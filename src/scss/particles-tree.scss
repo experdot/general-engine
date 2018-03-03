@@ -1,0 +1,42 @@
+@import "_modules/font.scss";
+@import "_modules/standard.scss";
+* {
+    box-sizing: border-box;
+}
+
+body {
+    background: #EEEEEE;
+    margin: 0rem;
+}
+
+home {
+    margin: auto;
+    .button-rebuild {
+        position: fixed;
+        width: 100%;
+        color: #CCCCCC;
+        background: rgba(0, 0, 0, 0.6);
+        text-align: center;
+        cursor: pointer;
+    }
+    .button-viewongithub {
+        position: fixed;
+        width: 100%;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.6);
+        text-align: center;
+        cursor: pointer;
+        a {
+            color: #CCCCCC;
+            text-decoration: none;
+        }
+    }
+    .gamebox {
+        margin: auto;
+        width: 120rem;
+        max-width: 100%;
+        canvas {
+            background: black;
+        }
+    }
+}

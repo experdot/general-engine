@@ -1,0 +1,54 @@
+language: node_js
+node_js: stable
+
+branches:
+  only:
+    - master
+
+env:
+  global:
+    - Remote_Repository: github.com/experdot/Natural2D.JS.git
+    - Deployment_Folder: repository_ghpages
+
+cache:
+  directories:
+    - $HOME/.npm
+
+# Start: Build LifeCycle
+install:
+  # install npm packages
+  - npm install
+
+script:
+  # gulp
+  - gulp default --env production
+
+  # check if gh-pages branch exists (token is required if origin is private)
+  - export BRANCH_EXISTS=$(git ls-remote --heads https://${GitHubToken}@${Remote_Repository} gh-pages)
+  - echo $BRANCH_EXISTS
+
+  # create or clone repository
+  - if [ -n $BRANCH_EXISTS ]; then
+      git init ${Deployment_Folder};
+      cd ${Deployment_Folder};
+      git checkout -b gh-pages;
+      cd ../;
+    else
+      git clone --depth=1 --branch=gh-pages https://${GitHubToken}@${Remote_Repository} ${Deployment_Folder};
+      cd ${Deployment_Folder};
+      git checkout gh-pages;
+      rm -rf *;
+      cd ../;
+    fi
+
+  # move distributing files
+  - mv ./dist/* ${Deployment_Folder}
+
+after_script:
+  - if [ "$TRAVIS_EVENT_TYPE" = "push" ]; then
+      cd ${Deployment_Folder};
+      git add --force .;
+      git commit -m "Deploy from $TRAVIS_BRANCH $TRAVIS_COMMIT. Travis-CI Build No.$TRAVIS_BUILD_NUMBER";
+      git push --force "https://${GitHubToken}@${Remote_Repository}" gh-pages:gh-pages;
+    fi
+# End: Build LifeCycle
