@@ -66,7 +66,7 @@ const config = {
         },
         browserify: {
             entries: "src/scripts/entry.js",
-            debug: options.env != "production",
+            debug: options.env !== "production",
             transform: [
                 [babelify, {
                     "presets": ["env"]
@@ -143,24 +143,24 @@ gulp.task(config.task.server, function () {
 gulp.task(config.task.chore, function () {
     return gulp.src(config.chore.src)
         .pipe(gulp.dest(config.chore.dest))
-        .pipe(gulpif(options.env != "production", browserSync.stream()));
+        .pipe(gulpif(options.env !== "production", browserSync.stream()));
 });
 
 // Static
 gulp.task(config.task.static, function () {
     return gulp.src(config.static.src)
         .pipe(gulp.dest(config.static.dest))
-        .pipe(gulpif(options.env != "production", browserSync.stream()));
+        .pipe(gulpif(options.env !== "production", browserSync.stream()));
 });
 
 // Html
 gulp.task(config.task.html, function () {
     return gulp.src(config.html.src, {
-            base: "."
-        })
+        base: "."
+    })
         .pipe(htmlmin(config.html.htmlMinOptions))
         .pipe(gulp.dest(config.html.dest))
-        .pipe(gulpif(options.env != "production", browserSync.stream()));
+        .pipe(gulpif(options.env !== "production", browserSync.stream()));
 });
 
 // Styles
@@ -187,7 +187,7 @@ gulp.task(config.task.scripts, function () {
         .bundle()
         .on("error", function (err) {
             console.error(err);
-            if (options.env != "production") {
+            if (options.env !== "production") {
                 this.emit("end");
             }
         })
@@ -203,7 +203,7 @@ gulp.task(config.task.scripts, function () {
         .pipe(gulpif(config.scripts.sourcemap, sourcemaps.write(".")))
         .pipe(gulpif(config.scripts.md5.enabled, md5(10, config.scripts.md5.html)))
         .pipe(gulp.dest(config.scripts.dest))
-        .pipe(gulpif(options.env != "production", browserSync.stream()));
+        .pipe(gulpif(options.env !== "production", browserSync.stream()));
 });
 
 // Clean
