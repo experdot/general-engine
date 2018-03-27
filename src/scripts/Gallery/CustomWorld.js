@@ -13,6 +13,9 @@ import {
 import {
     ParticlesTree
 } from "../Engine/Visual/ParticleSystem/Tree/ParticlesTree";
+import {
+    ParticlesWalker
+} from "../Engine/Visual/ParticleSystem/Walker/ParticlesWalker";
 
 class CustomWorld extends GameWorld {
     initialize() {
@@ -23,6 +26,9 @@ class CustomWorld extends GameWorld {
     createObjects() {
         let visual = new ParticlesTree(new ParticlesView());
         this.addVisual(visual);
+
+        // let visual2 = new ParticlesWalker(new ParticlesView());
+        // this.addVisual(visual2);
     }
 }
 

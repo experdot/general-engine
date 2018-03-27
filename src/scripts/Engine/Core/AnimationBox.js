@@ -29,6 +29,7 @@ class AnimationBox {
         this.canvas = canvas;
         this.context = canvas.getContext("2d");
         this.world = world;
+        this.world.canvas = canvas;
         this.internal = internal;
         this.registEvents();
         this.frameManager = new FrameManager();
