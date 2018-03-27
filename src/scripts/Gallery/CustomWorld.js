@@ -8,9 +8,11 @@ import {
     GameWorldView
 } from "../Engine/Core/GameWorld/GameWorldView";
 import {
-    ParticlesView,
+    ParticlesView
+} from "../Engine/Visual/ParticleSystem/ParticleSystem";
+import {
     ParticlesTree
-} from "../Engine/Visual/ParticlesTree/ParticlesTree";
+} from "../Engine/Visual/ParticleSystem/Tree/ParticlesTree";
 
 class CustomWorld extends GameWorld {
     initialize() {
