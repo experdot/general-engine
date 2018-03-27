@@ -5,12 +5,9 @@ import {
     CustomWorld
 } from "./Gallery/CustomWorld";
 
-attachObjectToTarget(window, "Natural2D", {});
-attachObjectToTarget(window.Natural2D, "AnimationBox", AnimationBox);
-attachObjectToTarget(window.Natural2D, "CustomWorld", CustomWorld);
-
-function attachObjectToTarget(target, key, value) {
-    if (!target[key]) {
-        target[key] = value;
-    }
+let natural2D = {
+    AnimationBox: AnimationBox,
+    CustomWorld: CustomWorld
 }
+
+window.Natural2D = natural2D;
