@@ -96,7 +96,7 @@ const config = {
         watch: "static/"
     },
     chore: {
-        src: ["README.md", "_config.yml"],
+        src: ["README.md", "_config.yml","LICENSE"],
         dest: "dist/"
     },
     clean: {
