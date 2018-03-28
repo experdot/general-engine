@@ -24,7 +24,7 @@ class ParticlesTree extends ParticlesBase {
     start() {
         var minLength = Math.min(this.world.width, this.world.height);
         var ratio = minLength / 2500 * Math.log10(minLength);
-        var center = new Vector2(this.world.width / 2, this.world.height * 1.2);
+        var center = new Vector2(this.world.width / 2, this.world.height * 1.45);
         var root = new SpotParticle(center);
         root.velocity = new Vector2(0, -16 * ratio);
         root.size = 256 * ratio;

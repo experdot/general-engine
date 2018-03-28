@@ -1,6 +1,9 @@
 import {
     GameVisual
 } from "../GameObject/GameVisual";
+import {
+    Vector2
+} from "../../../Fundamental/Vector";
 
 class GameWorld extends GameVisual {
     constructor(width, height) {
@@ -10,6 +13,9 @@ class GameWorld extends GameVisual {
         this.height = height;
         // game visual objects
         this.gameVisuals = [];
+        this.input = {
+            mouse: new Vector2(0, 0)
+        };
         // initialize
         this.initialize();
         this.createObjects();

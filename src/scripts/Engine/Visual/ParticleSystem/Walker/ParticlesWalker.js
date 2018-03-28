@@ -26,25 +26,20 @@ class ParticlesWalker extends ParticlesBase {
         let h = this.world.height;
         this.walkers = [];
 
-        let count = this.world.width * 3;
+        let count = this.world.width / 10;
         for (let i = 0; i < count; i++) {
-            let particle = new WalkerParticle();
-            particle.location = new Vector2(w * Math.random(), h * Math.random());
-            particle.velocity = new Vector2(16 * Math.random() - 8, -16 * Math.random() - 8).rotate(Math.random() * Math.PI * 2);
-            //particle.maxSize = 16 * Math.random() + 1;
-            particle.maxSize = 0.001 * i + 1;
-            particle.color = new Color(Math.random() * 255, Math.random() * 255, Math.random() * 255);
+            let particle = new WalkerParticle(new Vector2(w * Math.random(), h * Math.random()));
+            particle.maxSize = 0.06 * i + 1;
+            particle.color = new Color(255, 255, 255, Math.random() * 0.38 + 0.62);
             this.walkers.push(particle);
         }
         this.particles = this.walkers;
+
+        this.fillColor = new Color(0, 255, 0, 0.01);
         this.view.beforeDraw = (context) => {
-            context.fillStyle = "rgba(0,0,0,0.02)";
+            context.fillStyle = this.fillColor.getRGBAValue();
             context.fillRect(0, 0, w, h);
         };
-        this.mouse = new Vector2(w / 2, h / 2);
-        this.world.canvas.addEventListener("mousemove", e => {
-            this.mouse = new Vector2(e.offsetX, e.offsetY);
-        });
     }
 
     update() {
@@ -53,8 +48,12 @@ class ParticlesWalker extends ParticlesBase {
             height: this.world.height
         };
         this.walkers.forEach(element => {
-            element.update(rect, this.mouse);
+            element.update(rect, this.world.input.mouse);
         });
+
+        if (Math.random() > 0.5) {
+            this.fillColor = this.fillColor.getRandomColor(20);
+        }
     }
 }
 

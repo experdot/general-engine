@@ -35,7 +35,7 @@ class ParticlesView extends GameView {
             let p = element.location;
             context.beginPath();
             context.arc(p.x, p.y, element.size / 2, 0, Math.PI * 2, false);
-            context.fillStyle = element.color.getHexValue();
+            context.fillStyle = element.color.getRGBAValue();
             context.fill();
         }
     }

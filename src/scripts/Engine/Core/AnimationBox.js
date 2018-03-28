@@ -1,3 +1,7 @@
+import {
+    Vector2
+} from "../../Fundamental/Vector";
+
 class FrameManager {
     constructor() {
         this.isLoop = false;
@@ -61,6 +65,7 @@ class AnimationBox {
         });
         this.canvas.addEventListener("mousemove", (event) => {
             this.world.raiseSelfAndGameVisualsEvent("onMouseMove", event);
+            this.world.input.mouse = new Vector2(event.offsetX, event.offsetY);
         });
         window.onmousewheel = document.onmousewheel = (event) => {
             this.world.raiseSelfAndGameVisualsEvent("onMouseWheel", event);

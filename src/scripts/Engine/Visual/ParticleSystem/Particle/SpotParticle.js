@@ -2,9 +2,6 @@ import {
     DynamicParticle
 } from "./DynamicParticle";
 import {
-    Color
-} from "../../../../Fundamental/Color";
-import {
     Random
 } from "../../../../Fundamental/Random";
 import {
@@ -28,7 +25,9 @@ class SpotParticle extends DynamicParticle {
         this.divideRadius = 0.03;
         this.divideSizeRadius = 0.80;
         this.divideSizeRadiusEx = 0.92;
-        this.divideColorIncrement = 0.9;
+        this.divideColorIncrementRatio = 4;
+
+        this.getGradientColorIncrement = 1;
 
     }
 
@@ -38,9 +37,13 @@ class SpotParticle extends DynamicParticle {
             this.size = this.size * this.sizeRadius;
             this.velocity = this.velocity.rotate(this.angleOffset * this.rotateRadius);
             this.velocity = this.velocity.rotate(this.random.nextNorm(-100, 100) * this.rotateRadiusRandom);
-            this.color = this.getGradientColor(this.divideColorIncrement);
+            this.color = this.color.getGradientColor(this.getGradientColorIncrement);
             this.velocityUpon = this.size * 0.38;
             this.move();
+
+            this.color.a -= 0.002;
+            this.color.a = Math.max(0, this.color.a);
+
         }
         if (this.size > this.sizeMinimum) {
             if (Math.random() < this.divideRadius) {
@@ -66,49 +69,10 @@ class SpotParticle extends DynamicParticle {
                 let particle = new SpotParticle(this.location, newSize);
                 particle.velocity = this.velocity.rotate(this.random.next(-100, 100) * 0.011).multiply(0.618);
                 particle.age = this.random.nextNorm(0, 40);
-                particle.color = this.getDivideColor(this.divideColorIncrement);
+                particle.color = this.color.getRandomColor(this.velocity.length() * this.divideColorIncrementRatio);
                 particles.push(particle);
             }
         }
-    }
-
-    getGradientColor(increment = 1) {
-        const upon = 255;
-
-        var r = this.color.r;
-        r += increment;
-        r = Math.min(upon, Math.max(0, r));
-
-        var g = this.color.g;
-        g += increment;
-        g = Math.min(upon, Math.max(0, g));
-
-        var b = this.color.b;
-        b += increment;
-        b = Math.min(upon, Math.max(0, b));
-
-        return new Color(r, g, b);
-    }
-
-    getDivideColor(increment = 1) {
-        const upon = 255;
-
-        var r = this.color.r;
-        var len = this.velocity.length() * 5;
-        var half = len / 2;
-
-        r += increment * (Math.random() * len - half);
-        r = Math.min(upon, Math.max(0, r));
-
-        var g = this.color.g;
-        g += increment * (Math.random() * len - half);
-        g = Math.min(upon, Math.max(0, g));
-
-        var b = this.color.b;
-        b += increment * (Math.random() * len - half);
-        b = Math.min(upon, Math.max(0, b));
-
-        return new Color(r, g, b);
     }
 }
 
