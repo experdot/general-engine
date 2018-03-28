@@ -6,6 +6,7 @@ The Natural2D Game Engine For JavaScript
 
 ## Examples
 - [Particles Tree](./views/particles-tree.html)
+- [Particles Walker](./views/particles-walker.html)
 
 ## License
 - [MIT](./LICENSE)
