@@ -11,7 +11,7 @@
     </header>
     <main>
         <home>
-            <div id="button-rebuild" class="button-rebuild">Click here to build a new tree!</div>
+            <div id="button-rebuild" class="button-rebuild">Click here to restart!</div>
             <div id="gamebox" class="gamebox">
                 <div class="canvas-container">
                     <canvas id="canvas">Your browser doesn't support the canvas tag.</canvas>
@@ -48,7 +48,7 @@
         function startGame() {
             canvas.width = document.body.clientWidth;
             canvas.height = document.body.clientHeight;
-            box = new Natural2D.AnimationBox(canvas, new Natural2D.ParticlesTreeWorld(canvas.width, canvas.height));
+            box = new Natural2D.AnimationBox(canvas, new Natural2D.ParticlesWalkerWorld(canvas.width, canvas.height));
             box.run();
         }
     </script>

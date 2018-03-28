@@ -11,7 +11,7 @@ class DynamicParticle extends Particle {
         this.velocity = new Vector2(0, 0);
         this.acceleration = new Vector2(0, 0);
         this.mass = 10.0;
-        this.velocityUpon = 5.0;
+        this.velocityUpon = Number.POSITIVE_INFINITY;
     }
 
     applyForce(force) {
