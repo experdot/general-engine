@@ -40,6 +40,11 @@ class ParticlesWalker extends ParticlesBase {
             context.fillStyle = this.fillColor.getRGBAValue();
             context.fillRect(0, 0, w, h);
         };
+
+        WalkerParticle.StaticGravityRatio = 5000;
+        this.eventSystem.addHandler("onMouseWheel", event => {
+            WalkerParticle.StaticGravityRatio += event.wheelDelta;
+        });
     }
 
     update() {

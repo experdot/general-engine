@@ -24,7 +24,7 @@ class WalkerParticle extends DynamicParticle {
             this.velocityUpon = this.size / 2;
         }
 
-        let ratio = 20000;
+        let ratio = WalkerParticle.StaticGravityRatio || 0;
         let vec = mouse.subtract(this.location);
         let length = vec.length();
 
@@ -42,15 +42,15 @@ class WalkerParticle extends DynamicParticle {
         //this.applyForce(new Vector2(1, 0).rotate(Math.PI * 2 * Math.random()).multiply(Math.random() * this.mass / 10));
         this.move();
 
-        // if (rect) {
-        //     let x = this.location.x;
-        //     let y = this.location.y;
+        if (rect) {
+            let x = this.location.x;
+            let y = this.location.y;
 
-        //     if (x < -1000 || x > rect.width + 1000 || y < -1000 || y > rect.height + 1000) {
-        //         this.velocity = this.velocity.multiply(-1);
-        //         this.color = this.getDivideColor(Math.random() * 64);
-        //     }
-        // }
+            if (x < 0 || x > rect.width + 0 || y < 0 || y > rect.height) {
+                this.velocity = this.velocity.multiply(-1);
+                this.color = this.color.getRandomColor(Math.random() * 64);
+            }
+        }
     }
 }
 
