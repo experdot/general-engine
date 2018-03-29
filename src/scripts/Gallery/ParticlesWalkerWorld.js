@@ -8,7 +8,7 @@ import {
     GameWorldView
 } from "../Engine/Core/GameWorld/GameWorldView";
 import {
-    ParticlesView
+    ParticlesCircleView
 } from "../Engine/Visual/ParticleSystem/ParticleSystem";
 import {
     ParticlesWalker
@@ -21,7 +21,7 @@ class ParticlesWalkerWorld extends GameWorld {
     }
 
     createObjects() {
-        let visual = new ParticlesWalker(new ParticlesView());
+        let visual = new ParticlesWalker(new ParticlesCircleView());
         this.addVisual(visual);
     }
 }

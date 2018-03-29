@@ -25,7 +25,7 @@ class ParticlesBase extends GameVisual {
     }
 }
 
-class ParticlesView extends GameView {
+class ParticlesCircleView extends GameView {
     draw(context) {
         if (this.target.stopDraw) {
             return;
@@ -41,7 +41,36 @@ class ParticlesView extends GameView {
     }
 }
 
+class ParticlesLineView extends GameView {
+    draw(context) {
+        if (this.target.stopDraw) {
+            return;
+        }
+        for (let index = 1; index < this.target.particles.length; index++) {
+            const element = this.target.particles[index];
+            let p = element.location;
+            let last = element.lastLocation;
+            if (!last) {
+                continue;
+            }
+            context.beginPath();
+            context.moveTo(p.x, p.y);
+            context.lineTo(last.x, last.y);
+            context.lineWidth = element.size;
+            context.strokeStyle = element.color.getRGBAValue();
+            context.closePath();
+            context.stroke();
+
+            context.beginPath();
+            context.arc(p.x, p.y, element.size / 2, 0, Math.PI * 2, false);
+            context.fillStyle = element.color.getRGBAValue();
+            context.fill();
+        }
+    }
+}
+
 export {
     ParticlesBase,
-    ParticlesView
+    ParticlesCircleView,
+    ParticlesLineView
 };
