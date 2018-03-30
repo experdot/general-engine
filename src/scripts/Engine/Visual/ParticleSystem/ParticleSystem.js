@@ -49,7 +49,7 @@ class ParticlesLineView extends GameView {
         for (let index = 1; index < this.target.particles.length; index++) {
             const element = this.target.particles[index];
             let p = element.location;
-            let last = element.lastLocation;
+            let last = this.target.particles[index - 1].location || element.lastLocation;
             if (!last) {
                 continue;
             }

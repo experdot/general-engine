@@ -14,7 +14,7 @@ class GameWorld extends GameVisual {
         // game visual objects
         this.gameVisuals = [];
         this.input = {
-            mouse: new Vector2(0, 0)
+            pointer: new Vector2(0, 0)
         };
         // initialize
         this.initialize();

@@ -65,7 +65,12 @@ class AnimationBox {
         });
         this.canvas.addEventListener("mousemove", (event) => {
             this.world.raiseSelfAndGameVisualsEvent("onMouseMove", event);
-            this.world.input.mouse = new Vector2(event.offsetX, event.offsetY);
+            this.world.input.pointer = new Vector2(event.offsetX, event.offsetY);
+        });
+        this.canvas.addEventListener("touchmove", (event) => {
+            event.preventDefault();
+            this.world.raiseSelfAndGameVisualsEvent("onTouchMove", event);
+            this.world.input.pointer = new Vector2(event.changedTouches[0].clientX, event.changedTouches[0].clientY);
         });
         window.onmousewheel = document.onmousewheel = (event) => {
             this.world.raiseSelfAndGameVisualsEvent("onMouseWheel", event);
