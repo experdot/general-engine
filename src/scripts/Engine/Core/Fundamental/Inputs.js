@@ -61,7 +61,7 @@ class MouseInput extends InputBase {
 
         // [Experimental Code]
         window.onmousewheel = document.onmousewheel = (event) => {
-            this.world.raiseSelfAndGameVisualsEvent("onMouseWheel", event);
+            inputs.world.raiseSelfAndGameVisualsEvent("onMouseWheel", event);
         };
     }
 }
