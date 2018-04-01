@@ -2,8 +2,8 @@ import {
     GameVisual
 } from "../GameObject/GameVisual";
 import {
-    Vector2
-} from "../../../Fundamental/Vector";
+    Inputs
+} from "../Fundamental/Inputs";
 
 class GameWorld extends GameVisual {
     constructor(width, height) {
@@ -13,15 +13,19 @@ class GameWorld extends GameVisual {
         this.height = height;
         // game visual objects
         this.gameVisuals = [];
-        this.input = {
-            pointer: new Vector2(0, 0)
-        };
+        // game input
+        this.inputs = new Inputs(this);
         // initialize
         this.initialize();
         this.createObjects();
     }
 
     initialize() {}
+
+    initializeUI(ui) {
+        this.ui = ui;
+        this.inputs.launch(this.ui);
+    }
 
     createObjects() {}
 

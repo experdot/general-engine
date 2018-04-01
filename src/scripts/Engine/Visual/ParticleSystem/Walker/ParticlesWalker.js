@@ -57,7 +57,7 @@ class ParticlesWalker extends ParticlesBase {
             height: this.world.height
         };
         this.walkers.forEach((element) => {
-            element.update(rect, this.world.input.pointer);
+            element.update(rect, this.world.inputs.pointer.position);
         });
 
         if (Math.random() > 0.5) {

@@ -13,11 +13,17 @@ import {
 import {
     ParticlesWalker
 } from "../Engine/Visual/ParticleSystem/Walker/ParticlesWalker";
+import {
+    MouseInput,
+    PointerInput
+} from "../Engine/Core/Fundamental/Inputs";
 
 class ParticlesWalkerWorld extends GameWorld {
     initialize() {
         this.view = new GameWorldView(this);
         this.view.clearColor = new Color(0, 0, 0);
+        this.inputs.addInput(new MouseInput());
+        this.inputs.addInput(new PointerInput());
     }
 
     createObjects() {
