@@ -27,7 +27,7 @@ class ParticlesWalkerWorld extends GameWorld {
     }
 
     createObjects() {
-        let visual = new ParticlesWalker(new ParticlesCircleView());
+        let visual = new ParticlesWalker(new ParticlesCircleView(null, true, 1));
         this.addVisual(visual);
     }
 }

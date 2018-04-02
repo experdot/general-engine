@@ -26,17 +26,38 @@ class ParticlesBase extends GameVisual {
 }
 
 class ParticlesCircleView extends GameView {
+    constructor(target, isFill = true, scale = 1) {
+        super(target);
+        this.isFill = isFill;
+        this.scale = scale;
+    }
     draw(context) {
         if (this.target.stopDraw) {
             return;
         }
+        this.isFill ? this.drawByFillCircle(context) : this.drawByStrokeCircle(context);
+    }
+
+    drawByFillCircle(context) {
         for (let index = 0; index < this.target.particles.length; index++) {
             const element = this.target.particles[index];
             let p = element.location;
             context.beginPath();
-            context.arc(p.x, p.y, element.size / 2, 0, Math.PI * 2, false);
+            context.arc(p.x, p.y, element.size / 2 * this.scale, 0, Math.PI * 2, false);
             context.fillStyle = element.color.getRGBAValue();
             context.fill();
+        }
+    }
+
+    drawByStrokeCircle(context) {
+        for (let index = 0; index < this.target.particles.length; index++) {
+            const element = this.target.particles[index];
+            let p = element.location;
+            context.beginPath();
+            context.arc(p.x, p.y, element.size / 2 * this.scale, 0, Math.PI * 2, false);
+            context.strokeStyle = element.color.getRGBAValue();
+            context.closePath();
+            context.stroke();
         }
     }
 }
