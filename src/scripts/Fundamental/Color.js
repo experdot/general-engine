@@ -16,6 +16,10 @@ class Color {
         this.a = a;
     }
 
+    clone() {
+        return new Color(this.r, this.g, this.b, this.a);
+    }
+
     getHexValue() {
         let r = parseInt(this.r);
         let g = parseInt(this.g);

@@ -7,7 +7,7 @@ class Vector2 {
         this.x = x;
         this.y = y;
     }
-    copy() {
+    clone() {
         return new Vector2(this.x, this.y);
     }
     length() {
