@@ -1,5 +1,6 @@
 import {
-    Color
+    Color,
+    ColorHelper
 } from "../../../../Fundamental/Color";
 import {
     Vector2
@@ -63,7 +64,7 @@ class ParticlesWalker extends ParticlesBase {
             element.update(rect, index === 0 ? this.center : element.parent.location);
         });
         if (Math.random() > 0.5) {
-            this.fillColor = this.fillColor.getRandomColor(20);
+            this.fillColor = ColorHelper.getGradientRandomColor(this.fillColor, 20);
         }
         if (Math.random() > 0.8) {
             this.split += Math.random() * 1 - 0.5;

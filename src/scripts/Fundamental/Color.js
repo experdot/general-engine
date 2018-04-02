@@ -37,44 +37,49 @@ class Color {
         return `rgba(${r},${g},${b},${a})`;
     }
 
-    getGradientColor(increment = 1) {
+
+}
+
+class ColorHelper {
+    static getGradientColor(color, increment = 1) {
         const upon = 255;
 
-        var r = this.r;
+        var r = color.r;
         r += increment;
         r = Math.min(upon, Math.max(0, r));
 
-        var g = this.g;
+        var g = color.g;
         g += increment;
         g = Math.min(upon, Math.max(0, g));
-
-        var b = this.b;
+        
+        var b = color.b;
         b += increment;
         b = Math.min(upon, Math.max(0, b));
 
-        return new Color(r, g, b, this.a);
+        return new Color(r, g, b, color.a);
     }
 
-    getRandomColor(increment = 1) {
+    static getGradientRandomColor(color, increment = 1) {
         const upon = 255;
         let half = increment / 2;
 
-        var r = this.r;
+        var r = color.r;
         r += Math.random() * increment - half;
         r = Math.min(upon, Math.max(0, r));
 
-        var g = this.g;
+        var g = color.g;
         g += Math.random() * increment - half;
         g = Math.min(upon, Math.max(0, g));
 
-        var b = this.b;
+        var b = color.b;
         b += Math.random() * increment - half;
         b = Math.min(upon, Math.max(0, b));
 
-        return new Color(r, g, b, this.a);
+        return new Color(r, g, b, color.a);
     }
 }
 
 export {
-    Color
+    Color,
+    ColorHelper
 };

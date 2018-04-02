@@ -7,6 +7,9 @@ import {
 import {
     Vector2
 } from "../../../../Fundamental/Vector";
+import {
+    ColorHelper
+} from "../../../../Fundamental/Color";
 
 class SpotParticle extends DynamicParticle {
     constructor(location, size = 1, age = 0) {
@@ -37,7 +40,7 @@ class SpotParticle extends DynamicParticle {
             this.size = this.size * this.sizeRadius;
             this.velocity = this.velocity.rotate(this.angleOffset * this.rotateRadius);
             this.velocity = this.velocity.rotate(this.random.nextNorm(-100, 100) * this.rotateRadiusRandom);
-            this.color = this.color.getGradientColor(this.getGradientColorIncrement);
+            this.color = ColorHelper.getGradientColor(this.color, this.getGradientColorIncrement);
             this.velocityUpon = this.size * 0.38;
             this.move();
 
@@ -69,7 +72,7 @@ class SpotParticle extends DynamicParticle {
                 let particle = new SpotParticle(this.location, newSize);
                 particle.velocity = this.velocity.rotate(this.random.next(-100, 100) * 0.011).multiply(0.618);
                 particle.age = this.random.nextNorm(0, 40);
-                particle.color = this.color.getRandomColor(this.velocity.length() * this.divideColorIncrementRatio);
+                particle.color = ColorHelper.getGradientRandomColor(this.color, this.velocity.length() * this.divideColorIncrementRatio);
                 particles.push(particle);
             }
         }
