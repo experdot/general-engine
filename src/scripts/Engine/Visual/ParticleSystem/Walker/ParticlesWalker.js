@@ -14,6 +14,9 @@ import {
 import {
     WalkerParticle
 } from "../Particle/WalkerParticle";
+import {
+    GameView
+} from "../../../Core/GameObject/GameView";
 
 class ParticlesWalker extends ParticlesBase {
     constructor(view) {
@@ -46,10 +49,12 @@ class ParticlesWalker extends ParticlesBase {
 
         this.view.scale = 2;
 
-        this.rotationDelta = 1.8;
+        this.rotationDelta = 0.1 + Math.random() * 2.9;
         WalkerParticle.StaticGravityRatio = 5000;
         this.eventSystem.addHandler("onMouseWheel", event => {
-            WalkerParticle.StaticGravityRatio += event.wheelDelta;
+            // WalkerParticle.StaticGravityRatio += event.wheelDelta;
+            this.rotationDelta += (event.wheelDelta > 0 ? 0.01 : -0.01);
+            this.rotationDelta = Math.min(3, Math.max(0.1, this.rotationDelta));
         });
 
         this.particles = this.walkers;
@@ -90,7 +95,7 @@ class ParticlesWalker extends ParticlesBase {
                 particle.origin = particle.location.clone();
                 particle.parent = node;
                 particle.maxSize = node.maxSize * 0.8;
-                particle.color = new Color(255, 255, 255, 0.6 + 0.3 * depth / 10);
+                particle.color = new Color(255, 255, 255, 0.02 + 0.04 * depth / 10);
                 node.children.push(particle);
                 this.walkers.push(particle);
                 this.createNodes(walkers, particle, depth - 1, split, ratio);
@@ -111,6 +116,40 @@ class ParticlesWalker extends ParticlesBase {
     }
 }
 
+class ParticlesWalkerView extends GameView {
+    constructor(target, isFill = true, scale = 1) {
+        super(target);
+        this.isFill = isFill;
+        this.scale = scale;
+    }
+
+    draw(context) {
+        if (this.target.stopDraw) {
+            return;
+        }
+        for (let index = 0; index < this.target.particles.length; index++) {
+            const element = this.target.particles[index];
+            let p = element.location;
+            // context.beginPath();
+            // context.arc(p.x, p.y, element.size / 2 * this.scale, 0, Math.PI * 2, false);
+            // context.fillStyle = element.color.getRGBAValue();
+            // context.fill();
+
+            if (element.parent) {
+                context.beginPath();
+                context.moveTo(p.x, p.y);
+                context.lineTo(element.parent.location.x, element.parent.location.y);
+                context.lineWidth = element.size;
+                context.strokeStyle = element.color.getRGBAValue();
+                context.closePath();
+                context.stroke();
+            }
+        }
+    }
+}
+
+
 export {
-    ParticlesWalker
+    ParticlesWalker,
+    ParticlesWalkerView
 };
