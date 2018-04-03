@@ -1,6 +1,9 @@
 import {
     Vector2
 } from "../../../Fundamental/Vector";
+import {
+    FlowProcess
+} from "../Fundamental/FlowProcess";
 
 /** 
  * Represents a view to present the visual object
@@ -8,6 +11,7 @@ import {
 class GameView {
     constructor(target) {
         this.target = target;
+        this.drawProcess = new FlowProcess(this).next(this.draw);
     }
     beginDraw(context) {
         var translation = this.target.transform.translation;
@@ -26,9 +30,7 @@ class GameView {
         context.translate(-center.x, -center.y);
 
         // draw
-        this.beforeDraw(context);
-        this.draw(context);
-        this.afterDraw(context);
+        this.drawProcess.process(context);
 
         // reset transform
         context.setTransform(1, 0, 0, 1, 0, 0);

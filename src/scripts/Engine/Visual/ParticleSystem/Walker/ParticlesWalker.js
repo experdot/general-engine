@@ -39,12 +39,14 @@ class ParticlesWalker extends ParticlesBase {
         this.createNodes(this.walkers, particle, 9, this.split, 1);
 
         this.fillColor = new Color(0, 128, 128, 0.005);
-        this.view.beforeDraw = (context) => {
+        this.view.drawProcess.next(context => {
             context.fillStyle = this.fillColor.getRGBAValue();
             context.fillRect(0, 0, w, h);
-        };
+        }, 0);
+
         this.view.scale = 2;
 
+        this.rotationDelta = 1.8;
         WalkerParticle.StaticGravityRatio = 5000;
         this.eventSystem.addHandler("onMouseWheel", event => {
             WalkerParticle.StaticGravityRatio += event.wheelDelta;
@@ -56,6 +58,10 @@ class ParticlesWalker extends ParticlesBase {
     }
 
     update() {
+
+        this.transform.center = new Vector2(this.world.width / 2, this.world.height / 2);
+        this.transform.rotation = this.transform.rotation + this.rotationDelta;
+
         const rect = {
             width: this.world.width,
             height: this.world.height
@@ -84,7 +90,7 @@ class ParticlesWalker extends ParticlesBase {
                 particle.origin = particle.location.clone();
                 particle.parent = node;
                 particle.maxSize = node.maxSize * 0.8;
-                particle.color = new Color(255, 255, 255, 0.62);
+                particle.color = new Color(255, 255, 255, 0.6 + 0.3 * depth / 10);
                 node.children.push(particle);
                 this.walkers.push(particle);
                 this.createNodes(walkers, particle, depth - 1, split, ratio);
