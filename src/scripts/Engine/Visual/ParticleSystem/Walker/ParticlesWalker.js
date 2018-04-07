@@ -41,13 +41,13 @@ class ParticlesWalker extends ParticlesBase {
         this.walkers.push(particle);
         this.createNodes(this.walkers, particle, 9, this.split, 1);
 
-        this.fillColor = new Color(0, 128, 128, 0.005);
+        this.fillColor = new Color(0, 128, 128, 0.004);
         this.view.drawProcess.next(context => {
             context.fillStyle = this.fillColor.getRGBAValue();
             context.fillRect(0, 0, w, h);
         }, 0);
 
-        this.view.scale = 2;
+        this.view.scale = 1;
 
         this.rotationDelta = 0.1 + Math.random() * 2.9;
         WalkerParticle.StaticGravityRatio = 5000;
@@ -75,11 +75,12 @@ class ParticlesWalker extends ParticlesBase {
             element.update(rect, index === 0 ? this.center : element.parent.location);
         });
         if (Math.random() > 0.5) {
-            this.fillColor = ColorHelper.getGradientRandomColor(this.fillColor, 20);
+            this.fillColor = ColorHelper.getGradientRandomColor(this.fillColor, 80);
         }
         if (Math.random() > 0.8) {
-            this.split += Math.random() * 1 - 0.5;
+            this.split += (Math.random() * 1 - 0.5);
             this.split = Math.max(1, Math.min(12, this.split));
+            console.log(this.split)
         }
         this.modifyNodes(this.walkers[0], this.split, 1 * this.split / 10);
     }
@@ -139,7 +140,7 @@ class ParticlesWalkerView extends GameView {
                 context.beginPath();
                 context.moveTo(p.x, p.y);
                 context.lineTo(element.parent.location.x, element.parent.location.y);
-                context.lineWidth = element.size;
+                context.lineWidth = element.size * this.scale;
                 context.strokeStyle = element.color.getRGBAValue();
                 context.closePath();
                 context.stroke();

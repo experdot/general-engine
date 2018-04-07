@@ -9,6 +9,8 @@ class FrameManager {
             action();
             if (this.isLoop) {
                 window.requestAnimationFrame(step);
+            } else {
+                this.stopCallback && this.stopCallback();
             }
         };
         step();
@@ -19,8 +21,9 @@ class FrameManager {
         setInterval(action, internal);
     }
 
-    stop() {
+    stop(callback) {
         this.isLoop = false;
+        this.stopCallback = callback;
     }
 }
 
@@ -42,7 +45,9 @@ class AnimationBox {
     }
 
     stop() {
-        this.frameManager.stop();
+        this.frameManager.stop(() => {
+            this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        });
     }
 
     start(world) {
