@@ -80,7 +80,6 @@ class ParticlesWalker extends ParticlesBase {
         if (Math.random() > 0.8) {
             this.split += (Math.random() * 1 - 0.5);
             this.split = Math.max(1, Math.min(12, this.split));
-            console.log(this.split)
         }
         this.modifyNodes(this.walkers[0], this.split, 1 * this.split / 10);
     }
