@@ -21,7 +21,6 @@ import {
 class ParticlesWalker extends ParticlesBase {
     constructor(view) {
         super(view);
-        this.spots = [];
         this.random = new Random();
     }
 
@@ -33,52 +32,51 @@ class ParticlesWalker extends ParticlesBase {
         let center = new Vector2(w / 2, h * 0.8);
         this.center = center;
 
+        WalkerParticle.StaticGravityRatio = 5000;
         let particle = new WalkerParticle(center);
         particle.origin = particle.location.clone();
         particle.maxSize = 10;
         particle.color = new Color(255, 255, 255, 0.1);
         particle.direction = new Vector2(0, -this.world.width / 10);
         this.walkers.push(particle);
-        this.createNodes(this.walkers, particle, 9, this.split, 1);
 
-        this.fillColor = new Color(0, 128, 128, 0.004);
+        this.maxDepth = 6 + parseInt(w / 600);
+        this.createNodes(this.walkers, particle, this.maxDepth, this.split, 1);
+
+        this.fillColor = new Color(0, 128, 128, 0.005);
         this.view.drawProcess.next(context => {
             context.fillStyle = this.fillColor.getRGBAValue();
             context.fillRect(0, 0, w, h);
         }, 0);
 
-        this.view.scale = 1;
-
-        this.rotationDelta = 0.1 + Math.random() * 2.9;
-        WalkerParticle.StaticGravityRatio = 5000;
-        this.eventSystem.addHandler("onMouseWheel", event => {
-            // WalkerParticle.StaticGravityRatio += event.wheelDelta;
-            this.rotationDelta += (event.wheelDelta > 0 ? 0.01 : -0.01);
-            this.rotationDelta = Math.min(3, Math.max(0.1, this.rotationDelta));
-        });
+        this.period = Math.PI / 3;
+        this.rotationDelta = Math.random() * 3;
 
         this.particles = this.walkers;
-
-        this.world.inputs.pointer.position = center.clone();
     }
 
     update() {
-
-        this.transform.center = new Vector2(this.world.width / 2, this.world.height / 2);
-        this.transform.rotation = this.transform.rotation + this.rotationDelta;
-
         const rect = {
             width: this.world.width,
             height: this.world.height
         };
+
+        this.transform.center = new Vector2(rect.width / 2, rect.height / 2);
+        this.transform.rotation = this.transform.rotation + this.rotationDelta;
+
+        //this.period = (this.period + 0.0001) % (Math.PI * 2);
+        //this.rotationDelta = Math.sin(this.period) * 3;
+
         this.walkers.forEach((element, index) => {
             element.update(rect, index === 0 ? this.center : element.parent.location);
         });
+
         if (Math.random() > 0.5) {
-            this.fillColor = ColorHelper.getGradientRandomColor(this.fillColor, 80);
+            this.fillColor = ColorHelper.getGradientRandomColor(this.fillColor, 40);
         }
-        if (Math.random() > 0.8) {
-            this.split += (Math.random() * 1 - 0.5);
+
+        if (Math.random() > 0.5) {
+            this.split += (Math.random() * 1.6 - 0.8);
             this.split = Math.max(1, Math.min(12, this.split));
         }
         this.modifyNodes(this.walkers[0], this.split, 1 * this.split / 10);
@@ -86,7 +84,7 @@ class ParticlesWalker extends ParticlesBase {
 
     createNodes(walkers, node, depth, split = 1, ratio = 1) {
         if (depth > 0) {
-            const inverse = [-1, 1];
+            const inverse = [-1, 1, 0];
             node.children = [];
             for (let index = 0; index < 2; index++) {
                 let particle = new WalkerParticle();
@@ -95,7 +93,7 @@ class ParticlesWalker extends ParticlesBase {
                 particle.origin = particle.location.clone();
                 particle.parent = node;
                 particle.maxSize = node.maxSize * 0.8;
-                particle.color = new Color(255, 255, 255, 0.02 + 0.04 * depth / 10);
+                particle.color = new Color(255, 255, 255, 1 / this.maxDepth - 0.05 * depth);
                 node.children.push(particle);
                 this.walkers.push(particle);
                 this.createNodes(walkers, particle, depth - 1, split, ratio);
@@ -105,7 +103,7 @@ class ParticlesWalker extends ParticlesBase {
 
     modifyNodes(node, split, ratio = 1) {
         if (node.children && node.children.length > 0) {
-            const inverse = [-1, 1];
+            const inverse = [-1, 1, 0];
             for (let index = 0; index < 2; index++) {
                 const particle = node.children[index];
                 particle.direction = node.direction.rotate(Math.PI / split * inverse[index]);
@@ -117,9 +115,8 @@ class ParticlesWalker extends ParticlesBase {
 }
 
 class ParticlesWalkerView extends GameView {
-    constructor(target, isFill = true, scale = 1) {
+    constructor(target, scale = 1) {
         super(target);
-        this.isFill = isFill;
         this.scale = scale;
     }
 
