@@ -6,7 +6,7 @@ var gulp = require("gulp"),
     sourcemaps = require("gulp-sourcemaps"),
     concat = require("gulp-concat"),
     rename = require("gulp-rename"),
-    browserSync = require("browser-sync").create(),
+    browsersync = require("browser-sync").create(),
     del = require("del"),
     gulpif = require("gulp-if"),
     htmlmin = require("gulp-htmlmin"),
@@ -17,7 +17,8 @@ var gulp = require("gulp"),
     babelify = require("babelify"),
     uglify = require("gulp-uglify"),
     source = require("vinyl-source-stream"),
-    buffer = require("vinyl-buffer");
+    buffer = require("vinyl-buffer"),
+    tsify = require("tsify");
 
 var knownOptions = {
     string: "env",
@@ -49,7 +50,7 @@ const config = {
     scripts: {
         src: "src/scripts/**/*.js",
         dest: "dist/scripts",
-        watch: "src/scripts/**/*.js",
+        watch: ["src/scripts/**/*.js", "src/scripts/**/*.ts"],
         compile: true,
         sourcemap: options.env !== "production",
         concat: {
@@ -65,7 +66,7 @@ const config = {
             html: "./dist/**/*.html"
         },
         browserify: {
-            entries: "src/scripts/entry.js",
+            entries: "src/scripts/entry.ts",
             debug: options.env !== "production",
             transform: [
                 [babelify, {
@@ -88,6 +89,9 @@ const config = {
             removeStyleLinkTypeAttributes: true,
             minifyJS: true,
             minifyCSS: true
+        },
+        srcOptions: {
+            base: "."
         }
     },
     static: {
@@ -96,7 +100,7 @@ const config = {
         watch: "static/"
     },
     chore: {
-        src: ["README.md", "_config.yml","LICENSE"],
+        src: ["README.md", "_config.yml", "LICENSE"],
         dest: "dist/"
     },
     clean: {
@@ -121,7 +125,7 @@ const config = {
 
 // Watch
 gulp.task(config.task.watch, [config.task.default, config.task.server], function () {
-    gulp.watch(config.html.watch, [config.task.html]).on("change", browserSync.reload);
+    gulp.watch(config.html.watch, [config.task.html]).on("change", browsersync.reload);
     gulp.watch(config.styles.watch, [config.task.styles]);
     gulp.watch(config.scripts.watch, [config.task.scripts]);
 });
@@ -131,7 +135,7 @@ gulp.task(config.task.default, sequence(config.task.clean, [config.task.html, co
 
 // Server
 gulp.task(config.task.server, function () {
-    browserSync.init({
+    browsersync.init({
         server: {
             baseDir: config.server.baseDir
         },
@@ -143,24 +147,22 @@ gulp.task(config.task.server, function () {
 gulp.task(config.task.chore, function () {
     return gulp.src(config.chore.src)
         .pipe(gulp.dest(config.chore.dest))
-        .pipe(gulpif(options.env !== "production", browserSync.stream()));
+        .pipe(gulpif(options.env !== "production", browsersync.stream()));
 });
 
 // Static
 gulp.task(config.task.static, function () {
     return gulp.src(config.static.src)
         .pipe(gulp.dest(config.static.dest))
-        .pipe(gulpif(options.env !== "production", browserSync.stream()));
+        .pipe(gulpif(options.env !== "production", browsersync.stream()));
 });
 
 // Html
 gulp.task(config.task.html, function () {
-    return gulp.src(config.html.src, {
-        base: "."
-    })
+    return gulp.src(config.html.src, config.html.srcOptions)
         .pipe(htmlmin(config.html.htmlMinOptions))
         .pipe(gulp.dest(config.html.dest))
-        .pipe(gulpif(options.env !== "production", browserSync.stream()));
+        .pipe(gulpif(options.env !== "production", browsersync.stream()));
 });
 
 // Styles
@@ -178,12 +180,13 @@ gulp.task(config.task.styles, function () {
         .pipe(gulpif(config.styles.sourcemap, sourcemaps.write(".")))
         .pipe(gulpif(config.styles.md5.enabled, md5(10, config.styles.md5.html)))
         .pipe(gulp.dest(config.styles.dest))
-        .pipe(gulpif(options.env != "production", browserSync.stream()));
+        .pipe(gulpif(options.env != "production", browsersync.stream()));
 });
 
 // Scripts
 gulp.task(config.task.scripts, function () {
     return browserify(config.scripts.browserify)
+        .plugin(tsify)
         .bundle()
         .on("error", function (err) {
             console.error(err);
@@ -203,7 +206,7 @@ gulp.task(config.task.scripts, function () {
         .pipe(gulpif(config.scripts.sourcemap, sourcemaps.write(".")))
         .pipe(gulpif(config.scripts.md5.enabled, md5(10, config.scripts.md5.html)))
         .pipe(gulp.dest(config.scripts.dest))
-        .pipe(gulpif(options.env !== "production", browserSync.stream()));
+        .pipe(gulpif(options.env !== "production", browsersync.stream()));
 });
 
 // Clean

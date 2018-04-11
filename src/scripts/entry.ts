@@ -14,4 +14,4 @@ let natural2D = {
     ParticlesWalkerWorld: ParticlesWalkerWorld
 };
 
-window.Natural2D = natural2D;
+(window as any).Natural2D = natural2D;
