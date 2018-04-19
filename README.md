@@ -5,8 +5,9 @@
 The Natural2D Game Engine For JavaScript
 
 ## Examples
-- [Particles Tree](https://experdot.github.io/Natural2D.JS/views/particles-tree.html)
-- [Particles Walker](https://experdot.github.io/Natural2D.JS/views/particles-walker.html)
+- [Particles Tree](https://experdot.github.io/Natural2D.JS/views/particles.html?scene=tree)
+- [Particles Flyer](https://experdot.github.io/Natural2D.JS/views/particles.html?scene=flyer)
+- [Particles Walker](https://experdot.github.io/Natural2D.JS/views/particles.html?scene=tree)
 
 ## License
 - [MIT](./LICENSE)
