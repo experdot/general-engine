@@ -189,6 +189,7 @@ gulp.task(config.task.scripts, function () {
         .plugin(tsify)
         .bundle()
         .on("error", function (err) {
+            // eslint-disable-next-line
             console.error(err);
             if (options.env !== "production") {
                 this.emit("end");
