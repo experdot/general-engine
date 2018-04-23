@@ -55,7 +55,7 @@ class AnimationBox {
     }
 
     update(world, context) {
-        world.view.draw(context);
+        world.view.render(context);
         world.update();
     }
 }

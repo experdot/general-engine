@@ -18,6 +18,9 @@ class GameWorld extends GameVisual {
         // initialize
         this.initialize();
         this.createObjects();
+
+        this.startProcess.next(this.startGameVisuals);
+        this.updateProcess.next(this.updateGameVisuals);
     }
 
     initialize() {}
@@ -29,13 +32,13 @@ class GameWorld extends GameVisual {
 
     createObjects() {}
 
-    start() {
+    startGameVisuals() {
         this.gameVisuals.forEach(element => {
             element.start();
         });
     }
 
-    update() {
+    updateGameVisuals() {
         this.gameVisuals.forEach(element => {
             element.update();
         });

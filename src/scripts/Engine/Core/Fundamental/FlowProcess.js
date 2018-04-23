@@ -17,8 +17,8 @@ class FlowProcess {
             element.enabled && element.func && element.func.call(this.context, ...arguments);
         });
     }
-    unshift(func) {
-        this.tasks.push(new Task(func));
+    before(func) {
+        this.tasks.unshift(new Task(func));
         return this;
     }
     next(func, index = -1) {

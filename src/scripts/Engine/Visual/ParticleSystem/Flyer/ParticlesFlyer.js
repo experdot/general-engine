@@ -22,7 +22,7 @@ class ParticlesFlyer extends ParticlesBase {
         super(view);
         this.random = new Random();
         this.fillColor = new Color(0, 0, 0, 0.01);
-        this.view.drawProcess.next(context => {
+        this.view.renderProcess.next(context => {
             context.fillStyle = this.fillColor.getRGBAValue();
             context.fillRect(0, 0, this.world.width, this.world.height);
         }, 0);
@@ -86,7 +86,7 @@ class ParticlesFlyerView extends GameView {
         let w = this.target.world.width - 8;
         let h = this.target.world.height - 8;
         context.translate(this.target.world.width / 2, this.target.world.height / 2);
-        // context.rotate(this.rotation);
+        //context.rotate(this.rotation);
         context.globalAlpha = 0.96;
         context.drawImage(document.getElementById("canvas"), -w / 2, -h / 2, w, h);
         context.globalAlpha = 1;

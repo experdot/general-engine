@@ -14,13 +14,13 @@ class GameWorldView extends GameView {
 
     draw(context) {
         if (this.isClear) {
-            context.fillStyle = this.clearColor.getHexValue();
+            context.fillStyle = this.clearColor.getRGBAValue();
             context.beginPath();
             context.fillRect(0, 0, this.target.width, this.target.height);
             context.closePath();
         }
         this.target.gameVisuals.forEach(element => {
-            element.view && element.view.beginDraw(context);
+            element.view && element.view.render(context);
         });
     }
 }

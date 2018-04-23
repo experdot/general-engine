@@ -44,7 +44,7 @@ class ParticlesWalker extends ParticlesBase {
         this.createNodes(this.walkers, particle, this.maxDepth, this.split, 1);
 
         this.fillColor = new Color(0, 128, 128, 0.005);
-        this.view.drawProcess.next(context => {
+        this.view.renderProcess.next(context => {
             context.fillStyle = this.fillColor.getRGBAValue();
             context.fillRect(0, 0, w, h);
         }, 0);
