@@ -1,5 +1,6 @@
 import {
-    Color
+    Color,
+    ColorHelper
 } from "../../../../Fundamental/Color";
 import {
     Vector2
@@ -21,11 +22,13 @@ class ParticlesFlyer extends ParticlesBase {
     constructor(view) {
         super(view);
         this.random = new Random();
-        this.fillColor = new Color(0, 0, 0, 0.01);
+        this.fillColor = new Color(0, 0, 0, 0.005);
         this.view.renderProcess.next(context => {
             context.fillStyle = this.fillColor.getRGBAValue();
             context.fillRect(0, 0, this.world.width, this.world.height);
         }, 0);
+        this.offsetX = [0, -1, 0, 1, 1, 1, 0, -1, -1];
+        this.offsetY = [0, -1, -1, -1, 0, 1, 1, 1, 0];
     }
 
     start() {
@@ -35,8 +38,8 @@ class ParticlesFlyer extends ParticlesBase {
         this.flyers = [];
 
         const screen = new Vector2(w, h).length();
-        const flyersCount = parseInt(screen / 15);
-        const maxSize = parseInt(screen / 15);
+        const flyersCount = parseInt(screen / 5);
+        const maxSize = parseInt(screen / 60);
         const fieldWidth = w * 0.8;
         const fieldHeight = h * 0.8;
         for (let i = 0; i < flyersCount; i++) {
@@ -49,6 +52,13 @@ class ParticlesFlyer extends ParticlesBase {
         }
 
         this.particles = this.flyers;
+
+        this.revolution = 20;
+        this.grid = this.createGrid(w, h, this.revolution);
+
+        if (this.world.inputs.pointer.position.length() === 0) {
+            this.world.inputs.pointer.position = new Vector2(w / 2, h / 2);
+        }
     }
 
     update() {
@@ -57,13 +67,75 @@ class ParticlesFlyer extends ParticlesBase {
             height: this.world.height
         };
 
-        this.flyers.forEach((element) => {
-            element.update(this.flyers, rect, this.world.inputs.pointer.position);
+        this.clearGrid(this.grid);
+        this.allocateGrid(this.grid, this.particles, this.revolution);
+
+        this.grid.forEach(element => {
+            element.forEach(cell => {
+                if (cell.length > 0) {
+                    let neighbours = this.getGridNeighbours(this.grid, cell[0], this.revolution);
+                    cell.forEach(particle => {
+                        particle.update(neighbours, rect, this.world.inputs.pointer.position);
+                    });
+                }
+            });
         });
 
-        // if (Math.random() > 0.5) {
-        //     this.fillColor = ColorHelper.getGradientRandomColor(this.fillColor, 40);
-        // }
+        // this.flyers.forEach((element) => {
+        //     let neighbours = this.getGridNeighbours(this.grid, element, this.revolution);
+        //     element.update(neighbours, rect, this.world.inputs.pointer.position);
+        // });
+
+        if (Math.random() > 0.5) {
+            this.fillColor = ColorHelper.getGradientRandomColor(this.fillColor, 40);
+        }
+    }
+
+    createGrid(width, height, revolution = 10) {
+        let w = Math.ceil(width / revolution);
+        let h = Math.ceil(height / revolution);
+        let grid = [];
+        for (let i = 0; i < w; i++) {
+            grid[i] = [];
+            for (let j = 0; j < h; j++) {
+                grid[i][j] = [];
+            }
+        }
+        return grid;
+    }
+
+    clearGrid(grid) {
+        grid.forEach(element => {
+            element.forEach(cell => {
+                cell.splice(0, cell.length);
+            });
+        });
+    }
+
+    allocateGrid(grid, particles, revolution = 10) {
+        particles.forEach(element => {
+            let p = element.location.divide(revolution);
+            let x = Math.floor(p.x);
+            let y = Math.floor(p.y);
+            grid[x][y].push(element);
+        });
+    }
+
+    getGridNeighbours(grid, particle, revolution) {
+        let result = [];
+        let w = grid.length;
+        let h = grid[0].length;
+        let p = particle.location.divide(revolution);
+        let x = Math.floor(p.x);
+        let y = Math.floor(p.y);
+        for (let i = 0; i < 9; i++) {
+            let dx = x + this.offsetX[i];
+            let dy = y + this.offsetY[i];
+            if (dx >= 0 && dx < w && dy >= 0 && dy < h) {
+                result.push(...grid[dx][dy]);
+            }
+        }
+        return result;
     }
 }
 
@@ -71,9 +143,10 @@ class ParticlesFlyerView extends GameView {
     constructor(target, scale = 1) {
         super(target);
         this.scale = scale;
-        // this.image = new Image(16, 16);
-        // this.image.src = "/static/sample.png";
+        this.image = new Image(16, 16);
+        this.image.src = "/static/sample.png";
         this.rotation = 0;
+        this.rotation2 = 0;
     }
 
     draw(context) {
@@ -81,16 +154,8 @@ class ParticlesFlyerView extends GameView {
             return;
         }
 
-        this.rotation = this.rotation + 0.0001;
-
-        let w = this.target.world.width - 8;
-        let h = this.target.world.height - 8;
-        context.translate(this.target.world.width / 2, this.target.world.height / 2);
-        //context.rotate(this.rotation);
-        context.globalAlpha = 0.96;
-        context.drawImage(document.getElementById("canvas"), -w / 2, -h / 2, w, h);
-        context.globalAlpha = 1;
-        context.setTransform(1, 0, 0, 1, 0, 0);
+        this.rotation2 = this.rotation2 + 0.002;
+        this.scaleCanvas(context, 16 * Math.sin(this.rotation2));
 
         for (let index = 0; index < this.target.particles.length; index++) {
             const element = this.target.particles[index];
@@ -130,8 +195,21 @@ class ParticlesFlyerView extends GameView {
             //     context.strokeStyle = element.color.getRGBAValue();
             //     context.closePath();
             //     context.stroke();
-            // }
+            // }F
         }
+    }
+
+    scaleCanvas(context, offset = 1) {
+        this.rotation = this.rotation + 0.0005;
+
+        let w = this.target.world.width + offset;
+        let h = this.target.world.height + offset;
+        context.translate(this.target.world.width / 2, this.target.world.height / 2);
+        //context.rotate(this.rotation);
+        context.globalAlpha = 0.99;
+        context.drawImage(document.getElementById("canvas"), -w / 2, -h / 2, w, h);
+        context.globalAlpha = 1;
+        context.setTransform(1, 0, 0, 1, 0, 0);
     }
 }
 

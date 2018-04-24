@@ -17,11 +17,12 @@ class FlyerParticle extends DynamicParticle {
         this.seperate(flyers);
         this.cohesion(flyers);
         this.follow(mouse, 0.5);
-        this.checkRadius(mouse, new Vector2(rect.width, rect.height).length() / 4);
+        this.checkRadius(mouse, new Vector2(rect.width, rect.height).length() / 3);
 
         this.move();
         this.checkBorder(rect);
-        this.findNeighbour(flyers);
+        //this.findNeighbour(flyers);
+
     }
 
     alignspeed(flyers) {
@@ -117,12 +118,13 @@ class FlyerParticle extends DynamicParticle {
         let offset = this.location.subtract(mouse);
         let distance = offset.length();
         if (distance > maxRadius) {
-            this.velocity = new Vector2();
+            //this.velocity = new Vector2();
         }
+
         let alpha = Math.max(0.1, Math.min(1, 1 - (distance / maxRadius)));
         this.color.r = this.color.g = this.color.b = alpha * 75 + 180;
 
-        //this.color.a = Math.max(0.1, Math.min(1, 1 - (distance / maxRadius)));
+        //this.color.a = alpha;
         //this.color.a = Math.max(0.1, Math.min(1, this.velocity.length() / this.velocityUpon));
 
         //this.size = Math.max(0.1, Math.min(1, 1 - (distance / maxRadius))) * 64 + 16;
