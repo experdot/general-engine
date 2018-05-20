@@ -1,5 +1,5 @@
 # General.JS
-[![Build Status](https://travis-ci.org/experdot/General.JS.svg?branch=master)](https://travis-ci.org/experdot/General.JS) [![codebeat badge](https://codebeat.co/badges/88011fec-7b87-4948-bff6-c391a5055c88)](https://codebeat.co/projects/github-com-experdot-natural2d-js-master)
+[![Build Status](https://travis-ci.org/experdot/General.JS.svg?branch=master)](https://travis-ci.org/experdot/General.JS) [![codebeat badge](https://codebeat.co/badges/64542319-65e3-4236-9714-bfcb0e8f27a9)](https://codebeat.co/projects/github-com-experdot-general-js-master)
 
 ## Introduction
 The General Engine For JavaScript
