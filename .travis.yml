@@ -7,7 +7,7 @@ branches:
 
 env:
   global:
-    - Remote_Repository: github.com/experdot/Natural2D.JS.git
+    - Remote_Repository: github.com/experdot/General.JS.git
     - Deployment_Folder: repository_ghpages
 
 cache:
