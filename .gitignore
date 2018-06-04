@@ -1,6 +1,10 @@
 # distribute directory
 dist/
 
+# sourcemap files
+
+*.map
+
 # package-lock json file
 package-lock.json
 
