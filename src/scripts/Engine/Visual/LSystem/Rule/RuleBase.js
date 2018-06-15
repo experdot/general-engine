@@ -9,11 +9,12 @@ class RuleBase {
     }
 }
 
-class RuleTree extends RuleBase {
-    constructor(target, priority) {
+class RuleGrammar extends RuleBase {
+    constructor(target, priority, letters = "") {
         super(target, priority);
-        this.states = "FF+[+F-F-F]-[-F+F+F]".split("");
+        this.states = letters.split("");
     }
+
     generate(parent) {
         let result = [];
         this.states.forEach(element => {
@@ -25,5 +26,5 @@ class RuleTree extends RuleBase {
 
 export {
     RuleBase,
-    RuleTree
+    RuleGrammar
 };
