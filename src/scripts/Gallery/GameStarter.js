@@ -10,6 +10,9 @@ import {
 import {
     ParticlesTreeWorld
 } from "./ParticlesTreeWorld";
+import {
+    LSystemTreeWorld
+} from "./LSystemTreeWorld";
 
 class GameStarter {
     launch(canvas) {
@@ -21,6 +24,8 @@ class GameStarter {
             box = new AnimationBox(canvas, new ParticlesWalkerWorld(canvas.width, canvas.height));
         } else if (request["scene"] === "tree") {
             box = new AnimationBox(canvas, new ParticlesTreeWorld(canvas.width, canvas.height));
+        } else if (request["scene"] === "lsystemtree") {
+            box = new AnimationBox(canvas, new LSystemTreeWorld(canvas.width, canvas.height));
         } else {
             window.location = "../";
         }
