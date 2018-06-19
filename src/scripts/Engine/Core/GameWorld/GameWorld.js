@@ -53,11 +53,7 @@ class GameWorld extends GameVisual {
     raiseSelfAndGameVisualsEvent(eventName, event) {
         this.eventSystem.raiseEvent(eventName, event);
         this.gameVisuals.forEach(element => {
-            if (element.eventSystem.handlers[eventName]) {
-                element.eventSystem.handlers[eventName].forEach(handler => {
-                    handler(event);
-                });
-            }
+            element.eventSystem.raiseEvent(eventName, event);
         });
     }
 }

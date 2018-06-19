@@ -1,15 +1,14 @@
 import {
-    FlowProcess
-} from "../Fundamental/FlowProcess";
+    GeneralProcess
+} from "./GeneralProcess";
 
 /**
  * Represent a general object
  */
 class GeneralObject {
     constructor() {
-        this.name = "";
-        this.start = new FlowProcess(this);
-        this.update = new FlowProcess(this);
+        this.start = new GeneralProcess(this);
+        this.update = new GeneralProcess(this);
     }
 }
 

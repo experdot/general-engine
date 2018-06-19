@@ -2,8 +2,8 @@ import {
     Vector2
 } from "../../../Fundamental/Vector";
 import {
-    FlowProcess
-} from "../Fundamental/FlowProcess";
+    GeneralProcess
+} from "../General/GeneralProcess";
 import {
     GeneralObject
 } from "../General/GeneralObject";
@@ -14,7 +14,7 @@ class GameView extends GeneralObject {
     constructor(target) {
         super(target);
         this.target = target;
-        this.render = new FlowProcess(this).next(this.setTransform).next(this.draw).next(this.restoreTransform);
+        this.render = new GeneralProcess(this).next(this.setTransform).next(this.draw).next(this.restoreTransform);
     }
 
     setTransform(context) {

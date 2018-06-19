@@ -1,14 +1,20 @@
+
 import {
     AnimationBox
-} from "./Engine/Core/AnimationBox";
+} from "./Engine/Core/GameAnimation/AnimationBox";
 import {
     ParticlesTreeWorld
 } from "./Gallery/ParticlesTreeWorld";
 import {
     ParticlesWalkerWorld
 } from "./Gallery/ParticlesWalkerWorld";
-import { ParticlesFlyerWorld } from "./Gallery/ParticlesFlyerWorld";
-import { GameStarter } from "./Gallery/GameStarter";
+import { 
+    ParticlesFlyerWorld 
+} from "./Gallery/ParticlesFlyerWorld";
+import { 
+    GameStarter 
+} from "./Gallery/GameStarter";
+
 
 let natural2D = {
     AnimationBox: AnimationBox,

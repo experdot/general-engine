@@ -15,9 +15,8 @@ class GameVisual extends GeneralObject {
     constructor(view) {
         super();
         this.transform = new Transform();
-        this.world = null;
-        this.bindView(view);
         this.eventSystem = new EventSystem();
+        this.bindView(view);
     }
 
     bindView(view) {

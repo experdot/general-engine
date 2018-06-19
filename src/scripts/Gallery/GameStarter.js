@@ -1,6 +1,6 @@
 import {
     AnimationBox
-} from "../Engine/Core/AnimationBox";
+} from "../Engine/Core/GameAnimation/AnimationBox";
 import {
     ParticlesFlyerWorld
 } from "./ParticlesFlyerWorld";
@@ -15,21 +15,28 @@ import {
 } from "./LSystemTreeWorld";
 
 class GameStarter {
+    constructor() {
+        this.symbols = {};
+        this.addSymbol("flyer", ParticlesFlyerWorld);
+        this.addSymbol("walker", ParticlesWalkerWorld);
+        this.addSymbol("tree", ParticlesTreeWorld);
+        this.addSymbol("lsystemtree", LSystemTreeWorld);
+    }
+
+    addSymbol(name, symbol) {
+        this.symbols[name] = symbol;
+    }
+    getSymbolByName(name) {
+        return this.symbols[name];
+    }
     launch(canvas) {
         let request = this._getRequest();
-        let box = {};
-        if (request["scene"] === "flyer") {
-            box = new AnimationBox(canvas, new ParticlesFlyerWorld(canvas.width, canvas.height));
-        } else if (request["scene"] === "walker") {
-            box = new AnimationBox(canvas, new ParticlesWalkerWorld(canvas.width, canvas.height));
-        } else if (request["scene"] === "tree") {
-            box = new AnimationBox(canvas, new ParticlesTreeWorld(canvas.width, canvas.height));
-        } else if (request["scene"] === "lsystemtree") {
-            box = new AnimationBox(canvas, new LSystemTreeWorld(canvas.width, canvas.height));
+        let World = this.getSymbolByName(request["scene"]);
+        if (World) {
+            return new AnimationBox(canvas, new World(canvas.width, canvas.height));
         } else {
             window.location = "../";
         }
-        return box;
     }
 
     _getRequest() {
