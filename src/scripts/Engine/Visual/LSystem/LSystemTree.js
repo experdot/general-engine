@@ -40,20 +40,23 @@ class LSystemTree extends GameVisual {
 
         this.depth = 3;
         this.LSystem.generate(this.depth);
+
+        this.start.next(this._start);
+        this.update.next(this._update);
     }
 
-    start() {
+    _start() {
         let w = this.world.width;
         let h = this.world.height;
 
         this.fillColor = new Color(0, 128, 128, 0.4);
-        this.view.renderProcess.next(context => {
+        this.view.render.next(context => {
             context.fillStyle = this.fillColor.getRGBAValue();
             context.fillRect(0, 0, w, h);
         }, 0);
     }
 
-    update() {
+    _update() {
         if (Math.random() > 0.5) {
             this.fillColor = ColorHelper.getGradientRandomColor(this.fillColor, 10);
         }
@@ -83,12 +86,13 @@ class LSystemTreeView extends GameView {
 
         this.rotateRatio = 6.2 + Math.sin(this.singleNumber) * 0.3;
 
-        if (true || !this.center) {
-            this.center = new Vector2(this.target.world.width / 2, this.target.world.height * 0.9);
-            this.lengthOfLine = this.target.world.height * (1 / Math.pow(3, this.target.depth + 1)) * 1;
-            this.offset = new Vector2(0, -this.lengthOfLine);
-            this.lineColor = new Color(255, 255, 255, 1);
-        }
+        //if (!this.center) {
+        this.center = new Vector2(this.target.world.width / 2, this.target.world.height * 0.9);
+        this.lengthOfLine = this.target.world.height * (1 / Math.pow(3, this.target.depth + 1)) * 1;
+        this.offset = new Vector2(0, -this.lengthOfLine);
+        this.lineColor = new Color(255, 255, 255, 1);
+        //}
+
         let stepIndex = 0;
         let stepBound = 10000;
         let states = this.target.states;

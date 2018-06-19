@@ -5,31 +5,16 @@ import {
     FlowProcess
 } from "../Fundamental/FlowProcess";
 import {
-    GameObject
-} from "./Base/GameObject";
-
+    GeneralObject
+} from "../General/GeneralObject";
 /** 
  * Represents a view to present the visual object
  */
-class GameView extends GameObject {
+class GameView extends GeneralObject {
     constructor(target) {
         super(target);
         this.target = target;
-        this.startProcess = new FlowProcess(this);
-        this.updateProcess = new FlowProcess(this);
-        this.renderProcess = new FlowProcess(this).next(this.setTransform).next(this.draw).next(this.restoreTransform);
-    }
-
-    start() {
-        this.startProcess.process(...arguments);
-    }
-
-    update() {
-        this.updateProcess.process(...arguments);
-    }
-
-    render() {
-        this.renderProcess.process(...arguments);
+        this.render = new FlowProcess(this).next(this.setTransform).next(this.draw).next(this.restoreTransform);
     }
 
     setTransform(context) {

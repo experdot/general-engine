@@ -22,9 +22,11 @@ class ParticlesWalker extends ParticlesBase {
     constructor(view) {
         super(view);
         this.random = new Random();
+        this.start.next(this._start);
+        this.update.next(this._update);
     }
 
-    start() {
+    _start() {
         let w = this.world.width;
         let h = this.world.height;
         this.walkers = [];
@@ -44,7 +46,7 @@ class ParticlesWalker extends ParticlesBase {
         this.createNodes(this.walkers, particle, this.maxDepth, this.split, 1);
 
         this.fillColor = new Color(0, 128, 128, 0.005);
-        this.view.renderProcess.next(context => {
+        this.view.render.next(context => {
             context.fillStyle = this.fillColor.getRGBAValue();
             context.fillRect(0, 0, w, h);
         }, 0);
@@ -55,7 +57,7 @@ class ParticlesWalker extends ParticlesBase {
         this.particles = this.walkers;
     }
 
-    update() {
+    _update() {
         const rect = {
             width: this.world.width,
             height: this.world.height

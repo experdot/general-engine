@@ -20,7 +20,7 @@ class GameWorldView extends GameView {
             context.closePath();
         }
         this.target.gameVisuals.forEach(element => {
-            element.view && element.view.render(context);
+            element.view && element.view.render.process(context);
         });
     }
 }

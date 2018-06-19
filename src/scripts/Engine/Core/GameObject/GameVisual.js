@@ -5,29 +5,19 @@ import {
     EventSystem
 } from "../Fundamental/EventSystem";
 import {
-    FlowProcess
-} from "../Fundamental/FlowProcess";
+    GeneralObject
+} from "../General/GeneralObject";
 
 /** 
  * Represents a visual object
  */
-class GameVisual {
+class GameVisual extends GeneralObject {
     constructor(view) {
+        super();
         this.transform = new Transform();
         this.world = null;
         this.bindView(view);
         this.eventSystem = new EventSystem();
-
-        this.startProcess = new FlowProcess(this);
-        this.updateProcess = new FlowProcess(this);
-    }
-    // invoke when a visual object is added to the world.
-    start() {
-        this.startProcess.process();
-    }
-    // invoke once per frame.
-    update() {
-        this.updateProcess.process();
     }
 
     bindView(view) {

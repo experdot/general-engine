@@ -19,9 +19,11 @@ class ParticlesTree extends ParticlesBase {
         super(view);
         this.spots = [];
         this.random = new Random();
+        this.start.next(this._start);
+        this.update.next(this._update);
     }
 
-    start() {
+    _start() {
         var minLength = Math.min(this.world.width, this.world.height);
         var ratio = minLength / 2500 * Math.log10(minLength);
         var center = new Vector2(this.world.width / 2, this.world.height * 1.45);
@@ -34,7 +36,7 @@ class ParticlesTree extends ParticlesBase {
         this.particles = this.spots;
     }
 
-    update() {
+    _update() {
         if (this.stopDraw) {
             return;
         }

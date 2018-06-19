@@ -17,7 +17,7 @@ class FrameManager {
     }
 
     // [Obsolute Method]
-    loopInvokeBySetInternal(action, internal = 16.67) {
+    loopInvokeBySetInternal(action, internal = 16.667) {
         setInterval(action, internal);
     }
 
@@ -51,12 +51,12 @@ class AnimationBox {
     }
 
     start(world) {
-        world.start();
+        world.start.process();
     }
 
     update(world, context) {
-        world.view.render(context);
-        world.update();
+        world.view.render.process(context);
+        world.update.process();
     }
 }
 

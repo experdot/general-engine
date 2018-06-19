@@ -23,15 +23,18 @@ class ParticlesFlyer extends ParticlesBase {
         super(view);
         this.random = new Random();
         this.fillColor = new Color(0, 0, 0, 0.005);
-        this.view.renderProcess.next(context => {
+        this.view.render.next(context => {
             context.fillStyle = this.fillColor.getRGBAValue();
             context.fillRect(0, 0, this.world.width, this.world.height);
         }, 0);
         this.offsetX = [0, -1, 0, 1, 1, 1, 0, -1, -1];
         this.offsetY = [0, -1, -1, -1, 0, 1, 1, 1, 0];
+
+        this.start.next(this._start);
+        this.update.next(this._update);
     }
 
-    start() {
+    _start() {
         let w = this.world.width;
         let h = this.world.height;
         let center = new Vector2(w * 0.5, h * 0.5);
@@ -61,7 +64,7 @@ class ParticlesFlyer extends ParticlesBase {
         }
     }
 
-    update() {
+    _update() {
         const rect = {
             width: this.world.width,
             height: this.world.height
