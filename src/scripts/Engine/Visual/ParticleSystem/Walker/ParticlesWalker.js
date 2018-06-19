@@ -45,14 +45,13 @@ class ParticlesWalker extends ParticlesBase {
         this.maxDepth = 6 + parseInt(w / 600);
         this.createNodes(this.walkers, particle, this.maxDepth, this.split, 1);
 
-        this.fillColor = new Color(0, 128, 128, 0.005);
+        this.fillColor = new Color(0, 128, 128, w > 800 ? 0.003 : 0.005);
         this.view.render.next(context => {
             context.fillStyle = this.fillColor.getRGBAValue();
             context.fillRect(0, 0, w, h);
         }, 0);
 
-        this.period = Math.PI / 3;
-        this.rotationDelta = Math.random() * 3;
+        this.rotationDelta = Math.PI / Math.floor(Math.random() * 8 + 1);
 
         this.particles = this.walkers;
     }
@@ -65,9 +64,6 @@ class ParticlesWalker extends ParticlesBase {
 
         this.transform.center = new Vector2(rect.width / 2, rect.height / 2);
         this.transform.rotation = this.transform.rotation + this.rotationDelta;
-
-        //this.period = (this.period + 0.0001) % (Math.PI * 2);
-        //this.rotationDelta = Math.sin(this.period) * 3;
 
         this.walkers.forEach((element, index) => {
             element.update(rect, index === 0 ? this.center : element.parent.location);
