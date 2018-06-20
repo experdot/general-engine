@@ -51,7 +51,7 @@ class ParticlesWalker extends ParticlesBase {
             context.fillRect(0, 0, w, h);
         }, 0);
 
-        this.rotationDelta = Math.PI / Math.floor(Math.random() * 8 + 1);
+        this.rotationDelta = Math.PI * 2 / Math.floor(Math.random() * 8 + 2);
 
         this.particles = this.walkers;
     }
@@ -75,7 +75,7 @@ class ParticlesWalker extends ParticlesBase {
 
         if (Math.random() > 0.5) {
             this.split += (Math.random() * 1.6 - 0.8);
-            this.split = Math.max(1, Math.min(12, this.split));
+            this.split = Math.max(1, Math.min(16, this.split));
         }
         this.modifyNodes(this.walkers[0], this.split, 1 * this.split / 10);
     }
@@ -113,11 +113,6 @@ class ParticlesWalker extends ParticlesBase {
 }
 
 class ParticlesWalkerView extends GameView {
-    constructor(target, scale = 1) {
-        super(target);
-        this.scale = scale;
-    }
-
     draw(context) {
         if (this.target.stopDraw) {
             return;
@@ -125,16 +120,11 @@ class ParticlesWalkerView extends GameView {
         for (let index = 0; index < this.target.particles.length; index++) {
             const element = this.target.particles[index];
             let p = element.location;
-            // context.beginPath();
-            // context.arc(p.x, p.y, element.size / 2 * this.scale, 0, Math.PI * 2, false);
-            // context.fillStyle = element.color.getRGBAValue();
-            // context.fill();
-
             if (element.parent) {
                 context.beginPath();
                 context.moveTo(p.x, p.y);
                 context.lineTo(element.parent.location.x, element.parent.location.y);
-                context.lineWidth = element.size * this.scale;
+                context.lineWidth = element.size;
                 context.strokeStyle = element.color.getRGBAValue();
                 context.closePath();
                 context.stroke();
