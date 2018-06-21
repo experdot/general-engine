@@ -78,8 +78,8 @@ class EventSystem {
  * and provides a value to use for events that do not include event data.
  */
 class EventArgs {
-    constructor(data) {
-        this.data = data;
+    constructor() {
+        
     }
 
     static get empty() {
@@ -87,7 +87,15 @@ class EventArgs {
     }
 }
 
+class ValueChangedEventArgs extends EventArgs {
+    constructor(source, newValue) {
+        super(source);
+        this.newValue = newValue;
+    }
+}
+
 export {
     EventSystem,
-    EventArgs
+    EventArgs,
+    ValueChangedEventArgs
 };
