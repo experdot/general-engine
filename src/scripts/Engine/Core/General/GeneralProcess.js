@@ -8,6 +8,9 @@ class GeneralProcess {
         this.tasks = [];
     }
 
+    setContext(context) {
+        this.context = context;
+    }
     process() {
         this.tasks.forEach(element => {
             element.enabled && element.action && element.action.call(this.context, ...arguments);

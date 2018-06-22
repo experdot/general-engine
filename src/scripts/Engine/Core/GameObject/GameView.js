@@ -12,7 +12,7 @@ import {
  */
 class GameView extends GeneralObject {
     constructor(target) {
-        super(target);
+        super();
         this.target = target;
         this.render = new GeneralProcess(this).next(this.setTransform).next(this.draw).next(this.restoreTransform);
     }

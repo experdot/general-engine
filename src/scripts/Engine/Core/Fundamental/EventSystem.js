@@ -79,7 +79,7 @@ class EventSystem {
  */
 class EventArgs {
     constructor() {
-        
+
     }
 
     static get empty() {
@@ -89,7 +89,8 @@ class EventArgs {
 
 class ValueChangedEventArgs extends EventArgs {
     constructor(source, newValue) {
-        super(source);
+        super();
+        this.source = source;
         this.newValue = newValue;
     }
 }
