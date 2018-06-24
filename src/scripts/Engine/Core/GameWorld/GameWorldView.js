@@ -1,5 +1,5 @@
 import {
-    Color
+    Colors
 } from "../../../Fundamental/Color";
 import {
     GameView
@@ -9,7 +9,7 @@ class GameWorldView extends GameView {
     constructor(target) {
         super(target);
         this.isClear = false;
-        this.clearColor = new Color();
+        this.clearColor = Colors.Black();
     }
 
     draw(context) {

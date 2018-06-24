@@ -1,6 +1,7 @@
 import {
     Color,
-    ColorHelper
+    ColorHelper,
+    Colors
 } from "../../../../Fundamental/Color";
 import {
     Vector2
@@ -50,7 +51,7 @@ class ParticlesFlyer extends ParticlesBase {
             particle.location = center.add(new Vector2(fieldWidth * Math.random() - fieldWidth / 2, fieldHeight * Math.random() - fieldHeight / 2));
             particle.velocity = new Vector2(10 * Math.random() - 5, 10 * Math.random() - 5);
             particle.size = 2 + maxSize * Math.random();
-            particle.color = Color.White();
+            particle.color = Colors.White();
             this.flyers.push(particle);
         }
 

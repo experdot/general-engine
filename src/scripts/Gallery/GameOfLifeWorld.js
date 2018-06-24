@@ -5,29 +5,28 @@ import {
     GameWorldView
 } from "../Engine/Core/GameWorld/GameWorldView";
 import {
-    ParticlesWalker,
-    ParticlesWalkerView
-} from "../Engine/Visual/ParticleSystem/Walker/ParticlesWalker";
+    GameOfLife,
+    GameOfLifeView
+} from "../Engine/Visual/CA/GameOfLife/GameOfLife";
 import {
     PointerInput
 } from "../Engine/Core/Fundamental/Inputs";
 
-class ParticlesWalkerWorld extends GameWorld {
+class GameOfLifeWorld extends GameWorld {
     static Title() {
-        return "Particels - Walker";
+        return "CA - GameOfLife";
     }
-
     initialize() {
         this.view = new GameWorldView(this);
         this.inputs.addInput(new PointerInput());
     }
 
     createObjects() {
-        let visual = new ParticlesWalker(new ParticlesWalkerView());
+        let visual = new GameOfLife(new GameOfLifeView());
         this.addVisual(visual);
     }
 }
 
 export {
-    ParticlesWalkerWorld
+    GameOfLifeWorld
 };

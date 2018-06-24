@@ -120,8 +120,17 @@ class PointerInput extends InputBase {
         // [Experimental Code]
         this.registEventFast("touchmove", "onTouchMove", event => {
             event.preventDefault();
+            inputs.pointer.isPressed = true;
             inputs.pointer.position = new Vector2(event.changedTouches[0].clientX, event.changedTouches[0].clientY);
         });
+
+        this.registEventFast("mousedown", "onPointerPressed");
+        this.registEventFast("mouseup", "onPointerReleased");
+        this.registEventFast("mousemove", "onPointerMove");
+
+        this.registEventFast("touchStart", "onPointerPressed");
+        this.registEventFast("touchEnd", "onPointerReleased");
+        this.registEventFast("touchmove", "onPointerMove");
     }
 }
 

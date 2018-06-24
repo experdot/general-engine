@@ -2,13 +2,6 @@
  * Represents a RGBA (red, green, blue, alpha) color.
  */
 class Color {
-    static Black() {
-        return new Color(0, 0, 0, 1);
-    }
-    static White() {
-        return new Color(255, 255, 255, 1);
-    }
-
     constructor(r = 255, g = 255, b = 255, a = 1) {
         this.r = r;
         this.g = g;
@@ -51,7 +44,7 @@ class ColorHelper {
         var g = color.g;
         g += increment;
         g = Math.min(upon, Math.max(0, g));
-        
+
         var b = color.b;
         b += increment;
         b = Math.min(upon, Math.max(0, b));
@@ -79,7 +72,17 @@ class ColorHelper {
     }
 }
 
+class Colors {
+    static Black() {
+        return new Color(0, 0, 0, 1);
+    }
+    static White() {
+        return new Color(255, 255, 255, 1);
+    }
+}
+
 export {
     Color,
-    ColorHelper
+    ColorHelper,
+    Colors
 };

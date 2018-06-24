@@ -1,18 +1,21 @@
 import {
     AnimationBox
-} from "../Engine/Core/GameAnimation/AnimationBox";
+} from "../../Engine/Core/GameAnimation/AnimationBox";
 import {
     ParticlesFlyerWorld
-} from "./ParticlesFlyerWorld";
+} from ".././ParticlesFlyerWorld";
 import {
     ParticlesWalkerWorld
-} from "./ParticlesWalkerWorld";
+} from ".././ParticlesWalkerWorld";
 import {
     ParticlesTreeWorld
-} from "./ParticlesTreeWorld";
+} from ".././ParticlesTreeWorld";
 import {
     LSystemTreeWorld
-} from "./LSystemTreeWorld";
+} from ".././LSystemTreeWorld";
+import {
+    GameOfLifeWorld
+} from "../GameOfLifeWorld";
 
 class GameStarter {
     constructor() {
@@ -21,6 +24,7 @@ class GameStarter {
         this.addSymbol("walker", ParticlesWalkerWorld);
         this.addSymbol("tree", ParticlesTreeWorld);
         this.addSymbol("lsystemtree", LSystemTreeWorld);
+        this.addSymbol("gameoflife", GameOfLifeWorld);
     }
 
     addSymbol(name, symbol) {
@@ -33,6 +37,7 @@ class GameStarter {
         let request = this._getRequest();
         let World = this.getSymbolByName(request["scene"]);
         if (World) {
+            document.title = World.Title();
             return new AnimationBox(canvas, new World(canvas.width, canvas.height));
         } else {
             window.location = "../";

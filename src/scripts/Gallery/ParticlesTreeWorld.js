@@ -1,7 +1,4 @@
 import {
-    Color
-} from "../Fundamental/Color";
-import {
     GameWorld
 } from "../Engine/Core/GameWorld/GameWorld";
 import {
@@ -15,9 +12,12 @@ import {
 } from "../Engine/Visual/ParticleSystem/Tree/ParticlesTree";
 
 class ParticlesTreeWorld extends GameWorld {
+    static Title() {
+        return "Particles - Tree";
+    }
+
     initialize() {
         this.view = new GameWorldView(this);
-        this.view.clearColor = new Color(0, 0, 0);
     }
 
     createObjects() {

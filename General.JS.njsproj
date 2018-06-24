@@ -50,10 +50,10 @@
     <Compile Include=".eslintrc.js" />
     <Compile Include="gulpfile.js" />
     <Content Include="dist\README.md" />
-    <Content Include="views\particles.html" />
+    <Content Include="views\gallery.html" />
     <Compile Include="dist\scripts\bundle.min.js" />
     <Content Include="dist\styles\particles.min.css" />
-    <Content Include="dist\views\particles.html" />
+    <Content Include="dist\views\gallery.html" />
     <TypeScriptCompile Include="src\scripts\entry.ts" />
     <Compile Include="src\scripts\Fundamental\Color.js" />
     <Compile Include="src\scripts\Fundamental\Random.js" />

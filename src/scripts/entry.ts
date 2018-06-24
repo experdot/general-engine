@@ -8,12 +8,12 @@ import {
 import {
     ParticlesWalkerWorld
 } from "./Gallery/ParticlesWalkerWorld";
-import { 
-    ParticlesFlyerWorld 
+import {
+    ParticlesFlyerWorld
 } from "./Gallery/ParticlesFlyerWorld";
-import { 
-    GameStarter 
-} from "./Gallery/GameStarter";
+import {
+    GameStarter
+} from "./Gallery/GameStarter/GameStarter";
 
 
 let natural2D = {

@@ -1,7 +1,4 @@
 import {
-    Color
-} from "../Fundamental/Color";
-import {
     GameWorld
 } from "../Engine/Core/GameWorld/GameWorld";
 import {
@@ -13,9 +10,12 @@ import {
 } from "../Engine/Visual/LSystem/LSystemTree";
 
 class LSystemTreeWorld extends GameWorld {
+    static Title() {
+        return "L-System - Tree";
+    }
+
     initialize() {
         this.view = new GameWorldView(this);
-        this.view.clearColor = new Color(0, 0, 0);
     }
 
     createObjects() {
