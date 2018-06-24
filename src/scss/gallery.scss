@@ -4,6 +4,16 @@
     box-sizing: border-box;
 }
 
+html {
+    font-size: 5vw;
+}
+
+@media screen and (min-width:1200px) {
+    html {
+        font-size: 1vw;
+    }
+}
+
 body {
     background: #EEEEEE;
     margin: 0rem;
@@ -18,6 +28,7 @@ home {
         background: rgba(0, 0, 0, 0.6);
         text-align: center;
         cursor: pointer;
+        font-size: 1rem;
     }
     .button-viewongithub {
         position: fixed;
@@ -26,6 +37,7 @@ home {
         background: rgba(0, 0, 0, 0.6);
         text-align: center;
         cursor: pointer;
+        font-size: 1rem;
         a {
             color: #CCCCCC;
             text-decoration: none;
