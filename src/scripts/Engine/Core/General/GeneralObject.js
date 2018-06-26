@@ -9,6 +9,7 @@ class GeneralObject {
     constructor() {
         this.start = new GeneralProcess(this);
         this.update = new GeneralProcess(this);
+        this.dispose = new GeneralProcess(this);
     }
 
     proxy(action, sync = true) {
@@ -21,6 +22,9 @@ class GeneralObject {
             });
             this.update.next(() => {
                 p.update.process(...arguments);
+            });
+            this.dispose.next(() => {
+                p.dispose.process(...arguments);
             });
         }
         action && action(p, this);

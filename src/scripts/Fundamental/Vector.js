@@ -57,6 +57,10 @@ class Vector2 {
             this.setLength(upon);
         }
     }
+
+    cos(v) {
+        return this.dot(v) / (this.length() * v.length());
+    }
 }
 
 export {

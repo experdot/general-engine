@@ -15,6 +15,13 @@ class Inputs {
         });
     }
 
+    release() {
+        this.inputList.forEach(element => {
+            element.release();
+        });
+        this.ui = null;
+    }
+
     regist(input) {
         input.regist(this);
     }
@@ -27,12 +34,24 @@ class Inputs {
 class InputBase {
     regist(inputs) {
         this.inputs = inputs;
+        this.events = [];
     }
     registEventFast(sourceName, targetName, before, after) {
-        this.inputs.ui.addEventListener(sourceName, (event) => {
+        let listener = (event) => {
             before && before(event);
             this.inputs.world.raiseSelfAndGameVisualsEvent(targetName, event);
             after && after(event);
+        };
+        this.inputs.ui.addEventListener(sourceName, listener);
+        this.events.push({
+            ui: this.inputs.ui,
+            name: sourceName,
+            listener: listener
+        });
+    }
+    release() {
+        this.events.forEach(event => {
+            event.ui.removeEventListener(event.name, event.listener);
         });
     }
 }
@@ -110,10 +129,12 @@ class PointerInput extends InputBase {
             inputs.pointer.position = new Vector2(event.offsetX, event.offsetY);
         });
 
-        this.registEventFast("touchStart", "onTouchStart", () => {
+        this.registEventFast("touchstart", "onTouchStart", () => {
+            event.preventDefault();
             inputs.pointer.isPressed = true;
         });
-        this.registEventFast("touchEnd", "onTouchEnd", () => {
+        this.registEventFast("touchend", "onTouchEnd", () => {
+            event.preventDefault();
             inputs.pointer.isPressed = false;
         });
 
@@ -128,8 +149,8 @@ class PointerInput extends InputBase {
         this.registEventFast("mouseup", "onPointerReleased");
         this.registEventFast("mousemove", "onPointerMove");
 
-        this.registEventFast("touchStart", "onPointerPressed");
-        this.registEventFast("touchEnd", "onPointerReleased");
+        this.registEventFast("touchstart", "onPointerPressed");
+        this.registEventFast("touchend", "onPointerReleased");
         this.registEventFast("touchmove", "onPointerMove");
     }
 }

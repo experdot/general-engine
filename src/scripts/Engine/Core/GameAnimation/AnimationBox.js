@@ -33,6 +33,7 @@ class AnimationBox extends GeneralObject {
         this.frameManager.stop(() => {
             this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
         });
+        this.world.dispose.process();
     }
 }
 

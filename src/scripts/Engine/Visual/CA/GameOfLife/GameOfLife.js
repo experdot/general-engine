@@ -15,6 +15,7 @@ import {
     Color,
     ColorHelper
 } from "../../../../Fundamental/Color";
+import { Cell } from "../Cell";
 
 class GameOfLife extends GameVisual {
     constructor(view) {
@@ -100,7 +101,7 @@ class GameOfLife extends GameVisual {
 
     addDefaultCell(ca, x, y, color = Colors.White()) {
         let location = new Vector2(x * this.cellSize, y * this.cellSize);
-        ca.setCell(x, y).setLocation(location).setColor(color).setSize(this.cellSize);
+        ca.setCell(x, y,new Cell()).setLocation(location).setColor(color).setSize(this.cellSize);
     }
 }
 

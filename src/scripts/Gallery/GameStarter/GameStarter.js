@@ -16,6 +16,9 @@ import {
 import {
     GameOfLifeWorld
 } from "../GameOfLifeWorld";
+import {
+    EndlessAbyssWorld
+} from "../EndlessAbyssWorld";
 
 class GameStarter {
     constructor() {
@@ -25,6 +28,7 @@ class GameStarter {
         this.addSymbol("tree", ParticlesTreeWorld);
         this.addSymbol("lsystemtree", LSystemTreeWorld);
         this.addSymbol("gameoflife", GameOfLifeWorld);
+        this.addSymbol("endlessabyss", EndlessAbyssWorld);
     }
 
     addSymbol(name, symbol) {

@@ -1,9 +1,10 @@
 import {
-    Cell
-} from "./Cell";
+    GeneralGrid
+} from "../../Core/Common/GeneralGrid";
 
-class CellularAutomata {
+class CellularAutomata extends GeneralGrid {
     constructor(width = 1, height = 1) {
+        super(width, height);
         this.width = width;
         this.height = height;
         this.grid = [];
@@ -18,7 +19,6 @@ class CellularAutomata {
     generate() {
         return new CellularAutomata(this.width, this.height);
     }
-
     getAround(x, y, offsetX, offsetY) {
         let result = 0;
         for (let i = 0; i < 8; i++) {
@@ -30,31 +30,6 @@ class CellularAutomata {
         }
         return result;
     }
-
-    kill(x, y) {
-        delete this.grid[x, y];
-    }
-
-    setCell(x, y, cell = new Cell()) {
-        this.grid[x][y] = cell;
-        return this.grid[x][y];
-    }
-
-    getCell(x, y) {
-        return this.grid[x][y];
-    }
-
-    forEach(action) {
-        let x = 0;
-        this.grid.forEach(column => {
-            column && column.forEach((cell, index) => {
-                action && action(cell, x, index);
-            });
-            x += 1;
-        });
-    }
-
-
 }
 
 export {
