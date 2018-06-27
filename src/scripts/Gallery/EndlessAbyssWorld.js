@@ -5,7 +5,8 @@ import {
     GameWorldView
 } from "../Engine/Core/GameWorld/GameWorldView";
 import {
-    PointerInput
+    PointerInput,
+    KeyInput
 } from "../Engine/Core/Fundamental/Inputs";
 import {
     EndlessAbyss,
@@ -19,6 +20,7 @@ class EndlessAbyssWorld extends GameWorld {
     initialize() {
         this.view = new GameWorldView(this);
         this.inputs.addInput(new PointerInput());
+        this.inputs.addInput(new KeyInput());
     }
 
     createObjects() {

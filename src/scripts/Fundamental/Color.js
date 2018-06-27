@@ -2,6 +2,11 @@
  * Represents a RGBA (red, green, blue, alpha) color.
  */
 class Color {
+    static FromHex(hex) {
+        let value = parseInt(hex.slice(1), 16);
+        return new Color(value / 65536, value / 256 % 256, value % 256);
+    }
+
     constructor(r = 255, g = 255, b = 255, a = 1) {
         this.r = r;
         this.g = g;
@@ -12,7 +17,6 @@ class Color {
     clone() {
         return new Color(this.r, this.g, this.b, this.a);
     }
-
     getHexValue() {
         let r = parseInt(this.r);
         let g = parseInt(this.g);

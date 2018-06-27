@@ -36,15 +36,16 @@ class InputBase {
         this.inputs = inputs;
         this.events = [];
     }
-    registEventFast(sourceName, targetName, before, after) {
+    registEventFast(sourceName, targetName, before, after, uiElement = null) {
         let listener = (event) => {
             before && before(event);
             this.inputs.world.raiseSelfAndGameVisualsEvent(targetName, event);
             after && after(event);
         };
-        this.inputs.ui.addEventListener(sourceName, listener);
+        uiElement = uiElement || this.inputs.ui;
+        uiElement.addEventListener(sourceName, listener);
         this.events.push({
-            ui: this.inputs.ui,
+            ui: uiElement,
             name: sourceName,
             listener: listener
         });
@@ -155,10 +156,30 @@ class PointerInput extends InputBase {
     }
 }
 
+class KeyInput extends InputBase {
+    regist(inputs) {
+        super.regist(inputs);
+        if (!inputs.key) {
+            inputs.key = {
+                isKeyDown: false
+            };
+        }
+
+        this.registEventFast("keydown", "onKeyDown", () => {
+            inputs.key.isKeyDown = true;
+        }, null, document);
+        this.registEventFast("keyup", "onKeyUp", () => {
+            inputs.key.isKeyDown = false;
+        }, null, document);
+        this.registEventFast("keypress", "onKeyPress", null, null, document);
+    }
+}
+
 export {
     Inputs,
     InputBase,
     MouseInput,
     TouchInput,
-    PointerInput
+    PointerInput,
+    KeyInput
 };
