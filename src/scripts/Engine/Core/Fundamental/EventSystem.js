@@ -42,24 +42,24 @@ class EventSystem {
         }
     }
 
-    registSystemEventByDom0(container, eventName, domEventName) {
+    registSystemEventByDom0(eventTarget, eventName, domEventName) {
         if (!this.handlers[eventName]) {
             this.handlers[eventName] = [];
-            if (domEventName && container) {
-                container[domEventName] = (event) => {
+            if (domEventName && eventTarget) {
+                eventTarget[domEventName] = (event) => {
                     this.raiseEvent(eventName, event);
                 };
             }
         }
     }
 
-    registSystemEventByDom2(container, eventName, domEventName) {
+    registSystemEventByDom2(eventTarget, eventName, domEventName, useCapture) {
         if (!this.handlers[eventName]) {
             this.handlers[eventName] = [];
-            if (domEventName && container) {
-                container.addEventListener(domEventName, (event) => {
+            if (domEventName && eventTarget) {
+                eventTarget.addEventListener(domEventName, (event) => {
                     this.raiseEvent(eventName, event);
-                });
+                }, useCapture);
             }
         }
     }

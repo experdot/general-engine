@@ -15,7 +15,9 @@ import {
     Color,
     ColorHelper
 } from "../../../../Fundamental/Color";
-import { Cell } from "../Cell";
+import {
+    Cell
+} from "../Cell";
 
 class GameOfLife extends GameVisual {
     constructor(view) {
@@ -51,7 +53,7 @@ class GameOfLife extends GameVisual {
 
         this.cellColor = new Color(255, 255, 255, 1);
 
-        this.eventSystem.addHandler("onPointerMove", () => {
+        this.on("onPointerMove", () => {
             //console.log(this.world.inputs.pointer.isPressed);
             if (this.world.inputs.pointer.isPressed) {
                 let p = this.world.inputs.pointer.position;
@@ -101,7 +103,7 @@ class GameOfLife extends GameVisual {
 
     addDefaultCell(ca, x, y, color = Colors.White()) {
         let location = new Vector2(x * this.cellSize, y * this.cellSize);
-        ca.setCell(x, y,new Cell()).setLocation(location).setColor(color).setSize(this.cellSize);
+        ca.setCell(x, y, new Cell()).setLocation(location).setColor(color).setSize(this.cellSize);
     }
 }
 

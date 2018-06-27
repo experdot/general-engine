@@ -25,6 +25,14 @@ class GameVisual extends GeneralObject {
             view.target = this;
         }
     }
+
+    on(eventName, handler, force = true) {
+        this.eventSystem.addHandler(eventName, handler, force);
+    }
+
+    off(eventName, handler) {
+        this.eventSystem.removeHandler(eventName, handler);
+    }
 }
 
 export {

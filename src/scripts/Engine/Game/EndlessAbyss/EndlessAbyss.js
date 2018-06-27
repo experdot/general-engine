@@ -5,7 +5,7 @@ import {
     GameVisual
 } from "../../Core/GameObject/GameVisual";
 import {
-    Color    
+    Color
 } from "../../../Fundamental/Color";
 import {
     BlockGrid
@@ -57,7 +57,7 @@ class EndlessAbyss extends GameVisual {
     }
 
     _registEvents() {
-        this.eventSystem.addHandler("onKeyPress", (event) => {
+        this.on("onKeyPress", (event) => {
             if (event.key === "a") {
                 this.blockGrid.left();
             } else if (event.key === "d") {
@@ -67,20 +67,20 @@ class EndlessAbyss extends GameVisual {
             } else if (event.key === "s") {
                 this.blockGrid.down();
             }
-        }, true);
+        });
 
-        this.eventSystem.addHandler("onPointerPressed", (event) => {
+        this.on("onPointerPressed", (event) => {
             this.isPressed = true;
             this.startPointer = EventHelper.getEventClientPositon(event);
             this.startRotation = this.rotation;
             this.moveCount = 0;
-        }, true);
+        });
 
-        this.eventSystem.addHandler("onPointerReleased", () => {
+        this.on("onPointerReleased", () => {
             this.isPressed = false;
-        }, true);
+        });
 
-        this.eventSystem.addHandler("onPointerMove", (event) => {
+        this.on("onPointerMove", (event) => {
             if (this.isPressed) {
                 let end = EventHelper.getEventClientPositon(event);
                 let offset = end.subtract(this.startPointer);
@@ -95,7 +95,7 @@ class EndlessAbyss extends GameVisual {
                     this.moveCount = 0;
                 }
             }
-        }, true);
+        });
     }
 }
 
