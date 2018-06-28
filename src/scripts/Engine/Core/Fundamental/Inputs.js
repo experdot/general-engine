@@ -1,11 +1,16 @@
 import {
     Vector2
 } from "../../../Fundamental/Vector";
+import {
+    GeneralObject
+} from "../General/GeneralObject";
 
-class Inputs {
+class Inputs extends GeneralObject {
     constructor(world) {
+        super();
         this.world = world;
         this.inputList = [];
+        this.dispose.next(this.release);
     }
 
     launch(ui) {

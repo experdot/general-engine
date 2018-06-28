@@ -10,25 +10,27 @@ class GeneralObject {
         this.start = new GeneralProcess(this);
         this.update = new GeneralProcess(this);
         this.dispose = new GeneralProcess(this);
+        this.attachements = [];
     }
 
     proxy(action, sync = true) {
-        let p = new GeneralObject();
-        p.start.setContext(this);
-        p.update.setContext(this);
-        if (sync) {
-            this.start.next(() => {
-                p.start.process(...arguments);
-            });
-            this.update.next(() => {
-                p.update.process(...arguments);
-            });
-            this.dispose.next(() => {
-                p.dispose.process(...arguments);
-            });
-        }
-        action && action(p, this);
-        return p;
+        let object = new GeneralObject();
+        object.start.setContext(this);
+        object.update.setContext(this);
+        sync && this.sync(object);
+        action && action(object, this);
+        return object;
+    }
+
+    attach(object, sync = true) {
+        this.attachements.push(object);
+        sync && this.sync(object);
+    }
+
+    sync(object) {
+        this.start.next(() => object.start.process(...arguments));
+        this.update.next(() => object.update.process(...arguments));
+        this.dispose.next(() => object.dispose.process(...arguments));
     }
 }
 

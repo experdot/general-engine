@@ -21,9 +21,8 @@ class GameWorld extends GameVisual {
 
         this.start.next(this.startGameVisuals);
         this.update.next(this.updateGameVisuals);
-        this.dispose.next(() => {
-            this.inputs.release();
-        });
+
+        this.attach(this.inputs);
     }
 
     initialize() {}
