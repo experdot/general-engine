@@ -1,17 +1,18 @@
 import {
     GameWorld
-} from "../Engine/Core/GameWorld/GameWorld";
+} from "../Engine/Game/GameWorld/GameWorld";
 import {
     GameWorldView
-} from "../Engine/Core/GameWorld/GameWorldView";
+} from "../Engine/Game/GameWorld/GameWorldView";
 import {
     PointerInput,
     KeyInput
-} from "../Engine/Core/Fundamental/Inputs";
+} from "../Engine/Common/Inputs";
 import {
     EndlessAbyss,
     EndlessAbyssView
-} from "../Engine/Game/EndlessAbyss/EndlessAbyss";
+} from "./EndlessAbyss/EndlessAbyss";
+
 
 class EndlessAbyssWorld extends GameWorld {
     static Title() {

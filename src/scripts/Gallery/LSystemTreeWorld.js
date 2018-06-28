@@ -1,13 +1,13 @@
 import {
     GameWorld
-} from "../Engine/Core/GameWorld/GameWorld";
+} from "../Engine/Game/GameWorld/GameWorld";
 import {
     GameWorldView
-} from "../Engine/Core/GameWorld/GameWorldView";
+} from "../Engine/Game/GameWorld/GameWorldView";
 import {
     LSystemTree,
     LSystemTreeView
-} from "../Engine/Visual/LSystem/LSystemTree";
+} from "../Engine/Game/Visual/LSystem/LSystemTree";
 
 class LSystemTreeWorld extends GameWorld {
     static Title() {

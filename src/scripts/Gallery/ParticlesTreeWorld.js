@@ -1,15 +1,15 @@
 import {
     GameWorld
-} from "../Engine/Core/GameWorld/GameWorld";
+} from "../Engine/Game/GameWorld/GameWorld";
 import {
     GameWorldView
-} from "../Engine/Core/GameWorld/GameWorldView";
-import {
-    ParticlesCircleView
-} from "../Engine/Visual/ParticleSystem/ParticleSystem";
+} from "../Engine/Game/GameWorld/GameWorldView";
 import {
     ParticlesTree
-} from "../Engine/Visual/ParticleSystem/Tree/ParticlesTree";
+} from "../Engine/Game/Visual/ParticleSystem/Tree/ParticlesTree";
+import {
+    ParticlesCircleView
+} from "../Engine/Game/Visual/ParticleSystem/ParticleSystem";
 
 class ParticlesTreeWorld extends GameWorld {
     static Title() {

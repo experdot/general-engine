@@ -1,16 +1,16 @@
 import {
     GameWorld
-} from "../Engine/Core/GameWorld/GameWorld";
+} from "../Engine/Game/GameWorld/GameWorld";
 import {
     GameWorldView
-} from "../Engine/Core/GameWorld/GameWorldView";
+} from "../Engine/Game/GameWorld/GameWorldView";
+import {
+    PointerInput
+} from "../Engine/Common/Inputs";
 import {
     GameOfLife,
     GameOfLifeView
-} from "../Engine/Visual/CA/GameOfLife/GameOfLife";
-import {
-    PointerInput
-} from "../Engine/Core/Fundamental/Inputs";
+} from "../Engine/Game/Visual/CA/GameOfLife/GameOfLife";
 
 class GameOfLifeWorld extends GameWorld {
     static Title() {

@@ -1,16 +1,16 @@
 import {
     GameWorld
-} from "../Engine/Core/GameWorld/GameWorld";
+} from "../Engine/Game/GameWorld/GameWorld";
 import {
     GameWorldView
-} from "../Engine/Core/GameWorld/GameWorldView";
+} from "../Engine/Game/GameWorld/GameWorldView";
+import {
+    PointerInput
+} from "../Engine/Common/Inputs";
 import {
     ParticlesWalker,
     ParticlesWalkerView
-} from "../Engine/Visual/ParticleSystem/Walker/ParticlesWalker";
-import {
-    PointerInput
-} from "../Engine/Core/Fundamental/Inputs";
+} from "../Engine/Game/Visual/ParticleSystem/Walker/ParticlesWalker";
 
 class ParticlesWalkerWorld extends GameWorld {
     static Title() {

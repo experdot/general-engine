@@ -1,6 +1,6 @@
 import {
     AnimationBox
-} from "../../Engine/Core/GameAnimation/AnimationBox";
+} from "../../Engine/Game/Animation/AnimationBox";
 import {
     ParticlesFlyerWorld
 } from "../ParticlesFlyerWorld";
