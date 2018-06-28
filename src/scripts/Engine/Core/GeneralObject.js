@@ -28,9 +28,9 @@ class GeneralObject {
     }
 
     sync(object) {
-        this.start.next(() => object.start.process(...arguments));
-        this.update.next(() => object.update.process(...arguments));
-        this.dispose.next(() => object.dispose.process(...arguments));
+        this.start.next(...args => object.start.process(...args));
+        this.update.next(...args => object.update.process(...args));
+        this.dispose.next(...args => object.dispose.process(...args));
     }
 }
 
