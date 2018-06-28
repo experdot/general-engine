@@ -3,7 +3,7 @@ import {
 } from "./DynamicParticle";
 import {
     Random
-} from "../../../../Fundamental/Random";
+} from "../../../../Engine/Fundamental/Random";
 
 class WalkerParticle extends DynamicParticle {
     constructor(location, size = 1, age = 0) {

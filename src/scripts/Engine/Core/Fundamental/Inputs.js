@@ -1,6 +1,6 @@
 import {
     Vector2
-} from "../../../Fundamental/Vector";
+} from "../../../Engine/Fundamental/Vector";
 import {
     GeneralObject
 } from "../General/GeneralObject";

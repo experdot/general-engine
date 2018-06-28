@@ -2,18 +2,23 @@ import {
     Exception
 } from "./Exception";
 
+
+const StrictMode = {
+    None: 0,
+    Strict: 1 // The event must be registed explicitly
+};
+
 /**
  * Represents a event container
  */
 class EventSystem {
-    constructor() {
-        // The event must be registed explicitly if strict equals true.
-        this.strict = false;
+    constructor(mode = StrictMode.None) {
+        this.mode = mode;
         this.handlers = {};
     }
 
     addHandler(eventName, handler, force = false) {
-        if (!this.strict || force) {
+        if (this.strict === StrictMode.None || force) {
             this.registEvent(eventName);
         }
         if (this.handlers[eventName]) {
@@ -96,6 +101,7 @@ class ValueChangedEventArgs extends EventArgs {
 }
 
 export {
+    StrictMode,
     EventSystem,
     EventArgs,
     ValueChangedEventArgs

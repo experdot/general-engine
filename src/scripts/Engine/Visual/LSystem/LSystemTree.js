@@ -15,11 +15,11 @@ import {
 } from "../../Core/GameObject/GameView";
 import {
     Vector2
-} from "../../../Fundamental/Vector";
+} from "../../../Engine/Fundamental/Vector";
 import {
     Color,
     ColorHelper
-} from "../../../Fundamental/Color";
+} from "../../../Engine/Fundamental/Color";
 
 class LSystemTree extends GameVisual {
     get states() {

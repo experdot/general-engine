@@ -3,13 +3,13 @@ import {
 } from "../../../Core/Common/GeneralGrid";
 import {
     Vector2
-} from "../../../../Fundamental/Vector";
+} from "../../../../Engine/Fundamental/Vector";
 import {
     BlockGroupHelper
 } from "./BlockGroup";
 import {
     Color
-} from "../../../../Fundamental/Color";
+} from "../../../../Engine/Fundamental/Color";
 
 class BlockGrid extends GeneralGrid {
     constructor(width = 1, height = 1) {

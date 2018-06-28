@@ -67,7 +67,7 @@ const config = {
             html: "./dist/**/*.html"
         },
         browserify: {
-            entries: "src/scripts/entry.ts",
+            entries: "src/scripts/GalleryEntry.ts",
             debug: options.env !== "production",
             transform: [
                 [babelify, {

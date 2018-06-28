@@ -1,12 +1,12 @@
 import {
     Color
-} from "../../../../Fundamental/Color";
+} from "../../../../Engine/Fundamental/Color";
 import {
     Vector2
-} from "../../../../Fundamental/Vector";
+} from "../../../../Engine/Fundamental/Vector";
 import {
     Random
-} from "../../../../Fundamental/Random";
+} from "../../../../Engine/Fundamental/Random";
 import {
     ParticlesBase
 } from "../ParticleSystem";

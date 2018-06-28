@@ -3,13 +3,13 @@ import {
 } from "./DynamicParticle";
 import {
     Random
-} from "../../../../Fundamental/Random";
+} from "../../../../Engine/Fundamental/Random";
 import {
     Vector2
-} from "../../../../Fundamental/Vector";
+} from "../../../../Engine/Fundamental/Vector";
 import {
     ColorHelper
-} from "../../../../Fundamental/Color";
+} from "../../../../Engine/Fundamental/Color";
 
 class SpotParticle extends DynamicParticle {
     constructor(location, size = 1, age = 0) {

@@ -3,16 +3,16 @@ import {
 } from "../../Engine/Core/GameAnimation/AnimationBox";
 import {
     ParticlesFlyerWorld
-} from ".././ParticlesFlyerWorld";
+} from "../ParticlesFlyerWorld";
 import {
     ParticlesWalkerWorld
-} from ".././ParticlesWalkerWorld";
+} from "../ParticlesWalkerWorld";
 import {
     ParticlesTreeWorld
-} from ".././ParticlesTreeWorld";
+} from "../ParticlesTreeWorld";
 import {
     LSystemTreeWorld
-} from ".././LSystemTreeWorld";
+} from "../LSystemTreeWorld";
 import {
     GameOfLifeWorld
 } from "../GameOfLifeWorld";

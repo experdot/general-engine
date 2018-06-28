@@ -1,6 +1,6 @@
 import {
     Colors
-} from "../../../Fundamental/Color";
+} from "../../../Engine/Fundamental/Color";
 import {
     GameView
 } from "../GameObject/GameView";

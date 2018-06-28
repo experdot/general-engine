@@ -1,6 +1,6 @@
 import {
     Color
-} from "../../../Fundamental/Color";
+} from "../../../Engine/Fundamental/Color";
 
 class Particle {
     constructor(location, size = 1, age = 0) {

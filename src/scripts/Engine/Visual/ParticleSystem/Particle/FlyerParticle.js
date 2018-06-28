@@ -3,7 +3,7 @@ import {
 } from "./DynamicParticle";
 import {
     Vector2
-} from "../../../../Fundamental/Vector";
+} from "../../../../Engine/Fundamental/Vector";
 
 class FlyerParticle extends DynamicParticle {
     constructor(location, size = 1, age = 0) {

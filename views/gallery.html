@@ -46,30 +46,6 @@
 </body>
 <foot>
     <script src="../scripts/bundle.min.js" type="text/javascript"></script>
-    <script>
-        var gamebox = document.getElementById("gamebox");
-        var canvas = document.getElementById("canvas");
-        var rebuildButton = document.getElementById("button-rebuild");
-        var box;
-
-        window.addEventListener("resize", function () {
-            box.stop();
-            startGame();
-        });
-        rebuildButton.addEventListener("click", function () {
-            box.stop();
-            startGame();
-        })
-
-        startGame();
-
-        function startGame() {
-            canvas.width = document.body.clientWidth;
-            canvas.height = document.body.clientHeight;
-            box = new Natural2D.GameStarter().launch(canvas);
-            box.run();
-        }
-    </script>
 </foot>
 
 </html>

@@ -6,13 +6,13 @@ import {
 } from "../../Core/GameObject/GameVisual";
 import {
     Color
-} from "../../../Fundamental/Color";
+} from "../../../Engine/Fundamental/Color";
 import {
     BlockGrid
 } from "./Models/BlockGrid";
 import {
     Vector2
-} from "../../../Fundamental/Vector";
+} from "../../../Engine/Fundamental/Vector";
 import {
     EventHelper
 } from "../../Core/Utilities/EventHelper";

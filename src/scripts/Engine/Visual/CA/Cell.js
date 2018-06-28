@@ -1,9 +1,9 @@
 import {
     Vector2
-} from "../../../Fundamental/Vector";
+} from "../../../Engine/Fundamental/Vector";
 import {
     Colors
-} from "../../../Fundamental/Color";
+} from "../../../Engine/Fundamental/Color";
 
 class Cell {
     constructor() {

@@ -1,9 +1,9 @@
 import {
     Colors
-} from "../../../../../Fundamental/Color";
+} from "../../../../../Engine/Fundamental/Color";
 import {
     Vector2
-} from "../../../../../Fundamental/Vector";
+} from "../../../../../Engine/Fundamental/Vector";
 
 class Block {
     constructor() {
