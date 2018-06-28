@@ -1,6 +1,9 @@
 # distribute directory
 dist/
 
+# visual studio code
+.vscode/
+
 # sourcemap files
 
 *.map
