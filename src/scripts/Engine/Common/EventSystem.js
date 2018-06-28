@@ -1,12 +1,15 @@
 import {
     Exception
 } from "./Exception";
+import {
+    Enum
+} from "./Enum";
 
 
-const StrictMode = {
+const StrictMode = Enum.create({
     None: 0,
     Strict: 1 // The event must be registed explicitly
-};
+});
 
 /**
  * Represents a event container

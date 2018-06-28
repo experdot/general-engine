@@ -13,8 +13,12 @@ import {
 import {
     Inputs
 } from "./Inputs";
+import {
+    Enum
+} from "./Enum";
 
 export const Common = {
+    Enum,
     EventArgs,
     EventSystem,
     Exception,
