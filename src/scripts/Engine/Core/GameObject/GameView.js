@@ -14,7 +14,7 @@ class GameView extends GeneralObject {
     constructor(target) {
         super();
         this.target = target;
-        this.render = new GeneralProcess(this).next(this.setTransform).next(this.draw).next(this.restoreTransform);
+        this.render = new GeneralProcess(this).next([this.setTransform, this.draw, this.restoreTransform]);
     }
 
     setTransform(context) {

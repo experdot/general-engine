@@ -20,11 +20,19 @@ class GeneralProcess {
         this.tasks.unshift(new GeneralTask(action));
         return this;
     }
-    next(action, index = -1) {
+    next(actionOrActions, index = -1) {
+        if (actionOrActions instanceof Array) {
+            let newIndex = index;
+            actionOrActions.forEach(element => {
+                this.next(element, newIndex);
+                newIndex++;
+            });
+            return this;
+        }
         if (index < 0) {
             index = this.tasks.length;
         }
-        this.tasks.splice(index, 0, new GeneralTask(action));
+        this.tasks.splice(index, 0, new GeneralTask(actionOrActions));
         return this;
     }
 }
