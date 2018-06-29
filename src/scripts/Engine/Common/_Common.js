@@ -1,27 +1,21 @@
+import * as EventArgs from "./EventArgs";
+import * as EventSystem from "./EventSystem";
+import * as Exception from "./Exception";
+import * as GeneralGrid from "./GeneralGrid";
+import * as Inputs from "./Inputs";
+import * as Enum from "./Enum";
 import {
-    EventArgs
-} from "./EventArgs";
-import {
-    EventSystem
-} from "./EventSystem";
-import {
-    Exception
-} from "./Exception";
-import {
-    GeneralGrid
-} from "./GeneralGrid";
-import {
-    Inputs
-} from "./Inputs";
-import {
-    Enum
-} from "./Enum";
+    Namespace
+} from "./Namespace";
 
-export const Common = {
+/*eslint-disable*/
+export const Common = Namespace.combine({
+        Namespace
+    },
     Enum,
     EventArgs,
     EventSystem,
     Exception,
     GeneralGrid,
     Inputs
-};
+);

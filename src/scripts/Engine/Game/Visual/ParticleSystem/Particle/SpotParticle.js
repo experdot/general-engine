@@ -39,7 +39,7 @@ class SpotParticle extends DynamicParticle {
             this.age -= 1;
             this.size = this.size * this.sizeRadius;
             this.velocity = this.velocity.rotate(this.angleOffset * this.rotateRadius);
-            this.velocity = this.velocity.rotate(this.random.nextNorm(-100, 100) * this.rotateRadiusRandom);
+            this.velocity = this.velocity.rotate(this.random.normal(-100, 100) * this.rotateRadiusRandom);
             this.color = ColorHelper.getGradientColor(this.color, this.getGradientColorIncrement);
             this.velocityUpon = this.size * 0.38;
             this.move();

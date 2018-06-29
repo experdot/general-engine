@@ -1,5 +1,5 @@
 import {
-    Exception
+    InvalidOperationException
 } from "./Exception";
 import {
     Enum
@@ -27,7 +27,7 @@ class EventSystem {
         if (this.handlers[eventName]) {
             this.handlers[eventName].push(handler);
         } else {
-            throw new Exception("The event is not registed.");
+            throw new InvalidOperationException("The event is not registed.");
         }
         return handler;
     }
