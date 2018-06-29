@@ -64,14 +64,14 @@ class SpotParticle extends DynamicParticle {
         }
         var newSize = this.size * this.divideSizeRadius;
         this.size = newSize;
-        this.age = this.random.nextNorm(0, 30);
+        this.age = this.random.normal(0, 30);
         this.angleOffset = Math.random() * 0.02 - 0.01;
         if (count > 1) {
             for (let i = 2; i <= count; i++) {
                 newSize *= this.divideSizeRadiusEx;
                 let particle = new SpotParticle(this.location, newSize);
-                particle.velocity = this.velocity.rotate(this.random.next(-100, 100) * 0.011).multiply(0.618);
-                particle.age = this.random.nextNorm(0, 40);
+                particle.velocity = this.velocity.rotate(this.random.normal(-100, 100) * 0.011).multiply(0.618);
+                particle.age = this.random.normal(0, 40);
                 particle.color = ColorHelper.getGradientRandomColor(this.color, this.velocity.length() * this.divideColorIncrementRatio);
                 particles.push(particle);
             }
