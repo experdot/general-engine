@@ -1,5 +1,4 @@
 import { GameStarter } from "./Gallery/GameStarter/GameStarter";
-
 import * as General from "./Engine/_General";
 
 var canvas = document.getElementById("canvas");
