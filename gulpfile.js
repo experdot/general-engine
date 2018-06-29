@@ -109,7 +109,8 @@ const config = {
     },
     server: {
         baseDir: "./dist",
-        host: "0.0.0.0"
+        host: "0.0.0.0",
+        index: "README.md"
     },
     task: {
         default: "default",
@@ -138,7 +139,8 @@ gulp.task(config.task.default, sequence(config.task.clean, [config.task.html, co
 gulp.task(config.task.server, function () {
     browsersync.init({
         server: {
-            baseDir: config.server.baseDir
+            baseDir: config.server.baseDir,
+            index: config.server.index
         },
         host: config.server.host
     });
