@@ -2,22 +2,29 @@ import {
     Vector2
 } from "../../Engine/Numerics/Vector2";
 import {
-    GeneralObject
-} from "../Core/GeneralObject";
+    NotSupportedException
+} from "./Exception";
 
-class Inputs extends GeneralObject {
-    constructor(world) {
-        super();
-        this.world = world;
+class Inputs {
+    constructor() {
         this.inputList = [];
-        this.dispose.next(this.release);
+        this.handler = () => {
+            throw new NotSupportedException("The event hanlder is not configured");
+        };
+    }
+
+    handle(handler) {
+        this.handler = handler;
+        return this;
     }
 
     launch(ui) {
+        this.release();
         this.ui = ui;
         this.inputList.forEach(element => {
             this.regist(element);
         });
+        return this;
     }
 
     release() {
@@ -37,14 +44,18 @@ class Inputs extends GeneralObject {
 }
 
 class InputBase {
-    regist(inputs) {
-        this.inputs = inputs;
+    constructor() {
         this.events = [];
     }
-    registEventFast(sourceName, targetName, before, after, uiElement = null) {
+
+    regist(inputs) {
+        this.inputs = inputs;
+    }
+
+    registEvent(sourceName, targetName, before, after, uiElement = null) {
         let listener = (event) => {
             before && before(event);
-            this.inputs.world.raiseSelfAndGameVisualsEvent(targetName, event);
+            this.inputs.handler & this.inputs.handler(targetName, event);
             after && after(event);
         };
         uiElement = uiElement || this.inputs.ui;
@@ -55,6 +66,7 @@ class InputBase {
             listener: listener
         });
     }
+
     release() {
         this.events.forEach(event => {
             event.ui.removeEventListener(event.name, event.listener);
@@ -71,22 +83,24 @@ class MouseInput extends InputBase {
                 position: new Vector2(0, 0)
             };
         }
-        this.registEventFast("click", "onClick");
-        this.registEventFast("mouseenter", "onMouseEnter");
-        this.registEventFast("mouseleave", "onMouseLeave");
-        this.registEventFast("mousedown", "onMouseDown", () => {
+        this._registMouseEvent(inputs);
+    }
+
+    _registMouseEvent(inputs) {
+        this.registEvent("click", "Click");
+        this.registEvent("mouseenter", "MouseEnter");
+        this.registEvent("mouseleave", "MouseLeave");
+        this.registEvent("mousedown", "MouseDown", () => {
             inputs.mouse.isPressed = true;
         });
-        this.registEventFast("mouseup", "onMouseUp", () => {
+        this.registEvent("mouseup", "MouseUp", () => {
             inputs.mouse.isPressed = false;
         });
-        this.registEventFast("mousemove", "onMouseMove", event => {
+        this.registEvent("mousemove", "MouseMove", event => {
             inputs.mouse.position = new Vector2(event.offsetX, event.offsetY);
         });
-
-        // [Experimental Code]
         window.onmousewheel = document.onmousewheel = (event) => {
-            inputs.world.raiseSelfAndGameVisualsEvent("onMouseWheel", event);
+            inputs.handler("MouseWheel", event);
         };
     }
 }
@@ -100,15 +114,18 @@ class TouchInput extends InputBase {
                 position: new Vector2(0, 0)
             };
         }
-        this.registEventFast("touchStart", "onTouchStart", () => {
+        this._registTouchEvent(inputs);
+    }
+
+    _registTouchEvent(inputs) {
+        this.registEvent("tap", "Tap");
+        this.registEvent("touchStart", "TouchStart", () => {
             inputs.touch.isTouching = true;
         });
-        this.registEventFast("touchEnd", "onTouchEnd", () => {
+        this.registEvent("touchEnd", "TouchEnd", () => {
             inputs.touch.isTouching = false;
         });
-
-        // [Experimental Code]
-        this.registEventFast("touchmove", "onTouchMove", event => {
+        this.registEvent("touchmove", "TouchMove", event => {
             event.preventDefault();
             inputs.touch.position = new Vector2(event.changedTouches[0].clientX, event.changedTouches[0].clientY);
         });
@@ -124,40 +141,43 @@ class PointerInput extends InputBase {
                 position: new Vector2(0, 0)
             };
         }
+        this._registMouseEvent(inputs);
+        this._registTouchEvent(inputs);
+    }
 
-        this.registEventFast("mousedown", "onMouseDown", () => {
+    _registMouseEvent(inputs) {
+        this.registEvent("click", "PointerClicked");
+        this.registEvent("mouseenter", "PointerEntered");
+        this.registEvent("mouseleave", "PointerExited");
+        this.registEvent("mousedown", "PointerPressed", () => {
             inputs.pointer.isPressed = true;
         });
-        this.registEventFast("mouseup", "onMouseUp", () => {
+        this.registEvent("mouseup", "PointerReleased", () => {
             inputs.pointer.isPressed = false;
         });
-        this.registEventFast("mousemove", "onMouseMove", event => {
+        this.registEvent("mousemove", "PointerMoved", event => {
             inputs.pointer.position = new Vector2(event.offsetX, event.offsetY);
         });
-
-        this.registEventFast("touchstart", "onTouchStart", () => {
+        window.onmousewheel = document.onmousewheel = (event) => {
+            inputs.handler("PointerWheelChanged", event);
+        };
+    }
+    _registTouchEvent(inputs) {
+        this.registEvent("tap", "PointerClicked");
+        this.registEvent("touchstart", "PointerPressed", () => {
             event.preventDefault();
             inputs.pointer.isPressed = true;
         });
-        this.registEventFast("touchend", "onTouchEnd", () => {
+        this.registEvent("touchend", "PointerReleased", () => {
             event.preventDefault();
             inputs.pointer.isPressed = false;
         });
-
-        // [Experimental Code]
-        this.registEventFast("touchmove", "onTouchMove", event => {
+        this.registEvent("touchmove", "PointerMoved", event => {
             event.preventDefault();
             inputs.pointer.isPressed = true;
             inputs.pointer.position = new Vector2(event.changedTouches[0].clientX, event.changedTouches[0].clientY);
         });
 
-        this.registEventFast("mousedown", "onPointerPressed");
-        this.registEventFast("mouseup", "onPointerReleased");
-        this.registEventFast("mousemove", "onPointerMove");
-
-        this.registEventFast("touchstart", "onPointerPressed");
-        this.registEventFast("touchend", "onPointerReleased");
-        this.registEventFast("touchmove", "onPointerMove");
     }
 }
 
@@ -170,13 +190,13 @@ class KeyInput extends InputBase {
             };
         }
 
-        this.registEventFast("keydown", "onKeyDown", () => {
+        this.registEvent("keydown", "KeyDown", () => {
             inputs.key.isKeyDown = true;
         }, null, document);
-        this.registEventFast("keyup", "onKeyUp", () => {
+        this.registEvent("keyup", "KeyUp", () => {
             inputs.key.isKeyDown = false;
         }, null, document);
-        this.registEventFast("keypress", "onKeyPress", null, null, document);
+        this.registEvent("keypress", "KeyPress", null, null, document);
     }
 }
 

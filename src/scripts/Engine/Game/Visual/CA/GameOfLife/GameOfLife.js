@@ -53,7 +53,7 @@ class GameOfLife extends GameVisual {
 
         this.cellColor = new Color(255, 255, 255, 1);
 
-        this.on("onPointerMove", () => {
+        this.on("PointerMoved", () => {
             //console.log(this.world.inputs.pointer.isPressed);
             if (this.world.inputs.pointer.isPressed) {
                 let p = this.world.inputs.pointer.position;

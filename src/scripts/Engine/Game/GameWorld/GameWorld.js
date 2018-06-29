@@ -15,15 +15,14 @@ class GameWorld extends GameVisual {
         // game visual objects
         this.gameVisuals = [];
         // game input
-        this.inputs = new Inputs(this);
+        this.inputs = new Inputs().handle((eventName, event) => this.raiseEvent(eventName, event));
         // initialize
         this.initialize();
         this.createObjects();
 
         this.start.next(this.startGameVisuals);
         this.update.next(this.updateGameVisuals);
-
-        this.attach(this.inputs);
+        this.dispose.next(() => this.inputs.release());
     }
 
     initialize() {}
@@ -53,7 +52,7 @@ class GameWorld extends GameVisual {
         visual.world = this;
     }
 
-    raiseSelfAndGameVisualsEvent(eventName, event) {
+    raiseEvent(eventName, event) {
         this.eventSystem.raiseEvent(eventName, event);
         this.gameVisuals.forEach(element => {
             element.eventSystem.raiseEvent(eventName, event);

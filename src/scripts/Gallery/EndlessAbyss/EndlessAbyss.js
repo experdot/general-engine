@@ -58,7 +58,7 @@ class EndlessAbyss extends GameVisual {
     }
 
     _registEvents() {
-        this.on("onKeyPress", (event) => {
+        this.on("KeyPress", (event) => {
             if (event.key === "a") {
                 this.blockGrid.left();
             } else if (event.key === "d") {
@@ -70,18 +70,18 @@ class EndlessAbyss extends GameVisual {
             }
         });
 
-        this.on("onPointerPressed", (event) => {
+        this.on("PointerPressed", (event) => {
             this.isPressed = true;
             this.startPointer = EventHelper.getEventClientPositon(event);
             this.startRotation = this.rotation;
             this.moveCount = 0;
         });
 
-        this.on("onPointerReleased", () => {
+        this.on("PointerReleased", () => {
             this.isPressed = false;
         });
 
-        this.on("onPointerMove", (event) => {
+        this.on("PointerMoved", (event) => {
             if (this.isPressed) {
                 let end = EventHelper.getEventClientPositon(event);
                 let offset = end.subtract(this.startPointer);
