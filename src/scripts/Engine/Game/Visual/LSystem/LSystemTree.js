@@ -52,7 +52,7 @@ class LSystemTree extends GameVisual {
 
         this.fillColor = new Color(0, 128, 128, 0.4);
         this.view.render.next(context => {
-            context.fillStyle = this.fillColor.getRGBAValue();
+            context.fillStyle = this.fillColor.rgba;
             context.fillRect(0, 0, w, h);
         }, 0);
     }
@@ -156,11 +156,11 @@ class LSystemTreeView extends GameView {
         // context.beginPath();
         // context.arc(circle.x, circle.y, offset.length() / 2, 0, Math.PI * 2, false);
         // context.closePath();
-        // context.fillStyle = this.lineColor.getRGBAValue();
+        // context.fillStyle = this.lineColor.rgba;
         // context.fill();
 
         let target = center.add(offset);
-        context.strokeStyle = this.lineColor.getRGBAValue();
+        context.strokeStyle = this.lineColor.rgba;
         //context.lineWidth = offset.length() / 10;
         context.beginPath();
         context.moveTo(center.x, center.y);

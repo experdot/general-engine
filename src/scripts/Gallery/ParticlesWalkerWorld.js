@@ -13,7 +13,7 @@ import {
 } from "../Engine/Game/Visual/ParticleSystem/Walker/ParticlesWalker";
 
 class ParticlesWalkerWorld extends GameWorld {
-    static Title() {
+    static get Title() {
         return "Particels - Walker";
     }
 
@@ -23,8 +23,7 @@ class ParticlesWalkerWorld extends GameWorld {
     }
 
     createObjects() {
-        let visual = new ParticlesWalker(new ParticlesWalkerView());
-        this.addVisual(visual);
+        this.addVisual(new ParticlesWalker(new ParticlesWalkerView()));
     }
 }
 

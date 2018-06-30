@@ -8,7 +8,7 @@ import {
 class Cell {
     constructor() {
         this.location = new Vector2(0, 0);
-        this.color = Colors.Black();
+        this.color = Colors.Black;
         this.size = 1.0;
     }
 

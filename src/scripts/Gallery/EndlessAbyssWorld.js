@@ -13,11 +13,11 @@ import {
     EndlessAbyssView
 } from "./EndlessAbyss/EndlessAbyss";
 
-
 class EndlessAbyssWorld extends GameWorld {
-    static Title() {
+    static get Title() {
         return "Game - EndlessAbyss";
     }
+
     initialize() {
         this.view = new GameWorldView(this);
         this.inputs.addInput(new PointerInput());
@@ -25,8 +25,7 @@ class EndlessAbyssWorld extends GameWorld {
     }
 
     createObjects() {
-        let visual = new EndlessAbyss(new EndlessAbyssView());
-        this.addVisual(visual);
+        this.addVisual(new EndlessAbyss(new EndlessAbyssView()));
     }
 }
 

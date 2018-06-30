@@ -47,7 +47,7 @@ class GameOfLife extends GameVisual {
 
         this.fillColor = new Color(0, 128, 128, 0.5);
         this.view.render.next(context => {
-            context.fillStyle = this.fillColor.getRGBAValue();
+            context.fillStyle = this.fillColor.rgba;
             context.fillRect(0, 0, w, h);
         }, 0);
 
@@ -101,7 +101,7 @@ class GameOfLife extends GameVisual {
         this.CA = generation;
     }
 
-    addDefaultCell(ca, x, y, color = Colors.White()) {
+    addDefaultCell(ca, x, y, color = Colors.White) {
         let location = new Vector2(x * this.cellSize, y * this.cellSize);
         ca.setCell(x, y, new Cell()).setLocation(location).setColor(color).setSize(this.cellSize);
     }
@@ -112,7 +112,7 @@ class GameOfLifeView extends GameView {
         this.target.CA.forEach(cell => {
             if (cell) {
                 let p = cell.location;
-                context.fillStyle = cell.color.getRGBAValue();
+                context.fillStyle = cell.color.rgba;
                 context.fillRect(p.x, p.y, cell.size, cell.size);
             }
         });

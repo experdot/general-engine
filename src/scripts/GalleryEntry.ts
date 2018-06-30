@@ -1,5 +1,4 @@
 import { GameStarter } from "./Gallery/GameStarter/GameStarter";
-import * as General from "./Engine/_General";
 
 var canvas = document.getElementById("canvas");
 var rebuildButton = document.getElementById("button-rebuild");
@@ -15,8 +14,6 @@ rebuildButton.addEventListener("click", function () {
 })
 
 startGame();
-
-console.log(General);
 
 function startGame(): void {
     (canvas as HTMLCanvasElement).width = document.body.clientWidth;

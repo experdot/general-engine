@@ -13,17 +13,17 @@ import {
 } from "../Engine/Game/Visual/CA/GameOfLife/GameOfLife";
 
 class GameOfLifeWorld extends GameWorld {
-    static Title() {
+    static get Title() {
         return "CA - GameOfLife";
     }
+    
     initialize() {
         this.view = new GameWorldView(this);
         this.inputs.addInput(new PointerInput());
     }
 
     createObjects() {
-        let visual = new GameOfLife(new GameOfLifeView());
-        this.addVisual(visual);
+        this.addVisual(new GameOfLife(new GameOfLifeView()));
     }
 }
 

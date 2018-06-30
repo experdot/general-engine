@@ -25,7 +25,7 @@ class ParticlesFlyer extends ParticlesBase {
         this.random = new Random();
         this.fillColor = new Color(0, 0, 0, 0.005);
         this.view.render.next(context => {
-            context.fillStyle = this.fillColor.getRGBAValue();
+            context.fillStyle = this.fillColor.rgba;
             context.fillRect(0, 0, this.world.width, this.world.height);
         }, 0);
         this.offsetX = [0, -1, 0, 1, 1, 1, 0, -1, -1];
@@ -51,7 +51,7 @@ class ParticlesFlyer extends ParticlesBase {
             particle.location = center.add(new Vector2(fieldWidth * Math.random() - fieldWidth / 2, fieldHeight * Math.random() - fieldHeight / 2));
             particle.velocity = new Vector2(10 * Math.random() - 5, 10 * Math.random() - 5);
             particle.size = 2 + maxSize * Math.random();
-            particle.color = Colors.White();
+            particle.color = Colors.White;
             this.flyers.push(particle);
         }
 
@@ -167,7 +167,7 @@ class ParticlesFlyerView extends GameView {
 
             context.beginPath();
             context.arc(p.x, p.y, element.size / 2 * this.scale, 0, Math.PI * 2, false);
-            context.fillStyle = element.color.getRGBAValue();
+            context.fillStyle = element.color.rgba;
             context.fill();
 
             // let v = element.velocity;
@@ -176,7 +176,7 @@ class ParticlesFlyerView extends GameView {
             // context.moveTo(p.x, p.y);
             // context.lineTo(t.x, t.y);
             // context.lineWidth = 4 * this.scale;
-            // context.strokeStyle = element.color.getRGBAValue();
+            // context.strokeStyle = element.color.rgba;
             // context.closePath();
             // context.stroke();
 
@@ -196,7 +196,7 @@ class ParticlesFlyerView extends GameView {
             //     context.moveTo(p.x, p.y);
             //     context.lineTo(t.x, t.y);
             //     context.lineWidth = 2 * this.scale;
-            //     context.strokeStyle = element.color.getRGBAValue();
+            //     context.strokeStyle = element.color.rgba;
             //     context.closePath();
             //     context.stroke();
             // }F

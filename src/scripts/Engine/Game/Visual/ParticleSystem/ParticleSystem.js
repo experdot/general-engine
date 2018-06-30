@@ -44,7 +44,7 @@ class ParticlesCircleView extends GameView {
             let p = element.location;
             context.beginPath();
             context.arc(p.x, p.y, element.size / 2 * this.scale, 0, Math.PI * 2, false);
-            context.fillStyle = element.color.getRGBAValue();
+            context.fillStyle = element.color.rgba;
             context.fill();
         }
     }
@@ -55,7 +55,7 @@ class ParticlesCircleView extends GameView {
             let p = element.location;
             context.beginPath();
             context.arc(p.x, p.y, element.size / 2 * this.scale, 0, Math.PI * 2, false);
-            context.strokeStyle = element.color.getRGBAValue();
+            context.strokeStyle = element.color.rgba;
             context.closePath();
             context.stroke();
         }
@@ -78,13 +78,13 @@ class ParticlesLineView extends GameView {
             context.moveTo(p.x, p.y);
             context.lineTo(last.x, last.y);
             context.lineWidth = element.size;
-            context.strokeStyle = element.color.getRGBAValue();
+            context.strokeStyle = element.color.rgba;
             context.closePath();
             context.stroke();
 
             context.beginPath();
             context.arc(p.x, p.y, element.size / 2, 0, Math.PI * 2, false);
-            context.fillStyle = element.color.getRGBAValue();
+            context.fillStyle = element.color.rgba;
             context.fill();
         }
     }

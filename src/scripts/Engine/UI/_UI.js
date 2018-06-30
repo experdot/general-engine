@@ -1,7 +1,11 @@
 import {
-    Color
+    Color,
+    Colors,
+    ColorHelper
 } from "./Color";
 
 export const UI = {
-    Color
+    Color,
+    Colors,
+    ColorHelper
 };

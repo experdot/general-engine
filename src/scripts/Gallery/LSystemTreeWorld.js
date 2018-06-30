@@ -10,7 +10,7 @@ import {
 } from "../Engine/Game/Visual/LSystem/LSystemTree";
 
 class LSystemTreeWorld extends GameWorld {
-    static Title() {
+    static get Title() {
         return "L-System - Tree";
     }
 
@@ -19,8 +19,7 @@ class LSystemTreeWorld extends GameWorld {
     }
 
     createObjects() {
-        let visual = new LSystemTree(new LSystemTreeView());
-        this.addVisual(visual);
+        this.addVisual(new LSystemTree(new LSystemTreeView()));
     }
 }
 

@@ -37,26 +37,25 @@ class EndlessAbyss extends GameVisual {
 
         this.fillColor = new Color(0, 0, 0, 1);
         this.view.render.next(context => {
-            context.fillStyle = this.fillColor.getRGBAValue();
+            context.fillStyle = this.fillColor.rgba;
             context.fillRect(0, 0, w, h);
         }, 0);
 
         this._registEvents();
 
-        this.updateCount = 0;
+        this.lastTime = new Date().getTime();
     }
     _update() {
         // if (Math.random() > 0.5) {
         //     this.fillColor = ColorHelper.getGradientRandomColor(this.fillColor, 10);
         // }
 
-        this.updateCount += 1;
-        if (this.updateCount > 30) {
-            this.updateCount = 0;
+        let current = new Date().getTime();
+        if (current - this.lastTime > 500) {
+            this.lastTime = current;
             this.blockGrid.down();
         }
     }
-
     _registEvents() {
         this.on("KeyPress", (event) => {
             if (event.key === "a") {
@@ -101,6 +100,12 @@ class EndlessAbyss extends GameVisual {
 }
 
 class EndlessAbyssView extends GameView {
+    constructor(target) {
+        super(target);
+        this.fillColor = new Color(255, 255, 255);
+        this.strokeColor = new Color(255, 255, 255, 0.2);
+    }
+
     draw(context) {
         let w = this.target.world.width;
         let h = this.target.world.height;
@@ -110,10 +115,6 @@ class EndlessAbyssView extends GameView {
         const height = this.target.blockGrid.height;
         const offset = (Math.min(w, h) * 0.8 - radius * 2) / height / 2;
         const border = 0;
-
-        this.fillColor = new Color(255, 255, 255);
-        this.strokeColor = new Color(255, 255, 255, 0.05);
-
 
         for (let i = 0; i < height; i++) {
             for (let j = 0; j < split; j++) {
@@ -154,12 +155,12 @@ class EndlessAbyssView extends GameView {
         context.arc(x, y, radius + offset, end, start, true);
         context.closePath();
         if (stroke) {
-            context.strokeStyle = color.getRGBAValue();
+            context.strokeStyle = color.rgba;
             context.stroke();
         } else {
-            context.fillStyle = color.getRGBAValue();
+            context.fillStyle = color.rgba;
             context.fill();
-            context.strokeStyle = color.getRGBAValue();
+            context.strokeStyle = color.rgba;
             context.stroke();
         }
     }

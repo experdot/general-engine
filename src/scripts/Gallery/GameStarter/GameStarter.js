@@ -41,7 +41,7 @@ class GameStarter {
         let request = this._getRequest();
         let World = this.getSymbolByName(request["scene"]);
         if (World) {
-            document.title = World.Title();
+            document.title = World.Title;
             return new AnimationBox(canvas, new World(canvas.width, canvas.height));
         } else {
             window.location = "../";

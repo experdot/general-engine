@@ -13,7 +13,7 @@ import {
 } from "../Engine/Game/Visual/ParticleSystem/Flyer/ParticlesFlyer";
 
 class ParticlesFlyerWorld extends GameWorld {
-    static Title() {
+    static get Title() {
         return "Particles - Flyer";
     }
 
@@ -23,8 +23,7 @@ class ParticlesFlyerWorld extends GameWorld {
     }
 
     createObjects() {
-        let visual = new ParticlesFlyer(new ParticlesFlyerView());
-        this.addVisual(visual);
+        this.addVisual(new ParticlesFlyer(new ParticlesFlyerView()));
     }
 }
 

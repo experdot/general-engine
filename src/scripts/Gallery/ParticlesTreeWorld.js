@@ -12,7 +12,7 @@ import {
 } from "../Engine/Game/Visual/ParticleSystem/ParticleSystem";
 
 class ParticlesTreeWorld extends GameWorld {
-    static Title() {
+    static get Title() {
         return "Particles - Tree";
     }
 
@@ -21,8 +21,7 @@ class ParticlesTreeWorld extends GameWorld {
     }
 
     createObjects() {
-        let visual = new ParticlesTree(new ParticlesCircleView());
-        this.addVisual(visual);
+        this.addVisual(new ParticlesTree(new ParticlesCircleView()));
     }
 }
 

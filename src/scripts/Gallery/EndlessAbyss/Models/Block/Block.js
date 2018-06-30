@@ -8,7 +8,7 @@ import {
 class Block {
     constructor() {
         this.location = new Vector2(0, 0);
-        this.color = Colors.White();
+        this.color = Colors.White;
     }
 
     setLocation(location) {

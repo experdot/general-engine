@@ -6,6 +6,22 @@ class Color {
         let value = parseInt(hex.slice(1), 16);
         return new Color(value / 65536, value / 256 % 256, value % 256);
     }
+    get hex() {
+        let r = parseInt(this.r);
+        let g = parseInt(this.g);
+        let b = parseInt(this.b);
+        let gx = g < 16 ? "0" : "";
+        let rx = r < 16 ? "0" : "";
+        let bx = b < 16 ? "0" : "";
+        return `#${rx}${r.toString(16)}${gx}${g.toString(16)}${bx}${b.toString(16)}`;
+    }
+    get rgba() {
+        let r = parseInt(this.r);
+        let g = parseInt(this.g);
+        let b = parseInt(this.b);
+        let a = this.a;
+        return `rgba(${r},${g},${b},${a})`;
+    }
 
     constructor(r = 255, g = 255, b = 255, a = 1) {
         this.r = r;
@@ -17,24 +33,6 @@ class Color {
     clone() {
         return new Color(this.r, this.g, this.b, this.a);
     }
-    getHexValue() {
-        let r = parseInt(this.r);
-        let g = parseInt(this.g);
-        let b = parseInt(this.b);
-        let gx = g < 16 ? "0" : "";
-        let rx = r < 16 ? "0" : "";
-        let bx = b < 16 ? "0" : "";
-        return `#${rx}${r.toString(16)}${gx}${g.toString(16)}${bx}${b.toString(16)}`;
-    }
-    getRGBAValue() {
-        let r = parseInt(this.r);
-        let g = parseInt(this.g);
-        let b = parseInt(this.b);
-        let a = this.a;
-        return `rgba(${r},${g},${b},${a})`;
-    }
-
-
 }
 
 class ColorHelper {
@@ -77,10 +75,10 @@ class ColorHelper {
 }
 
 class Colors {
-    static Black() {
+    static get Black() {
         return new Color(0, 0, 0, 1);
     }
-    static White() {
+    static get White() {
         return new Color(255, 255, 255, 1);
     }
 }

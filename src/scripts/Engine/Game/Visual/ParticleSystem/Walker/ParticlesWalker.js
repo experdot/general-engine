@@ -47,7 +47,7 @@ class ParticlesWalker extends ParticlesBase {
 
         this.fillColor = new Color(0, 128, 128, w > 800 ? 0.003 : 0.005);
         this.view.render.next(context => {
-            context.fillStyle = this.fillColor.getRGBAValue();
+            context.fillStyle = this.fillColor.rgba;
             context.fillRect(0, 0, w, h);
         }, 0);
 
@@ -125,7 +125,7 @@ class ParticlesWalkerView extends GameView {
                 context.moveTo(p.x, p.y);
                 context.lineTo(element.parent.location.x, element.parent.location.y);
                 context.lineWidth = element.size;
-                context.strokeStyle = element.color.getRGBAValue();
+                context.strokeStyle = element.color.rgba;
                 context.closePath();
                 context.stroke();
             }
