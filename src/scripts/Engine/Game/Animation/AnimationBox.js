@@ -1,31 +1,21 @@
 import {
-    GeneralObject
-} from "../../Core/GeneralObject";
-import {
     FrameManager
 } from "./FrameManager";
 
-class AnimationBox extends GeneralObject {
+class AnimationBox {
     constructor(canvas, world) {
-        super();
         this.canvas = canvas;
         this.context = canvas.getContext("2d");
         this.world = world;
         this.world.initializeUI(canvas);
         this.frameManager = new FrameManager();
-        this.start.next(() => {
-            this.world.start.process();
-        });
-        this.update.next(() => {
-            this.world.view.render.process(this.context);
-            this.world.update.process();
-        });
     }
 
     run() {
-        this.start.process();
+        this.world.start.process();
         this.frameManager.loopInvoke(() => {
-            this.update.process();
+            this.world.view.render.process(this.context);
+            this.world.update.process();
         });
     }
 

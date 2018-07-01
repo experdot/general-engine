@@ -11,8 +11,7 @@ import {
     Vector2
 } from "../../../../Engine/Numerics/Vector2";
 import {
-    Color,
-    ColorHelper
+    Color
 } from "../../../../Engine/UI/Color";
 import {
     GameVisual
@@ -20,6 +19,9 @@ import {
 import {
     GameView
 } from "../../GameObject/GameView";
+import {
+    GhostEffect
+} from "../../GameComponents/Effect/Effect";
 
 
 class LSystemTree extends GameVisual {
@@ -42,25 +44,7 @@ class LSystemTree extends GameVisual {
         this.depth = 3;
         this.LSystem.generate(this.depth);
 
-        this.start.next(this._start);
-        this.update.next(this._update);
-    }
-
-    _start() {
-        let w = this.world.width;
-        let h = this.world.height;
-
-        this.fillColor = new Color(0, 128, 128, 0.4);
-        this.view.render.next(context => {
-            context.fillStyle = this.fillColor.rgba;
-            context.fillRect(0, 0, w, h);
-        }, 0);
-    }
-
-    _update() {
-        if (Math.random() > 0.5) {
-            this.fillColor = ColorHelper.getGradientRandomColor(this.fillColor, 10);
-        }
+        this.proxy(new GhostEffect(new Color(0, 128, 128, 0.4), 10));
     }
 }
 
@@ -75,7 +59,7 @@ class LSystemTreeView extends GameView {
         this.rotateRatio = 3;
         this.singleNumber = 0;
     }
-    draw(context) {
+    draw(source, context) {
 
         //context.clearRect(0, 0, this.target.world.width, this.target.world.height);
 

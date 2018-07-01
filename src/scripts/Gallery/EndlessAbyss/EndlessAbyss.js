@@ -17,6 +17,9 @@ import {
 import {
     BlockGrid
 } from "./Models/BlockGrid";
+import {
+    GhostEffect
+} from "../../Engine/Game/GameComponents/Effect/Effect";
 
 class EndlessAbyss extends GameVisual {
     constructor(view) {
@@ -27,6 +30,8 @@ class EndlessAbyss extends GameVisual {
         this.blockGrid = new BlockGrid(10, 20);
 
         this.rotation = 0;
+
+        this.proxy(new GhostEffect(new Color(0, 0, 0, 1), 0));
     }
 
     _start() {
@@ -34,22 +39,11 @@ class EndlessAbyss extends GameVisual {
         let h = this.world.height;
 
         this.center = new Vector2(w / 2, h / 2);
-
-        this.fillColor = new Color(0, 0, 0, 1);
-        this.view.render.next(context => {
-            context.fillStyle = this.fillColor.rgba;
-            context.fillRect(0, 0, w, h);
-        }, 0);
+        this.lastTime = new Date().getTime();
 
         this._registEvents();
-
-        this.lastTime = new Date().getTime();
     }
     _update() {
-        // if (Math.random() > 0.5) {
-        //     this.fillColor = ColorHelper.getGradientRandomColor(this.fillColor, 10);
-        // }
-
         let current = new Date().getTime();
         if (current - this.lastTime > 500) {
             this.lastTime = current;
@@ -106,7 +100,7 @@ class EndlessAbyssView extends GameView {
         this.strokeColor = new Color(255, 255, 255, 0.2);
     }
 
-    draw(context) {
+    draw(source, context) {
         let w = this.target.world.width;
         let h = this.target.world.height;
 

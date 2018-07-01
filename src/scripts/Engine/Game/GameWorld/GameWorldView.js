@@ -12,7 +12,7 @@ class GameWorldView extends GameView {
         this.clearColor = Colors.Black;
     }
 
-    draw(context) {
+    draw(source, context) {
         if (this.isClear) {
             context.fillStyle = this.clearColor.rgba;
             context.fillRect(0, 0, this.target.width, this.target.height);

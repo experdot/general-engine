@@ -31,7 +31,7 @@ class ParticlesCircleView extends GameView {
         this.isFill = isFill;
         this.scale = scale;
     }
-    draw(context) {
+    draw(source, context) {
         if (this.target.stopDraw) {
             return;
         }
@@ -63,7 +63,7 @@ class ParticlesCircleView extends GameView {
 }
 
 class ParticlesLineView extends GameView {
-    draw(context) {
+    draw(source, context) {
         if (this.target.stopDraw) {
             return;
         }

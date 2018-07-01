@@ -7,6 +7,9 @@ import {
 import {
     EventSystem
 } from "../../Common/EventSystem";
+import {
+    GeneralProcess
+} from "../../Core/GeneralProcess";
 
 /** 
  * Represents a visual object
@@ -14,6 +17,11 @@ import {
 class GameVisual extends GeneralObject {
     constructor(view) {
         super();
+
+        this.start = new GeneralProcess(this);
+        this.update = new GeneralProcess(this);
+        this.dispose = new GeneralProcess(this);
+
         this.transform = new Transform();
         this.eventSystem = new EventSystem();
         this.bindView(view);

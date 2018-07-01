@@ -16,6 +16,7 @@ import {
 import {
     Utilities
 } from "./Utilities/_Utilities";
+import "./Extenstion/_Extenstion";
 
 export const General = {
     Common,

@@ -18,7 +18,7 @@ class GameView extends GeneralObject {
         this.render = new GeneralProcess(this).next([this.setTransform, this.draw, this.restoreTransform]);
     }
 
-    setTransform(context) {
+    setTransform(source, context) {
         let translation = this.target.transform.translation;
         let scale = this.target.transform.scale;
         let rotation = this.target.transform.rotation;
@@ -35,7 +35,7 @@ class GameView extends GeneralObject {
         context.translate(-center.x, -center.y);
     }
 
-    restoreTransform(context) {
+    restoreTransform(source, context) {
         context.setTransform(1, 0, 0, 1, 0, 0);
     }
 

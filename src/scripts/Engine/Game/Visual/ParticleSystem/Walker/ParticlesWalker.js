@@ -1,6 +1,5 @@
 import {
-    Color,
-    ColorHelper
+    Color
 } from "../../../../../Engine/UI/Color";
 import {
     Vector2
@@ -17,6 +16,9 @@ import {
 import {
     GameView
 } from "../../../GameObject/GameView";
+import {
+    GhostEffect
+} from "../../../GameComponents/Effect/Effect";
 
 class ParticlesWalker extends ParticlesBase {
     constructor(view) {
@@ -24,6 +26,8 @@ class ParticlesWalker extends ParticlesBase {
         this.random = new Random();
         this.start.next(this._start);
         this.update.next(this._update);
+
+        this.proxy(new GhostEffect(new Color(0, 128, 128, 0.003), 40));
     }
 
     _start() {
@@ -45,12 +49,6 @@ class ParticlesWalker extends ParticlesBase {
         this.maxDepth = 6 + parseInt(w / 600);
         this.createNodes(this.walkers, particle, this.maxDepth, this.split, 1);
 
-        this.fillColor = new Color(0, 128, 128, w > 800 ? 0.003 : 0.005);
-        this.view.render.next(context => {
-            context.fillStyle = this.fillColor.rgba;
-            context.fillRect(0, 0, w, h);
-        }, 0);
-
         this.rotationDelta = Math.PI * 2 / Math.floor(Math.random() * 8 + 2);
 
         this.particles = this.walkers;
@@ -68,10 +66,6 @@ class ParticlesWalker extends ParticlesBase {
         this.walkers.forEach((element, index) => {
             element.update(rect, index === 0 ? this.center : element.parent.location);
         });
-
-        if (Math.random() > 0.5) {
-            this.fillColor = ColorHelper.getGradientRandomColor(this.fillColor, 40);
-        }
 
         if (Math.random() > 0.5) {
             this.split += (Math.random() * 1.6 - 0.8);
@@ -113,7 +107,7 @@ class ParticlesWalker extends ParticlesBase {
 }
 
 class ParticlesWalkerView extends GameView {
-    draw(context) {
+    draw(source, context) {
         if (this.target.stopDraw) {
             return;
         }

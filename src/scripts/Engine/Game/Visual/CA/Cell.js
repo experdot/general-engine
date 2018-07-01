@@ -16,10 +16,12 @@ class Cell {
         this.location = location;
         return this;
     }
+
     setColor(color) {
         this.color = color;
         return this;
     }
+
     setSize(size) {
         this.size = size;
         return this;

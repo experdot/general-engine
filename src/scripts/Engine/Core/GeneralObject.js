@@ -7,18 +7,14 @@ import {
  */
 class GeneralObject {
     constructor() {
-        this.start = new GeneralProcess(this);
-        this.update = new GeneralProcess(this);
-        this.dispose = new GeneralProcess(this);
         this.attachements = [];
     }
 
-    proxy(action, sync = true) {
-        let object = new GeneralObject();
-        object.start.setContext(this);
-        object.update.setContext(this);
+    proxy(object = new GeneralObject(), sync = true) {
+        GeneralProcess.find(object).forEach(element => {
+            element.value.setSource(this);
+        });
         sync && this.sync(object);
-        action && action(object, this);
         return object;
     }
 
@@ -28,9 +24,13 @@ class GeneralObject {
     }
 
     sync(object) {
-        this.start.next(...args => object.start.process(...args));
-        this.update.next(...args => object.update.process(...args));
-        this.dispose.next(...args => object.dispose.process(...args));
+        GeneralProcess.find(object).forEach(element => {
+            const source = this[element.key];
+            const target = object[element.key];
+            if (target && source instanceof GeneralProcess && target instanceof GeneralProcess) {
+                source.next((s, ...args) => target.process(...args));
+            }
+        });
     }
 }
 

@@ -1,6 +1,5 @@
 import {
     Color,
-    ColorHelper,
     Colors
 } from "../../../../../Engine/UI/Color";
 import {
@@ -18,21 +17,22 @@ import {
 import {
     GameView
 } from "../../../GameObject/GameView";
+import {
+    GhostEffect
+} from "../../../GameComponents/Effect/Effect";
 
 class ParticlesFlyer extends ParticlesBase {
     constructor(view) {
         super(view);
         this.random = new Random();
-        this.fillColor = new Color(0, 0, 0, 0.005);
-        this.view.render.next(context => {
-            context.fillStyle = this.fillColor.rgba;
-            context.fillRect(0, 0, this.world.width, this.world.height);
-        }, 0);
+
         this.offsetX = [0, -1, 0, 1, 1, 1, 0, -1, -1];
         this.offsetY = [0, -1, -1, -1, 0, 1, 1, 1, 0];
 
         this.start.next(this._start);
         this.update.next(this._update);
+
+        this.proxy(new GhostEffect(new Color(0, 128, 128, 0.005), 40));
     }
 
     _start() {
@@ -89,10 +89,6 @@ class ParticlesFlyer extends ParticlesBase {
         //     let neighbours = this.getGridNeighbours(this.grid, element, this.revolution);
         //     element.update(neighbours, rect, this.world.inputs.pointer.position);
         // });
-
-        if (Math.random() > 0.5) {
-            this.fillColor = ColorHelper.getGradientRandomColor(this.fillColor, 40);
-        }
     }
 
     createGrid(width, height, revolution = 10) {
@@ -153,7 +149,7 @@ class ParticlesFlyerView extends GameView {
         this.rotation2 = 0;
     }
 
-    draw(context) {
+    draw(source, context) {
         if (this.target.stopDraw) {
             return;
         }

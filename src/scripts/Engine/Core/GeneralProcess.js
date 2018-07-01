@@ -3,23 +3,42 @@ import {
 } from "./GeneralTask";
 
 class GeneralProcess {
-    constructor(context) {
-        this.context = context;
+    static find(object) {
+        let result = [];
+        for (const key in object) {
+            if (object.hasOwnProperty(key)) {
+                const value = object[key];
+                if (value instanceof GeneralProcess) {
+                    result.push({
+                        key,
+                        value
+                    });
+                }
+            }
+        }
+        return result;
+    }
+
+    constructor(source) {
+        this.source = source;
         this.tasks = [];
     }
 
-    setContext(context) {
-        this.context = context;
+    setSource(source) {
+        this.source = source;
     }
+
     process() {
         this.tasks.forEach(element => {
-            element.enabled && element.action && element.action.call(this.context, ...arguments);
+            element.enabled && element.action && element.action.call(this.source, this.source, ...arguments);
         });
     }
+
     before(action) {
         this.tasks.unshift(new GeneralTask(action));
         return this;
     }
+
     next(actionOrActions, index = -1) {
         if (index < 0) {
             index = this.tasks.length;
