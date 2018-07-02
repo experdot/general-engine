@@ -13,6 +13,9 @@ import {
 import {
     SpotParticle
 } from "../Particle/SpotParticle";
+import {
+    GameView
+} from "../../../GameObject/GameView";
 
 class ParticlesTree extends ParticlesBase {
     constructor(view) {
@@ -55,6 +58,28 @@ class ParticlesTree extends ParticlesBase {
     }
 }
 
+class ParticlesTreeView extends GameView {
+    draw(source, context) {
+        if (this.target.stopDraw) {
+            return;
+        }
+        this.drawByFillCircle(context);
+    }
+
+    drawByFillCircle(context) {
+        const PI_2 = Math.PI * 2;
+        for (let index = 0; index < this.target.particles.length; index++) {
+            const element = this.target.particles[index];
+            let p = element.location;
+            context.beginPath();
+            context.arc(p.x, p.y, element.size / 2, 0, PI_2, false);
+            context.fillStyle = element.color.rgba;
+            context.fill();
+        }
+    }
+}
+
 export {
-    ParticlesTree
+    ParticlesTree,
+    ParticlesTreeView
 };

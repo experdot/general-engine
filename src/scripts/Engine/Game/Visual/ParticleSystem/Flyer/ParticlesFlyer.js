@@ -20,14 +20,14 @@ import {
 import {
     GhostEffect
 } from "../../../GameComponents/Effect/Effect";
+import {
+    ArrayGrid
+} from "./ArrayGrid";
 
 class ParticlesFlyer extends ParticlesBase {
     constructor(view) {
         super(view);
         this.random = new Random();
-
-        this.offsetX = [0, -1, 0, 1, 1, 1, 0, -1, -1];
-        this.offsetY = [0, -1, -1, -1, 0, 1, 1, 1, 0];
 
         this.start.next(this._start);
         this.update.next(this._update);
@@ -71,82 +71,43 @@ class ParticlesFlyer extends ParticlesBase {
             height: this.world.height
         };
 
-        this.clearGrid(this.grid);
+        this.grid.clear();
         this.allocateGrid(this.grid, this.particles, this.revolution);
 
-        this.grid.forEach(element => {
-            element.forEach(cell => {
-                if (cell.length > 0) {
-                    let neighbours = this.getGridNeighbours(this.grid, cell[0], this.revolution);
-                    cell.forEach(particle => {
-                        particle.update(neighbours, rect, this.world.inputs.pointer.position);
-                    });
-                }
-            });
+        this.grid.forEach((cell, x, y) => {
+            if (cell.length > 0) {
+                let neighbours = this.grid.neighbours(x, y);
+                cell.forEach(particle => {
+                    particle.update(neighbours, rect, this.world.inputs.pointer.position);
+                });
+            }
         });
-
-        // this.flyers.forEach((element) => {
-        //     let neighbours = this.getGridNeighbours(this.grid, element, this.revolution);
-        //     element.update(neighbours, rect, this.world.inputs.pointer.position);
-        // });
     }
 
     createGrid(width, height, revolution = 10) {
         let w = Math.ceil(width / revolution);
         let h = Math.ceil(height / revolution);
-        let grid = [];
-        for (let i = 0; i < w; i++) {
-            grid[i] = [];
-            for (let j = 0; j < h; j++) {
-                grid[i][j] = [];
-            }
-        }
-        return grid;
-    }
-
-    clearGrid(grid) {
-        grid.forEach(element => {
-            element.forEach(cell => {
-                cell.splice(0, cell.length);
-            });
-        });
+        return new ArrayGrid(w, h);
     }
 
     allocateGrid(grid, particles, revolution = 10) {
         particles.forEach(element => {
-            let p = element.location.divide(revolution);
-            let x = Math.floor(p.x);
-            let y = Math.floor(p.y);
-            grid[x][y].push(element);
+            let location = this.mapLocation(element.location, revolution);
+            grid.getCell(location.x, location.y).push(element);
         });
     }
 
-    getGridNeighbours(grid, particle, revolution) {
-        let result = [];
-        let w = grid.length;
-        let h = grid[0].length;
-        let p = particle.location.divide(revolution);
-        let x = Math.floor(p.x);
-        let y = Math.floor(p.y);
-        for (let i = 0; i < 9; i++) {
-            let dx = x + this.offsetX[i];
-            let dy = y + this.offsetY[i];
-            if (dx >= 0 && dx < w && dy >= 0 && dy < h) {
-                result.push(...grid[dx][dy]);
-            }
-        }
-        return result;
+    mapLocation(location, revolution) {
+        let x = Math.floor(location.x / revolution);
+        let y = Math.floor(location.y / revolution);
+        return new Vector2(x, y);
     }
 }
 
 class ParticlesFlyerView extends GameView {
-    constructor(target, scale = 1) {
+    constructor(target) {
         super(target);
-        this.scale = scale;
-        this.image = new Image(16, 16);
-        this.image.src = "/static/sample.png";
         this.rotation = 0;
-        this.rotation2 = 0;
     }
 
     draw(source, context) {
@@ -154,60 +115,26 @@ class ParticlesFlyerView extends GameView {
             return;
         }
 
-        this.rotation2 = this.rotation2 + 0.002;
-        this.scaleCanvas(context, 16 * Math.sin(this.rotation2));
+        this.rotation = this.rotation + 0.002;
+        this.scaleCanvas(context, 16 * Math.sin(this.rotation));
 
         for (let index = 0; index < this.target.particles.length; index++) {
             const element = this.target.particles[index];
             let p = element.location;
-
             context.beginPath();
-            context.arc(p.x, p.y, element.size / 2 * this.scale, 0, Math.PI * 2, false);
+            context.arc(p.x, p.y, element.size / 2, 0, Math.PI * 2, false);
+            context.closePath();
             context.fillStyle = element.color.rgba;
             context.fill();
-
-            // let v = element.velocity;
-            // let t = p.add(v);
-            // context.beginPath();
-            // context.moveTo(p.x, p.y);
-            // context.lineTo(t.x, t.y);
-            // context.lineWidth = 4 * this.scale;
-            // context.strokeStyle = element.color.rgba;
-            // context.closePath();
-            // context.stroke();
-
-            // let v = element.velocity;
-            // context.translate(p.x, p.y);
-            // context.rotate(Math.atan2(v.y, v.x));
-            // let s = element.size;
-            // context.globalAlpha = element.color.a;
-            // context.drawImage(this.image, -s / 2, -s / 2, s, s);
-            // context.globalAlpha = 1;
-            // context.setTransform(1, 0, 0, 1, 0, 0);
-
-            // let n = element.neighbour;
-            // if (n) {
-            //     let t = n.location;
-            //     context.beginPath();
-            //     context.moveTo(p.x, p.y);
-            //     context.lineTo(t.x, t.y);
-            //     context.lineWidth = 2 * this.scale;
-            //     context.strokeStyle = element.color.rgba;
-            //     context.closePath();
-            //     context.stroke();
-            // }F
         }
     }
 
     scaleCanvas(context, offset = 1) {
-        this.rotation = this.rotation + 0.0005;
-
         let w = this.target.world.width + offset;
         let h = this.target.world.height + offset;
         context.translate(this.target.world.width / 2, this.target.world.height / 2);
-        //context.rotate(this.rotation);
         context.globalAlpha = 0.99;
-        context.drawImage(document.getElementById("canvas"), -w / 2, -h / 2, w, h);
+        context.drawImage(context.canvas, -w / 2, -h / 2, w, h);
         context.globalAlpha = 1;
         context.setTransform(1, 0, 0, 1, 0, 0);
     }

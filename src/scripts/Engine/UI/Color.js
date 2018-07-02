@@ -81,6 +81,9 @@ class Colors {
     static get White() {
         return new Color(255, 255, 255, 1);
     }
+    static get Random() {
+        return new Color(255 * Math.random(), 255 * Math.random(), 255 * Math.random(), 1);
+    }
 }
 
 export {

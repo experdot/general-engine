@@ -17,12 +17,14 @@ class LSystem {
         this.states = [];
         this.states.push(root);
     }
+
     addRule(rule) {
         if (!this.ruleSets[rule.target]) {
             this.ruleSets[rule.target] = new RuleSet();
         }
         this.ruleSets[rule.target].add(rule);
     }
+    
     generate(count = 1) {
         for (let index = 0; index < count; index++) {
             let tempStates = [];

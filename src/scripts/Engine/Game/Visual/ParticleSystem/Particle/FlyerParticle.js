@@ -16,6 +16,7 @@ class FlyerParticle extends DynamicParticle {
         this.alignspeed(flyers);
         this.seperate(flyers);
         this.cohesion(flyers);
+
         this.follow(mouse, 0.5);
         this.checkRadius(mouse, new Vector2(rect.width, rect.height).length() / 3);
 
@@ -92,43 +93,13 @@ class FlyerParticle extends DynamicParticle {
         this.applyForce(this.seek(target).multiply(ratio));
     }
 
-    findNeighbour(flyers) {
-        let minDistance = Number.POSITIVE_INFINITY;
-        let minIndex = -1;
-        flyers.forEach((element, index) => {
-            let offset = this.location.subtract(element.location);
-            let distance = offset.length();
-            if (distance > 0 && distance < 100) {
-                if (distance < minDistance) {
-                    minDistance = distance;
-                    minIndex = index;
-                }
-            }
-        });
-
-        if (minIndex > 0) {
-            this.neighbour = flyers[minIndex];
-        } else {
-            this.neighbour = null;
-        }
-
-    }
-
     checkRadius(mouse, maxRadius = 100) {
         let offset = this.location.subtract(mouse);
         let distance = offset.length();
-        if (distance > maxRadius) {
-            //this.velocity = new Vector2();
-        }
-
         let alpha = Math.max(0.1, Math.min(1, 1 - (distance / maxRadius)));
-        this.color.r = this.color.g = this.color.b = alpha * 75 + 180;
 
-        //this.color.a = alpha;
-        //this.color.a = Math.max(0.1, Math.min(1, this.velocity.length() / this.velocityUpon));
-
-        //this.size = Math.max(0.1, Math.min(1, 1 - (distance / maxRadius))) * 64 + 16;
-        //this.size = Math.max(1, Math.min(16, this.velocity.length() / this.velocityUpon * 128));
+        this.color.r = this.color.g = this.color.b = 175 + alpha * 80;
+        this.size = Math.max(0.1, Math.min(1, 1 - (distance / maxRadius))) * 32 + 16;
     }
 
     checkBorder(rect) {

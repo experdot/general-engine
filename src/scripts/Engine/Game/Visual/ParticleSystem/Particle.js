@@ -8,7 +8,7 @@ class Particle {
         this.size = size;
         this.age = age;
         this.color = new Color(0, 0, 0, 1);
-        this.isDead = false;
+        this.dead = false;
     }
 }
 

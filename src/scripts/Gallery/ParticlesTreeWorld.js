@@ -5,11 +5,9 @@ import {
     GameWorldView
 } from "../Engine/Game/GameWorld/GameWorldView";
 import {
-    ParticlesTree
+    ParticlesTree,
+    ParticlesTreeView
 } from "../Engine/Game/Visual/ParticleSystem/Tree/ParticlesTree";
-import {
-    ParticlesCircleView
-} from "../Engine/Game/Visual/ParticleSystem/ParticleSystem";
 
 class ParticlesTreeWorld extends GameWorld {
     static get Title() {
@@ -21,7 +19,7 @@ class ParticlesTreeWorld extends GameWorld {
     }
 
     createObjects() {
-        this.addVisual(new ParticlesTree(new ParticlesCircleView()));
+        this.addVisual(new ParticlesTree(new ParticlesTreeView()));
     }
 }
 
