@@ -19,13 +19,13 @@ class EndlessAbyssWorld extends GameWorld {
     }
 
     initialize() {
-        this.view = new GameWorldView(this);
+        this.bind(new GameWorldView());
         this.inputs.addInput(new PointerInput());
         this.inputs.addInput(new KeyInput());
     }
 
     createObjects() {
-        this.addVisual(new EndlessAbyss(new EndlessAbyssView()));
+        this.addVisual(new EndlessAbyss(), new EndlessAbyssView());
     }
 }
 

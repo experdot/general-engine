@@ -14,10 +14,10 @@ class GhostEffect extends GameVisual {
         this.start.next(source => {
             const w = source.world.width;
             const h = source.world.height;
-            source.view.render.next((s, context) => {
+            source.view.render.before((s, context) => {
                 context.fillStyle = this.fillColor.rgba;
                 context.fillRect(0, 0, w, h);
-            }, 0);
+            });
         });
         this.update.next(() => {
             if (Math.random() > 0.5) {

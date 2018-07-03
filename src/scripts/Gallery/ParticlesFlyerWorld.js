@@ -18,12 +18,12 @@ class ParticlesFlyerWorld extends GameWorld {
     }
 
     initialize() {
-        this.view = new GameWorldView(this);
+        this.bind(new GameWorldView());
         this.inputs.addInput(new PointerInput());
     }
 
     createObjects() {
-        this.addVisual(new ParticlesFlyer(new ParticlesFlyerView()));
+        this.addVisual(new ParticlesFlyer(), new ParticlesFlyerView());
     }
 }
 

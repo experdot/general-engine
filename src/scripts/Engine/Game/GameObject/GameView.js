@@ -12,10 +12,10 @@ import {
  * Represents a view to present the visual object
  */
 class GameView extends GeneralObject {
-    constructor(target) {
+    constructor() {
         super();
-        this.target = target;
-        this.render = new GeneralProcess(this).next([this.setTransform, this.draw, this.restoreTransform]);
+        this.target = undefined;
+        this.render = new GeneralProcess(this).next(this.setTransform, this.draw, this.restoreTransform);
     }
 
     setTransform(source, context) {

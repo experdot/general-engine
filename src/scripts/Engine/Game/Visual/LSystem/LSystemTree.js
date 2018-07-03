@@ -46,8 +46,8 @@ class LSystemTree extends GameVisual {
 }
 
 class LSystemTreeView extends GameView {
-    constructor(target) {
-        super(target);
+    constructor() {
+        super();
         this.centerStack = [];
         this.offsetStack = [];
         this.lengthStack = [];

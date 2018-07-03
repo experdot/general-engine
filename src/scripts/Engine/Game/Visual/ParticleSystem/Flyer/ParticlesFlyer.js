@@ -105,8 +105,8 @@ class ParticlesFlyer extends ParticlesBase {
 }
 
 class ParticlesFlyerView extends GameView {
-    constructor(target) {
-        super(target);
+    constructor() {
+        super();
         this.rotation = 0;
     }
 

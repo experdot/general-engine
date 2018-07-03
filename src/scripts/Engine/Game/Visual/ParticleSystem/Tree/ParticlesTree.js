@@ -51,7 +51,7 @@ class ParticlesTree extends ParticlesBase {
         if (this.spots.length > 0) {
             for (let index = 0; index < this.spots.length; index++) {
                 const element = this.particles[index];
-                element.update(this.spots, parseInt(this.random.normal(1, 3)));
+                element.update(this.spots, Math.ceil(this.random.normal(1, 3)));
             }
             this.killDead(this.spots);
         }

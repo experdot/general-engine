@@ -4,6 +4,9 @@ import {
 import {
     GameVisual
 } from "../GameObject/GameVisual";
+import {
+    GameView
+} from "../GameObject/GameView";
 
 
 class GameWorld extends GameVisual {
@@ -47,9 +50,10 @@ class GameWorld extends GameVisual {
     }
 
     // Add a visual object into world
-    addVisual(visual) {
-        this.gameVisuals.push(visual);
+    addVisual(visual, view = new GameView()) {
         visual.world = this;
+        visual.bind(view);
+        this.gameVisuals.push(visual);
     }
 
     raiseEvent(eventName, event) {

@@ -34,21 +34,23 @@ class GeneralProcess {
         });
     }
 
-    before(action) {
-        this.tasks.unshift(new GeneralTask(action));
+    before(...actions) {
+        this.tasks.unshift(...actions.map(action => new GeneralTask(action)));
         return this;
     }
 
-    next(actionOrActions, index = -1) {
-        if (index < 0) {
-            index = this.tasks.length;
-        }
-        if (actionOrActions instanceof Array) {
-            this.tasks.splice(index, 0, ...actionOrActions.map(action => new GeneralTask(action)));
-        } else {
-            this.tasks.splice(index, 0, new GeneralTask(actionOrActions));
-        }
+    next(...actions) {
+        this.tasks.push(...actions.map(action => new GeneralTask(action)));
         return this;
+    }
+
+    insert(index, ...actions) {
+        this.tasks.splice(index, 0, ...actions.map(action => new GeneralTask(action)));
+        return this;
+    }
+
+    clear() {
+        this.tasks = [];
     }
 }
 export {

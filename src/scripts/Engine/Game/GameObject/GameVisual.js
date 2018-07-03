@@ -15,7 +15,7 @@ import {
  * Represents a visual object
  */
 class GameVisual extends GeneralObject {
-    constructor(view) {
+    constructor() {
         super();
 
         this.start = new GeneralProcess(this);
@@ -24,14 +24,11 @@ class GameVisual extends GeneralObject {
 
         this.transform = new Transform();
         this.eventSystem = new EventSystem();
-        this.bindView(view);
     }
 
-    bindView(view) {
+    bind(view) {
         this.view = view;
-        if (view) {
-            view.target = this;
-        }
+        view.target = this;
     }
 
     on(eventName, handler, force = true) {

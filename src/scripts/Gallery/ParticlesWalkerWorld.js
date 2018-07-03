@@ -18,12 +18,12 @@ class ParticlesWalkerWorld extends GameWorld {
     }
 
     initialize() {
-        this.view = new GameWorldView(this);
+        this.bind(new GameWorldView());
         this.inputs.addInput(new PointerInput());
     }
 
     createObjects() {
-        this.addVisual(new ParticlesWalker(new ParticlesWalkerView()));
+        this.addVisual(new ParticlesWalker(), new ParticlesWalkerView());
     }
 }
 

@@ -4,9 +4,11 @@ import * as Exception from "./Exception";
 import * as GeneralGrid from "./GeneralGrid";
 import * as Inputs from "./Inputs";
 import * as Enum from "./Enum";
+import * as DelayTimer from "./DelayTimer";
 import {
     Namespace
 } from "./Namespace";
+
 
 /*eslint-disable*/
 export const Common = Namespace.combine({
@@ -17,5 +19,6 @@ export const Common = Namespace.combine({
     EventSystem,
     Exception,
     GeneralGrid,
-    Inputs
+    Inputs,
+    DelayTimer
 );

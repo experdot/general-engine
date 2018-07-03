@@ -15,11 +15,11 @@ class LSystemTreeWorld extends GameWorld {
     }
 
     initialize() {
-        this.view = new GameWorldView(this);
+        this.bind(new GameWorldView());
     }
 
     createObjects() {
-        this.addVisual(new LSystemTree(new LSystemTreeView()));
+        this.addVisual(new LSystemTree(), new LSystemTreeView());
     }
 }
 

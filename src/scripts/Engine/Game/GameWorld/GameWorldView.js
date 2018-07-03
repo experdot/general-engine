@@ -6,21 +6,35 @@ import {
 } from "../../../Engine/UI/Color";
 
 class GameWorldView extends GameView {
-    constructor(target) {
-        super(target);
+    constructor() {
+        super();
         this.isClear = false;
         this.clearColor = Colors.Black;
     }
 
     draw(source, context) {
-        if (this.isClear) {
-            context.fillStyle = this.clearColor.rgba;
-            context.fillRect(0, 0, this.target.width, this.target.height);
-        }
+        this.checkInnerCanvas();
 
+        context.clearRect(0, 0, this.target.width, this.target.height);
+
+        if (this.isClear) {
+            this.innerContext.fillStyle = this.clearColor.rgba;
+            this.innerContext.fillRect(0, 0, this.target.width, this.target.height);
+        }
         this.target.gameVisuals.forEach(element => {
-            element.view && element.view.render.process(context);
+            element.view && element.view.render.process(this.innerContext);
         });
+
+        context.drawImage(this.innerCanvas, 0, 0);
+    }
+
+    checkInnerCanvas() {
+        if (!this.innerContext) {
+            this.innerCanvas = document.createElement("canvas");
+            this.innerContext = this.innerCanvas.getContext("2d");
+            this.innerCanvas.width = this.target.width;
+            this.innerCanvas.height = this.target.height;
+        }
     }
 }
 

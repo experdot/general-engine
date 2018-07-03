@@ -98,8 +98,12 @@ class FlyerParticle extends DynamicParticle {
         let distance = offset.length();
         let alpha = Math.max(0.1, Math.min(1, 1 - (distance / maxRadius)));
 
-        this.color.r = this.color.g = this.color.b = 175 + alpha * 80;
-        this.size = Math.max(0.1, Math.min(1, 1 - (distance / maxRadius))) * 32 + 16;
+        let current = this.color.r;
+        let target = 175 + alpha * 80;
+        let sign = Math.sign(target - this.color.r);
+        let real = current + sign * 0.5;
+
+        this.color.r = this.color.g = this.color.b = real;
     }
 
     checkBorder(rect) {

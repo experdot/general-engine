@@ -15,7 +15,7 @@ class Random {
      * @param {Number} max The exclusive upper bound of the random number returned. 
      */
     range(min, max) {
-        return parseInt(min + Math.floor(Math.random() * (max - min)));
+        return Math.ceil(min + Math.floor(Math.random() * (max - min)));
     }
     /**
      * Returns a random integer that is within a specified range and conforms to the normal distribution.

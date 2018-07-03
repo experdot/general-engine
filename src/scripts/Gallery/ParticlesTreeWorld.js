@@ -15,11 +15,11 @@ class ParticlesTreeWorld extends GameWorld {
     }
 
     initialize() {
-        this.view = new GameWorldView(this);
+        this.bind(new GameWorldView());
     }
 
     createObjects() {
-        this.addVisual(new ParticlesTree(new ParticlesTreeView()));
+        this.addVisual(new ParticlesTree(), new ParticlesTreeView());
     }
 }
 

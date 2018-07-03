@@ -15,13 +15,13 @@ class GeneralProperty extends GeneralObject {
         this.readonly = readonly;
         this.writeonly = writeonly;
         this.eventSystem = new EventSystem();
-        this.eventSystem.registEvent("onValueChanged");
+        this.eventSystem.registEvent("ValueChanged");
     }
 
     setValue(value) {
         if (!this.readonly && this.value !== value) {
             this.value = value;
-            this.eventSystem.raiseEvent("onValueChanged", new ValueChangedEventArgs(this, value));
+            this.eventSystem.raiseEvent("ValueChanged", new ValueChangedEventArgs(this, value));
         }
         return this;
     }

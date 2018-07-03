@@ -16,14 +16,14 @@ class GameOfLifeWorld extends GameWorld {
     static get Title() {
         return "CA - GameOfLife";
     }
-    
+
     initialize() {
-        this.view = new GameWorldView(this);
+        this.bind(new GameWorldView());
         this.inputs.addInput(new PointerInput());
     }
 
     createObjects() {
-        this.addVisual(new GameOfLife(new GameOfLifeView()));
+        this.addVisual(new GameOfLife(), new GameOfLifeView());
     }
 }
 

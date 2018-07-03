@@ -20,6 +20,9 @@ import {
 import {
     GhostEffect
 } from "../../Engine/Game/GameComponents/Effect/Effect";
+import {
+    DelayTimer
+} from "../../Engine/Common/DelayTimer";
 
 class EndlessAbyss extends GameVisual {
     constructor(view) {
@@ -37,18 +40,16 @@ class EndlessAbyss extends GameVisual {
     _start() {
         let w = this.world.width;
         let h = this.world.height;
-
         this.center = new Vector2(w / 2, h / 2);
-        this.lastTime = new Date().getTime();
+
+        this.timer = new DelayTimer();
 
         this._registEvents();
     }
     _update() {
-        let current = new Date().getTime();
-        if (current - this.lastTime > 500) {
-            this.lastTime = current;
+        this.timer.delay(500, () => {
             this.blockGrid.down();
-        }
+        });
     }
     _registEvents() {
         this.on("KeyPress", (event) => {
@@ -94,8 +95,8 @@ class EndlessAbyss extends GameVisual {
 }
 
 class EndlessAbyssView extends GameView {
-    constructor(target) {
-        super(target);
+    constructor() {
+        super();
         this.fillColor = new Color(255, 255, 255);
         this.strokeColor = new Color(255, 255, 255, 0.2);
     }
