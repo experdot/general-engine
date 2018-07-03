@@ -3,15 +3,15 @@
  */
 class Color {
     static FromHex(hex) {
-        let value = Math.floor(hex.slice(1), 16);
+        let value = parseInt(hex.slice(1), 16);
         return new Color(value / 65536, value / 256 % 256, value % 256);
     }
     get hex() {
         let r = Math.floor(this.r);
         let g = Math.floor(this.g);
         let b = Math.floor(this.b);
-        let gx = g < 16 ? "0" : "";
-        let rx = r < 16 ? "0" : "";
+        let rx = g < 16 ? "0" : "";
+        let gx = r < 16 ? "0" : "";
         let bx = b < 16 ? "0" : "";
         return `#${rx}${r.toString(16)}${gx}${g.toString(16)}${bx}${b.toString(16)}`;
     }
@@ -33,6 +33,8 @@ class Color {
     clone() {
         return new Color(this.r, this.g, this.b, this.a);
     }
+
+
 }
 
 class ColorHelper {
