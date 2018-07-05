@@ -69,28 +69,22 @@ class AudioVisualizer extends GameVisual {
             }
         });
 
-        this.proxy(new GhostEffect(new Color(0, 255, 0, 0.01), 40));
+        this.proxy(new GhostEffect(new Color(0, 0, 0, 0.01), 40));
     }
 
     loadFile(file) {
         if (file && file.type.indexOf("audio") === 0) {
             this.audio.src = URL.createObjectURL(file);
-            //this.audio.autoplay = true;
+            this.audio.autoplay = true;
             this.audio.play();
             this.audioStatus = true;
         } else {
             alert("Please select an avaliable audio file.");
         }
-
     }
 }
 
 class AudioVisualizerView extends GameView {
-    constructor() {
-        super();
-        this.rotation = 0;
-    }
-
     draw(source, context) {
         let viewport = {
             w: this.target.world.width,
@@ -103,12 +97,13 @@ class AudioVisualizerView extends GameView {
         let data = this.target.FFTData;
 
         if (!this.target.audioStatus) {
-            context.font = "32px Arial";
+            let size = Math.max(viewport.w / 30, 32);
+            context.font = size + "px Arial";
             context.textAlign = "center";
             context.fillStyle = "#FFF";
-            context.fillText("Drag an audio file here.", cx, cy - 16);
+            context.fillText("Drag an audio file here.", cx, cy - size / 2.5);
         } else {
-            Graphics.offsetScale(context, 6, 6);
+            Graphics.offsetScale(context, 5, 5, 0.99);
         }
 
         context.beginPath();
@@ -125,7 +120,7 @@ class AudioVisualizerView extends GameView {
         context.stroke();
 
         if (!this.target.audioStatus) {
-            Graphics.mirror(context, 1, -1);
+            Graphics.mirror(context, 1, -1, 0.01);
         } else {
             Graphics.rotate(context, Math.PI);
         }
