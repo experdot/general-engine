@@ -21,7 +21,7 @@ class GameWorldView extends GameView {
             this.innerContext.fillStyle = this.clearColor.rgba;
             this.innerContext.fillRect(0, 0, this.target.width, this.target.height);
         }
-        this.target.gameVisuals.forEach(element => {
+        this.target.visuals.forEach(element => {
             element.view && element.view.render.process(this.innerContext);
         });
 

@@ -19,6 +19,9 @@ import {
 import {
     EndlessAbyssWorld
 } from "../EndlessAbyssWorld";
+import {
+    AudioVisualizerWorld
+} from "../AudioVisualizerWorld";
 
 class GameStarter {
     constructor() {
@@ -29,6 +32,7 @@ class GameStarter {
         this.addSymbol("lsystemtree", LSystemTreeWorld);
         this.addSymbol("gameoflife", GameOfLifeWorld);
         this.addSymbol("endlessabyss", EndlessAbyssWorld);
+        this.addSymbol("audiovisualizer", AudioVisualizerWorld);
     }
 
     addSymbol(name, symbol) {

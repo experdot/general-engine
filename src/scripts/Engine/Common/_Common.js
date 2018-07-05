@@ -5,6 +5,7 @@ import * as GeneralGrid from "./GeneralGrid";
 import * as Inputs from "./Inputs";
 import * as Enum from "./Enum";
 import * as DelayTimer from "./DelayTimer";
+import * as Graphics from "./Graphics";
 import {
     Namespace
 } from "./Namespace";
@@ -20,5 +21,6 @@ export const Common = Namespace.combine({
     Exception,
     GeneralGrid,
     Inputs,
-    DelayTimer
+    DelayTimer,
+    Graphics
 );

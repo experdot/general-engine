@@ -200,11 +200,34 @@ class KeyInput extends InputBase {
     }
 }
 
+class DragDropInput extends InputBase {
+    regist(inputs) {
+        super.regist(inputs);
+        this.registEvent("drop", "Drop", event => {
+            event.stopPropagation();
+            event.preventDefault();
+        });
+        this.registEvent("dragenter", "DragEnter", event => {
+            event.stopPropagation();
+            event.preventDefault();
+        });
+        this.registEvent("dragexit", "DragExit", event => {
+            event.stopPropagation();
+            event.preventDefault();
+        });
+        this.registEvent("dragover", "DragOver", event => {
+            event.stopPropagation();
+            event.preventDefault();
+        });
+    }
+}
+
 export {
     Inputs,
     InputBase,
     MouseInput,
     TouchInput,
     PointerInput,
-    KeyInput
+    KeyInput,
+    DragDropInput
 };

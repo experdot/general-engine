@@ -23,6 +23,9 @@ import {
 import {
     ArrayGrid
 } from "./ArrayGrid";
+import {
+    Graphics
+} from "../../../../Common/Graphics";
 
 class ParticlesFlyer extends ParticlesBase {
     constructor(view) {
@@ -116,7 +119,9 @@ class ParticlesFlyerView extends GameView {
         }
 
         this.rotation = this.rotation + 0.002;
-        this.scaleCanvas(context, 16 * Math.sin(this.rotation));
+        let offset = 16 * Math.sin(this.rotation);
+
+        Graphics.offsetScale(context, offset, offset);
 
         for (let index = 0; index < this.target.particles.length; index++) {
             const element = this.target.particles[index];
@@ -127,16 +132,6 @@ class ParticlesFlyerView extends GameView {
             context.fillStyle = element.color.rgba;
             context.fill();
         }
-    }
-
-    scaleCanvas(context, offset = 1) {
-        let w = this.target.world.width + offset;
-        let h = this.target.world.height + offset;
-        context.translate(this.target.world.width / 2, this.target.world.height / 2);
-        context.globalAlpha = 0.99;
-        context.drawImage(context.canvas, -w / 2, -h / 2, w, h);
-        context.globalAlpha = 1;
-        context.setTransform(1, 0, 0, 1, 0, 0);
     }
 }
 

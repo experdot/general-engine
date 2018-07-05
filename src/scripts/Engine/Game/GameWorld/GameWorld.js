@@ -7,6 +7,9 @@ import {
 import {
     GameView
 } from "../GameObject/GameView";
+import {
+    GeneralProcess
+} from "../../Core/GeneralProcess";
 
 
 class GameWorld extends GameVisual {
@@ -16,15 +19,21 @@ class GameWorld extends GameVisual {
         this.width = width;
         this.height = height;
         // game visual objects
-        this.gameVisuals = [];
+        this.visuals = [];
         // game input
         this.inputs = new Inputs().handle((eventName, event) => this.raiseEvent(eventName, event));
         // initialize
         this.initialize();
         this.createObjects();
 
-        this.start.next(this.startGameVisuals);
-        this.update.next(this.updateGameVisuals);
+        GeneralProcess.find(this).forEach(element => {
+            element.value.next(() => {
+                this.visuals.forEach(v => {
+                    v[element.key].process();
+                });
+            });
+        });
+
         this.dispose.next(() => this.inputs.release());
     }
 
@@ -37,28 +46,17 @@ class GameWorld extends GameVisual {
 
     createObjects() {}
 
-    startGameVisuals() {
-        this.gameVisuals.forEach(element => {
-            element.start.process();
-        });
-    }
-
-    updateGameVisuals() {
-        this.gameVisuals.forEach(element => {
-            element.update.process();
-        });
-    }
 
     // Add a visual object into world
     addVisual(visual, view = new GameView()) {
         visual.world = this;
         visual.bind(view);
-        this.gameVisuals.push(visual);
+        this.visuals.push(visual);
     }
 
     raiseEvent(eventName, event) {
         this.eventSystem.raiseEvent(eventName, event);
-        this.gameVisuals.forEach(element => {
+        this.visuals.forEach(element => {
             element.eventSystem.raiseEvent(eventName, event);
         });
     }
