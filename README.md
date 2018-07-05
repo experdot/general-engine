@@ -16,5 +16,8 @@ The General Engine For JavaScript
 - [L-System Tree](https://experdot.github.io/General.JS/views/gallery.html?scene=lsystemtree)
 - [CA GameOfLife](https://experdot.github.io/General.JS/views/gallery.html?scene=gameoflife)
 
+## Audio Visualization
+- [Audio Visualizer](https://experdot.github.io/General.JS/views/gallery.html?scene=audiovisualizer)
+
 ## License
 - [MIT](./LICENSE)
