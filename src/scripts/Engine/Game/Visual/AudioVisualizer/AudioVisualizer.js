@@ -16,6 +16,9 @@ import {
 import {
     Graphics
 } from "../../../Common/Graphics";
+import {
+    FileIO
+} from "../../../IO/FileIO";
 
 class AudioVisualizer extends GameVisual {
     get FFTData() {
@@ -32,11 +35,12 @@ class AudioVisualizer extends GameVisual {
         this.start.next(() => {
             this.audio = document.createElement("audio");
             this.audio.loop = true;
+            document.body.appendChild(this.audio);
 
             this.audioSource = this.audioContext.createMediaElementSource(this.audio);
             this.audioAnalyzer = this.audioContext.createAnalyser();
 
-            this.fftSize = 2048;
+            this.fftSize = this.world.width > 1200 ? 2048 : 1024;
             this.audioAnalyzer.fftSize = this.fftSize;
             this.freqByteData = new Uint8Array(this.audioAnalyzer.frequencyBinCount);
 
@@ -44,12 +48,13 @@ class AudioVisualizer extends GameVisual {
             this.audioAnalyzer.connect(this.audioContext.destination);
 
             this.on("Drop", event => {
-                let file = event.dataTransfer.files[0];
-                if (file && file.type.indexOf("audio") === 0) {
-                    this.audio.src = URL.createObjectURL(file);
-                    this.audio.autoplay = true;
-                    this.audioStatus = true;
-                }
+                this.loadFile(event.dataTransfer.files[0]);
+            });
+
+            this.on("PointerClicked", () => {
+                FileIO.openFileDialog(event => {
+                    this.loadFile(event.target.files[0]);
+                });
             });
         });
 
@@ -59,9 +64,24 @@ class AudioVisualizer extends GameVisual {
 
         this.dispose.next(() => {
             this.audioContext.close();
+            if (this.audio) {
+                this.audio.remove();
+            }
         });
 
-        this.proxy(new GhostEffect(new Color(255, 0, 2, 0.01), 40));
+        this.proxy(new GhostEffect(new Color(0, 255, 0, 0.01), 40));
+    }
+
+    loadFile(file) {
+        if (file && file.type.indexOf("audio") === 0) {
+            this.audio.src = URL.createObjectURL(file);
+            //this.audio.autoplay = true;
+            this.audio.play();
+            this.audioStatus = true;
+        } else {
+            alert("Please select an avaliable audio file.");
+        }
+
     }
 }
 

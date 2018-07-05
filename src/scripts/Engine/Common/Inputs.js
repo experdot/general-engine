@@ -165,11 +165,9 @@ class PointerInput extends InputBase {
     _registTouchEvent(inputs) {
         this.registEvent("tap", "PointerClicked");
         this.registEvent("touchstart", "PointerPressed", () => {
-            event.preventDefault();
             inputs.pointer.isPressed = true;
         });
         this.registEvent("touchend", "PointerReleased", () => {
-            event.preventDefault();
             inputs.pointer.isPressed = false;
         });
         this.registEvent("touchmove", "PointerMoved", event => {
@@ -177,7 +175,6 @@ class PointerInput extends InputBase {
             inputs.pointer.isPressed = true;
             inputs.pointer.position = new Vector2(event.changedTouches[0].clientX, event.changedTouches[0].clientY);
         });
-
     }
 }
 

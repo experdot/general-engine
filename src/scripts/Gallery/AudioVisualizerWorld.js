@@ -9,6 +9,7 @@ import {
     AudioVisualizerView
 } from "../Engine/Game/Visual/AudioVisualizer/AudioVisualizer";
 import {
+    PointerInput,
     DragDropInput
 } from "../Engine/Common/Inputs";
 
@@ -19,6 +20,7 @@ class AudioVisualizerWorld extends GameWorld {
 
     initialize() {
         this.bind(new GameWorldView());
+        this.inputs.addInput(new PointerInput());
         this.inputs.addInput(new DragDropInput());
     }
 
