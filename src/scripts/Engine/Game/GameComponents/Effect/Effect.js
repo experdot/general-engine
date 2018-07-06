@@ -7,23 +7,29 @@ import {
 } from "../../GameObject/GameVisual";
 
 class GhostEffect extends GameVisual {
-    constructor(fill = Colors.Black, gradient = 10) {
+    constructor(fill = Colors.Black, gradient = 10, direct = true) {
         super();
         this.fillColor = fill;
         this.gradientNumber = gradient;
-        this.start.next(source => {
-            const w = source.world.width;
-            const h = source.world.height;
-            source.view.render.before((s, context) => {
-                context.fillStyle = this.fillColor.rgba;
-                context.fillRect(0, 0, w, h);
+        if (direct) {
+            this.start.next(source => {
+                source.view.render.before((s, context) => {
+                    this.effect(context);
+                });
             });
-        });
+        }
         this.update.next(() => {
             if (Math.random() > 0.5) {
                 this.fillColor = ColorHelper.getGradientRandomColor(this.fillColor, this.gradientNumber);
             }
         });
+    }
+
+    effect(context) {
+        const w = context.canvas.width;
+        const h = context.canvas.height;
+        context.fillStyle = this.fillColor.rgba;
+        context.fillRect(0, 0, w, h);
     }
 }
 

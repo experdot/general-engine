@@ -19,6 +19,9 @@ import {
 import {
     FileIO
 } from "../../../IO/FileIO";
+import {
+    OffscreenCanvas
+} from "../../../Drawing/OffscreenCanvas";
 
 class AudioVisualizer extends GameVisual {
     get FFTData() {
@@ -28,38 +31,18 @@ class AudioVisualizer extends GameVisual {
 
     constructor() {
         super();
-
         this.timer = new DelayTimer();
-        this.audioContext = new AudioContext();
 
         this.start.next(() => {
-            this.audio = document.createElement("audio");
-            this.audio.loop = true;
-            document.body.appendChild(this.audio);
-
-            this.audioSource = this.audioContext.createMediaElementSource(this.audio);
-            this.audioAnalyzer = this.audioContext.createAnalyser();
-
-            this.fftSize = this.world.width > 1200 ? 2048 : 1024;
-            this.audioAnalyzer.fftSize = this.fftSize;
-            this.freqByteData = new Uint8Array(this.audioAnalyzer.frequencyBinCount);
-
-            this.audioSource.connect(this.audioAnalyzer);
-            this.audioAnalyzer.connect(this.audioContext.destination);
-
+            this.initAudio();
             this.on("Drop", event => {
                 this.loadFile(event.dataTransfer.files[0]);
             });
-
             this.on("PointerClicked", () => {
                 FileIO.openFileDialog(event => {
                     this.loadFile(event.target.files[0]);
                 });
             });
-        });
-
-        this.update.next(() => {
-
         });
 
         this.dispose.next(() => {
@@ -69,7 +52,31 @@ class AudioVisualizer extends GameVisual {
             }
         });
 
-        this.proxy(new GhostEffect(new Color(0, 0, 0, 0.01), 40));
+        this.ghost = new GhostEffect(new Color(0, 0, 0, 0.01), 40, false);
+        this.proxy(this.ghost);
+    }
+
+    initAudio() {
+        this.audioContext = new AudioContext();
+
+        this.audio = document.createElement("audio");
+        this.audio.loop = true;
+        document.body.appendChild(this.audio);
+
+        this.audioSource = this.audioContext.createMediaElementSource(this.audio);
+        this.audioAnalyzer = this.audioContext.createAnalyser();
+
+        this.fftSize = this.world.width > 1200 ? 2048 : 1024;
+        this.audioAnalyzer.fftSize = this.fftSize;
+        this.freqByteData = new Uint8Array(this.audioAnalyzer.frequencyBinCount);
+
+        this.audioSource.connect(this.audioAnalyzer);
+        this.audioAnalyzer.connect(this.audioContext.destination);
+
+        this.file = {
+            name: "",
+            playing: false
+        };
     }
 
     loadFile(file) {
@@ -77,7 +84,8 @@ class AudioVisualizer extends GameVisual {
             this.audio.src = URL.createObjectURL(file);
             this.audio.autoplay = true;
             this.audio.play();
-            this.audioStatus = true;
+            this.file.playing = true;
+            this.file.name = file.name.split(".").shift();
         } else {
             alert("Please select an avaliable audio file.");
         }
@@ -91,12 +99,23 @@ class AudioVisualizerView extends GameView {
     }
 
     draw(source, context) {
+        if (!this.innerCanvas) {
+            this.innerCanvas = new OffscreenCanvas(context.canvas.width, context.canvas.height);
+        }
+        this.drawDynamic(this.innerCanvas.context);
+        this.innerCanvas.output(context, 0, 0);
+        this.drawStatic(context);
+    }
+
+    drawDynamic(context) {
         let w = this.target.world.width;
         let h = this.target.world.height;
         let cx = w / 2;
         let cy = h / 2;
 
-        if (!this.target.audioStatus) {
+        this.target.ghost.effect(context);
+
+        if (!this.target.file.playing) {
             this.drawText(context, w, h, cx, cy);
             Graphics.mirror(context, 1, -1, 0.01);
         } else {
@@ -132,6 +151,31 @@ class AudioVisualizerView extends GameView {
         context.lineWidth = w / data.length;
         context.strokeStyle = "#FFF";
         context.stroke();
+    }
+
+    drawStatic(context) {
+        let w = this.target.world.width;
+        let h = this.target.world.height;
+        this.drawFileinfo(context, w, h);
+    }
+
+    drawFileinfo(context, w, h) {
+        let file = this.target.file;
+        if (file.playing) {
+            let size = Math.max(w / 48, 16);
+            let x = w * 0.1;
+            let y = h * 0.8;
+            context.font = size + "px Arial";
+            context.textAlign = "left";
+            context.fillStyle = "#FFF";
+            context.fillText(file.name, x, y);
+
+            let width = w * 0.8;
+            let progress = this.target.audio.currentTime / this.target.audio.duration;
+            context.strokeStyle = "#FFF";
+            context.strokeRect(x, y + size, width, size / 3);
+            context.fillRect(x, y + size, width * progress, size / 3);
+        }
     }
 }
 

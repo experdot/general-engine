@@ -13,28 +13,13 @@ class GameWorldView extends GameView {
     }
 
     draw(source, context) {
-        this.checkInnerCanvas();
-
-        context.clearRect(0, 0, this.target.width, this.target.height);
-
         if (this.isClear) {
-            this.innerContext.fillStyle = this.clearColor.rgba;
-            this.innerContext.fillRect(0, 0, this.target.width, this.target.height);
+            context.fillStyle = this.clearColor.rgba;
+            context.fillRect(0, 0, this.target.width, this.target.height);
         }
         this.target.visuals.forEach(element => {
-            element.view && element.view.render.process(this.innerContext);
+            element.view && element.view.render.process(context);
         });
-
-        context.drawImage(this.innerCanvas, 0, 0);
-    }
-
-    checkInnerCanvas() {
-        if (!this.innerContext) {
-            this.innerCanvas = document.createElement("canvas");
-            this.innerContext = this.innerCanvas.getContext("2d");
-            this.innerCanvas.width = this.target.width;
-            this.innerCanvas.height = this.target.height;
-        }
     }
 }
 
