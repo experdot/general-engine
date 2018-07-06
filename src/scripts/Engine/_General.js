@@ -5,6 +5,9 @@ import {
     Core
 } from "./Core/_Core";
 import {
+    Drawing
+} from "./Drawing/_Drawing";
+import {
     Game
 } from "./Game/_Game";
 import {
@@ -24,6 +27,7 @@ import "./Extenstion/_Extenstion";
 export const General = {
     Common,
     Core,
+    Drawing,
     Game,
     IO,
     Numerics,

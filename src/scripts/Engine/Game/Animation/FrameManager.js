@@ -1,22 +1,42 @@
+import {
+    DelayTimer
+} from "../../Common/DelayTimer";
+
 class FrameManager {
     constructor() {
         this.isLoop = false;
+        this.frameCount = 0;
+        this.framePerSecond = 0;
+        this.lastSecondCount = 0;
+        this.timer = new DelayTimer();
+        this.onRateChanged = null;
     }
 
-    loopInvoke(action) {
+    loopInvoke(action = null) {
         this.isLoop = true;
+        let handle;
         let step = () => {
-            action();
+            action && action();
+            this.frameCount += 1;
+            this.timer.delay(1000, () => {
+                this.framePerSecond = this.frameCount - this.lastSecondCount - 1;
+                this.lastSecondCount = this.frameCount;
+                this.onRateChanged && this.onRateChanged(this.framePerSecond);
+            });
             if (this.isLoop) {
-                window.requestAnimationFrame(step);
+                handle = window.requestAnimationFrame(step);
             } else {
+                window.cancelAnimationFrame(handle);
+                this.frameCount = 0;
+                this.framePerSecond = 0;
+                this.lastSecondCount = 0;
                 this.stopCallback && this.stopCallback();
             }
         };
         step();
     }
 
-    stop(callback) {
+    stop(callback = null) {
         this.stopCallback = callback;
         this.isLoop = false;
     }

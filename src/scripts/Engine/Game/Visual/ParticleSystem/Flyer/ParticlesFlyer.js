@@ -25,7 +25,7 @@ import {
 } from "./ArrayGrid";
 import {
     Graphics
-} from "../../../../Common/Graphics";
+} from "../../../../Drawing/Graphics";
 
 class ParticlesFlyer extends ParticlesBase {
     constructor(view) {

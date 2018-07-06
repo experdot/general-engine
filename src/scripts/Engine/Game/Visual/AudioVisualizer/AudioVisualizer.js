@@ -15,7 +15,7 @@ import {
 } from "../../../UI/Color";
 import {
     Graphics
-} from "../../../Common/Graphics";
+} from "../../../Drawing/Graphics";
 import {
     FileIO
 } from "../../../IO/FileIO";
