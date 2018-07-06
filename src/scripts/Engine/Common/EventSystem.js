@@ -5,7 +5,6 @@ import {
     Enum
 } from "./Enum";
 
-
 const StrictMode = Enum.create({
     None: 0,
     Strict: 1 // The event must be registed explicitly
@@ -18,6 +17,8 @@ class EventSystem {
     constructor(mode = StrictMode.None) {
         this.mode = mode;
         this.handlers = {};
+        this.dom0Events = [];
+        this.dom2Events = [];
     }
 
     addHandler(eventName, handler, force = false) {
@@ -57,6 +58,10 @@ class EventSystem {
                 eventTarget[domEventName] = (event) => {
                     this.raiseEvent(eventName, event);
                 };
+                this.dom0Events.push({
+                    ui: eventTarget,
+                    name: domEventName
+                });
             }
         }
     }
@@ -65,9 +70,15 @@ class EventSystem {
         if (!this.handlers[eventName]) {
             this.handlers[eventName] = [];
             if (domEventName && eventTarget) {
-                eventTarget.addEventListener(domEventName, (event) => {
+                let listener = (event) => {
                     this.raiseEvent(eventName, event);
-                }, useCapture);
+                };
+                eventTarget.addEventListener(domEventName, listener, useCapture);
+                this.dom2Events.push({
+                    ui: eventTarget,
+                    name: domEventName,
+                    listener: listener
+                });
             }
         }
     }
@@ -79,9 +90,16 @@ class EventSystem {
             });
         }
     }
+
+    release() {
+        this.dom0Events.forEach(event => {
+            event.ui[event.name] = null;
+        });
+        this.dom2Events.forEach(event => {
+            event.ui.removeEventListener(event.name, event.listener);
+        });
+    }
 }
-
-
 
 export {
     StrictMode,

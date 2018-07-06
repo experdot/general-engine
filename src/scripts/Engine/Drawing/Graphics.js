@@ -14,7 +14,7 @@ class Graphics {
         });
     }
 
-    static rotate(context, rotation, alpha = 1) {
+    static rotate(context, rotation, alpha = 1, action) {
         let w = context.canvas.width;
         let h = context.canvas.height;
         let x = w / 2;
@@ -24,7 +24,7 @@ class Graphics {
             context.rotate(rotation);
             context.translate(-x, -y);
             context.globalAlpha = alpha;
-            context.drawImage(context.canvas, 0, 0, w, h);
+            action && action(context);
         });
     }
 

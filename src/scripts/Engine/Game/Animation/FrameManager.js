@@ -18,8 +18,9 @@ class FrameManager {
         let step = () => {
             action && action();
             this.frameCount += 1;
-            this.timer.delay(1000, () => {
-                this.framePerSecond = this.frameCount - this.lastSecondCount - 1;
+            this.timer.delay(1000, (actual) => {
+                let offset = actual === 1000 ? 0 : -1;
+                this.framePerSecond = this.frameCount - this.lastSecondCount + offset;
                 this.lastSecondCount = this.frameCount;
                 this.onRateChanged && this.onRateChanged(this.framePerSecond);
             });

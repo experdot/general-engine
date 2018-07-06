@@ -19,6 +19,12 @@ import {
 import {
     GhostEffect
 } from "../../../GameComponents/Effect/Effect";
+import {
+    Transform
+} from "../../../../Numerics/Transform";
+import {
+    Graphics
+} from "../../../../Drawing/Graphics";
 
 class ParticlesWalker extends ParticlesBase {
     constructor(view) {
@@ -26,6 +32,8 @@ class ParticlesWalker extends ParticlesBase {
         this.random = new Random();
         this.start.next(this._start);
         this.update.next(this._update);
+
+        this.transform = new Transform();
 
         this.proxy(new GhostEffect(new Color(0, 128, 128, 0.003), 40));
     }
@@ -111,19 +119,21 @@ class ParticlesWalkerView extends GameView {
         if (this.target.stopDraw) {
             return;
         }
-        for (let index = 0; index < this.target.particles.length; index++) {
-            const element = this.target.particles[index];
-            let p = element.location;
-            if (element.parent) {
-                context.beginPath();
-                context.moveTo(p.x, p.y);
-                context.lineTo(element.parent.location.x, element.parent.location.y);
-                context.lineWidth = element.size;
-                context.strokeStyle = element.color.rgba;
-                context.closePath();
-                context.stroke();
+        Graphics.transform(context, this.target.transform.toMatrix3x2(), () => {
+            for (let index = 0; index < this.target.particles.length; index++) {
+                const element = this.target.particles[index];
+                let p = element.location;
+                if (element.parent) {
+                    context.beginPath();
+                    context.moveTo(p.x, p.y);
+                    context.lineTo(element.parent.location.x, element.parent.location.y);
+                    context.lineWidth = element.size;
+                    context.strokeStyle = element.color.rgba;
+                    context.closePath();
+                    context.stroke();
+                }
             }
-        }
+        });
     }
 }
 

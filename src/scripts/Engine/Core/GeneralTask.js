@@ -4,6 +4,10 @@ class GeneralTask {
         this.name = name;
         this.enabled = enabled;
     }
+
+    run(source, ...args) {
+        this.enabled && this.action && this.action.call(source, ...args);
+    }
 }
 
 export {

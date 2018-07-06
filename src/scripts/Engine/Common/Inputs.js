@@ -8,13 +8,13 @@ import {
 class Inputs {
     constructor() {
         this.inputList = [];
-        this.handler = () => {
-            throw new NotSupportedException("The event hanlder is not configured");
+        this.onchange = () => {
+            throw new NotSupportedException("The onchange event hanlder is not configured.");
         };
     }
 
-    handle(handler) {
-        this.handler = handler;
+    change(handler) {
+        this.onchange = handler;
         return this;
     }
 
@@ -55,7 +55,7 @@ class InputBase {
     registEvent(sourceName, targetName, before, after, uiElement = null) {
         let listener = (event) => {
             before && before(event);
-            this.inputs.handler & this.inputs.handler(targetName, event);
+            this.inputs.onchange & this.inputs.onchange(targetName, event);
             after && after(event);
         };
         uiElement = uiElement || this.inputs.ui;
@@ -100,7 +100,7 @@ class MouseInput extends InputBase {
             inputs.mouse.position = new Vector2(event.offsetX, event.offsetY);
         });
         window.onmousewheel = document.onmousewheel = (event) => {
-            inputs.handler("MouseWheel", event);
+            inputs.onchange && inputs.onchange("MouseWheel", event);
         };
     }
 }

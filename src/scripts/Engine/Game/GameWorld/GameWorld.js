@@ -21,11 +21,12 @@ class GameWorld extends GameVisual {
         // game visual objects
         this.visuals = [];
         // game input
-        this.inputs = new Inputs().handle((eventName, event) => this.raiseEvent(eventName, event));
+        this.inputs = new Inputs().change((eventName, event) => this.raiseEvent(eventName, event));
         // initialize
         this.initialize();
         this.createObjects();
 
+        //visuals
         GeneralProcess.find(this).forEach(element => {
             element.value.next(() => {
                 this.visuals.forEach(v => {
@@ -34,20 +35,19 @@ class GameWorld extends GameVisual {
             });
         });
 
+        //dispose
         this.dispose.next(() => this.inputs.release());
     }
 
     initialize() {}
+
+    createObjects() {}
 
     initializeUI(ui) {
         this.ui = ui;
         this.inputs.launch(this.ui);
     }
 
-    createObjects() {}
-
-
-    // Add a visual object into world
     addVisual(visual, view = new GameView()) {
         visual.world = this;
         visual.bind(view);

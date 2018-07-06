@@ -24,6 +24,10 @@ class GameVisual extends GeneralObject {
 
         this.transform = new Transform();
         this.eventSystem = new EventSystem();
+
+        this.dispose.next(() => {
+            this.eventSystem.release();
+        });
     }
 
     bind(view) {

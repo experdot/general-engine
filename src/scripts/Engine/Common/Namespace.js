@@ -10,7 +10,7 @@ class Namespace {
                 if (element.hasOwnProperty(key)) {
                     const value = element[key];
                     if (result[key]) {
-                        throw new InvalidOperationException("An key is conflict while combined namespaces.");
+                        throw new InvalidOperationException("A key is conflict while combined namespaces.");
                     }
                     result[key] = value;
                 }

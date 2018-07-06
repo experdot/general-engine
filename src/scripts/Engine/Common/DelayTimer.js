@@ -10,12 +10,14 @@ class DelayTimer {
 
     delay(interval, action) {
         let current = new Date().getTime();
-        if (current - this.lastTime > interval) {
+        let actual = current - this.lastTime;
+        if (actual >= interval) {
             this.lastTime = current;
-            action && action();
+            action && action(actual);
         }
     }
 }
+
 export {
     DelayTimer
 };

@@ -85,45 +85,53 @@ class AudioVisualizer extends GameVisual {
 }
 
 class AudioVisualizerView extends GameView {
+    constructor() {
+        super();
+        this.rotation = 0;
+    }
+
     draw(source, context) {
-        let viewport = {
-            w: this.target.world.width,
-            h: this.target.world.height,
-        };
-
-        let cx = viewport.w / 2;
-        let cy = viewport.h / 2;
-
-        let data = this.target.FFTData;
+        let w = this.target.world.width;
+        let h = this.target.world.height;
+        let cx = w / 2;
+        let cy = h / 2;
 
         if (!this.target.audioStatus) {
-            let size = Math.max(viewport.w / 30, 32);
-            context.font = size + "px Arial";
-            context.textAlign = "center";
-            context.fillStyle = "#FFF";
-            context.fillText("Drag an audio file here.", cx, cy - size / 2.5);
+            this.drawText(context, w, h, cx, cy);
+            Graphics.mirror(context, 1, -1, 0.01);
         } else {
+            this.rotation += 0.001;
             Graphics.offsetScale(context, 5, 5, 0.99);
+            Graphics.rotate(context, this.rotation, 1, () => {
+                this.drawFFT(context, w, h, cx, cy);
+            });
+            Graphics.rotate(context, Math.PI, 1, () => {
+                context.drawImage(context.canvas, 0, 0, w, h);
+            });
         }
+    }
 
+    drawText(context, w, h, cx, cy) {
+        let size = Math.max(w / 30, 32);
+        context.font = size + "px Arial";
+        context.textAlign = "center";
+        context.fillStyle = "#FFF";
+        context.fillText("Drag an audio file here.", cx, cy - size / 2.5);
+        context.fillRect(0, cy - 2, w, 4);
+    }
+
+    drawFFT(context, w, h, cx, cy) {
+        let data = this.target.FFTData;
         context.beginPath();
         for (let index = 0; index < data.length; index++) {
             let value = data[index];
-            let x = index / data.length * viewport.w;
+            let x = index / data.length * w;
             let y = cy + value;
             context.lineTo(x, y);
         }
-        //context.closePath();
-
-        context.lineWidth = viewport.w / data.length;
+        context.lineWidth = w / data.length;
         context.strokeStyle = "#FFF";
         context.stroke();
-
-        if (!this.target.audioStatus) {
-            Graphics.mirror(context, 1, -1, 0.01);
-        } else {
-            Graphics.rotate(context, Math.PI);
-        }
     }
 }
 

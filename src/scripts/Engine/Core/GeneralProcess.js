@@ -28,9 +28,9 @@ class GeneralProcess {
         this.source = source;
     }
 
-    process() {
+    process(...args) {
         this.tasks.forEach(element => {
-            element.enabled && element.action && element.action.call(this.source, this.source, ...arguments);
+            element.run(this.source, this.source, ...args);
         });
     }
 
