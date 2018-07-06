@@ -22,6 +22,9 @@ import {
 import {
     OffscreenCanvas
 } from "../../../Drawing/OffscreenCanvas";
+import {
+    MessageBox
+} from "../../../UI/MessageBox";
 
 class AudioVisualizer extends GameVisual {
     get FFTData() {
@@ -41,7 +44,7 @@ class AudioVisualizer extends GameVisual {
             this.on("PointerClicked", () => {
                 FileIO.openFileDialog(event => {
                     this.loadFile(event.target.files[0]);
-                });
+                }, "audio/*");
             });
         });
 
@@ -87,7 +90,7 @@ class AudioVisualizer extends GameVisual {
             this.file.playing = true;
             this.file.name = file.name.split(".").shift();
         } else {
-            alert("Please select an avaliable audio file.");
+            MessageBox.show("Please select a valid audio file.");
         }
     }
 }
@@ -96,6 +99,7 @@ class AudioVisualizerView extends GameView {
     constructor() {
         super();
         this.rotation = 0;
+        this.rotation2 = 0;
     }
 
     draw(source, context) {
@@ -142,10 +146,11 @@ class AudioVisualizerView extends GameView {
     drawFFT(context, w, h, cx, cy) {
         let data = this.target.FFTData;
         context.beginPath();
+        this.rotation2 += 0.002;
         for (let index = 0; index < data.length; index++) {
             let value = data[index];
             let x = index / data.length * w;
-            let y = cy + value;
+            let y = cy + value + Math.sin(x / (100 + Math.sin(this.rotation2) * 50)) * 100;
             context.lineTo(x, y);
         }
         context.lineWidth = w / data.length;

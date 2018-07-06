@@ -3,14 +3,14 @@ import {
 } from "../Common/Exception";
 
 class FileIO {
-    static openFileDialog(changeCallback) {
-        let inputFileElement = document.createElement("input");
-        inputFileElement.setAttribute("type", "file");
-        inputFileElement.onchange = (event) => {
-            changeCallback && changeCallback(event);
-
+    static openFileDialog(onchange, accept = "") {
+        let input = document.createElement("input");
+        input.setAttribute("type", "file");
+        input.setAttribute("accept", accept);
+        input.onchange = (event) => {
+            onchange && onchange(event);
         };
-        inputFileElement.click();
+        input.click();
     }
 
     static readAllText(file, loadedCallback) {

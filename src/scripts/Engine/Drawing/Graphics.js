@@ -10,7 +10,8 @@ class Graphics {
         let rh = h + offsetY;
         Graphics.hold(context, () => {
             context.globalAlpha = alpha;
-            context.drawImage(context.canvas, -offsetX, -offsetY, rw, rh);
+            context.translate(w / 2, h / 2);
+            context.drawImage(context.canvas, -rw / 2, -rh / 2, rw, rh);
         });
     }
 

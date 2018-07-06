@@ -10,6 +10,9 @@ import {
 import {
     BlockGroupHelper
 } from "./BlockGroup";
+import {
+    MessageBox
+} from "../../../Engine/UI/MessageBox";
 
 class BlockGrid extends GeneralGrid {
     constructor(width = 1, height = 1) {
@@ -76,7 +79,7 @@ class BlockGrid extends GeneralGrid {
 
     over() {
         if (!this.overFlag) {
-            alert("Game Over");
+            MessageBox.show("Game Over");
         }
         this.overFlag = true;
     }
