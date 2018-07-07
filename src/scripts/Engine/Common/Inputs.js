@@ -89,7 +89,9 @@ class MouseInput extends InputBase {
     _registMouseEvent(inputs) {
         this.registEvent("click", "Click");
         this.registEvent("mouseenter", "MouseEnter");
-        this.registEvent("mouseleave", "MouseLeave");
+        this.registEvent("mouseleave", "MouseLeave", () => {
+            inputs.mouse.isPressed = false;
+        });
         this.registEvent("mousedown", "MouseDown", () => {
             inputs.mouse.isPressed = true;
         });
@@ -148,7 +150,9 @@ class PointerInput extends InputBase {
     _registMouseEvent(inputs) {
         this.registEvent("click", "PointerClicked");
         this.registEvent("mouseenter", "PointerEntered");
-        this.registEvent("mouseleave", "PointerExited");
+        this.registEvent("mouseleave", "PointerExited", () => {
+            inputs.pointer.isPressed = false;
+        });
         this.registEvent("mousedown", "PointerPressed", () => {
             inputs.pointer.isPressed = true;
         });

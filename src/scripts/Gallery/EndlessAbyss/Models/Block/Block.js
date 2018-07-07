@@ -6,8 +6,8 @@ import {
 } from "../../../../Engine/UI/Color";
 
 class Block {
-    constructor() {
-        this.location = new Vector2(0, 0);
+    constructor(x = 0, y = 0) {
+        this.location = new Vector2(x, y);
         this.color = Colors.White;
     }
 

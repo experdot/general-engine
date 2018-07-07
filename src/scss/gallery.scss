@@ -29,6 +29,7 @@ home {
         text-align: center;
         cursor: pointer;
         font-size: 1rem;
+        user-select: none;
     }
     .button-viewongithub {
         position: fixed;
@@ -42,6 +43,7 @@ home {
             color: #CCCCCC;
             text-decoration: none;
         }
+        user-select: none;
     }
     .gamebox {
         margin: auto;
@@ -55,6 +57,7 @@ home {
         position: absolute;
         right: 0;
         margin: 0px 2px;
-        color: #CCCCCC
+        color: #CCCCCC;
+        user-select: none;
     }
 }

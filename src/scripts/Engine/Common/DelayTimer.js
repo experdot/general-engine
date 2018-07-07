@@ -8,12 +8,14 @@ class DelayTimer {
         return this;
     }
 
-    delay(interval, action) {
+    delay(interval, action, fail) {
         let current = new Date().getTime();
         let actual = current - this.lastTime;
         if (actual >= interval) {
             this.lastTime = current;
             action && action(actual);
+        } else {
+            fail && fail(actual);
         }
     }
 }

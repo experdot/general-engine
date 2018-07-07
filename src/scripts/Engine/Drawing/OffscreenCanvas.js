@@ -8,10 +8,17 @@ class OffscreenCanvas {
 
     clear() {
         this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        return this;
+    }
+
+    draw(action) {
+        action && action(this.context);
+        return this;
     }
 
     output(context, ...args) {
         context.drawImage(this.canvas, ...args);
+        return this;
     }
 }
 

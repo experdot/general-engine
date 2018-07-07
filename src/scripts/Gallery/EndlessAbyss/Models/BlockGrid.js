@@ -11,10 +11,17 @@ import {
     BlockGroupHelper
 } from "./BlockGroup";
 import {
-    MessageBox
-} from "../../../Engine/UI/MessageBox";
+    Block
+} from "./Block/Block";
 
 class BlockGrid extends GeneralGrid {
+    get allBlocks() {
+        return this._allBlocks;
+    }
+    get preBlocks() {
+        return this._preBlocks;
+    }
+
     constructor(width = 1, height = 1) {
         super(width, height);
         this.current = null;
@@ -25,7 +32,7 @@ class BlockGrid extends GeneralGrid {
         this.rightOffset = new Vector2(1, 0);
         this.indexOffset = 1;
 
-        let colors = ["#EE1111", "#11EE11", "#1111EE", "#EEEE11", "#11EEEE", "#EE11EE"];
+        let colors = ["#FF0000", "#FFFF00", "#0000FF"];
         this.colors = colors.map(v => Color.FromHex(v));
 
         this.blockGroups = BlockGroupHelper.getStandardGroups();
@@ -47,6 +54,19 @@ class BlockGrid extends GeneralGrid {
     generateCurrent() {
         this.current = this.next;
         this.generateNext();
+        this.generateInformation();
+    }
+
+    generateInformation() {
+        this._allBlocks = [];
+        this._preBlocks = [];
+        let maxRow = this._findMaxRow();
+        this.forEach((block, x, y) => {
+            this._allBlocks.push(block ? block : new Block(x, y));
+            if (!block && y <= maxRow) {
+                this._preBlocks.push(new Block(x, y));
+            }
+        });
     }
 
     up() {
@@ -78,10 +98,7 @@ class BlockGrid extends GeneralGrid {
     }
 
     over() {
-        if (!this.overFlag) {
-            MessageBox.show("Game Over");
-        }
-        this.overFlag = true;
+        this.onover && this.onover();
     }
 
 
