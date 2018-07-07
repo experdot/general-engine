@@ -29,7 +29,7 @@ class Graphics {
         });
     }
 
-    static mirror(context, horizontal, vertical, alpha = 1) {
+    static mirror(context, horizontal, vertical, alpha = 1, action) {
         let w = context.canvas.width;
         let h = context.canvas.height;
         let x = w / 2;
@@ -39,7 +39,7 @@ class Graphics {
             context.scale(horizontal, vertical);
             context.translate(-x, -y);
             context.globalAlpha = alpha;
-            context.drawImage(context.canvas, 0, 0, w, h);
+            action && action(context);
         });
     }
 

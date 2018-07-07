@@ -1,4 +1,4 @@
-import { GameStarter } from "./Gallery/GameStarter/GameStarter";
+import { GalleryStarter } from "./Gallery/GalleryStarter";
 
 var canvas = document.getElementById("canvas");
 var rebuildButton = document.getElementById("button-rebuild");
@@ -19,7 +19,7 @@ startGame();
 function startGame(): void {
     (canvas as HTMLCanvasElement).width = document.body.clientWidth;
     (canvas as HTMLCanvasElement).height = document.body.clientHeight;
-    box = new GameStarter().launch(canvas);
+    box = new GalleryStarter().launch(canvas);
     box.frameManager.onRateChanged = rate => {
         if (frame) { frame.innerText = "FPS:" + rate; }
     };

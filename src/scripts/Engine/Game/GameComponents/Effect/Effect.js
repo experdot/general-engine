@@ -20,7 +20,7 @@ class GhostEffect extends GameVisual {
         }
         this.update.next(() => {
             if (Math.random() > 0.5) {
-                this.fillColor = ColorHelper.getGradientRandomColor(this.fillColor, this.gradientNumber);
+                this.fillColor = ColorHelper.gradientRandom(this.fillColor, this.gradientNumber);
             }
         });
     }

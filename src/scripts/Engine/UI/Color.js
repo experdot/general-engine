@@ -2,7 +2,7 @@
  * Represents a RGBA (red, green, blue, alpha) color.
  */
 class Color {
-    static FromHex(hex) {
+    static fromHex(hex) {
         let value = parseInt(hex.slice(1), 16);
         return new Color(value / 65536, value / 256 % 256, value % 256);
     }
@@ -38,7 +38,7 @@ class Color {
 }
 
 class ColorHelper {
-    static getGradientColor(color, increment = 1) {
+    static gradient(color, increment = 1) {
         const upon = 255;
 
         var r = color.r;
@@ -56,7 +56,7 @@ class ColorHelper {
         return new Color(r, g, b, color.a);
     }
 
-    static getGradientRandomColor(color, increment = 1) {
+    static gradientRandom(color, increment = 1) {
         const upon = 255;
         let half = increment / 2;
 
