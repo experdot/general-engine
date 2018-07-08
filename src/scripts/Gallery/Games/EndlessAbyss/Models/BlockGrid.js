@@ -71,6 +71,12 @@ class BlockGrid extends Array2 {
         }
     }
 
+    reset() {
+        this.forEach((block, x, y) => {
+            this.set(x, y, null);
+        });
+    }
+
     over() {
         this.onover && this.onover();
     }
@@ -140,7 +146,7 @@ class BlockGrid extends Array2 {
     _combineFullRow() {
         let maxRow = this._findMaxRow();
         let changedFlag = false;
-        for (let y = 0; y < maxRow; y++) {
+        for (let y = maxRow; y >= 0; y--) {
             if (this._checkFullRow(y)) {
                 this._clearSingleRow(y);
                 changedFlag = true;

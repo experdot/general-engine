@@ -84,7 +84,7 @@ class EndlessAbyss extends GameVisual {
                     this.settings.playing = true;
                     if (this.settings.gameover) {
                         this.settings.gameover = false;
-                        this.blockGrid = new BlockGrid(this.width, 20);
+                        this.blockGrid.reset();
                     }
                 }
                 return;
@@ -199,11 +199,11 @@ class EndlessAbyssView extends GameView {
     }
 
     drawNotify(context, w, h, cx, cy) {
-        let size = Math.max(w / 48, 32);
+        let size = Math.max(w / 48, 24);
         context.font = size + "px Arial";
         context.textAlign = "center";
         this.single += 0.06;
-        context.fillStyle = new Color(255, 255, 255, 0.6 + Math.sin(this.single) * 0.4).rgba;
+        context.fillStyle = new Color(255, 255, 255, 0.6 + Math.sin(this.single) * 0.3).rgba;
         context.fillText("Press enter key to start", cx, cy + size * 1.6);
     }
 
