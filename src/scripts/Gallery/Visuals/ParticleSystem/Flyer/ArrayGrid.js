@@ -1,13 +1,13 @@
 import {
-    GeneralGrid
-} from "../../../../Engine/Common/GeneralGrid";
+    Array2
+} from "../../../../Engine/Collections/Array2";
 
-class ArrayGrid extends GeneralGrid {
+class ArrayGrid extends Array2 {
     constructor(w, h) {
         super(w, h);
 
         this.forEach((cell, x, y) => {
-            this.grid[x][y] = [];
+            this.data[x][y] = [];
         });
 
         this.offsetX = [0, -1, 0, 1, 1, 1, 0, -1, -1];
@@ -26,7 +26,7 @@ class ArrayGrid extends GeneralGrid {
             let dx = x + this.offsetX[i];
             let dy = y + this.offsetY[i];
             if (dx >= 0 && dx < this.width && dy >= 0 && dy < this.height) {
-                result.push(...this.grid[dx][dy]);
+                result.push(...this.data[dx][dy]);
             }
         }
         return result;

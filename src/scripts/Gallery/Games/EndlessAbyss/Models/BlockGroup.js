@@ -7,24 +7,34 @@ import {
 import {
     Vector2
 } from "../../../../Engine/Numerics/Vector2";
+import {
+    Colors
+} from "../../../../Engine/UI/Color";
 
 class BlockGroup {
     constructor() {
         this.location = new Vector2(0, 0);
+        this.color = Colors.White;
         this.offsetMaps = [];
-        this.current = 0;
+        this.currentIndex = 0;
     }
 
     clone() {
         let result = new BlockGroup();
         result.location = this.location.clone();
+        result.color = this.color;
         result.offsetMaps = this.offsetMaps;
-        result.current = this.current;
+        result.currentIndex = this.currentIndex;
         return result;
     }
 
     setLocation(location) {
         this.location = location;
+        return this;
+    }
+
+    setColor(color) {
+        this.color = color;
         return this;
     }
 
@@ -41,14 +51,14 @@ class BlockGroup {
     }
 
     getLocations(indexOffset = 0) {
-        let index = (this.current + indexOffset) % this.offsetMaps.length;
+        let index = (this.currentIndex + indexOffset) % this.offsetMaps.length;
         return this.offsetMaps[index].getLocations(this.location);
     }
 
     getBlocks(indexOffset = 0) {
         let blocks = [];
         this.getLocations(indexOffset).forEach(location => {
-            blocks.push(new Block().setLocation(location));
+            blocks.push(new Block().setLocation(location).setColor(this.color.clone()));
         });
         return blocks;
     }
@@ -59,7 +69,7 @@ class BlockGroup {
     }
 
     rotate() {
-        this.current = (this.current + 1) % this.offsetMaps.length;
+        this.currentIndex = (this.currentIndex + 1) % this.offsetMaps.length;
         return this;
     }
 }

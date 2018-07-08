@@ -75,6 +75,7 @@ class EndlessAbyss extends GameVisual {
                 this.settings.progress = actual / this.settings.delayTime;
             });
         }
+        this.settings.rotation += 0.002;
     }
     _registEvents() {
         this.on("KeyPress", (event) => {
@@ -227,15 +228,13 @@ class EndlessAbyssView extends GameView {
             this.drawBlocks(context, allBlocks, cx, cy, radius, blockHeight, blockBorder, 0, split, stroke, null);
             this.drawBlocks(context, fixBlocks, cx, cy, radius, blockHeight, blockBorder, 0, split, stroke, fill, false, true);
             this.drawBlocks(context, preBlocks, cx, cy, radius, blockHeight, blockBorder, 0, split, null, this.fill.blank);
-            this.drawBlocks(context, current, cx, cy, radius, blockHeight, blockBorder, yOffset, split, null, null, true, true);
             this.drawBlocks(context, next, cx, cy, radius, blockHeight, blockBorder, 4, split, null, null, true, true);
         } else {
             stroke = this.stroke.black;
             this.drawBlocks(context, fixBlocks, cx, cy, radius, blockHeight, blockBorder, 0, split, stroke, null);
-            this.drawBlocks(context, current, cx, cy, radius, blockHeight, blockBorder, yOffset, split, stroke, null);
+            this.drawBlocks(context, current, cx, cy, radius, blockHeight, blockBorder, yOffset, split, stroke, null, false, true);
         }
     }
-
 
     drawBlocks(context, blocks, cx, cy, radius, blockHeight, blockBorder, yOffset, split, stroke, fill, strokeRaw, fillRaw) {
         let angle = Math.PI / split;

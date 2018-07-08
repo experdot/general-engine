@@ -96,7 +96,7 @@ class ParticlesFlyer extends ParticlesBase {
     allocateGrid(grid, particles, revolution = 10) {
         particles.forEach(element => {
             let location = this.mapLocation(element.location, revolution);
-            grid.getCell(location.x, location.y).push(element);
+            grid.get(location.x, location.y).push(element);
         });
     }
 

@@ -92,8 +92,8 @@ class GameOfLife extends GameVisual {
             let count = this.CA.around(x, y, this.xOffsets, this.yOffsets);
             if (cell) {
                 if (count === 2 || count === 3 || count === 4) {
-                    let cell = this.CA.getCell(x, y);
-                    generation.setCell(x, y, cell);
+                    let cell = this.CA.get(x, y);
+                    generation.set(x, y, cell);
                 }
             } else {
                 if (count === 3) {
@@ -107,7 +107,7 @@ class GameOfLife extends GameVisual {
 
     _addDefaultCell(ca, x, y, color = Colors.Random) {
         let location = new Vector2(x * this.cellSize, y * this.cellSize);
-        ca.setCell(x, y, new Cell()).setLocation(location).setColor(color).setSize(this.cellSize);
+        ca.set(x, y, new Cell()).setLocation(location).setColor(color).setSize(this.cellSize);
     }
 }
 

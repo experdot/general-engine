@@ -1,7 +1,6 @@
 import * as EventArgs from "./EventArgs";
 import * as EventSystem from "./EventSystem";
 import * as Exception from "./Exception";
-import * as GeneralGrid from "./GeneralGrid";
 import * as Inputs from "./Inputs";
 import * as Enum from "./Enum";
 import * as DelayTimer from "./DelayTimer";
@@ -19,7 +18,6 @@ export const Common = Namespace.combine({
     EventArgs,
     EventSystem,
     Exception,
-    GeneralGrid,
     Inputs,
     DelayTimer,
     Graphics

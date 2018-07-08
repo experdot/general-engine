@@ -1,4 +1,7 @@
 import {
+    Collections
+} from "./Collections/_Collections";
+import {
     Common
 } from "./Common/_Common";
 import {
@@ -25,6 +28,7 @@ import {
 import "./Extenstion/_Extenstion";
 
 export const General = {
+    Collections,
     Common,
     Core,
     Drawing,

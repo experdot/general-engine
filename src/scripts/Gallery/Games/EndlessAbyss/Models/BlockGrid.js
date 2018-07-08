@@ -1,6 +1,6 @@
 import {
-    GeneralGrid
-} from "../../../../Engine/Common/GeneralGrid";
+    Array2
+} from "../../../../Engine/Collections/Array2";
 import {
     Vector2
 } from "../../../../Engine/Numerics/Vector2";
@@ -14,7 +14,7 @@ import {
     Block
 } from "./Block/Block";
 
-class BlockGrid extends GeneralGrid {
+class BlockGrid extends Array2 {
     get allBlocks() {
         return this._allBlocks;
     }
@@ -36,28 +36,64 @@ class BlockGrid extends GeneralGrid {
         this.colors = colors.map(v => Color.fromHex(v));
 
         this.blockGroups = BlockGroupHelper.getStandardGroups();
-        this.generateNext();
-        this.generateCurrent();
+        this._generateNext();
+        this._generateCurrent();
+    }
+
+    up() {
+        if (this._checkMoveAvaliable(this.current, this.upOffset, this.indexOffset)) {
+            this.current.move(this.upOffset).rotate(this.indexOffset);
+        }
+    }
+
+    down() {
+        if (this._checkMoveAvaliable(this.current, this.downOffset)) {
+            this.current.move(this.downOffset);
+        } else {
+            if (this.current.location.y === this.height - 1) {
+                this.over();
+            } else {
+                this._combineBlock(this.current);
+                this._generateCurrent();
+            }
+        }
+    }
+
+    left() {
+        if (this._checkMoveAvaliable(this.current, this.leftOffset)) {
+            this.current.move(this.leftOffset);
+        }
+    }
+
+    right() {
+        if (this._checkMoveAvaliable(this.current, this.rightOffset)) {
+            this.current.move(this.rightOffset);
+        }
+    }
+
+    over() {
+        this.onover && this.onover();
     }
 
     setCurrent(current) {
         this.current = current;
     }
 
-    generateNext() {
+    _generateCurrent() {
+        this.current = this.next;
+        this._generateNext();
+        this._generateInformation();
+    }
+
+    _generateNext() {
         let nextIndex = Math.floor(Math.random() * this.blockGroups.length);
         let nextLocation = new Vector2(Math.floor(this.width * Math.random()), this.height - 1);
         let nextRotation = Math.floor(Math.random() * 4);
-        this.next = this.blockGroups[nextIndex].clone().setLocation(nextLocation).rotate(nextRotation);
+        let color = this.colors[Math.floor(this.colors.length * Math.random())];
+        this.next = this.blockGroups[nextIndex].clone().setLocation(nextLocation).setColor(color).rotate(nextRotation);
     }
 
-    generateCurrent() {
-        this.current = this.next;
-        this.generateNext();
-        this.generateInformation();
-    }
-
-    generateInformation() {
+    _generateInformation() {
         this._allBlocks = [];
         this._preBlocks = [];
         let maxRow = this._findMaxRow();
@@ -69,39 +105,6 @@ class BlockGrid extends GeneralGrid {
         });
     }
 
-    up() {
-        if (this._checkMoveAvaliable(this.current, this.upOffset, this.indexOffset)) {
-            this.current.move(this.upOffset).rotate(this.indexOffset);
-        }
-    }
-    down() {
-        if (this._checkMoveAvaliable(this.current, this.downOffset)) {
-            this.current.move(this.downOffset);
-        } else {
-            if (this.current.location.y === this.height - 1) {
-                this.over();
-            } else {
-                this.combineBlock(this.current);
-                this.generateCurrent();
-            }
-        }
-    }
-    left() {
-        if (this._checkMoveAvaliable(this.current, this.leftOffset)) {
-            this.current.move(this.leftOffset);
-        }
-    }
-    right() {
-        if (this._checkMoveAvaliable(this.current, this.rightOffset)) {
-            this.current.move(this.rightOffset);
-        }
-    }
-
-    over() {
-        this.onover && this.onover();
-    }
-
-
     _checkMoveAvaliable(group, offset = Vector2.Zero(), indexOffset = 0, annular = true) {
         let locations = this.current.getLocations(indexOffset);
         for (let index = 0; index < locations.length; index++) {
@@ -112,14 +115,14 @@ class BlockGrid extends GeneralGrid {
                     location.x += this.width;
                 }
             }
-            if (location.y < 0 || this.getCell(location.x, location.y)) {
+            if (location.y < 0 || this.get(location.x, location.y)) {
                 return false;
             }
         }
         return true;
     }
-    combineBlock(target, annular = true) {
-        let color = this.colors[Math.floor(this.colors.length * Math.random())];
+
+    _combineBlock(target, annular = true) {
         target.getBlocks().forEach(block => {
             if (block) {
                 if (annular) {
@@ -128,12 +131,13 @@ class BlockGrid extends GeneralGrid {
                         block.location.x += this.width;
                     }
                 }
-                this.setCell(block.location.x, block.location.y, block.setColor(color));
+                this.set(block.location.x, block.location.y, block);
             }
         });
-        this.combineFullRow();
+        this._combineFullRow();
     }
-    combineFullRow() {
+
+    _combineFullRow() {
         let maxRow = this._findMaxRow();
         let changedFlag = false;
         for (let y = 0; y < maxRow; y++) {
@@ -151,7 +155,7 @@ class BlockGrid extends GeneralGrid {
         let max = -1;
         for (let y = 0; y < this.height; y++) {
             for (let x = 0; x < this.width; x++) {
-                if (this.getCell(x, y)) {
+                if (this.get(x, y)) {
                     max = y;
                     break;
                 }
@@ -161,13 +165,13 @@ class BlockGrid extends GeneralGrid {
     }
     _clearSingleRow(y) {
         for (let x = 0; x < this.width; x++) {
-            this.grid[x].splice(y, 1);
-            this.grid[x].push(null);
+            this.data[x].splice(y, 1);
+            this.data[x].push(null);
         }
     }
     _checkFullRow(y) {
         for (let x = 0; x < this.width; x++) {
-            if (!this.getCell(x, y)) {
+            if (!this.get(x, y)) {
                 return false;
             }
         }
