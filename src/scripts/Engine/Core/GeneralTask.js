@@ -5,8 +5,8 @@ class GeneralTask {
         this.enabled = enabled;
     }
 
-    run(source, ...args) {
-        this.enabled && this.action && this.action.call(source, ...args);
+    run(thisArg, ...args) {
+        this.enabled && this.action && this.action.call(thisArg, ...args);
     }
 }
 

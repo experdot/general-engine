@@ -18,7 +18,7 @@ class GameWorldView extends GameView {
             context.fillRect(0, 0, this.target.width, this.target.height);
         }
         this.target.visuals.forEach(element => {
-            element.view && element.view.render.process(context);
+            element.view && element.view.$render.process(context);
         });
     }
 }

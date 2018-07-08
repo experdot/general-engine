@@ -11,18 +11,21 @@ class GhostEffect extends GameVisual {
         super();
         this.fillColor = fill;
         this.gradientNumber = gradient;
-        if (direct) {
-            this.start.next(source => {
-                source.view.render.before((s, context) => {
-                    this.effect(context);
-                });
+        this.direct = direct;
+    }
+
+    start(source) {
+        if (this.direct) {
+            source.view.$render.before((s, context) => {
+                this.effect(context);
             });
         }
-        this.update.next(() => {
-            if (Math.random() > 0.5) {
-                this.fillColor = ColorHelper.gradientRandom(this.fillColor, this.gradientNumber);
-            }
-        });
+    }
+
+    update() {
+        if (Math.random() > 0.5) {
+            this.fillColor = ColorHelper.gradientRandom(this.fillColor, this.gradientNumber);
+        }
     }
 
     effect(context) {

@@ -31,10 +31,9 @@ import {
 class GameOfLife extends GameVisual {
     constructor(view) {
         super(view);
-        this.start.next(this._start);
-        this.update.next(this._update);
 
         this.timer = new DelayTimer();
+        this.ghost = this.proxy(new GhostEffect(new Color(0, 0, 0, 0.05), 0));
 
         this.xOffsets = [-1, 0, 1, 1, 1, 0, -1, -1];
         this.yOffsets = [-1, -1, -1, 0, 1, 1, 1, 0];
@@ -42,11 +41,9 @@ class GameOfLife extends GameVisual {
         this.createColor = new Color(128, 128, 128, 1);
 
         this.progress = 0;
-
-        this.proxy(new GhostEffect(new Color(0, 0, 0, 0.05), 0));
     }
 
-    _start() {
+    start() {
         this.cellSize = 16;
 
         let w = this.world.width;
@@ -65,7 +62,7 @@ class GameOfLife extends GameVisual {
         this._bindEvents();
     }
 
-    _update() {
+    update() {
         this.timer.delay(500, () => {
             this._generate();
             this.progress = 0;

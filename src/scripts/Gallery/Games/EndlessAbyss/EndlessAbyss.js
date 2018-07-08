@@ -33,28 +33,21 @@ import {
 class EndlessAbyss extends GameVisual {
     constructor(view) {
         super(view);
-        this.start.next(this._start);
-        this.update.next(this._update);
-
-        this.width = 10;
-
-        this.blockGrid = new BlockGrid(this.width, 20);
-
         this.timer = new DelayTimer();
-
-        this.ghost = new GhostEffect(new Color(0, 0, 0, 0.01), 40, false);
-        this.proxy(this.ghost);
+        this.ghost = this.proxy(new GhostEffect(new Color(0, 0, 0, 0.01), 40, false));
     }
 
-    _start() {
+    start() {
         let w = this.world.width;
         let h = this.world.height;
 
         this.settings = {
+            width: 10,
             rotation: 0,
             center: new Vector2(w / 2, h / 2),
             playing: false,
             gameover: false,
+            score: 0,
             progress: 0,
             delayTime: 500,
             pointer: {
@@ -64,9 +57,11 @@ class EndlessAbyss extends GameVisual {
             }
         };
 
+        this.blockGrid = new BlockGrid(this.settings.width, 20);
         this._registEvents();
     }
-    _update() {
+
+    update() {
         if (this.settings.playing) {
             this.timer.delay(this.settings.delayTime, () => {
                 this.blockGrid.down();
@@ -77,6 +72,7 @@ class EndlessAbyss extends GameVisual {
         }
         this.settings.rotation += 0.002;
     }
+    
     _registEvents() {
         this.on("KeyPress", (event) => {
             if (!this.settings.playing) {
@@ -124,9 +120,14 @@ class EndlessAbyss extends GameVisual {
             }
         });
 
-        this.blockGrid.onover = () => {
+        this.blockGrid.onOver = () => {
             this.settings.playing = false;
             this.settings.gameover = true;
+            this.settings.score = 0;
+        };
+
+        this.blockGrid.onFullRow = (count) => {
+            this.settings.score += 10 * Math.pow(2, count - 1);
         };
     }
 }
@@ -134,8 +135,6 @@ class EndlessAbyss extends GameVisual {
 class EndlessAbyssView extends GameView {
     constructor() {
         super();
-
-        this.single = 0;
 
         this.fill = {
             white: new Color(255, 255, 255, 0.05),
@@ -146,65 +145,9 @@ class EndlessAbyssView extends GameView {
             white: new Color(255, 255, 255, 0.05),
             black: new Color(0, 0, 0, 0.2),
         };
-    }
 
-    draw(source, context) {
-        if (!this.innerCanvas) {
-            this.innerCanvas = new OffscreenCanvas(context.canvas.width, context.canvas.height);
-        }
-
-        let w = this.target.world.width;
-        let h = this.target.world.height;
-        let cx = w / 2;
-        let cy = h / 2;
-
-        this.innerCanvas.draw(innerContext => {
-            this.drawDynamic(innerContext, w, h, cx, cy);
-        }).output(context, 0, 0);
-
-        this.drawStatic(context, w, h, cx, cy);
-    }
-
-    drawDynamic(context, w, h, cx, cy) {
-        this.target.ghost.effect(context);
-        Graphics.offsetScale(context, 8, 8 * context.canvas.height / context.canvas.width, 0.99);
-        this.drawAll(context, w, h, cx, cy);
-    }
-
-    drawStatic(context, w, h, cx, cy) {
-        if (this.target.settings.playing) {
-            this.drawAll(context, w, h, cx, cy, false);
-        } else {
-            this.drawMask(context, w, h);
-            if (this.target.settings.gameover) {
-                this.drawTitle(context, w, h, cx, cy, "Game Over");
-            } else {
-                this.drawTitle(context, w, h, cx, cy, "Endless Abyss");
-            }
-            this.drawNotify(context, w, h, cx, cy);
-        }
-    }
-
-    drawMask(context, w, h) {
-        context.fillStyle = this.fill.mask.rgba;
-        context.fillRect(0, 0, w, h);
-    }
-
-    drawTitle(context, w, h, cx, cy, title) {
-        let size = Math.max(w / 20, 48);
-        context.font = size + "px Arial";
-        context.textAlign = "center";
-        context.fillStyle = "#FFF";
-        context.fillText(title, cx, cy);
-    }
-
-    drawNotify(context, w, h, cx, cy) {
-        let size = Math.max(w / 48, 24);
-        context.font = size + "px Arial";
-        context.textAlign = "center";
-        this.single += 0.06;
-        context.fillStyle = new Color(255, 255, 255, 0.6 + Math.sin(this.single) * 0.3).rgba;
-        context.fillText("Press enter key to start", cx, cy + size * 1.6);
+        this.proxy(new DynamicLayerView());
+        this.proxy(new StaticLayerView());
     }
 
     drawAll(context, w, h, cx, cy, dynamic = true) {
@@ -266,6 +209,96 @@ class EndlessAbyssView extends GameView {
             context.fillStyle = fill.rgba;
             context.fill();
         }
+    }
+}
+
+
+class DynamicLayerView extends GameView {
+    constructor() {
+        super();
+    }
+
+    draw(source, context) {
+        if (!this.innerCanvas) {
+            this.innerCanvas = new OffscreenCanvas(context.canvas.width, context.canvas.height);
+        }
+        let w = source.target.world.width;
+        let h = source.target.world.height;
+        let cx = w / 2;
+        let cy = h / 2;
+        this.innerCanvas.draw(innerContext => {
+            this.drawDynamic(source, innerContext, w, h, cx, cy);
+        }).output(context, 0, 0);
+    }
+
+    drawDynamic(source, context, w, h, cx, cy) {
+        source.target.ghost.effect(context);
+        Graphics.offsetScale(context, 8, 8 * context.canvas.height / context.canvas.width, 0.99);
+        source.drawAll(context, w, h, cx, cy);
+    }
+
+}
+
+class StaticLayerView extends GameView {
+    constructor() {
+        super();
+        this.single = 0;
+        this.fill = {
+            mask: new Color(0, 0, 0, 0.6)
+        };
+    }
+
+    draw(source, context) {
+        let w = source.target.world.width;
+        let h = source.target.world.height;
+        let cx = w / 2;
+        let cy = h / 2;
+        this.drawStatic(source, context, w, h, cx, cy);
+    }
+
+    drawStatic(source, context, w, h, cx, cy) {
+        if (source.target.settings.playing) {
+            source.drawAll(context, w, h, cx, cy, false);
+            this.drawScore(context, w, h, source.target.settings.score);
+        } else {
+            this.drawMask(context, w, h);
+            if (source.target.settings.gameover) {
+                this.drawTitle(context, w, h, cx, cy, "Game Over");
+            } else {
+                this.drawTitle(context, w, h, cx, cy, "Endless Abyss");
+            }
+            this.drawNotify(context, w, h, cx, cy);
+        }
+    }
+
+    drawMask(context, w, h) {
+        context.fillStyle = this.fill.mask.rgba;
+        context.fillRect(0, 0, w, h);
+    }
+
+    drawTitle(context, w, h, cx, cy, title) {
+        let size = Math.max(w / 20, 48);
+        context.font = size + "px Arial";
+        context.textAlign = "center";
+        context.fillStyle = "#FFF";
+        context.fillText(title, cx, cy);
+    }
+
+    drawNotify(context, w, h, cx, cy) {
+        let size = Math.max(w / 48, 24);
+        context.font = size + "px Arial";
+        context.textAlign = "center";
+        this.single += 0.06;
+        context.fillStyle = new Color(255, 255, 255, 0.6 + Math.sin(this.single) * 0.3).rgba;
+        context.fillText("Press enter key to start", cx, cy + size * 1.6);
+    }
+
+    drawScore(context, w, h, score) {
+        let size = Math.max(w / 48, 24);
+        context.font = size + "px Arial";
+        context.textAlign = "right";
+        context.fillStyle = new Color(255, 255, 255, 0.9).rgba;
+        context.fillText("Score:" + score, w * 0.9, h * 0.15);
     }
 }
 

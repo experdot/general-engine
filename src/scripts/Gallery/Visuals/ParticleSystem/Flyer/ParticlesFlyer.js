@@ -30,15 +30,12 @@ import {
 class ParticlesFlyer extends ParticlesBase {
     constructor(view) {
         super(view);
+        
         this.random = new Random();
-
-        this.start.next(this._start);
-        this.update.next(this._update);
-
         this.proxy(new GhostEffect(new Color(0, 128, 128, 0.005), 40));
     }
 
-    _start() {
+    start() {
         let w = this.world.width;
         let h = this.world.height;
         let center = new Vector2(w * 0.5, h * 0.5);
@@ -68,7 +65,7 @@ class ParticlesFlyer extends ParticlesBase {
         }
     }
 
-    _update() {
+    update() {
         const rect = {
             width: this.world.width,
             height: this.world.height

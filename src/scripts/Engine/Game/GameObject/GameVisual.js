@@ -2,14 +2,11 @@ import {
     GeneralObject
 } from "../../Core/GeneralObject";
 import {
-    Transform
-} from "../../Numerics/Transform";
+    GeneralProcess
+} from "../../Core/GeneralProcess";
 import {
     EventSystem
 } from "../../Common/EventSystem";
-import {
-    GeneralProcess
-} from "../../Core/GeneralProcess";
 
 /** 
  * Represents a visual object
@@ -18,16 +15,11 @@ class GameVisual extends GeneralObject {
     constructor() {
         super();
 
-        this.start = new GeneralProcess(this);
-        this.update = new GeneralProcess(this);
-        this.dispose = new GeneralProcess(this);
+        this.$start = new GeneralProcess(this).next(this.start);
+        this.$update = new GeneralProcess(this).next(this.update);
+        this.$dispose = new GeneralProcess(this).next(this.dispose);
 
-        this.transform = new Transform();
         this.eventSystem = new EventSystem();
-
-        this.dispose.next(() => {
-            this.eventSystem.release();
-        });
     }
 
     bind(view) {
@@ -41,6 +33,10 @@ class GameVisual extends GeneralObject {
 
     off(eventName, handler) {
         this.eventSystem.removeHandler(eventName, handler);
+    }
+
+    dispose() {
+        this.eventSystem.release();
     }
 }
 

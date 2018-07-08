@@ -21,6 +21,7 @@ class GeneralObject {
     attach(object, sync = true) {
         this.attachements.push(object);
         sync && this.sync(object);
+        return object;
     }
 
     sync(object) {

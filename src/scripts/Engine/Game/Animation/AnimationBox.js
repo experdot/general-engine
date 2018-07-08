@@ -12,10 +12,10 @@ class AnimationBox {
     }
 
     run() {
-        this.world.start.process();
+        this.world.$start.process();
         this.frameManager.loopInvoke(() => {
-            this.world.view.render.process(this.context);
-            this.world.update.process();
+            this.world.view.$render.process(this.context);
+            this.world.$update.process();
         });
     }
 
@@ -23,7 +23,7 @@ class AnimationBox {
         this.frameManager.stop(() => {
             this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
         });
-        this.world.dispose.process();
+        this.world.$dispose.process();
     }
 }
 

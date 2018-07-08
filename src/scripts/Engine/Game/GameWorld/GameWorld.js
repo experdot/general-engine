@@ -34,9 +34,6 @@ class GameWorld extends GameVisual {
                 });
             });
         });
-
-        //dispose
-        this.dispose.next(() => this.inputs.release());
     }
 
     initialize() {}
@@ -59,6 +56,10 @@ class GameWorld extends GameVisual {
         this.visuals.forEach(element => {
             element.eventSystem.raiseEvent(eventName, event);
         });
+    }
+
+    dispose() {
+        this.inputs.release();
     }
 }
 

@@ -29,16 +29,14 @@ import {
 class ParticlesWalker extends ParticlesBase {
     constructor(view) {
         super(view);
+
         this.random = new Random();
-        this.start.next(this._start);
-        this.update.next(this._update);
+        this.proxy(new GhostEffect(new Color(0, 128, 128, 0.003), 40));
 
         this.transform = new Transform();
-
-        this.proxy(new GhostEffect(new Color(0, 128, 128, 0.003), 40));
     }
 
-    _start() {
+    start() {
         let w = this.world.width;
         let h = this.world.height;
         this.walkers = [];
@@ -62,7 +60,7 @@ class ParticlesWalker extends ParticlesBase {
         this.particles = this.walkers;
     }
 
-    _update() {
+    update() {
         const rect = {
             width: this.world.width,
             height: this.world.height

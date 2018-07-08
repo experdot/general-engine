@@ -38,6 +38,9 @@ class BlockGrid extends Array2 {
         this.blockGroups = BlockGroupHelper.getStandardGroups();
         this._generateNext();
         this._generateCurrent();
+
+        this.onOver = null;
+        this.onFullRow = null;
     }
 
     up() {
@@ -78,7 +81,7 @@ class BlockGrid extends Array2 {
     }
 
     over() {
-        this.onover && this.onover();
+        this.onOver && this.onOver();
     }
 
     setCurrent(current) {
@@ -145,14 +148,15 @@ class BlockGrid extends Array2 {
 
     _combineFullRow() {
         let maxRow = this._findMaxRow();
-        let changedFlag = false;
+        let combineCount = 0;
         for (let y = maxRow; y >= 0; y--) {
             if (this._checkFullRow(y)) {
                 this._clearSingleRow(y);
-                changedFlag = true;
+                combineCount += 1;
             }
         }
-        if (changedFlag) {
+        if (combineCount > 0) {
+            this.onFullRow && this.onFullRow(combineCount);
             this._updateBlockLocation();
         }
     }

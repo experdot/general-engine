@@ -34,29 +34,29 @@ class AudioVisualizer extends GameVisual {
 
     constructor() {
         super();
+        
         this.timer = new DelayTimer();
+        this.ghost = this.proxy(new GhostEffect(new Color(0, 0, 0, 0.01), 40, false));
+    }
 
-        this.start.next(() => {
-            this.initAudio();
-            this.on("Drop", event => {
-                this.loadFile(event.dataTransfer.files[0]);
-            });
-            this.on("PointerClicked", () => {
-                FileIO.openFileDialog(event => {
-                    this.loadFile(event.target.files[0]);
-                }, "audio/*");
-            });
+    start() {
+        this.initAudio();
+        this.on("Drop", event => {
+            this.loadFile(event.dataTransfer.files[0]);
         });
-
-        this.dispose.next(() => {
-            this.audioContext.close();
-            if (this.audio) {
-                this.audio.remove();
-            }
+        this.on("PointerClicked", () => {
+            FileIO.openFileDialog(event => {
+                this.loadFile(event.target.files[0]);
+            }, "audio/*");
         });
+    }
 
-        this.ghost = new GhostEffect(new Color(0, 0, 0, 0.01), 40, false);
-        this.proxy(this.ghost);
+    dispose() {
+        super.dispose();
+        this.audioContext.close();
+        if (this.audio) {
+            this.audio.remove();
+        }
     }
 
     initAudio() {
