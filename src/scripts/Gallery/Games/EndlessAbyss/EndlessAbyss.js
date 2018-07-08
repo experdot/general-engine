@@ -313,7 +313,7 @@ class StaticLayerView extends GameView {
         context.textAlign = "center";
         this.single += 0.06;
         context.fillStyle = new Color(255, 255, 255, 0.6 + Math.sin(this.single) * 0.3).rgba;
-        context.fillText("Press enter key to start", size.center.x, size.center.y + size * 1.6);
+        context.fillText("Press enter key to start", size.center.x, size.center.y + fonSize * 1.6);
     }
 
     drawScore(context, size, score) {
