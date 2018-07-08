@@ -13,6 +13,17 @@ import {
 
 
 class GameWorld extends GameVisual {
+    get size() {
+        return {
+            width: this.width,
+            height: this.height,
+            center: {
+                x: this.width / 2,
+                y: this.height / 2,
+            }
+        };
+    }
+
     constructor(width, height) {
         super();
         // set size
@@ -59,6 +70,7 @@ class GameWorld extends GameVisual {
     }
 
     dispose() {
+        super.dispose();
         this.inputs.release();
     }
 }

@@ -72,7 +72,7 @@ class EndlessAbyss extends GameVisual {
         }
         this.settings.rotation += 0.002;
     }
-    
+
     _registEvents() {
         this.on("KeyPress", (event) => {
             if (!this.settings.playing) {
@@ -146,15 +146,27 @@ class EndlessAbyssView extends GameView {
             black: new Color(0, 0, 0, 0.2),
         };
 
+        let stroke = this.stroke.white;
+        let fill = this.fill.white;
+
+        this.styles = [
+            [stroke, null, false, false],
+            [stroke, fill, false, true],
+            [null, this.fill.blank, false, false],
+            [null, null, true, true],
+            [this.stroke.black, null, false, false],
+            [stroke, null, false, true],
+        ];
+
         this.proxy(new DynamicLayerView());
         this.proxy(new StaticLayerView());
     }
 
-    drawAll(context, w, h, cx, cy, dynamic = true) {
+    drawAll(context, size, dynamic = true) {
         const radius = 50;
         const split = this.target.blockGrid.width;
         const height = this.target.blockGrid.height;
-        const offset = (Math.min(w, h) * 0.8 - radius * 2) / height / 2;
+        const offset = (Math.min(size.width, size.height) * 0.8 - radius * 2) / height / 2;
         const blockBorder = 0;
         const blockHeight = offset + blockBorder;
         const yOffset = 1 - this.target.settings.progress;
@@ -164,42 +176,59 @@ class EndlessAbyssView extends GameView {
         let fixBlocks = this.target.blockGrid;
         let current = this.target.blockGrid.current.getBlocks();
         let next = this.target.blockGrid.next.getBlocks();
-        let stroke = this.stroke.white;
-        let fill = this.fill.white;
+
+        let args = {
+            center: size.center,
+            radius,
+            blockHeight,
+            blockBorder,
+            yOffset: 0,
+            split
+        };
 
         if (dynamic) {
-            this.drawBlocks(context, allBlocks, cx, cy, radius, blockHeight, blockBorder, 0, split, stroke, null);
-            this.drawBlocks(context, fixBlocks, cx, cy, radius, blockHeight, blockBorder, 0, split, stroke, fill, false, true);
-            this.drawBlocks(context, preBlocks, cx, cy, radius, blockHeight, blockBorder, 0, split, null, this.fill.blank);
-            this.drawBlocks(context, next, cx, cy, radius, blockHeight, blockBorder, 4, split, null, null, true, true);
+            this.drawBlocks(context, allBlocks, args, this.styles[0]);
+            this.drawBlocks(context, fixBlocks, args, this.styles[1]);
+            this.drawBlocks(context, preBlocks, args, this.styles[2]);
+            args.yOffset = 4;
+            this.drawBlocks(context, next, args, this.styles[3]);
+            args.yOffset = 0;
         } else {
-            stroke = this.stroke.black;
-            this.drawBlocks(context, fixBlocks, cx, cy, radius, blockHeight, blockBorder, 0, split, stroke, null);
-            this.drawBlocks(context, current, cx, cy, radius, blockHeight, blockBorder, yOffset, split, stroke, null, false, true);
+            this.drawBlocks(context, fixBlocks, args, this.styles[4]);
+            args.yOffset = yOffset;
+            this.drawBlocks(context, current, args, this.styles[5]);
+            args.yOffset = 0;
         }
     }
 
-    drawBlocks(context, blocks, cx, cy, radius, blockHeight, blockBorder, yOffset, split, stroke, fill, strokeRaw, fillRaw) {
-        let angle = Math.PI / split;
-        let actualHeight = blockHeight - blockBorder;
+    drawBlocks(context, blocks, args, style) {
+        let angle = Math.PI / args.split;
+        let actualHeight = args.blockHeight - args.blockBorder;
         blocks.forEach(block => {
             if (block) {
                 let x = block.location.x;
-                let y = block.location.y + yOffset;
+                let y = block.location.y + args.yOffset;
                 let base = x * angle * 2;
                 let start = base - angle + this.target.settings.rotation;
                 let end = base + angle + this.target.settings.rotation;
-                let actualStroke = strokeRaw ? block.color : stroke;
-                let actualFill = fillRaw ? block.color : fill;
-                this.drawSingle(context, cx, cy, radius + y * blockHeight, actualHeight, start, end, actualStroke, actualFill);
+                let actualStroke = style[2] ? block.color : style[0];
+                let actualFill = style[3] ? block.color : style[1];
+                let singleArgs = {
+                    center: args.center,
+                    radius: args.radius + y * args.blockHeight,
+                    height: actualHeight,
+                    start,
+                    end
+                };
+                this.drawSingle(context, singleArgs, actualStroke, actualFill);
             }
         });
     }
 
-    drawSingle(context, cx, cy, radius, height, start, end, stroke, fill) {
+    drawSingle(context, args, stroke, fill) {
         context.beginPath();
-        context.arc(cx, cy, radius, start, end, false);
-        context.arc(cx, cy, radius + height, end, start, true);
+        context.arc(args.center.x, args.center.y, args.radius, args.start, args.end, false);
+        context.arc(args.center.x, args.center.y, args.radius + args.height, args.end, args.start, true);
         context.closePath();
         if (stroke) {
             context.strokeStyle = stroke.rgba;
@@ -222,19 +251,16 @@ class DynamicLayerView extends GameView {
         if (!this.innerCanvas) {
             this.innerCanvas = new OffscreenCanvas(context.canvas.width, context.canvas.height);
         }
-        let w = source.target.world.width;
-        let h = source.target.world.height;
-        let cx = w / 2;
-        let cy = h / 2;
+        let size = source.target.world.size;
         this.innerCanvas.draw(innerContext => {
-            this.drawDynamic(source, innerContext, w, h, cx, cy);
+            this.drawDynamic(source, innerContext, size);
         }).output(context, 0, 0);
     }
 
-    drawDynamic(source, context, w, h, cx, cy) {
+    drawDynamic(source, context, size) {
         source.target.ghost.effect(context);
         Graphics.offsetScale(context, 8, 8 * context.canvas.height / context.canvas.width, 0.99);
-        source.drawAll(context, w, h, cx, cy);
+        source.drawAll(context, size);
     }
 
 }
@@ -249,56 +275,53 @@ class StaticLayerView extends GameView {
     }
 
     draw(source, context) {
-        let w = source.target.world.width;
-        let h = source.target.world.height;
-        let cx = w / 2;
-        let cy = h / 2;
-        this.drawStatic(source, context, w, h, cx, cy);
+        let size = source.target.world.size;
+        this.drawStatic(source, context, size);
     }
 
-    drawStatic(source, context, w, h, cx, cy) {
+    drawStatic(source, context, size) {
         if (source.target.settings.playing) {
-            source.drawAll(context, w, h, cx, cy, false);
-            this.drawScore(context, w, h, source.target.settings.score);
+            source.drawAll(context, size, false);
+            this.drawScore(context, size, source.target.settings.score);
         } else {
-            this.drawMask(context, w, h);
+            this.drawMask(context, size);
             if (source.target.settings.gameover) {
-                this.drawTitle(context, w, h, cx, cy, "Game Over");
+                this.drawTitle(context, size, "Game Over");
             } else {
-                this.drawTitle(context, w, h, cx, cy, "Endless Abyss");
+                this.drawTitle(context, size, "Endless Abyss");
             }
-            this.drawNotify(context, w, h, cx, cy);
+            this.drawNotify(context, size);
         }
     }
 
-    drawMask(context, w, h) {
+    drawMask(context, size) {
         context.fillStyle = this.fill.mask.rgba;
-        context.fillRect(0, 0, w, h);
+        context.fillRect(0, 0, size.width, size.height);
     }
 
-    drawTitle(context, w, h, cx, cy, title) {
-        let size = Math.max(w / 20, 48);
-        context.font = size + "px Arial";
+    drawTitle(context, size, title) {
+        let fonSize = Math.max(size.width / 20, 48);
+        context.font = fonSize + "px Arial";
         context.textAlign = "center";
         context.fillStyle = "#FFF";
-        context.fillText(title, cx, cy);
+        context.fillText(title, size.center.x, size.center.y);
     }
 
-    drawNotify(context, w, h, cx, cy) {
-        let size = Math.max(w / 48, 24);
-        context.font = size + "px Arial";
+    drawNotify(context, size) {
+        let fonSize = Math.max(size.width / 48, 24);
+        context.font = fonSize + "px Arial";
         context.textAlign = "center";
         this.single += 0.06;
         context.fillStyle = new Color(255, 255, 255, 0.6 + Math.sin(this.single) * 0.3).rgba;
-        context.fillText("Press enter key to start", cx, cy + size * 1.6);
+        context.fillText("Press enter key to start", size.center.x, size.center.y + size * 1.6);
     }
 
-    drawScore(context, w, h, score) {
-        let size = Math.max(w / 48, 24);
-        context.font = size + "px Arial";
+    drawScore(context, size, score) {
+        let fonSize = Math.max(size.width / 48, 24);
+        context.font = fonSize + "px Arial";
         context.textAlign = "right";
         context.fillStyle = new Color(255, 255, 255, 0.9).rgba;
-        context.fillText("Score:" + score, w * 0.9, h * 0.15);
+        context.fillText("Score:" + score, size.width * 0.9, size.height * 0.15);
     }
 }
 

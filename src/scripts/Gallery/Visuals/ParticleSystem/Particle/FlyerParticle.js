@@ -22,16 +22,12 @@ class FlyerParticle extends DynamicParticle {
 
         this.move();
         this.checkBorder(rect);
-        //this.findNeighbour(flyers);
-
     }
 
     alignspeed(flyers) {
         let sum = new Vector2();
         let sumCount = 0;
-        flyers.forEach(element => {
-            let offset = this.location.subtract(element.location);
-            let distance = offset.length();
+        this._forEachDistance(flyers, (element, offset, distance) => {
             if (distance < this.neighbourDistance) {
                 sum = sum.add(element.velocity);
                 sumCount++;
@@ -49,9 +45,7 @@ class FlyerParticle extends DynamicParticle {
     seperate(flyers) {
         let sum = new Vector2();
         let sumCount = 0;
-        flyers.forEach(element => {
-            let offset = this.location.subtract(element.location);
-            let distance = offset.length();
+        this._forEachDistance(flyers, (element, offset, distance) => {
             let minDistance = (this.size + element.size) / 2 + 5;
             if (distance > 0 && distance < minDistance) {
                 offset.normalize();
@@ -73,9 +67,7 @@ class FlyerParticle extends DynamicParticle {
     cohesion(flyers) {
         let sum = new Vector2();
         let sumCount = 0;
-        flyers.forEach(element => {
-            let offset = this.location.subtract(element.location);
-            let distance = offset.length();
+        this._forEachDistance(flyers, (element, offset, distance) => {
             if (distance < this.neighbourDistance) {
                 sum = sum.add(element.location);
                 sumCount++;
@@ -142,6 +134,14 @@ class FlyerParticle extends DynamicParticle {
         let steer = desired.subtract(velocity);
         steer.limitLength(1);
         return steer;
+    }
+
+    _forEachDistance(flyers, action) {
+        flyers.forEach(element => {
+            let offset = this.location.subtract(element.location);
+            let distance = offset.length();
+            action && action(element, offset, distance);
+        });
     }
 
 }
