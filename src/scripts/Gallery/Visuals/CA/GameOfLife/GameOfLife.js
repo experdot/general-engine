@@ -41,6 +41,8 @@ class GameOfLife extends GameVisual {
 
         this.createColor = new Color(128, 128, 128, 1);
 
+        this.progress = 0;
+
         this.proxy(new GhostEffect(new Color(0, 0, 0, 0.05), 0));
     }
 
@@ -66,6 +68,9 @@ class GameOfLife extends GameVisual {
     _update() {
         this.timer.delay(500, () => {
             this._generate();
+            this.progress = 0;
+        }, actual => {
+            this.progress = actual / 500;
         });
     }
 
@@ -103,22 +108,34 @@ class GameOfLife extends GameVisual {
             }
         });
         this.CA = generation;
+
+        this._exchangeColumns(this.CA);
+    }
+
+    _exchangeColumns(ca) {
+        let columns = ca.data.splice(0, 1);
+        ca.data.push(columns[0]);
     }
 
     _addDefaultCell(ca, x, y, color = Colors.Random) {
-        let location = new Vector2(x * this.cellSize, y * this.cellSize);
-        ca.set(x, y, new Cell()).setLocation(location).setColor(color).setSize(this.cellSize);
+        ca.set(x, y, new Cell().setColor(color));
     }
 }
 
 class GameOfLifeView extends GameView {
+    constructor() {
+        super();
+        this.single = 0;
+    }
     draw(source, context) {
+        this.single += 0.002;
+        let size = 48 + Math.sin(this.single) * 32;
         Graphics.offsetScale(context, -6, -6, 0.99);
-        this.target.CA.forEach(cell => {
+        this.target.CA.forEach((cell, x, y) => {
             if (cell) {
-                let p = cell.location;
+                let p = new Vector2((x + 1 - this.target.progress) * size, y * size);
                 context.fillStyle = cell.color.rgba;
-                context.fillRect(p.x, p.y, cell.size, cell.size);
+                context.fillRect(p.x, p.y, size, size);
             }
         });
     }
