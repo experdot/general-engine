@@ -41,7 +41,10 @@ const config = {
         },
         minify: {
             enabled: true || options.env === "production",
-            suffix: ".min"
+        },
+        suffix: {
+            enabled: true,
+            text: ".min"
         },
         md5: {
             enabled: options.env === "production",
@@ -59,8 +62,11 @@ const config = {
             fileName: "bundle.js"
         },
         minify: {
-            enabled: true || options.env === "production",
-            suffix: ".min"
+            enabled: false || options.env === "production",
+        },
+        suffix: {
+            enabled: true,
+            text: ".min"
         },
         md5: {
             enabled: options.env === "production",
@@ -177,8 +183,8 @@ gulp.task(config.task.styles, function () {
         .pipe(autoprefixer("last 2 version"))
         .pipe(gulpif(config.styles.concat.enabled, concat(config.styles.concat.fileName)))
         .pipe(gulpif(config.styles.minify.enabled, cssnano()))
-        .pipe(gulpif(config.styles.minify.enabled, rename({
-            suffix: config.styles.minify.suffix
+        .pipe(gulpif(config.styles.suffix.enabled, rename({
+            suffix: config.styles.suffix.text
         })))
         .pipe(gulpif(config.styles.sourcemap, sourcemaps.write(".")))
         .pipe(gulpif(config.styles.md5.enabled, md5(10, config.styles.md5.html)))
@@ -204,8 +210,8 @@ gulp.task(config.task.scripts, function () {
             loadMaps: true
         })))
         .pipe(gulpif(config.scripts.minify.enabled, uglify()))
-        .pipe(gulpif(config.scripts.minify.enabled, rename({
-            suffix: config.scripts.minify.suffix
+        .pipe(gulpif(config.scripts.suffix.enabled, rename({
+            suffix: config.scripts.suffix.text
         })))
         .pipe(gulpif(config.scripts.sourcemap, sourcemaps.write(".")))
         .pipe(gulpif(config.scripts.md5.enabled, md5(10, config.scripts.md5.html)))
