@@ -114,12 +114,12 @@ class ParticlesWalker extends ParticlesBase {
 
 class ParticlesWalkerView extends GameView {
     draw(source, context) {
-        if (this.target.stopDraw) {
+        if (source.stopDraw) {
             return;
         }
-        Graphics.transform(context, this.target.transform.toMatrix3x2(), () => {
-            for (let index = 0; index < this.target.particles.length; index++) {
-                const element = this.target.particles[index];
+        Graphics.transform(context, source.transform.toMatrix3x2(), () => {
+            for (let index = 0; index < source.particles.length; index++) {
+                const element = source.particles[index];
                 let p = element.location;
                 if (element.parent) {
                     context.beginPath();

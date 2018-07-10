@@ -39,6 +39,14 @@ class CellularAutomata extends Array2 {
         }
         return new Color(r / count, g / count, b / count);
     }
+
+    grow(growth = 0.001) {
+        this.forEach(cell => {
+            if (cell && cell.scale < 1) {
+                cell.scale += growth;
+            }
+        });
+    }
 }
 
 export {

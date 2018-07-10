@@ -15,6 +15,12 @@ class Color {
         let bx = b < 16 ? "0" : "";
         return `#${rx}${r.toString(16)}${gx}${g.toString(16)}${bx}${b.toString(16)}`;
     }
+    get rgb() {
+        let r = Math.floor(this.r);
+        let g = Math.floor(this.g);
+        let b = Math.floor(this.b);
+        return `rgb(${r},${g},${b})`;
+    }
     get rgba() {
         let r = Math.floor(this.r);
         let g = Math.floor(this.g);
@@ -83,8 +89,15 @@ class Colors {
     static get White() {
         return new Color(255, 255, 255, 1);
     }
+    static get Gray() {
+        return new Color(128, 128, 128, 1);
+    }
     static get Random() {
         return new Color(255 * Math.random(), 255 * Math.random(), 255 * Math.random(), 1);
+    }
+    static get RandomGray() {
+        let gray = 255 * Math.random();
+        return new Color(gray, gray, gray, 1);
     }
 }
 

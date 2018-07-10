@@ -15,13 +15,13 @@ class GridView extends GameView {
     }
 
     draw(source, context) {
-        let width = this.target.world.width;
-        let height = this.target.world.height;
+        let width = source.world.width;
+        let height = source.world.height;
 
         for (var i = 0; i <= width; i += this.size.x) {
             this.drawLine(context, new Vector2(i, 0), new Vector2(i, height));
         }
-        for (var j = 0; j <= this.target.world.height; j += this.size.y) {
+        for (var j = 0; j <= source.world.height; j += this.size.y) {
             this.drawLine(context, new Vector2(0, j), new Vector2(width, j));
         }
     }

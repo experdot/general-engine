@@ -2,9 +2,6 @@ import {
     GameWorld
 } from "../../Engine/Game/GameWorld/GameWorld";
 import {
-    GameWorldView
-} from "../../Engine/Game/GameWorld/GameWorldView";
-import {
     PointerInput
 } from "../../Engine/Common/Inputs";
 import {
@@ -18,12 +15,11 @@ class GameOfLifeWorld extends GameWorld {
     }
 
     initialize() {
-        this.bind(new GameWorldView());
         this.inputs.addInput(new PointerInput());
     }
 
     createObjects() {
-        this.addVisual(new GameOfLife(), new GameOfLifeView());
+        this.addChild(new GameOfLife(), new GameOfLifeView());
     }
 }
 

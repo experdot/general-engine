@@ -68,18 +68,18 @@ class LSystemTreeView extends GameView {
             this.lengthStack = [];
             this.currentIndex = 0;
             this.lineColor = new Color(255, 255, 255, 1);
-            context.clearRect(0, 0, this.target.world.width, this.target.world.height);
+            context.clearRect(0, 0, source.world.width, source.world.height);
         }
 
         if (this.animation || !this.center) {
-            this.center = new Vector2(this.target.world.width / 2, this.target.world.height * 0.9);
-            this.lengthOfLine = this.target.world.height * (1 / Math.pow(3, this.target.depth + 1)) * 1;
+            this.center = new Vector2(source.world.width / 2, source.world.height * 0.9);
+            this.lengthOfLine = source.world.height * (1 / Math.pow(3, source.depth + 1)) * 1;
             this.offset = new Vector2(0, -this.lengthOfLine);
         }
 
         let stepIndex = 0;
         let stepBound = this.animation ? 10000 : 1000;
-        let states = this.target.states;
+        let states = source.states;
         for (let i = this.currentIndex; i < states.length; i++) {
             this.mapped(states[i].id, context);
             this.currentIndex = i + 1;

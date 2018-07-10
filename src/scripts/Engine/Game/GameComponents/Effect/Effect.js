@@ -16,7 +16,7 @@ class GhostEffect extends GameVisual {
 
     start(source) {
         if (this.direct) {
-            source.view.$render.before((s, context) => {
+            source.$render.before((s, context) => {
                 this.effect(context);
             });
         }

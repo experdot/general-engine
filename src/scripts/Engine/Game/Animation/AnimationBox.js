@@ -14,7 +14,7 @@ class AnimationBox {
     run() {
         this.world.$start.process();
         this.frameManager.loopInvoke(() => {
-            this.world.view.$render.process(this.context);
+            this.world.$render.process(this.context);
             this.world.$update.process();
         });
     }

@@ -15,69 +15,72 @@ class SpotParticle extends DynamicParticle {
     constructor(location, size = 1, age = 0) {
         super(location, size, age);
 
-        this.angleOffset = Math.random() * 0.03 - 0.015;
+        this.angleOffset = Math.random() * 0.024 - 0.012;
         this.velocityUpon = 16.0;
         this.random = new Random();
 
-        this.sizeMinimum = 1.0;
-        this.sizeRadius = 0.995;
-
-        this.rotateRadius = 0.01;
-        this.rotateRadiusRandom = 0.001;
-
-        this.divideRadius = 0.03;
-        this.divideSizeRadius = 0.80;
-        this.divideSizeRadiusEx = 0.92;
-        this.divideColorIncrementRatio = 4;
-
-        this.getGradientColorIncrement = 1;
-
     }
 
-    update(particles, count) {
+    update(generation, count) {
         if (this.age > 0) {
             this.age -= 1;
-            this.size = this.size * this.sizeRadius;
-            this.velocity = this.velocity.rotate(this.angleOffset * this.rotateRadius);
-            this.velocity = this.velocity.rotate(this.random.normal(-100, 100) * this.rotateRadiusRandom);
-            this.color = ColorHelper.gradient(this.color, this.getGradientColorIncrement);
-            this.velocityUpon = this.size * 0.38;
+            this.size = this.size * config.sizeRadius;
+            this.velocity = this.velocity.rotate(this.angleOffset * config.rotateRatio);
+            this.velocity = this.velocity.rotate(this.random.normal(-100, 100) * config.rotateRatioRandom);
+            this.color = ColorHelper.gradient(this.color, config.gradientColorIncrement);
+            this.velocityUpon = this.size * 0.32;
             this.move();
-
-            this.color.a -= 0.002;
-            this.color.a = Math.max(0, this.color.a);
-
         }
-        if (this.size > this.sizeMinimum) {
-            if (Math.random() < this.divideRadius) {
-                this.divide(particles, count);
+
+        if (this.size > config.sizeMinimum) {
+            if (Math.random() < config.divideRatio) {
+                this.divide(generation, count);
             }
         } else {
-            this.velocity = new Vector2(0, 0);
+            this.velocity = new Vector2(-1, -1);
             this.isDead = true;
         }
     }
 
-    divide(particles, count) {
+    divide(generation, count) {
         if (count < 2) {
             count = 2;
         }
-        var newSize = this.size * this.divideSizeRadius;
+        var newSize = this.size * config.divideSizeRatio;
         this.size = newSize;
-        this.age = this.random.normal(0, 30);
-        this.angleOffset = Math.random() * 0.02 - 0.01;
+        this.age = this.random.normal(0, 20);
         if (count > 1) {
             for (let i = 2; i <= count; i++) {
-                newSize *= this.divideSizeRadiusEx;
+                newSize *= config.divideSizeRatioEx;
                 let particle = new SpotParticle(this.location, newSize);
-                particle.velocity = this.velocity.rotate(this.random.normal(-100, 100) * 0.011).multiply(0.618);
+                particle.velocity = this.velocity.rotate(this.random.normal(-100, 100) * config.divideRotateRatio).multiply(config.divideLengthRatio);
                 particle.age = this.random.normal(0, 40);
-                particle.color = ColorHelper.gradientRandom(this.color, this.velocity.length() * this.divideColorIncrementRatio);
-                particles.push(particle);
+                particle.color = ColorHelper.gradient(this.color, config.gradientColorIncrement);
+                particle.color.a = 0.96;
+                generation.push(particle);
             }
         }
     }
 }
+
+
+const config = {
+    sizeMinimum: 1,
+    sizeRadius: 0.995,
+
+    rotateRatio: 0.01,
+    rotateRatioRandom: 0.003,
+
+    divideRatio: 0.03,
+    divideSizeRatio: 0.8,
+    divideSizeRatioEx: 0.92,
+    divideColorIncrementRatio: 1,
+
+    divideRotateRatio: 0.012,
+    divideLengthRatio: 0.7,
+
+    gradientColorIncrement: 1.1,
+};
 
 export {
     SpotParticle

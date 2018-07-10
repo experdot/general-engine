@@ -2,9 +2,6 @@ import {
     GameWorld
 } from "../../Engine/Game/GameWorld/GameWorld";
 import {
-    GameWorldView
-} from "../../Engine/Game/GameWorld/GameWorldView";
-import {
     PointerInput,
     DragDropInput
 } from "../../Engine/Common/Inputs";
@@ -19,13 +16,12 @@ class AudioVisualizerWorld extends GameWorld {
     }
 
     initialize() {
-        this.bind(new GameWorldView());
         this.inputs.addInput(new PointerInput());
         this.inputs.addInput(new DragDropInput());
     }
 
     createObjects() {
-        this.addVisual(new AudioVisualizer(), new AudioVisualizerView());
+        this.addChild(new AudioVisualizer(), new AudioVisualizerView());
     }
 }
 

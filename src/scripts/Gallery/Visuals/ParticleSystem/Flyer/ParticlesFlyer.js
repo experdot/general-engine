@@ -30,9 +30,9 @@ import {
 class ParticlesFlyer extends ParticlesBase {
     constructor(view) {
         super(view);
-        
+
         this.random = new Random();
-        this.proxy(new GhostEffect(new Color(0, 128, 128, 0.005), 40));
+        this.proxy(new GhostEffect(new Color(0, 0, 0, 0.1), 5));
     }
 
     start() {
@@ -42,7 +42,7 @@ class ParticlesFlyer extends ParticlesBase {
         this.flyers = [];
 
         const screen = new Vector2(w, h).length();
-        const flyersCount = parseInt(screen / 5);
+        const flyersCount = parseInt(screen / 16);
         const maxSize = parseInt(screen / 60);
         const fieldWidth = w * 0.8;
         const fieldHeight = h * 0.8;
@@ -51,7 +51,7 @@ class ParticlesFlyer extends ParticlesBase {
             particle.location = center.add(new Vector2(fieldWidth * Math.random() - fieldWidth / 2, fieldHeight * Math.random() - fieldHeight / 2));
             particle.velocity = new Vector2(10 * Math.random() - 5, 10 * Math.random() - 5);
             particle.size = 2 + maxSize * Math.random();
-            particle.color = Colors.White;
+            particle.color = Colors.Gray;
             this.flyers.push(particle);
         }
 
@@ -111,17 +111,9 @@ class ParticlesFlyerView extends GameView {
     }
 
     draw(source, context) {
-        if (this.target.stopDraw) {
-            return;
-        }
-
-        this.rotation = this.rotation + 0.002;
-        let offset = 16 * Math.sin(this.rotation);
-
-        Graphics.offsetScale(context, offset, offset, 0.99);
-
-        for (let index = 0; index < this.target.particles.length; index++) {
-            const element = this.target.particles[index];
+        Graphics.offsetScale(context, -1, -1, 1);
+        for (let index = 0; index < source.particles.length; index++) {
+            const element = source.particles[index];
             let p = element.location;
             context.beginPath();
             context.arc(p.x, p.y, element.size / 2, 0, Math.PI * 2, false);

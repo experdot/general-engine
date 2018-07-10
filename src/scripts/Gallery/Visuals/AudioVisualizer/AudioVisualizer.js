@@ -34,7 +34,7 @@ class AudioVisualizer extends GameVisual {
 
     constructor() {
         super();
-        
+
         this.timer = new DelayTimer();
         this.ghost = this.proxy(new GhostEffect(new Color(0, 0, 0, 0.01), 40, false));
     }
@@ -106,21 +106,23 @@ class AudioVisualizerView extends GameView {
         if (!this.innerCanvas) {
             this.innerCanvas = new OffscreenCanvas(context.canvas.width, context.canvas.height);
         }
-        this.drawDynamic(this.innerCanvas.context);
-        this.innerCanvas.output(context, 0, 0);
-        this.drawStatic(context);
+        this.innerCanvas.draw(innerContext => {
+            this.drawDynamic(source, innerContext);
+        }).output(context, 0, 0);
+
+        this.drawStatic(source, context);
     }
 
-    drawDynamic(context) {
-        let w = this.target.world.width;
-        let h = this.target.world.height;
+    drawDynamic(source, context) {
+        let w = source.world.width;
+        let h = source.world.height;
         let cx = w / 2;
         let cy = h / 2;
 
-        this.target.ghost.effect(context);
+        source.ghost.effect(context);
 
-        if (!this.target.file.playing) {
-            this.drawText(context, w, h, cx, cy);
+        if (!source.file.playing) {
+            this.drawText(source, context, w, h, cx, cy);
             Graphics.mirror(context, 1, -1, 0.01, () => {
                 context.drawImage(context.canvas, 0, 0);
             });
@@ -128,7 +130,7 @@ class AudioVisualizerView extends GameView {
             this.rotation += 0.001;
             Graphics.offsetScale(context, 5, 5, 0.99);
             Graphics.rotate(context, this.rotation, 1, () => {
-                this.drawFFT(context, w, h, cx, cy);
+                this.drawFFT(source, context, w, h, cx, cy);
             });
             Graphics.rotate(context, Math.PI, 1, () => {
                 context.drawImage(context.canvas, 0, 0, w, h);
@@ -136,7 +138,7 @@ class AudioVisualizerView extends GameView {
         }
     }
 
-    drawText(context, w, h, cx, cy) {
+    drawText(source, context, w, h, cx, cy) {
         let size = Math.max(w / 30, 32);
         context.font = size + "px Arial";
         context.textAlign = "center";
@@ -145,8 +147,8 @@ class AudioVisualizerView extends GameView {
         context.fillRect(0, cy - 2, w, 4);
     }
 
-    drawFFT(context, w, h, cx, cy) {
-        let data = this.target.FFTData;
+    drawFFT(source, context, w, h, cx, cy) {
+        let data = source.FFTData;
         context.beginPath();
         this.rotation2 += 0.002;
         for (let index = 0; index < data.length; index++) {
@@ -160,14 +162,14 @@ class AudioVisualizerView extends GameView {
         context.stroke();
     }
 
-    drawStatic(context) {
-        let w = this.target.world.width;
-        let h = this.target.world.height;
-        this.drawFileinfo(context, w, h);
+    drawStatic(source, context) {
+        let w = source.world.width;
+        let h = source.world.height;
+        this.drawFileinfo(source, context, w, h);
     }
 
-    drawFileinfo(context, w, h) {
-        let file = this.target.file;
+    drawFileinfo(source, context, w, h) {
+        let file = source.file;
         if (file.playing) {
             let size = Math.max(w / 48, 16);
             let x = w * 0.1;
@@ -178,7 +180,7 @@ class AudioVisualizerView extends GameView {
             context.fillText(file.name, x, y);
 
             let width = w * 0.8;
-            let progress = this.target.audio.currentTime / this.target.audio.duration;
+            let progress = source.audio.currentTime / source.audio.duration;
             context.strokeStyle = "#FFF";
             context.strokeRect(x, y + size, width, size / 3);
             context.fillRect(x, y + size, width * progress, size / 3);

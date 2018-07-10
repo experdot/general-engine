@@ -162,6 +162,10 @@ class EndlessAbyssView extends GameView {
         this.proxy(new StaticLayerView());
     }
 
+    draw(source) {
+        this.target = source;
+    }
+
     drawAll(context, size, dynamic = true) {
         const radius = 50;
         const split = this.target.blockGrid.width;
@@ -251,6 +255,7 @@ class DynamicLayerView extends GameView {
         if (!this.innerCanvas) {
             this.innerCanvas = new OffscreenCanvas(context.canvas.width, context.canvas.height);
         }
+
         let size = source.target.world.size;
         this.innerCanvas.draw(innerContext => {
             this.drawDynamic(source, innerContext, size);
@@ -262,7 +267,6 @@ class DynamicLayerView extends GameView {
         Graphics.offsetScale(context, 8, 8 * context.canvas.height / context.canvas.width, 0.99);
         source.drawAll(context, size);
     }
-
 }
 
 class StaticLayerView extends GameView {
@@ -324,6 +328,7 @@ class StaticLayerView extends GameView {
         context.fillText("Score:" + score, size.width * 0.9, size.height * 0.15);
     }
 }
+
 
 export {
     EndlessAbyss,
