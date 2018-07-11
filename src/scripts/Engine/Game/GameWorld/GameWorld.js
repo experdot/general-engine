@@ -47,7 +47,7 @@ class GameWorld extends GameVisual {
     addChild(visual, view = new GameView()) {
         super.addChild(visual);
         visual.world = this;
-        visual.proxy(view);
+        visual.join(view);
     }
 
     dispose() {

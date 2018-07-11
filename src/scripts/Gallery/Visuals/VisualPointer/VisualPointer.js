@@ -11,7 +11,7 @@ class VisualPointer extends GameVisual {
     constructor() {
         super();
         this.pointers = [];
-        this.proxy(new VisualPointerView());
+        this.join(new VisualPointerView());
     }
 
     start(source) {

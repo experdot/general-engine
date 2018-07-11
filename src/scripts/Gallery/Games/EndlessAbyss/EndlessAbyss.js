@@ -34,7 +34,7 @@ class EndlessAbyss extends GameVisual {
     constructor(view) {
         super(view);
         this.timer = new DelayTimer();
-        this.ghost = this.proxy(new GhostEffect(new Color(0, 0, 0, 0.01), 40, false));
+        this.ghost = this.join(new GhostEffect(new Color(0, 0, 0, 0.01), 40, false));
     }
 
     start() {
@@ -158,8 +158,8 @@ class EndlessAbyssView extends GameView {
             [stroke, null, false, true],
         ];
 
-        this.proxy(new DynamicLayerView());
-        this.proxy(new StaticLayerView());
+        this.join(new DynamicLayerView());
+        this.join(new StaticLayerView());
     }
 
     draw(source) {

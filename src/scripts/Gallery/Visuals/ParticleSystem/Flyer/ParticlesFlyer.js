@@ -31,7 +31,7 @@ class ParticlesFlyer extends ParticlesBase {
     constructor(view) {
         super(view);
         this.random = new Random();
-        this.proxy(new GhostEffect(new Color(0, 0, 0, 0.01), 5));
+        this.join(new GhostEffect(new Color(0, 0, 0, 0.01), 5));
     }
 
     start() {

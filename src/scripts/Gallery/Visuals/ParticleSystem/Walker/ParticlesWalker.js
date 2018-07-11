@@ -31,7 +31,7 @@ class ParticlesWalker extends ParticlesBase {
         super(view);
 
         this.random = new Random();
-        this.proxy(new GhostEffect(new Color(0, 128, 128, 0.003), 40));
+        this.join(new GhostEffect(new Color(0, 128, 128, 0.003), 40));
 
         this.transform = new Transform();
     }

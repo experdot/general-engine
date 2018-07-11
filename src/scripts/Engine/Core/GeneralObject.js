@@ -10,7 +10,7 @@ class GeneralObject {
         this.attachements = [];
     }
 
-    proxy(object = new GeneralObject(), sync = true) {
+    join(object = new GeneralObject(), sync = true) {
         GeneralProcess.find(object).forEach(element => {
             element.value.setSource(this);
         });

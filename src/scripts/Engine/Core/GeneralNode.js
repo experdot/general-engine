@@ -14,7 +14,7 @@ class GeneralNode extends GeneralObject {
 
     addChild(child) {
         if (child instanceof GeneralNode) {
-            this.proxy(child);
+            this.join(child);
             child.parent = this;
             this.children.push(child);
         } else {
