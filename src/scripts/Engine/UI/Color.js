@@ -6,6 +6,11 @@ class Color {
         let value = parseInt(hex.slice(1), 16);
         return new Color(value / 65536, value / 256 % 256, value % 256);
     }
+
+    static fromNumber(number) {
+        return new Color(number / 65536, number / 256 % 256, number % 256);
+    }
+
     get hex() {
         let r = Math.floor(this.r);
         let g = Math.floor(this.g);

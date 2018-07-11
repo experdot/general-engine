@@ -1,20 +1,17 @@
 import {
-    GeneralObject
-} from "../../Core/GeneralObject";
+    GeneralNode
+} from "../../Core/GeneralNode";
 import {
     GeneralProcess
 } from "../../Core/GeneralProcess";
 import {
     EventSystem
 } from "../../Common/EventSystem";
-import {
-    ArgumentException
-} from "../../Common/Exception";
 
 /** 
  * Represents a visual object
  */
-class GameVisual extends GeneralObject {
+class GameVisual extends GeneralNode {
     constructor() {
         super();
 
@@ -23,18 +20,7 @@ class GameVisual extends GeneralObject {
         this.$render = new GeneralProcess(this).next(this.draw);
         this.$dispose = new GeneralProcess(this).next(this.dispose);
 
-        this.children = [];
-
         this.eventSystem = new EventSystem();
-    }
-
-    addChild(child) {
-        if (child instanceof GameVisual) {
-            this.proxy(child);
-            this.children.push(child);
-        } else {
-            throw ArgumentException("The child must be an instance of GameVisual.");
-        }
     }
 
     on(eventName, handler, force = true) {

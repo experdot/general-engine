@@ -50,6 +50,13 @@ class Graphics {
         });
     }
 
+    static transparent(context, alpha = 1, action) {
+        Graphics.hold(context, () => {
+            context.globalAlpha = alpha;
+            action && action(context);
+        });
+    }
+
     static hold(context, action) {
         context.save();
         action && action(context);

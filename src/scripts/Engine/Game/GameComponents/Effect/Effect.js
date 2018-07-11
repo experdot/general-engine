@@ -3,10 +3,10 @@ import {
     Colors
 } from "../../../UI/Color";
 import {
-    GameVisual
-} from "../../GameObject/GameVisual";
+    GameComponent
+} from "../../GameObject/GameComponent";
 
-class GhostEffect extends GameVisual {
+class GhostEffect extends GameComponent {
     constructor(fill = Colors.Black, gradient = 10, direct = true) {
         super();
         this.fillColor = fill;
@@ -16,9 +16,7 @@ class GhostEffect extends GameVisual {
 
     start(source) {
         if (this.direct) {
-            source.$render.before((s, context) => {
-                this.effect(context);
-            });
+            source.$render.before((s, context) => this.effect(context));
         }
     }
 
@@ -36,6 +34,30 @@ class GhostEffect extends GameVisual {
     }
 }
 
+class GhostImageEffect extends GameComponent {
+    constructor(src, alpha = 1, direct = true) {
+        super();
+        this.image = new Image();
+        this.image.src = src;
+        this.alpha = alpha;
+        this.direct = direct;
+    }
+
+    start(source) {
+        if (this.direct) {
+            source.$render.before((s, context) => this.effect(context));
+        }
+    }
+
+    effect(context) {
+        let alpha = context.globalAlpha;
+        context.globalAlpha = this.alpha;
+        context.drawImage(this.image, 0, 0);
+        context.globalAlpha = alpha;
+    }
+}
+
 export {
-    GhostEffect
+    GhostEffect,
+    GhostImageEffect
 };

@@ -34,9 +34,10 @@ class AudioVisualizer extends GameVisual {
 
     constructor() {
         super();
-
         this.timer = new DelayTimer();
-        this.ghost = this.proxy(new GhostEffect(new Color(0, 0, 0, 0.01), 40, false));
+        this.effects = {
+            ghost: this.proxy(new GhostEffect(new Color(0, 0, 0, 0.01), 40, false)),
+        };
     }
 
     start() {
@@ -119,7 +120,7 @@ class AudioVisualizerView extends GameView {
         let cx = w / 2;
         let cy = h / 2;
 
-        source.ghost.effect(context);
+        source.effects.ghost.effect(context);
 
         if (!source.file.playing) {
             this.drawText(source, context, w, h, cx, cy);
