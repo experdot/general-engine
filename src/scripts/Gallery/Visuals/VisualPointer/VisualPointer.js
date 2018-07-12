@@ -12,6 +12,7 @@ class VisualPointer extends GameVisual {
         super();
         this.pointers = [];
         this.joint(new VisualPointerView());
+        console.log(this);
     }
 
     start(source) {

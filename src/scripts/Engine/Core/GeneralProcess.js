@@ -62,12 +62,12 @@ class GeneralProcess {
     }
 
     before(action, identifier) {
-        this.tasks.unshift(new GeneralTask(action, identifier));
+        action && this.tasks.unshift(new GeneralTask(action, identifier));
         return this;
     }
 
     next(action, identifier) {
-        this.tasks.push(new GeneralTask(action, identifier));
+        action && this.tasks.push(new GeneralTask(action, identifier));
         return this;
     }
 
