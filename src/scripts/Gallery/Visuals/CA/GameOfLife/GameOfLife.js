@@ -151,7 +151,7 @@ class GameOfLife extends GameVisual {
 }
 
 class GameOfLifeView extends GameView {
-    draw(source, context) {
+    render(source, context) {
         let offset = source.offset;
         let size = source.settings.size;
         let offsetX = 1 - source.settings.progress;

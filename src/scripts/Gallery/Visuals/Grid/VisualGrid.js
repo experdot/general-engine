@@ -14,7 +14,7 @@ class GridView extends GameView {
         };
     }
 
-    draw(source, context) {
+    render(source, context) {
         let width = source.world.width;
         let height = source.world.height;
 

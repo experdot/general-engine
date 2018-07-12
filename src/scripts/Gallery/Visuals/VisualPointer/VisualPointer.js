@@ -35,7 +35,7 @@ class VisualPointer extends GameVisual {
 }
 
 class VisualPointerView extends GameView {
-    draw(source, context) {
+    render(source, context) {
         Graphics.hold(context, () => {
             if (source.pointers.length > 0) {
                 context.beginPath();

@@ -109,7 +109,7 @@ class ParticlesFlyerView extends GameView {
         this.rotation = 0;
     }
 
-    draw(source, context) {
+    render(source, context) {
         Graphics.offsetScale(context, -1, -1, 1);
         for (let index = 0; index < source.particles.length; index++) {
             const element = source.particles[index];

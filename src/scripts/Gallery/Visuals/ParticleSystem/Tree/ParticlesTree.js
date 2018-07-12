@@ -72,7 +72,7 @@ class ParticlesTree extends ParticlesBase {
 }
 
 class ParticlesTreeView extends GameView {
-    draw(source, context) {
+    render(source, context) {
         this.drawByFillCircle(source, context);
     }
 

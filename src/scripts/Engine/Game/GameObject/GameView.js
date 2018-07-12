@@ -11,7 +11,7 @@ import {
 class GameView extends GeneralObject {
     constructor() {
         super();
-        this.$render = new GeneralProcess(this).next(this.draw);
+        this.$render = new GeneralProcess(this).next(this.render);
     }
 }
 

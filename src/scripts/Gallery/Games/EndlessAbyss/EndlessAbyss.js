@@ -162,7 +162,7 @@ class EndlessAbyssView extends GameView {
         this.join(new StaticLayerView());
     }
 
-    draw(source) {
+    render(source) {
         this.target = source;
     }
 
@@ -251,7 +251,7 @@ class DynamicLayerView extends GameView {
         super();
     }
 
-    draw(source, context) {
+    render(source, context) {
         if (!this.innerCanvas) {
             this.innerCanvas = new OffscreenCanvas(context.canvas.width, context.canvas.height);
         }
@@ -278,7 +278,7 @@ class StaticLayerView extends GameView {
         };
     }
 
-    draw(source, context) {
+    render(source, context) {
         let size = source.target.world.size;
         this.drawStatic(source, context, size);
     }

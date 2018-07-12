@@ -103,7 +103,7 @@ class AudioVisualizerView extends GameView {
         this.rotation2 = 0;
     }
 
-    draw(source, context) {
+    render(source, context) {
         if (!this.innerCanvas) {
             this.innerCanvas = new OffscreenCanvas(context.canvas.width, context.canvas.height);
         }

@@ -17,7 +17,7 @@ class GameVisual extends GeneralNode {
 
         this.$start = new GeneralProcess(this).next(this.start);
         this.$update = new GeneralProcess(this).next(this.update);
-        this.$render = new GeneralProcess(this).next(this.draw);
+        this.$render = new GeneralProcess(this).next(this.render);
         this.$dispose = new GeneralProcess(this).next(this.dispose);
 
         this.eventSystem = new EventSystem();
