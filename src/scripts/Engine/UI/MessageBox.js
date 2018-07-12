@@ -1,10 +1,10 @@
 class MessageBox {
     static show(message = "") {
-        MessageBox.onchange && MessageBox.onchange(message);
+        MessageBox.onNotify && MessageBox.onNotify(message);
     }
 }
 
-MessageBox.onchange = (message) => {
+MessageBox.onNotify = (message) => {
     window.alert(message);
 };
 

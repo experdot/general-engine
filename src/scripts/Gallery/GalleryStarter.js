@@ -1,7 +1,4 @@
 import {
-    AnimationBox
-} from "../Engine/Game/Animation/AnimationBox";
-import {
     ParticlesFlyerWorld
 } from "./Visuals/ParticlesFlyerWorld";
 import {
@@ -22,6 +19,9 @@ import {
 import {
     EndlessAbyssWorld
 } from "./Games/EndlessAbyssWorld";
+import {
+    GameBox
+} from "../Engine/Game/GameBox/GameBox";
 
 class GalleryStarter {
     constructor() {
@@ -38,15 +38,17 @@ class GalleryStarter {
     addSymbol(name, symbol) {
         this.symbols[name] = symbol;
     }
+
     getSymbolByName(name) {
         return this.symbols[name];
     }
+
     launch(canvas) {
         let request = this._getRequest();
         let World = this.getSymbolByName(request["scene"]);
         if (World) {
             document.title = World.Title;
-            return new AnimationBox(canvas, new World(canvas.width, canvas.height));
+            return new GameBox(canvas, canvas, new World(canvas.width, canvas.height));
         } else {
             window.location = "../";
         }

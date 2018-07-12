@@ -2,17 +2,19 @@ import {
     FrameManager
 } from "./FrameManager";
 
-class AnimationBox {
-    constructor(canvas, world) {
+class GameBox {
+    constructor(container, canvas, world) {
+        this.container = container;
         this.canvas = canvas;
         this.context = canvas.getContext("2d");
         this.world = world;
-        this.world.initializeUI(canvas);
+        this.world.initializeUI(container, canvas);
         this.frameManager = new FrameManager();
     }
 
     run() {
         this.world.$start.process();
+        this.world.$gui.process(this.container);
         this.frameManager.loopInvoke(() => {
             this.world.$render.process(this.context);
             this.world.$update.process();
@@ -28,5 +30,5 @@ class AnimationBox {
 }
 
 export {
-    AnimationBox
+    GameBox
 };

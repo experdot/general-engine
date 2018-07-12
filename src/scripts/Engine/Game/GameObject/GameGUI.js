@@ -6,16 +6,16 @@ import {
 } from "../../Core/GeneralProcess";
 
 /** 
- * Represents a view to present the visual object
+ * Represents a GUI attached to the visual object
  */
-class GameView extends GeneralObject {
+class GameGUI extends GeneralObject {
     constructor() {
         super();
-        this.$render = new GeneralProcess(this).next(this.render);
+        this.$gui = new GeneralProcess(this).next(this.gui);
         this.$dispose = new GeneralProcess(this).next(this.dispose);
     }
 }
 
 export {
-    GameView
+    GameGUI
 };

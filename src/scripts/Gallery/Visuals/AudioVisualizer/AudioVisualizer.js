@@ -36,7 +36,7 @@ class AudioVisualizer extends GameVisual {
         super();
         this.timer = new DelayTimer();
         this.effects = {
-            ghost: this.join(new GhostEffect(new Color(0, 0, 0, 0.01), 40, false)),
+            ghost: this.joint(new GhostEffect(new Color(0, 0, 0, 0.01), 40, false)),
         };
     }
 

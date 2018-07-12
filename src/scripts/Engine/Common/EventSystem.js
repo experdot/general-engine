@@ -51,7 +51,7 @@ class EventSystem {
         }
     }
 
-    registSystemEventByDom0(eventTarget, eventName, domEventName) {
+    registEventDomLevel0(eventTarget, eventName, domEventName) {
         if (!this.handlers[eventName]) {
             this.handlers[eventName] = [];
             if (domEventName && eventTarget) {
@@ -66,7 +66,7 @@ class EventSystem {
         }
     }
 
-    registSystemEventByDom2(eventTarget, eventName, domEventName, useCapture) {
+    registEventDomLevel2(eventTarget, eventName, domEventName, useCapture) {
         if (!this.handlers[eventName]) {
             this.handlers[eventName] = [];
             if (domEventName && eventTarget) {
@@ -92,6 +92,7 @@ class EventSystem {
     }
 
     release() {
+        this.handlers = {};
         this.dom0Events.forEach(event => {
             event.ui[event.name] = null;
         });

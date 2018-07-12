@@ -25,7 +25,7 @@ class EndlessAbyssWorld extends GameWorld {
 
     createObjects() {
         this.addChild(new EndlessAbyss(), new EndlessAbyssView());
-        this.join(new VisualPointer());
+        this.joint(new VisualPointer());
     }
 }
 

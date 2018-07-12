@@ -39,7 +39,7 @@ class GameOfLife extends GameVisual {
     constructor(view) {
         super(view);
 
-        this.ghost = this.join(new GhostEffect(new Color(0, 0, 0, 0.08), 0));
+        this.ghost = this.joint(new GhostEffect(new Color(0, 0, 0, 0.08), 0));
 
         this.timers = {
             generate: new DelayTimer(),

@@ -1,7 +1,7 @@
 class GeneralTask {
-    constructor(action, name = "", enabled = true) {
+    constructor(action, identifier = Number.MIN_SAFE_INTEGER, enabled = true) {
         this.action = action;
-        this.name = name;
+        this.identifier = identifier;
         this.enabled = enabled;
     }
 

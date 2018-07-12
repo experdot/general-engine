@@ -16,7 +16,7 @@ class GhostEffect extends GameComponent {
 
     start(source) {
         if (this.direct) {
-            source.$render.before((s, context) => this.effect(context));
+            source.$render.before((s, context) => this.effect(context), this.identifier);
         }
     }
 

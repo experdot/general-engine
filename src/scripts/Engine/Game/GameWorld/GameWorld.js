@@ -27,9 +27,13 @@ class GameWorld extends GameVisual {
         this.height = height;
 
         this.world = this;
-        this.visuals = [];
 
         this.inputs = new Inputs().change((eventName, event) => this.dispatch(eventName, event));
+
+        this.ui = {
+            container: null,
+            canvas: null
+        };
 
         this.initialize();
         this.createObjects();
@@ -39,15 +43,16 @@ class GameWorld extends GameVisual {
 
     createObjects() {}
 
-    initializeUI(ui) {
-        this.ui = ui;
-        this.inputs.launch(this.ui);
+    initializeUI(container, canvas) {
+        this.ui.container = container;
+        this.ui.canvas = canvas;
+        this.inputs.launch(this.ui.container);
     }
 
     addChild(visual, view = new GameView()) {
         super.addChild(visual);
         visual.world = this;
-        visual.join(view);
+        visual.joint(view);
     }
 
     dispose() {
