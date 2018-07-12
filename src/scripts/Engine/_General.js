@@ -25,7 +25,10 @@ import {
 import {
     Utilities
 } from "./Utilities/_Utilities";
-import "./Extenstion/_Extenstion";
+import {
+    Extentions
+} from "./Extenstions/_Extenstion";
+
 
 export const General = {
     Collections,
@@ -36,5 +39,6 @@ export const General = {
     IO,
     Numerics,
     UI,
-    Utilities
+    Utilities,
+    Extentions
 };

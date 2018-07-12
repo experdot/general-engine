@@ -18,7 +18,7 @@ class GeneralProperty extends GeneralObject {
         this.eventSystem.registEvent("ValueChanged");
     }
 
-    setValue(value) {
+    set(value) {
         if (!this.readonly && this.value !== value) {
             this.value = value;
             this.eventSystem.raiseEvent("ValueChanged", new ValueChangedEventArgs(this, value));
@@ -26,7 +26,7 @@ class GeneralProperty extends GeneralObject {
         return this;
     }
 
-    getValue() {
+    get() {
         if (!this.writeonly) {
             return this.value;
         }

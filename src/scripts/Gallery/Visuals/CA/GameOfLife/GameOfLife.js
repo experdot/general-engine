@@ -155,7 +155,7 @@ class GameOfLifeView extends GameView {
         let offset = source.offset;
         let size = source.settings.size;
         let offsetX = 1 - source.settings.progress;
-        Graphics.offsetScale(context, -4, -4, 1);
+        Graphics.scaleOffset(context, -4, -4, 1);
 
         Graphics.rotate(context, source.settings.rotation, 1, () => {
             context.beginPath();

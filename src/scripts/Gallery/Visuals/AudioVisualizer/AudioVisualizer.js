@@ -15,7 +15,7 @@ import {
 } from "../../../Engine/UI/Color";
 import {
     MessageBox
-} from "../../../Engine/UI/MessageBox";
+} from "../../../Engine/Application/MessageBox";
 import {
     GameView
 } from "../../../Engine/Game/GameObject/GameView";
@@ -129,7 +129,7 @@ class AudioVisualizerView extends GameView {
             });
         } else {
             this.rotation += 0.001;
-            Graphics.offsetScale(context, 5, 5, 0.99);
+            Graphics.scaleOffset(context, 5, 5, 0.99);
             Graphics.rotate(context, this.rotation, 1, () => {
                 this.drawFFT(source, context, w, h, cx, cy);
             });

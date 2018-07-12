@@ -264,7 +264,7 @@ class DynamicLayerView extends GameView {
 
     drawDynamic(source, context, size) {
         source.target.ghost.effect(context);
-        Graphics.offsetScale(context, 8, 8 * context.canvas.height / context.canvas.width, 0.99);
+        Graphics.scaleOffset(context, 8, 8 * context.canvas.height / context.canvas.width, 0.99);
         source.drawAll(context, size);
     }
 }

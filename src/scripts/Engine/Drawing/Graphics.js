@@ -3,7 +3,7 @@ class Graphics {
         context.clearRect(0, 0, context.canvas.width, context.canvas.height);
     }
 
-    static offsetScale(context, offsetX = 0, offsetY = 0, alpha = 1) {
+    static scaleOffset(context, offsetX = 0, offsetY = 0, alpha = 1) {
         let w = context.canvas.width;
         let h = context.canvas.height;
         let rw = w + offsetX;

@@ -5,7 +5,7 @@ import {
 } from "./Color";
 import {
     MessageBox
-} from "./MessageBox";
+} from "../Application/MessageBox";
 
 export const UI = {
     Color,
