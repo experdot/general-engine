@@ -3,10 +3,10 @@ import {
     Colors
 } from "../../../UI/Color";
 import {
-    GameComponent
-} from "../../GameObject/GameComponent";
+    GameNode
+} from "../../GameNode/GameNode";
 
-class GhostEffect extends GameComponent {
+class GhostEffect extends GameNode {
     constructor(fill = Colors.Black, gradient = 10, direct = true) {
         super();
         this.fillColor = fill;
@@ -34,7 +34,7 @@ class GhostEffect extends GameComponent {
     }
 }
 
-class GhostImageEffect extends GameComponent {
+class GhostImageEffect extends GameNode {
     constructor(src, alpha = 1, direct = true) {
         super();
         this.image = new Image();

@@ -1,17 +1,17 @@
 import {
-    GeneralNode
-} from "../../Core/GeneralNode";
-import {
     GeneralProcess
 } from "../../Core/GeneralProcess";
 import {
     EventSystem
 } from "../../Common/EventSystem";
+import {
+    GameNode
+} from "../GameNode/GameNode";
 
 /** 
  * Represents a visual object
  */
-class GameVisual extends GeneralNode {
+class GameVisual extends GameNode {
     constructor() {
         super();
 

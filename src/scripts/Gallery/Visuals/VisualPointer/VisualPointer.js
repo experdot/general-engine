@@ -11,17 +11,18 @@ class VisualPointer extends GameVisual {
     constructor() {
         super();
         this.pointers = [];
+        this.cache = {};
         this.joint(new VisualPointerView());
-        console.log(this);
     }
 
     start(source) {
-        let container = source.world.ui.container;
-        this.cursor = container.style.cursor;
-        container.style.cursor = "none";
-        source.on("PointerMoved", () => {
+        this.cache.container = source.world.ui.container;
+        this.cache.cursor = this.cache.container.style.cursor;
+        this.cache.container.style.cursor = "none";
+        this.cache.handler = () => {
             this.pointers.push(source.world.inputs.pointer.position.clone());
-        });
+        };
+        source.on("PointerMoved", this.cache.handler);
     }
 
     update() {
@@ -32,7 +33,8 @@ class VisualPointer extends GameVisual {
 
     dispose(source) {
         super.dispose();
-        source.world.ui.container.style.cursor = this.cursor;
+        this.cache.container.style.cursor = this.cache.cursor;
+        source.off("PointerMoved", this.cache.handler);
     }
 }
 
