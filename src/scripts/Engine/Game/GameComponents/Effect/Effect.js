@@ -5,6 +5,9 @@ import {
 import {
     GameNode
 } from "../../GameNode/GameNode";
+import {
+    GeneralProcess
+} from "../../../Core/GeneralProcess";
 
 class GhostEffect extends GameNode {
     constructor(fill = Colors.Black, gradient = 10, direct = true) {
@@ -12,6 +15,8 @@ class GhostEffect extends GameNode {
         this.fillColor = fill;
         this.gradientNumber = gradient;
         this.direct = direct;
+
+        this.$update = new GeneralProcess(this).next(this.update);
     }
 
     start(source) {
