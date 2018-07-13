@@ -29,8 +29,7 @@ import {
     Extentions
 } from "./Extenstions/_Extenstion";
 
-
-export const General = {
+export default {
     Collections,
     Common,
     Core,

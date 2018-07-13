@@ -7,7 +7,7 @@ branches:
 
 env:
   global:
-    - Remote_Repository: github.com/experdot/General.JS.git
+    - Remote_Repository: github.com/experdot/general-engine.git
     - Deployment_Folder: repository_ghpages
 
 cache:

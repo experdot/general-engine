@@ -1,7 +1,23 @@
 {
-  "name": "general-javascript",
-  "version": "1.0.0",
+  "name": "general-engine",
+  "version": "0.1.2",
   "lockfileVersion": 1,
+  "main": "src/scripts/Engine/_General.js",
+  "author": "experdot",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/experdot/general-engine.git"
+  },
+  "keywords": [
+    "game engine",
+    "canvas",
+    "html5",
+    "javascript"
+  ],
+  "files": [
+    "src/scripts/Engine"
+  ],
   "dependencies": {},
   "devDependencies": {
     "babel-cli": "^6.26.0",
