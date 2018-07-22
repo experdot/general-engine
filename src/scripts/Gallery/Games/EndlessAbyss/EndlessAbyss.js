@@ -29,6 +29,9 @@ import {
 import {
     OffscreenCanvas
 } from "../../../Engine/Drawing/OffscreenCanvas";
+import {
+    InputEvents
+} from "../../../Engine/Common/Inputs";
 
 class EndlessAbyss extends GameVisual {
     constructor(view) {
@@ -75,7 +78,7 @@ class EndlessAbyss extends GameVisual {
     }
 
     _registEvents() {
-        this.on("KeyPress", (event) => {
+        this.on(InputEvents.KeyPress, (event) => {
             if (!this.settings.playing) {
                 if (event.key === "Enter") {
                     this.settings.playing = true;
@@ -97,14 +100,14 @@ class EndlessAbyss extends GameVisual {
             }
         });
 
-        this.on("PointerPressed", (event) => {
+        this.on(InputEvents.PointerPressed, (event) => {
             let pointer = this.settings.pointer;
             pointer.position = EventHelper.getEventClientPositon(event);
             pointer.rotation = this.settings.rotation;
             pointer.count = 0;
         });
 
-        this.on("PointerMoved", (event) => {
+        this.on(InputEvents.PointerMoved, (event) => {
             if (this.world.inputs.pointer.isPressed) {
                 let pointer = this.settings.pointer;
                 let end = EventHelper.getEventClientPositon(event);

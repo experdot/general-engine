@@ -21,7 +21,7 @@ class FlyerParticle extends DynamicParticle {
         //this.checkRadius(mouse, new Vector2(rect.width, rect.height).length / 3);
 
         this.move();
-        //this.checkBorder(rect);
+        this.checkBorder(rect);
     }
 
     alignspeed(flyers) {
@@ -82,9 +82,6 @@ class FlyerParticle extends DynamicParticle {
     }
 
     follow(target, ratio = 1) {
-        // if (this.location.subtract(target).length < this.neighbourDistance) {
-        //     this.applyForce(this.seek(target).multiply(ratio));
-        // }
         this.applyForce(this.seek(target).multiply(ratio));
     }
 

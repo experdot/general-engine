@@ -26,6 +26,9 @@ import {
 import {
     DelayTimer
 } from "../../../../Engine/Common/DelayTimer";
+import {
+    InputEvents
+} from "../../../../Engine/Common/Inputs";
 
 class GameOfLife extends GameVisual {
     get offset() {
@@ -104,10 +107,10 @@ class GameOfLife extends GameVisual {
     }
 
     _bindEvents() {
-        this.on("PointerMoved", () => {
+        this.on(InputEvents.PointerMoved, () => {
             this._delete();
         });
-        this.on("PointerPressed", () => {
+        this.on(InputEvents.PointerPressed, () => {
             this._delete();
         });
     }

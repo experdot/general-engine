@@ -31,7 +31,7 @@ class ParticlesFlyer extends ParticlesBase {
     constructor(view) {
         super(view);
         this.random = new Random();
-        this.joint(new GhostEffect(new Color(0, 0, 0, 0.1), 20));
+        this.joint(new GhostEffect(new Color(0, 0, 0, 0.5), 10));
     }
 
     start() {
@@ -160,7 +160,7 @@ class ParticlesFlyerView extends GameView {
     }
 
     drawGrid(context, size, offset) {
-        let split = 10;
+        let split = 20;
         let csize = Math.max(size.width, size.height) / split;
         let cw = Math.ceil(size.width / csize) + 1;
         let ch = Math.ceil(size.height / csize) + 1;
@@ -186,7 +186,7 @@ class ParticlesFlyerView extends GameView {
     }
 
     drawInfo(context, size) {
-        let fonSize = Math.max(size.width / 20, 48);
+        let fonSize = Math.max(size.width / 20, 32);
         context.font = fonSize + "px Arial";
         context.textAlign = "center";
         context.fillStyle = "#FFF";

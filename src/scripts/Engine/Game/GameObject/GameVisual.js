@@ -1,6 +1,6 @@
 import {
-    EventSystem
-} from "../../Common/EventSystem";
+    Events
+} from "../../Common/Events";
 import {
     GeneralNode
 } from "../../Core/GeneralNode";
@@ -15,26 +15,26 @@ class GameVisual extends GeneralNode {
     constructor() {
         super();
         this.implements(GameVisualInterface);
-        this.eventSystem = new EventSystem();
+        this.events = new Events();
     }
 
     on(eventName, handler, force = true) {
-        this.eventSystem.addHandler(eventName, handler, force);
+        this.events.addHandler(eventName, handler, force);
     }
 
     off(eventName, handler) {
-        this.eventSystem.removeHandler(eventName, handler);
+        this.events.removeHandler(eventName, handler);
     }
 
     dispatch(eventName, event) {
-        this.eventSystem.raiseEvent(eventName, event);
+        this.events.raiseEvent(eventName, event);
         this.children.forEach(element => {
             element.dispatch(eventName, event);
         });
     }
 
     dispose() {
-        this.eventSystem.release();
+        this.events.release();
     }
 }
 

@@ -11,9 +11,9 @@ const StrictMode = Enum.create({
 });
 
 /**
- * Represents a event container
+ * Represents an event system
  */
-class EventSystem {
+class Events {
     constructor(mode = StrictMode.None) {
         this.mode = mode;
         this.handlers = {};
@@ -104,5 +104,5 @@ class EventSystem {
 
 export {
     StrictMode,
-    EventSystem
+    Events
 };

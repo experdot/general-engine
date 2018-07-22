@@ -7,6 +7,9 @@ import {
 import {
     Graphics
 } from "../../../Engine/Drawing/Graphics";
+import {
+    InputEvents
+} from "../../../Engine/Common/Inputs";
 class VisualPointer extends GameVisual {
     constructor() {
         super();
@@ -22,7 +25,7 @@ class VisualPointer extends GameVisual {
         this.cache.handler = () => {
             this.pointers.push(source.world.inputs.pointer.position.clone());
         };
-        source.on("PointerMoved", this.cache.handler);
+        source.on(InputEvents.PointerMoved, this.cache.handler);
     }
 
     update() {
@@ -34,7 +37,7 @@ class VisualPointer extends GameVisual {
     dispose(source) {
         super.dispose();
         this.cache.container.style.cursor = this.cache.cursor;
-        source.off("PointerMoved", this.cache.handler);
+        source.off(InputEvents.PointerMoved, this.cache.handler);
     }
 }
 

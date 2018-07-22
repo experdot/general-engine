@@ -25,6 +25,9 @@ import {
 import {
     OffscreenCanvas
 } from "../../../Engine/Drawing/OffscreenCanvas";
+import {
+    InputEvents
+} from "../../../Engine/Common/Inputs";
 
 class AudioVisualizer extends GameVisual {
     get FFTData() {
@@ -43,10 +46,10 @@ class AudioVisualizer extends GameVisual {
 
     start() {
         this.initAudio();
-        this.on("Drop", event => {
+        this.on(InputEvents.Drop, event => {
             this.loadFile(event.dataTransfer.files[0]);
         });
-        this.on("PointerClicked", () => {
+        this.on(InputEvents.PointerClicked, () => {
             FileIO.openFileDialog(event => {
                 this.loadFile(event.target.files[0]);
             }, "audio/*");
