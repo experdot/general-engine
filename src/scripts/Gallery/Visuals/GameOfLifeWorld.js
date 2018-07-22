@@ -19,7 +19,7 @@ class GameOfLifeWorld extends GameWorld {
     }
 
     createObjects() {
-        this.addChild(new GameOfLife(), new GameOfLifeView());
+        this.addChild(new GameOfLife().joint(new GameOfLifeView()));
     }
 }
 

@@ -144,7 +144,7 @@ class LSystemTreeView extends GameView {
     drawCircleBranch(context, center, offset) {
         let circle = center.add(offset.multiply(0.5));
         context.beginPath();
-        context.arc(circle.x, circle.y, offset.length() / 2, 0, Math.PI * 2, false);
+        context.arc(circle.x, circle.y, offset.length / 2, 0, Math.PI * 2, false);
         context.closePath();
         context.fillStyle = this.lineColor.rgba;
         context.fill();

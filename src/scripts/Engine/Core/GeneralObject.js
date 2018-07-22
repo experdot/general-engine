@@ -19,7 +19,7 @@ class GeneralObject {
         GeneralProcess.combine(this, object);
         this.joints.push(object);
         object.joints.push(this);
-        return object;
+        return this;
     }
 
     disjoint(object) {
@@ -27,7 +27,15 @@ class GeneralObject {
         object.joints.splice(object.joints.indexOf(this), 1);
         GeneralProcess.seperate(this, object);
         GeneralProcess.setObjectSource(object, object);
-        return object;
+        return this;
+    }
+
+    implements(generalInterface) {
+        generalInterface.processes.forEach(element => {
+            if (!this.element) {
+                this[element] = new GeneralProcess(this).next(this[element.slice(1)]);
+            }
+        });
     }
 }
 

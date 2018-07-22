@@ -19,7 +19,7 @@ class ParticlesWalkerWorld extends GameWorld {
     }
 
     createObjects() {
-        this.addChild(new ParticlesWalker(), new ParticlesWalkerView());
+        this.addChild(new ParticlesWalker().joint(new ParticlesWalkerView()));
     }
 }
 

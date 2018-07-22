@@ -12,7 +12,7 @@ import {
 } from "../ParticleSystem";
 import {
     WalkerParticle
-} from "../Particle/WalkerParticle";
+} from "./WalkerParticle";
 import {
     Transform
 } from "../../../../Engine/Numerics/Transform";
@@ -31,7 +31,7 @@ class ParticlesWalker extends ParticlesBase {
         super(view);
 
         this.random = new Random();
-        this.joint(new GhostEffect(new Color(0, 128, 128, 0.003), 40));
+        this.joint(new GhostEffect(new Color(0, 128, 128, 0.006), 40));
 
         this.transform = new Transform();
     }

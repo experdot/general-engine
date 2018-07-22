@@ -1,6 +1,6 @@
 import {
     DynamicParticle
-} from "./DynamicParticle";
+} from "../Particle/DynamicParticle";
 import {
     Vector2
 } from "../../../../Engine/Numerics/Vector2";
@@ -17,11 +17,11 @@ class FlyerParticle extends DynamicParticle {
         this.seperate(flyers);
         this.cohesion(flyers);
 
-        this.follow(mouse, 0.5);
-        this.checkRadius(mouse, new Vector2(rect.width, rect.height).length() / 3);
+        mouse && this.follow(mouse, 1);
+        //this.checkRadius(mouse, new Vector2(rect.width, rect.height).length / 3);
 
         this.move();
-        this.checkBorder(rect);
+        //this.checkBorder(rect);
     }
 
     alignspeed(flyers) {
@@ -82,18 +82,21 @@ class FlyerParticle extends DynamicParticle {
     }
 
     follow(target, ratio = 1) {
+        // if (this.location.subtract(target).length < this.neighbourDistance) {
+        //     this.applyForce(this.seek(target).multiply(ratio));
+        // }
         this.applyForce(this.seek(target).multiply(ratio));
     }
 
     checkRadius(mouse, maxRadius = 100) {
         let offset = this.location.subtract(mouse);
-        let distance = offset.length();
+        let distance = offset.length;
         let alpha = Math.max(0.1, Math.min(1, 1 - (distance / maxRadius)));
 
         let current = this.color.r;
         let target = 175 + alpha * 80;
         let sign = Math.sign(target - this.color.r);
-        let real = current + sign * 0.5;
+        let real = current + sign * 0.5 * 10;
 
         this.color.r = this.color.g = this.color.b = real;
     }
@@ -139,7 +142,7 @@ class FlyerParticle extends DynamicParticle {
     _forEachDistance(flyers, action) {
         flyers.forEach(element => {
             let offset = this.location.subtract(element.location);
-            let distance = offset.length();
+            let distance = offset.length;
             action && action(element, offset, distance);
         });
     }

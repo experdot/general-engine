@@ -1,27 +1,20 @@
 import {
-    GeneralProcess
-} from "../../Core/GeneralProcess";
-import {
     EventSystem
 } from "../../Common/EventSystem";
 import {
-    GameNode
-} from "../GameNode/GameNode";
+    GeneralNode
+} from "../../Core/GeneralNode";
+import {
+    GameVisualInterface
+} from "../GameInterface/GameInterface";
 
 /** 
  * Represents a visual object
  */
-class GameVisual extends GameNode {
+class GameVisual extends GeneralNode {
     constructor() {
         super();
-
-        this.$start = new GeneralProcess(this).next(this.start);
-        this.$update = new GeneralProcess(this).next(this.update);
-        this.$dispose = new GeneralProcess(this).next(this.dispose);
-
-        this.$gui = new GeneralProcess(this).next(this.gui);
-        this.$render = new GeneralProcess(this).next(this.render);
-
+        this.implements(GameVisualInterface);
         this.eventSystem = new EventSystem();
     }
 

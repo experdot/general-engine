@@ -19,7 +19,7 @@ class ParticlesFlyerWorld extends GameWorld {
     }
 
     createObjects() {
-        this.addChild(new ParticlesFlyer(), new ParticlesFlyerView());
+        this.addChild(new ParticlesFlyer().joint(new ParticlesFlyerView()));
     }
 }
 

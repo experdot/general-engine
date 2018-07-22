@@ -16,7 +16,7 @@ class LSystemTreeWorld extends GameWorld {
     }
 
     createObjects() {
-        this.addChild(new LSystemTree(), new LSystemTreeView());
+        this.addChild(new LSystemTree().joint(new LSystemTreeView()));
     }
 }
 

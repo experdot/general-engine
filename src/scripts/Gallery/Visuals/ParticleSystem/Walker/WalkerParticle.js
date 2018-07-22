@@ -1,6 +1,6 @@
 import {
     DynamicParticle
-} from "./DynamicParticle";
+} from "../Particle/DynamicParticle";
 import {
     Random
 } from "../../../../Engine/Numerics/Random";
@@ -22,7 +22,7 @@ class WalkerParticle extends DynamicParticle {
         }
 
         let vec = target.subtract(this.location);
-        let length = vec.length();
+        let length = vec.length;
         if (length < this.size / 2) {
             this.age = 0;
             this.size = 1;

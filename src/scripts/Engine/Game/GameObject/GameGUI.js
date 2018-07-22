@@ -1,17 +1,17 @@
 import {
-    GeneralProcess
-} from "../../Core/GeneralProcess";
+    GeneralObject
+} from "../../Core/GeneralObject";
 import {
-    GameNode
-} from "../GameNode/GameNode";
+    GameGUIInterface
+} from "../GameInterface/GameInterface";
 
 /** 
  * Represents a GUI attached to the visual object
  */
-class GameGUI extends GameNode {
+class GameGUI extends GeneralObject {
     constructor() {
         super();
-        this.$gui = new GeneralProcess(this).next(this.gui);
+        this.implements(GameGUIInterface);
     }
 }
 

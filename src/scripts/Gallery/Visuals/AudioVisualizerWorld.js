@@ -21,7 +21,7 @@ class AudioVisualizerWorld extends GameWorld {
     }
 
     createObjects() {
-        this.addChild(new AudioVisualizer(), new AudioVisualizerView());
+        this.addChild(new AudioVisualizer().joint(new AudioVisualizerView()));
     }
 }
 

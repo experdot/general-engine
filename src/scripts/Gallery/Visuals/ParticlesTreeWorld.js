@@ -16,7 +16,7 @@ class ParticlesTreeWorld extends GameWorld {
     }
 
     createObjects() {
-        this.addChild(new ParticlesTree(), new ParticlesTreeView());
+        this.addChild(new ParticlesTree().joint(new ParticlesTreeView()));
     }
 }
 

@@ -34,7 +34,8 @@ class EndlessAbyss extends GameVisual {
     constructor(view) {
         super(view);
         this.timer = new DelayTimer();
-        this.ghost = this.joint(new GhostEffect(new Color(0, 0, 0, 0.01), 40, false));
+        this.ghost = new GhostEffect(new Color(0, 0, 0, 0.01), 40, false);
+        this.joint(this.ghost);
     }
 
     start() {

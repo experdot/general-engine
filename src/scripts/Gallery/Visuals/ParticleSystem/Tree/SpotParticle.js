@@ -1,6 +1,6 @@
 import {
     DynamicParticle
-} from "./DynamicParticle";
+} from "../Particle/DynamicParticle";
 import {
     Random
 } from "../../../../Engine/Numerics/Random";

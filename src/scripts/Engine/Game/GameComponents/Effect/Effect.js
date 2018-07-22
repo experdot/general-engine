@@ -3,20 +3,20 @@ import {
     Colors
 } from "../../../UI/Color";
 import {
-    GameNode
-} from "../../GameNode/GameNode";
+    GeneralObject
+} from "../../../Core/GeneralObject";
 import {
-    GeneralProcess
-} from "../../../Core/GeneralProcess";
+    GameEffectInterface
+} from "../../GameInterface/GameInterface";
 
-class GhostEffect extends GameNode {
+class GhostEffect extends GeneralObject {
     constructor(fill = Colors.Black, gradient = 10, direct = true) {
         super();
         this.fillColor = fill;
         this.gradientNumber = gradient;
         this.direct = direct;
 
-        this.$update = new GeneralProcess(this).next(this.update);
+        this.implements(GameEffectInterface);
     }
 
     start(source) {
@@ -39,13 +39,15 @@ class GhostEffect extends GameNode {
     }
 }
 
-class GhostImageEffect extends GameNode {
+class GhostImageEffect extends GeneralObject {
     constructor(src, alpha = 1, direct = true) {
         super();
         this.image = new Image();
         this.image.src = src;
         this.alpha = alpha;
         this.direct = direct;
+
+        this.implements(GameEffectInterface);
     }
 
     start(source) {

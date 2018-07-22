@@ -12,7 +12,7 @@ import {
 } from "../ParticleSystem";
 import {
     SpotParticle
-} from "../Particle/SpotParticle";
+} from "./SpotParticle";
 import {
     GameView
 } from "../../../../Engine/Game/GameObject/GameView";

@@ -1,6 +1,7 @@
 class Graphics {
     static clear(context) {
         context.clearRect(0, 0, context.canvas.width, context.canvas.height);
+        return this;
     }
 
     static scaleOffset(context, offsetX = 0, offsetY = 0, alpha = 1) {
@@ -13,6 +14,7 @@ class Graphics {
             context.translate(w / 2, h / 2);
             context.drawImage(context.canvas, -rw / 2, -rh / 2, rw, rh);
         });
+        return this;
     }
 
     static rotate(context, rotation, alpha = 1, action) {
@@ -27,6 +29,7 @@ class Graphics {
             context.globalAlpha = alpha;
             action && action(context);
         });
+        return this;
     }
 
     static mirror(context, horizontal, vertical, alpha = 1, action) {
@@ -41,6 +44,7 @@ class Graphics {
             context.globalAlpha = alpha;
             action && action(context);
         });
+        return this;
     }
 
     static transform(context, matrix, action) {
@@ -48,6 +52,7 @@ class Graphics {
             context.setTransform(...matrix.toArray());
             action && action(context);
         });
+        return this;
     }
 
     static transparent(context, alpha = 1, action) {
@@ -55,12 +60,14 @@ class Graphics {
             context.globalAlpha = alpha;
             action && action(context);
         });
+        return this;
     }
 
     static hold(context, action) {
         context.save();
         action && action(context);
         context.restore();
+        return this;
     }
 }
 

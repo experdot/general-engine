@@ -4,9 +4,6 @@ import {
 import {
     GameVisual
 } from "../GameObject/GameVisual";
-import {
-    GameView
-} from "../GameObject/GameView";
 
 class GameWorld extends GameVisual {
     get size() {
@@ -49,10 +46,9 @@ class GameWorld extends GameVisual {
         this.inputs.launch(this.ui.container);
     }
 
-    addChild(visual, view = new GameView()) {
+    addChild(visual) {
         super.addChild(visual);
         visual.world = this;
-        visual.joint(view);
     }
 
     dispose() {
