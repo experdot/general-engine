@@ -54,8 +54,22 @@ class ParticlesFlyer extends ParticlesBase {
             particle.color = Colors.White;
             this.flyers.push(particle);
         }
-
         this.particles = this.flyers;
+
+
+        this.blocks = [];
+        const blocksCount = 5;
+        const areaSize = 2;
+        const areaWidth = fieldWidth * areaSize;
+        const areaHeight = fieldHeight * areaSize;
+        for (let i = 0; i < blocksCount; i++) {
+            let particle = new FlyerParticle();
+            particle.location = center.add(new Vector2(areaWidth * Math.random() - areaWidth / 2, areaHeight * Math.random() - areaHeight / 2));
+            particle.velocity = new Vector2(0, 0);
+            particle.size = 20 + maxSize * Math.random() * 20;
+            particle.color = Colors.Gray;
+            this.blocks.push(particle);
+        }
 
         this.revolution = 20;
         this.grid = this.createGrid(w, h, this.revolution);
@@ -86,7 +100,7 @@ class ParticlesFlyer extends ParticlesBase {
         }
 
         this.flyers.forEach(element => {
-            element.update(this.flyers, rect, mouse);
+            element.update(this.flyers, this.blocks, mouse);
         });
 
         // this.grid.forEach((cell, x, y) => {
@@ -144,19 +158,25 @@ class ParticlesFlyerView extends GameView {
         Graphics.hold(context, () => {
             context.translate(-source.offset.x, -source.offset.y);
             this.drawGrid(context, source.world.size, source.offset);
-            for (let index = 0; index < source.particles.length; index++) {
-                const element = source.particles[index];
-                let p = element.location;
-                context.beginPath();
-                context.arc(p.x, p.y, element.size / 2, 0, Math.PI * 2, false);
-                context.closePath();
-                context.fillStyle = element.color.rgba;
-                context.fill();
-            }
+            source.particles.forEach(element => {
+                this.drawParticle(context, element);
+            });
+            source.blocks.forEach(element => {
+                this.drawParticle(context, element);
+            });
             this.drawInfo(context, source.world.size);
             context.translate(source.offset.x, source.offset.y);
         });
 
+    }
+
+    drawParticle(context, particle) {
+        let p = particle.location;
+        context.beginPath();
+        context.arc(p.x, p.y, particle.size / 2, 0, Math.PI * 2, false);
+        context.closePath();
+        context.fillStyle = particle.color.rgba;
+        context.fill();
     }
 
     drawGrid(context, size, offset) {
@@ -190,7 +210,7 @@ class ParticlesFlyerView extends GameView {
         context.font = fonSize + "px Arial";
         context.textAlign = "center";
         context.fillStyle = "#FFF";
-        context.fillText("PLEASE PRESS AND MOVE POINTER!", size.center.x, size.center.y);
+        context.fillText("Press And Move Pointer!", size.center.x, size.center.y);
     }
 }
 

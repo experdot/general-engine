@@ -8,20 +8,21 @@ import {
 class FlyerParticle extends DynamicParticle {
     constructor(location, size = 1, age = 0) {
         super(location, size, age);
-        this.velocityUpon = 3;
+        this.velocityUpon = 6;
         this.neighbourDistance = 200;
     }
 
-    update(flyers, rect, mouse) {
+    update(flyers, blocks, mouse) {
         this.alignspeed(flyers);
         this.seperate(flyers);
         this.cohesion(flyers);
+        this.seperate(blocks, 5);
 
-        mouse && this.follow(mouse, 1);
+        mouse && this.follow(mouse, 3);
         //this.checkRadius(mouse, new Vector2(rect.width, rect.height).length / 3);
 
         this.move();
-        this.checkBorder(rect);
+        //this.checkBorder(rect);
     }
 
     alignspeed(flyers) {
@@ -42,7 +43,7 @@ class FlyerParticle extends DynamicParticle {
         }
     }
 
-    seperate(flyers) {
+    seperate(flyers, ratio = 1) {
         let sum = new Vector2();
         let sumCount = 0;
         this._forEachDistance(flyers, (element, offset, distance) => {
@@ -60,7 +61,7 @@ class FlyerParticle extends DynamicParticle {
             sum.multiply(this.velocityUpon);
             let steer = sum.subtract(this.velocity);
             steer.limitLength(10);
-            this.applyForce(steer);
+            this.applyForce(steer.multiply(ratio));
         }
     }
 
