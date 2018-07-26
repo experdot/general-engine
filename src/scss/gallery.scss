@@ -21,43 +21,58 @@ body {
 
 home {
     margin: auto;
-    .button-rebuild {
+    .headerbox {
         position: fixed;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        z-index: 10;
         width: 100%;
-        color: #CCCCCC;
         background: rgba(0, 0, 0, 0.6);
-        text-align: center;
-        cursor: pointer;
-        font-size: 1rem;
-        user-select: none;
-    }
-    .button-viewongithub {
-        position: fixed;
-        width: 100%;
-        bottom: 0;
-        background: rgba(0, 0, 0, 0.6);
-        text-align: center;
-        cursor: pointer;
-        font-size: 1rem;
-        a {
+        padding: 2px;
+        .button-rebuild {
+            display: none;
+            margin: 0px 2px;
             color: #CCCCCC;
-            text-decoration: none;
+            text-align: center;
+            cursor: pointer;
+            font-size: 1rem;
+            user-select: none;
+            &:hover {
+                color: white;
+            }
         }
-        user-select: none;
+        .button-viewongithub {
+            margin: 0px 2px;
+            text-align: center;
+            cursor: pointer;
+            font-size: 1rem;
+            a {
+                color: #CCCCCC;
+                text-decoration: none;
+                &:hover {
+                    color: white;
+                }
+            }
+            user-select: none;
+        }
+        #text-frame {
+            position: absolute;
+            right: 0;
+            margin: 0px 2px;
+            color: #CCCCCC;
+            user-select: none;
+        }
     }
     .gamebox {
         margin: auto;
-        width: 120rem;
         max-width: 100%;
         canvas {
             background: black;
         }
-    }
-    #text-frame {
-        position: absolute;
-        right: 0;
-        margin: 0px 2px;
-        color: #CCCCCC;
-        user-select: none;
+        .canvas-container {
+            width: 100%;
+            height: 100%;
+        }
     }
 }

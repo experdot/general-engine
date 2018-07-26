@@ -43,12 +43,12 @@ class GalleryStarter {
         return this.symbols[name];
     }
 
-    launch(canvas) {
+    launch(container, canvas) {
         let request = this._getRequest();
         let World = this.getSymbolByName(request["scene"]);
         if (World) {
             document.title = World.Title;
-            return new GameBox(canvas, canvas, new World(canvas.width, canvas.height));
+            return new GameBox(container, canvas, new World(canvas.width, canvas.height));
         } else {
             window.location = "../";
         }

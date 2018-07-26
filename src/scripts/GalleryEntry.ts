@@ -2,6 +2,7 @@ import { GalleryStarter } from "./Gallery/GalleryStarter";
 
 declare const window: any
 
+var container = window.document.getElementById("canvas-container");
 var canvas = window.document.getElementById("canvas");
 var rebuildButton = window.document.getElementById("button-rebuild");
 var frame = window.document.getElementById("text-frame");
@@ -21,7 +22,7 @@ startGame();
 function startGame(): void {
     canvas.width = window.document.body.clientWidth;
     canvas.height = window.document.body.clientHeight;
-    box = new GalleryStarter().launch(canvas);
+    box = new GalleryStarter().launch(container, canvas);
     box.frameManager.onRateChanged = rate => {
         if (frame) { frame.innerText = "FPS:" + rate; }
     };
