@@ -9,6 +9,9 @@ import {
  * Represent a general object
  */
 class GeneralObject {
+
+    public identifier: any;
+    public joints: any[];
     constructor() {
         this.identifier = Identifier.Unique;
         this.joints = [];
@@ -32,7 +35,7 @@ class GeneralObject {
 
     implements(generalInterface) {
         generalInterface.processes.forEach(element => {
-            if (!this.element) {
+            if (!this[element]) {
                 this[element] = new GeneralProcess(this).next(this[element.slice(1)]);
             }
         });

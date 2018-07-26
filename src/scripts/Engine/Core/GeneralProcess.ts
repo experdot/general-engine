@@ -1,9 +1,10 @@
 import {
     GeneralTask
 } from "./GeneralTask";
+import { GeneralObject } from "./GeneralObject";
 
 class GeneralProcess {
-    static find(object) {
+    static find(object: GeneralObject) {
         let result = [];
         for (const key in object) {
             const value = object[key];
@@ -17,25 +18,25 @@ class GeneralProcess {
         return result;
     }
 
-    static setObjectSource(object, source) {
+    static setObjectSource(object: GeneralObject, source: GeneralObject) {
         GeneralProcess.find(object).forEach(element => {
             element.value.setSource(source);
         });
     }
 
-    static combine(source, target) {
+    static combine(source: GeneralObject, target: GeneralObject) {
         GeneralProcess.every(source, target, (s, t) => {
             s.next((s, ...args) => t.process(...args), target.identifier);
         });
     }
 
-    static seperate(source, target) {
+    static seperate(source: GeneralObject, target: GeneralObject) {
         GeneralProcess.every(source, target, (s) => {
             s.remove(target.identifier);
         });
     }
 
-    static every(source, target, hanlder) {
+    static every(source: GeneralObject, target: GeneralObject, hanlder: { (source: GeneralProcess, target: GeneralProcess, key: string) }) {
         GeneralProcess.find(source).forEach(element => {
             const sourceProcess = source[element.key];
             const targetProcess = target[element.key];
@@ -45,13 +46,17 @@ class GeneralProcess {
         });
     }
 
-    constructor(thisArg) {
+    public thisArg: object;
+    public source: object;
+    public tasks: GeneralTask[];
+
+    constructor(thisArg: object) {
         this.thisArg = thisArg;
         this.source = thisArg;
         this.tasks = [];
     }
 
-    setSource(source) {
+    setSource(source: object) {
         this.source = source;
     }
 
@@ -61,17 +66,17 @@ class GeneralProcess {
         });
     }
 
-    before(action, identifier) {
+    before(action: { (...args) }, identifier?: number) {
         action && this.tasks.unshift(new GeneralTask(action, identifier));
         return this;
     }
 
-    next(action, identifier) {
+    next(action: { (...args) }, identifier?: number) {
         action && this.tasks.push(new GeneralTask(action, identifier));
         return this;
     }
 
-    remove(identifier) {
+    remove(identifier?: number) {
         let tasks = this.tasks.filter(v => v.identifier === identifier);
         tasks.forEach(task => {
             let index = this.tasks.indexOf(task);

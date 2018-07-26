@@ -6,23 +6,22 @@ import {
 } from "../Common/Exception";
 
 class GeneralNode extends GeneralObject {
+    public parent: GeneralNode;
+    public children: GeneralNode[];
+
     constructor() {
         super();
         this.parent = null;
         this.children = [];
     }
 
-    addChild(child) {
-        if (child instanceof GeneralNode) {
-            child.parent = this;
-            this.children.push(child);
-            this.joint(child);
-        } else {
-            throw ArgumentException("The child must be an instance of GeneralNode.");
-        }
+    addChild(child: GeneralNode) {
+        child.parent = this;
+        this.children.push(child);
+        this.joint(child);
     }
 
-    removeChild(child) {
+    removeChild(child: GeneralNode) {
         let index = this.children.indexOf(child);
         if (index >= 0) {
             this.disjoint(child);

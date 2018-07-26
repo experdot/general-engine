@@ -1,8 +1,10 @@
 import { GalleryStarter } from "./Gallery/GalleryStarter";
 
-var canvas = document.getElementById("canvas");
-var rebuildButton = document.getElementById("button-rebuild");
-var frame = document.getElementById("text-frame");
+declare const window: any
+
+var canvas = window.document.getElementById("canvas");
+var rebuildButton = window.document.getElementById("button-rebuild");
+var frame = window.document.getElementById("text-frame");
 var box;
 
 window.addEventListener("resize", function () {
@@ -17,8 +19,8 @@ rebuildButton.addEventListener("click", function () {
 startGame();
 
 function startGame(): void {
-    (canvas as HTMLCanvasElement).width = document.body.clientWidth;
-    (canvas as HTMLCanvasElement).height = document.body.clientHeight;
+    canvas.width = window.document.body.clientWidth;
+    canvas.height = window.document.body.clientHeight;
     box = new GalleryStarter().launch(canvas);
     box.frameManager.onRateChanged = rate => {
         if (frame) { frame.innerText = "FPS:" + rate; }
