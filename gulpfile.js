@@ -1,4 +1,3 @@
-/// <binding BeforeBuild='clean' AfterBuild='watch' Clean='clean' />
 "use strict";
 var gulp = require("gulp"),
     sass = require("gulp-sass"),
@@ -19,7 +18,10 @@ var gulp = require("gulp"),
     uglify = require("gulp-uglify"),
     source = require("vinyl-source-stream"),
     buffer = require("vinyl-buffer"),
-    tsify = require("tsify");
+    tsify = require("tsify"),
+    es = require("event-stream"),
+    header = require("gulp-header"),
+    clone = require("gulp-clone");
 
 var knownOptions = {
     string: "env",
@@ -30,6 +32,25 @@ var knownOptions = {
 var options = minimist(process.argv.slice(2), knownOptions);
 
 const config = {
+    html: {
+        src: ["index.html", "views/**/*.html"],
+        dest: "dist/",
+        watch: ["index.html", "views/**/*.html"],
+        minify: true,
+        htmlMinOptions: {
+            removeComments: true,
+            collapseWhitespace: true,
+            collapseBooleanAttributes: true,
+            removeEmptyAttributes: true,
+            removeScriptTypeAttributes: true,
+            removeStyleLinkTypeAttributes: true,
+            minifyJS: true,
+            minifyCSS: true
+        },
+        srcOptions: {
+            base: "."
+        }
+    },
     styles: {
         src: "src/scss/*.scss",
         dest: "dist/styles",
@@ -51,16 +72,11 @@ const config = {
             html: "./dist/**/*.html"
         }
     },
-    scripts: {
-        src: "src/scripts/**/*.js",
+    gallery: {
         dest: "dist/scripts",
         watch: ["src/scripts/**/*.js", "src/scripts/**/*.ts"],
-        compile: true,
         sourcemap: options.env !== "production",
-        concat: {
-            enabled: true,
-            fileName: "bundle.js"
-        },
+        bundle: "bundle.js",
         minify: {
             enabled: false || options.env === "production",
         },
@@ -82,25 +98,6 @@ const config = {
             ]
         }
     },
-    html: {
-        src: ["index.html", "views/**/*.html"],
-        dest: "dist/",
-        watch: ["index.html", "views/**/*.html"],
-        minify: true,
-        htmlMinOptions: {
-            removeComments: true,
-            collapseWhitespace: true,
-            collapseBooleanAttributes: true,
-            removeEmptyAttributes: true,
-            removeScriptTypeAttributes: true,
-            removeStyleLinkTypeAttributes: true,
-            minifyJS: true,
-            minifyCSS: true
-        },
-        srcOptions: {
-            base: "."
-        }
-    },
     static: {
         src: "static/**/",
         dest: "dist/static",
@@ -113,6 +110,33 @@ const config = {
     clean: {
         path: "dist/"
     },
+    release: {
+        dest: "release/",
+        suffix: ".min",
+        bundle: "general-engine.js",
+        browserify: {
+            entries: "src/scripts/Engine/_General.js",
+            transform: [
+                [babelify, {
+                    "presets": ["env"]
+                }]
+            ]
+        }
+    },
+    npm: {
+        dest: "lib/",
+        suffix: ".min",
+        bundle: "index.js",
+        browserify: {
+            entries: "src/scripts/Engine/_General.js",
+            standalone: "General",
+            transform: [
+                [babelify, {
+                    "presets": ["env"]
+                }]
+            ]
+        }
+    },
     server: {
         baseDir: "./dist",
         host: "0.0.0.0",
@@ -124,22 +148,33 @@ const config = {
         server: "server",
         html: "html",
         styles: "styles",
-        scripts: "scripts",
+        gallery: "scripts:gallery",
         static: "static",
         chore: "chore",
-        clean: "clean"
+        clean: "clean",
+        npm: "scripts:npm",
+        release: "scripts:release"
     }
 };
+
+const banner = [
+    "/**",
+    "* <%= context.name %> <%= context.version %> by <%= context.author %> <%= context.date %>",
+    "* <%= context.homepage %>",
+    "* License <%= context.license %>",
+    "*/",
+    ""
+].join("\n");
 
 // Watch
 gulp.task(config.task.watch, [config.task.default, config.task.server], function () {
     gulp.watch(config.html.watch, [config.task.html]).on("change", browsersync.reload);
     gulp.watch(config.styles.watch, [config.task.styles]);
-    gulp.watch(config.scripts.watch, [config.task.scripts]);
+    gulp.watch(config.gallery.watch, [config.task.gallery]);
 });
 
 // Default
-gulp.task(config.task.default, sequence(config.task.clean, [config.task.html, config.task.static, config.task.chore], [config.task.styles, config.task.scripts]));
+gulp.task(config.task.default, sequence(config.task.clean, [config.task.html, config.task.static, config.task.chore], [config.task.styles, config.task.gallery]));
 
 // Server
 gulp.task(config.task.server, function () {
@@ -150,6 +185,11 @@ gulp.task(config.task.server, function () {
         },
         host: config.server.host
     });
+});
+
+// Clean
+gulp.task(config.task.clean, function () {
+    return del(config.clean.path);
 });
 
 // Chore
@@ -193,8 +233,62 @@ gulp.task(config.task.styles, function () {
 });
 
 // Scripts
-gulp.task(config.task.scripts, function () {
-    return browserify(config.scripts.browserify)
+gulp.task(config.task.gallery, function () {
+    return buildGalleryScripts(compile(config.gallery), config.gallery)
+        .pipe(gulpif(options.env !== "production", browsersync.stream()));
+});
+
+// NPM
+gulp.task(config.task.npm, function () {
+    return buildNPMScripts(compile(config.npm), config.npm);
+});
+
+// Release
+gulp.task(config.task.release, function () {
+    return buildReleaseScripts(compile(config.release), config.release);
+});
+
+
+function buildNPMScripts(stream, args) {
+    return stream.pipe(gulp.dest(args.dest));
+}
+
+function buildReleaseScripts(stream, args) {
+    let script_normal = stream
+        .pipe(clone())
+        .pipe(header(banner, {
+            context: options
+        }))
+        .pipe(gulp.dest(args.dest));
+    let script_minify = stream
+        .pipe(clone())
+        .pipe(uglify())
+        .pipe(header(banner, {
+            context: options
+        }))
+        .pipe(rename({
+            suffix: args.suffix
+        })).pipe(gulp.dest(args.dest));
+
+    return es.merge(script_normal, script_minify);
+}
+
+function buildGalleryScripts(stream, args) {
+    return stream
+        .pipe(gulpif(args.sourcemap, sourcemaps.init({
+            loadMaps: true
+        })))
+        .pipe(gulpif(args.minify.enabled, uglify()))
+        .pipe(gulpif(args.suffix.enabled, rename({
+            suffix: args.suffix.text
+        })))
+        .pipe(gulpif(args.sourcemap, sourcemaps.write(".")))
+        .pipe(gulpif(args.md5.enabled, md5(10, args.md5.html)))
+        .pipe(gulp.dest(args.dest));
+}
+
+function compile(args) {
+    return browserify(args.browserify)
         .plugin(tsify)
         .bundle()
         .on("error", function (err) {
@@ -204,22 +298,6 @@ gulp.task(config.task.scripts, function () {
                 this.emit("end");
             }
         })
-        .pipe(source("bundle.js"))
-        .pipe(buffer())
-        .pipe(gulpif(config.scripts.sourcemap, sourcemaps.init({
-            loadMaps: true
-        })))
-        .pipe(gulpif(config.scripts.minify.enabled, uglify()))
-        .pipe(gulpif(config.scripts.suffix.enabled, rename({
-            suffix: config.scripts.suffix.text
-        })))
-        .pipe(gulpif(config.scripts.sourcemap, sourcemaps.write(".")))
-        .pipe(gulpif(config.scripts.md5.enabled, md5(10, config.scripts.md5.html)))
-        .pipe(gulp.dest(config.scripts.dest))
-        .pipe(gulpif(options.env !== "production", browsersync.stream()));
-});
-
-// Clean
-gulp.task(config.task.clean, function () {
-    return del(config.clean.path);
-});
+        .pipe(source(args.bundle))
+        .pipe(buffer());
+}

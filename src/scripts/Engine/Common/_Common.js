@@ -1,16 +1,13 @@
 import * as EventArgs from "./EventArgs";
-import * as EventSystem from "./EventSystem";
+import * as Events from "./Events";
 import * as Exception from "./Exception";
 import * as Inputs from "./Inputs";
 import * as Enum from "./Enum";
 import * as DelayTimer from "./DelayTimer";
-import * as Graphics from "./Graphics";
 import * as Identifier from "./Identifier";
 import {
     Namespace
 } from "./Namespace";
-
-
 
 /*eslint-disable*/
 export const Common = Namespace.combine({
@@ -18,10 +15,9 @@ export const Common = Namespace.combine({
     },
     Enum,
     EventArgs,
-    EventSystem,
+    Events,
     Exception,
     Inputs,
     DelayTimer,
-    Graphics,
     Identifier
 );

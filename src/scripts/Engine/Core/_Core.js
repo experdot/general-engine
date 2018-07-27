@@ -5,9 +5,6 @@ import {
     GeneralProcess
 } from "./GeneralProcess";
 import {
-    GeneralProperty
-} from "./GeneralProperty";
-import {
     GeneralTask
 } from "./GeneralTask";
 import {
@@ -18,6 +15,5 @@ export const Core = {
     GeneralNode,
     GeneralObject,
     GeneralProcess,
-    GeneralProperty,
     GeneralTask
 };

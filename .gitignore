@@ -1,5 +1,7 @@
 # distribute directory
 dist/
+lib/
+release/
 
 # visual studio code
 .vscode/

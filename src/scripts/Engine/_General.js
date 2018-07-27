@@ -29,7 +29,7 @@ import {
     Extentions
 } from "./Extenstions/_Extenstion";
 
-export default {
+export {
     Collections,
     Common,
     Core,
