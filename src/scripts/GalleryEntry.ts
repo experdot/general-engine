@@ -1,11 +1,9 @@
 import { GalleryStarter } from "./Gallery/GalleryStarter";
 
-declare const window: any
-
-var container = window.document.getElementById("canvas-container");
-var canvas = window.document.getElementById("canvas");
-var rebuildButton = window.document.getElementById("button-rebuild");
-var frame = window.document.getElementById("text-frame");
+var container = document.getElementById("canvas-container");
+let canvas = document.getElementById("canvas") as HTMLCanvasElement;
+var rebuildButton = document.getElementById("button-rebuild");
+var frame = document.getElementById("text-frame");
 var box;
 
 window.addEventListener("resize", function () {
