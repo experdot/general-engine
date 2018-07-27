@@ -23,7 +23,7 @@
     "babel-cli": "^6.26.0",
     "babel-preset-env": "^1.6.1",
     "babelify": "^8.0.0",
-    "browser-sync": "^2.18.13",
+    "browser-sync": "^2.24.6",
     "browserify": "^16.2.2",
     "del": "^3.0.0",
     "eslint-config-google": "^0.9.1",
