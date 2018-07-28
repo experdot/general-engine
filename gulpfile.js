@@ -123,6 +123,7 @@ const config = {
         bundle_minfify: "general-engine.min.js",
         browserify: {
             entries: "src/scripts/Engine/_General.js",
+            standalone: "General",
             transform: [
                 [babelify, {
                     "presets": ["env"]
