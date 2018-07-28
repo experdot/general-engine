@@ -1,26 +1,49 @@
 # general-engine
 [![npm][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![codebeat badge][codebeat-image]][codebeat-url]
 
-## Introduction
-An experimental framework to build web applications or games.
+> General Engine is an experimental framework to build web applications or games.
 
-## Games
+## Gallery
+#### Games
 - [Endless Abyss](https://experdot.github.io/general-engine/views/gallery.html?scene=endlessabyss)    
 
-## Particle System
+#### Particle System
 - [Particles Tree](https://experdot.github.io/general-engine/views/gallery.html?scene=tree)
 - [Particles Flyer](https://experdot.github.io/general-engine/views/gallery.html?scene=flyer)
 - [Particles Walker](https://experdot.github.io/general-engine/views/gallery.html?scene=walker)
 
-## State Machine
+#### State Machine
 - [L-System Tree](https://experdot.github.io/general-engine/views/gallery.html?scene=lsystemtree)
 - [CA GameOfLife](https://experdot.github.io/general-engine/views/gallery.html?scene=gameoflife)
 
-## Audio Visualization
+#### Audio Visualization
 - [Audio Visualizer](https://experdot.github.io/general-engine/views/gallery.html?scene=audiovisualizer)
+
+## Install
+Download a [stable release][repo-releases] and include the script in your web page:
+``` html
+    <script src="general-engine.js" type="text/javascript"></script>
+```
+You can also install using the package managers [NPM][npm-url].
+``` bash
+    npm install general-engine
+```
+
+## Building 
+To build you must first install [node.js](http://nodejs.org/) and [gulp](http://gulpjs.com/), then run
+``` bash
+    npm install
+```
+This will install the required build dependencies, then run
+``` bash
+    gulp watch
+```
+to spawn a development server.
 
 ## License
 - [MIT](./LICENSE)
+
+[repo-releases]: https://github.com/experdot/general-engine/releases
 
 [npm-url]: https://www.npmjs.com/package/general-engine
 [npm-image]: https://img.shields.io/npm/v/general-engine.svg
