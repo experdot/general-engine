@@ -1,14 +1,16 @@
 {
   "name": "general-engine",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "lockfileVersion": 1,
   "main": "lib/index.js",
   "author": "experdot",
+  "description": "An experimental framework to build apps or games.",
   "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/experdot/general-engine.git"
   },
+  "homepage": "https://github.com/experdot/general-engine",
   "keywords": [
     "game engine",
     "canvas",
@@ -17,7 +19,8 @@
   ],
   "files": [
     "lib/",
-    "src/scripts/Engine"
+    "src/scripts/Engine",
+    "CHANGELOG.md"
   ],
   "dependencies": {},
   "devDependencies": {
@@ -41,6 +44,7 @@
     "gulp-clone": "^2.0.1",
     "gulp-concat": "^2.6.1",
     "gulp-cssnano": "^2.1.1",
+    "gulp-github-release": "^1.2.1",
     "gulp-header": "^2.0.5",
     "gulp-htmlmin": "^4.0.0",
     "gulp-if": "^2.0.2",
@@ -55,6 +59,7 @@
     "minimist": "^1.2.0",
     "tsify": "^4.0.0",
     "typescript": "^2.9.2",
+    "util": "^0.11.0",
     "vinyl-buffer": "^1.0.1",
     "vinyl-source-stream": "^2.0.0"
   }

@@ -21,15 +21,21 @@ var gulp = require("gulp"),
     tsify = require("tsify"),
     es = require("event-stream"),
     header = require("gulp-header"),
-    clone = require("gulp-clone");
+    clone = require("gulp-clone"),
+    release = require("gulp-github-release"),
+    npmpkg = require("./package.json"),
+    extend = require("util")._extend;
 
-var knownOptions = {
-    string: "env",
+const knownOptions = {
+    string: ["env", "prerelease", "githubtoken"],
     default: {
-        env: process.env.NODE_ENV || "development"
+        env: process.env.NODE_ENV || "development",
+        prerelease: "",
+        githubtoken: ""
     }
 };
-var options = minimist(process.argv.slice(2), knownOptions);
+
+const options = minimist(process.argv.slice(2), knownOptions);
 
 const config = {
     html: {
@@ -114,12 +120,21 @@ const config = {
         dest: "release/",
         suffix: ".min",
         bundle: "general-engine.js",
+        bundle_minfify: "general-engine.min.js",
         browserify: {
             entries: "src/scripts/Engine/_General.js",
             transform: [
                 [babelify, {
                     "presets": ["env"]
                 }]
+            ]
+        },
+        github: {
+            src: [
+                "CHANGELOG.md",
+                "LICENSE",
+                "release/general-engine.js",
+                "release/general-engine.min.js"
             ]
         }
     },
@@ -148,18 +163,28 @@ const config = {
         server: "server",
         html: "html",
         styles: "styles",
-        gallery: "scripts:gallery",
+
         static: "static",
         chore: "chore",
         clean: "clean",
-        npm: "scripts:npm",
-        release: "scripts:release"
+
+        scripts: {
+            gallery: "scripts:gallery",
+            npm: "scripts:npm",
+            release: "scripts:release"
+        },
+        release: {
+            github: "release:github"
+        },
+        quick: {
+            release: "quick:release"
+        }
     }
 };
 
 const banner = [
     "/**",
-    "* <%= context.name %> <%= context.version %> by <%= context.author %> <%= context.date %>",
+    "* <%= context.name %> <%= context.version %> by <%= context.author %> <%= extra.date %>",
     "* <%= context.homepage %>",
     "* License <%= context.license %>",
     "*/",
@@ -174,7 +199,7 @@ gulp.task(config.task.watch, [config.task.default, config.task.server], function
 });
 
 // Default
-gulp.task(config.task.default, sequence(config.task.clean, [config.task.html, config.task.static, config.task.chore], [config.task.styles, config.task.gallery]));
+gulp.task(config.task.default, sequence(config.task.clean, [config.task.html, config.task.static, config.task.chore], [config.task.styles, config.task.scripts.gallery]));
 
 // Server
 gulp.task(config.task.server, function () {
@@ -232,39 +257,79 @@ gulp.task(config.task.styles, function () {
         .pipe(gulpif(options.env != "production", browsersync.stream()));
 });
 
-// Scripts
-gulp.task(config.task.gallery, function () {
+// Scripts: Gallery
+gulp.task(config.task.scripts.gallery, function () {
     return buildGalleryScripts(compile(config.gallery), config.gallery)
         .pipe(gulpif(options.env !== "production", browsersync.stream()));
 });
 
-// NPM
-gulp.task(config.task.npm, function () {
+// Scripts: NPM
+gulp.task(config.task.scripts.npm, function () {
     return buildNPMScripts(compile(config.npm), config.npm);
 });
 
-// Release
-gulp.task(config.task.release, function () {
-    return buildReleaseScripts(compile(config.release), config.release);
+// Scripts: Release
+gulp.task(config.task.scripts.release, function () {
+    return buildReleaseScripts(compile(config.release), config.release, extendPackageInfo(npmpkg));
 });
 
+// Release: GitHub    
+// Commandline: gulp release:github --prerelease alpha1.0 --githubtoken <token>
+gulp.task(config.task.release.github, function () {
+    return releaseToGitHub(extendPackageInfo(npmpkg));
+});
+
+// Compile and release to GitHub    
+// Commandline: gulp quick:release --prerelease alpha1.0 --githubtoken <token>
+gulp.task(config.task.quick.release, sequence(config.task.scripts.release, config.task.release.github));
+
+
+function extendPackageInfo(args) {
+    let isPrerelease = options.prerelease !== "";
+    let pkgInfo = extend(extend({}, args), {
+        version: "v" + args.version + (isPrerelease ? "-" + options.prerelease : ""),
+        prerelease: isPrerelease
+    });
+    return pkgInfo;
+}
+
+function compile(args) {
+    return browserify(args.browserify)
+        .plugin(tsify)
+        .bundle()
+        .on("error", function (err) {
+            // eslint-disable-next-line
+            console.error(err);
+            if (options.env !== "production") {
+                this.emit("end");
+            }
+        })
+        .pipe(source(args.bundle))
+        .pipe(buffer());
+}
 
 function buildNPMScripts(stream, args) {
     return stream.pipe(gulp.dest(args.dest));
 }
 
-function buildReleaseScripts(stream, args) {
+function buildReleaseScripts(stream, args, packageInfo) {
     let script_normal = stream
         .pipe(clone())
         .pipe(header(banner, {
-            context: options
+            context: packageInfo,
+            extra: {
+                date: new Date().toISOString().slice(0, 10)
+            }
         }))
         .pipe(gulp.dest(args.dest));
     let script_minify = stream
         .pipe(clone())
         .pipe(uglify())
         .pipe(header(banner, {
-            context: options
+            context: packageInfo,
+            extra: {
+                date: new Date().toISOString().slice(0, 10)
+            }
         }))
         .pipe(rename({
             suffix: args.suffix
@@ -287,17 +352,15 @@ function buildGalleryScripts(stream, args) {
         .pipe(gulp.dest(args.dest));
 }
 
-function compile(args) {
-    return browserify(args.browserify)
-        .plugin(tsify)
-        .bundle()
-        .on("error", function (err) {
-            // eslint-disable-next-line
-            console.error(err);
-            if (options.env !== "production") {
-                this.emit("end");
-            }
-        })
-        .pipe(source(args.bundle))
-        .pipe(buffer());
+function releaseToGitHub(packageInfo) {
+    return gulp.src(config.release.github.src)
+        .pipe(release({
+            token: options.githubtoken,
+            owner: packageInfo.author,
+            repo: packageInfo.name,
+            tag: packageInfo.version,
+            name: packageInfo.name + " " + packageInfo.version,
+            draft: true,
+            prerelease: options.prerelease
+        }));
 }
