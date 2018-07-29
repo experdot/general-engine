@@ -40,7 +40,7 @@
     "gulp": "^3.9.1",
     "gulp-autoprefixer": "^5.0.0",
     "gulp-babel": "^7.0.1",
-    "gulp-cache": "^1.0.1",
+    "gulp-cache": "^1.0.2",
     "gulp-clone": "^2.0.1",
     "gulp-concat": "^2.6.1",
     "gulp-cssnano": "^2.1.1",
