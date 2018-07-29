@@ -51,7 +51,7 @@
     "gulp-md5-plus": "^1.0.3",
     "gulp-refresh": "^1.1.0",
     "gulp-rename": "^1.4.0",
-    "gulp-sass": "^4.0.0",
+    "gulp-sass": "^4.0.1",
     "gulp-sequence": "^1.0.0",
     "gulp-sourcemaps": "^2.6.4",
     "gulp-uglify": "^3.0.1",
