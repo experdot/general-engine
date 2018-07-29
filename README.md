@@ -1,23 +1,51 @@
 # general-engine
 [![npm][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![codebeat badge][codebeat-image]][codebeat-url]
 
-> *General Engine* is an framework to build web applications or games.
+> *General Engine* is a framework to build web applications or games.
 
 ## Gallery
-#### Games
-- [Endless Abyss](https://experdot.github.io/general-engine/views/gallery.html?scene=endlessabyss)    
 
-#### Particle System
-- [Particles Tree](https://experdot.github.io/general-engine/views/gallery.html?scene=tree)
-- [Particles Flyer](https://experdot.github.io/general-engine/views/gallery.html?scene=flyer)
-- [Particles Walker](https://experdot.github.io/general-engine/views/gallery.html?scene=walker)
-
-#### State Machine
-- [L-System Tree](https://experdot.github.io/general-engine/views/gallery.html?scene=lsystemtree)
-- [CA GameOfLife](https://experdot.github.io/general-engine/views/gallery.html?scene=gameoflife)
-
-#### Audio Visualization
-- [Audio Visualizer](https://experdot.github.io/general-engine/views/gallery.html?scene=audiovisualizer)
+<table>
+    <tr>
+        <td>Type</td> 
+        <td>Name</td> 
+   </tr>
+    <tr>
+        <td>Game</td>    
+        <td >      
+            <ul>
+                <li><a href="https://experdot.github.io/general-engine/views/gallery.html?scene=endlessabyss">Endless Abyss</a></li>
+            </ul>
+        </td>  
+    </tr>
+    <tr>
+        <td>Particles</td>    
+        <td >      
+            <ul>
+                <li><a href="https://experdot.github.io/general-engine/views/gallery.html?scene=tree">Particles Tree</a></li>
+                <li><a href="https://experdot.github.io/general-engine/views/gallery.html?scene=flyer">Particles Flyer</a></li>
+                <li><a href="https://experdot.github.io/general-engine/views/gallery.html?scene=walker">Particles Walker</a></li>
+            </ul>
+        </td>  
+    </tr>
+    <tr>
+        <td>State Machine</td>    
+        <td >      
+            <ul>
+                <li><a href="https://experdot.github.io/general-engine/views/gallery.html?scene=lsystemtree">L-System Tree</a></li>
+                <li><a href="https://experdot.github.io/general-engine/views/gallery.html?scene=gameoflife">CA GameOfLife</a></li>
+            </ul>
+        </td>  
+    </tr>
+    <tr>
+        <td>Audio</td>    
+        <td >      
+            <ul>
+                <li><a href="https://experdot.github.io/general-engine/views/gallery.html?scene=audiovisualizer">Audio Visualizer</a></li>
+            </ul>
+        </td>  
+    </tr>
+</table>
 
 ## Install
 Download a [stable release][repo-releases] and include the script in your web page:
