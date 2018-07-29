@@ -1,11 +1,7 @@
 import {
-    ResourceManager
+    CultureResourceManager,
+    CultureResourceConfig
 } from "../../Engine/Resources/ResourceManager";
-
-const langs = ["en-US", "zh-CN"];
-const currentLang = langs.findIndex(v => v === navigator.language) >= 0 ? navigator.language : langs[0];
-
-const json_url = `../static/i18n/gallery.${currentLang}.json`;
 
 const GalleryResources = {
     Gallery: "",
@@ -24,7 +20,9 @@ const GalleryResources = {
     }
 };
 
-const GalleryResourceManager = new ResourceManager().load(json_url, GalleryResources);
+const config = new CultureResourceConfig("../static/i18n/gallery.{{language}}.json", ["en-US", "zh-CN"]);
+
+const GalleryResourceManager = new CultureResourceManager(config).load(GalleryResources);
 
 export {
     GalleryResourceManager,

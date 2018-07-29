@@ -1,6 +1,9 @@
 import {
     Network
 } from "../Network/Network";
+import {
+    CultureInfo
+} from "../Globalization/CultureInfo";
 
 class ResourceManager {
     constructor() {
@@ -39,6 +42,34 @@ class ResourceManager {
     }
 }
 
+class CultureResourceManager extends ResourceManager {
+    constructor(config) {
+        super();
+        this.config = config;
+    }
+
+    load(target, culture = CultureInfo.Default) {
+        return super.load(this.config.get(culture.language), target);
+    }
+}
+
+class CultureResourceConfig {
+    constructor(template, languages = [], replace = "{{language}}") {
+        this.template = template;
+        this.languages = languages;
+        this.replace = replace;
+    }
+
+    get(language) {
+        if (this.languages.findIndex(v => v === language) < 0) {
+            language = this.languages[0];
+        }
+        return this.template.replace(this.replace, language);
+    }
+}
+
 export {
-    ResourceManager
+    ResourceManager,
+    CultureResourceManager,
+    CultureResourceConfig
 };
