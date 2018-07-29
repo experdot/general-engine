@@ -5,10 +5,13 @@ import {
     LSystemTree,
     LSystemTreeView
 } from "./LSystem/LSystemTree";
+import {
+    GalleryResources
+} from "../Resources/GalleryResource";
 
 class LSystemTreeWorld extends GameWorld {
     static get Title() {
-        return "L-System - Tree";
+        return GalleryResources.LSystemTreeWorld_Title;
     }
 
     initialize() {

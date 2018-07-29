@@ -8,10 +8,13 @@ import {
     ParticlesWalker,
     ParticlesWalkerView
 } from "./ParticleSystem/Walker/ParticlesWalker";
+import {
+    GalleryResources
+} from "../Resources/GalleryResource";
 
 class ParticlesWalkerWorld extends GameWorld {
     static get Title() {
-        return "Particels - Walker";
+        return GalleryResources.PartilesWalkerWorld_Title;
     }
 
     initialize() {

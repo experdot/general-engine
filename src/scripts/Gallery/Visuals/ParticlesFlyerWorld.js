@@ -8,10 +8,13 @@ import {
     ParticlesFlyer,
     ParticlesFlyerView
 } from "./ParticleSystem/Flyer/ParticlesFlyer";
+import {
+    GalleryResources
+} from "../Resources/GalleryResource";
 
 class ParticlesFlyerWorld extends GameWorld {
     static get Title() {
-        return "Particles - Flyer";
+        return GalleryResources.ParticlesFlyerWorld_Title;
     }
 
     initialize() {

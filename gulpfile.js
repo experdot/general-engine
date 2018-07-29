@@ -107,7 +107,7 @@ const config = {
     static: {
         src: "static/**/",
         dest: "dist/static",
-        watch: "static/"
+        watch: "static/**/*.json"
     },
     chore: {
         src: ["README.md", "_config.yml", "LICENSE"],
@@ -196,7 +196,8 @@ const banner = [
 gulp.task(config.task.watch, [config.task.default, config.task.server], function () {
     gulp.watch(config.html.watch, [config.task.html]).on("change", browsersync.reload);
     gulp.watch(config.styles.watch, [config.task.styles]);
-    gulp.watch(config.gallery.watch, [config.task.gallery]);
+    gulp.watch(config.static.watch, [config.task.static]);
+    gulp.watch(config.gallery.watch, [config.task.scripts.gallery]);
 });
 
 // Default

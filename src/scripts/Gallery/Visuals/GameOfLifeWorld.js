@@ -8,10 +8,13 @@ import {
     GameOfLife,
     GameOfLifeView
 } from "./CA/GameOfLife/GameOfLife";
+import {
+    GalleryResources
+} from "../Resources/GalleryResource";
 
 class GameOfLifeWorld extends GameWorld {
     static get Title() {
-        return "CA - GameOfLife";
+        return GalleryResources.GameOfLifeWorld_Title;
     }
 
     initialize() {

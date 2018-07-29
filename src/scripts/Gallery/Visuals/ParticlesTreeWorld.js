@@ -5,10 +5,13 @@ import {
     ParticlesTree,
     ParticlesTreeView
 } from "./ParticleSystem/Tree/ParticlesTree";
+import {
+    GalleryResources
+} from "../Resources/GalleryResource";
 
 class ParticlesTreeWorld extends GameWorld {
     static get Title() {
-        return "Particles - Tree";
+        return GalleryResources.ParticlesTreeWorld_Title;
     }
 
     initialize() {

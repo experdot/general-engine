@@ -1,4 +1,5 @@
 import { GalleryStarter } from "./Gallery/GalleryStarter";
+import { GalleryResourceManager } from "./Gallery/Resources/GalleryResource"
 
 var container = document.getElementById("canvas-container");
 let canvas = document.getElementById("canvas") as HTMLCanvasElement;
@@ -20,9 +21,12 @@ startGame();
 function startGame(): void {
     canvas.width = window.document.body.clientWidth;
     canvas.height = window.document.body.clientHeight;
-    box = new GalleryStarter().launch(container, canvas);
-    box.frameManager.onRateChanged = rate => {
-        if (frame) { frame.innerText = "FPS:" + rate; }
-    };
-    box.run();
+
+    GalleryResourceManager.wait(() => {
+        box = new GalleryStarter().launch(container, canvas);
+        box.frameManager.onRateChanged = rate => {
+            if (frame) { frame.innerText = "FPS:" + rate; }
+        };
+        box.run();
+    });
 };

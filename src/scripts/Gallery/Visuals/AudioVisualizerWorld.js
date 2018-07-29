@@ -9,10 +9,13 @@ import {
     AudioVisualizer,
     AudioVisualizerView
 } from "./AudioVisualizer/AudioVisualizer";
+import {
+    GalleryResources
+} from "../Resources/GalleryResource";
 
 class AudioVisualizerWorld extends GameWorld {
     static get Title() {
-        return "Audio - Visualizer";
+        return GalleryResources.AudioVisualizerWorld_Title;
     }
 
     initialize() {
