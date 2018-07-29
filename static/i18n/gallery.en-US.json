@@ -1,0 +1,17 @@
+{
+    "Gallery": "Gallery",
+    "AudioVisualizerWorld_Title": "Audio - Visualizer",
+    "GameOfLifeWorld_Title": "CA - GameOfLife",
+    "LSystemTreeWorld_Title": "LSystem - Tree",
+    "ParticlesFlyerWorld_Title": "Particles - Flyer",
+    "ParticlesTreeWorld_Title": "Particles - Tree",
+    "PartilesWalkerWorld_Title": "Particles - Walker",
+    "EndlessAbyssWorld_Title": "Game - EndlessAbyss",
+    "EndlessAbyssWorld": {
+        "Title": "Game - EndlessAbyss",
+        "GameName": "EndlessAbyss",
+        "GameOver": "GameOver",
+        "Tip": "Press enter key to start",
+        "Score": "Score:"
+    }
+}

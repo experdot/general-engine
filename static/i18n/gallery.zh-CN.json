@@ -1,0 +1,16 @@
+{
+    "Gallery": "示例集",
+    "AudioVisualizerWorld_Title": "音频 - 频谱可视化",
+    "GameOfLifeWorld_Title": "元胞自动机 - 生命游戏",
+    "LSystemTreeWorld_Title": "L系统 - 树",
+    "ParticlesFlyerWorld_Title": "粒子系统- 飞行",
+    "ParticlesTreeWorld_Title": "粒子系统 - 树",
+    "PartilesWalkerWorld_Title": "粒子系统 - 图案",
+    "EndlessAbyssWorld": {
+        "Title": "游戏 - 无尽深渊",
+        "GameName": "无尽深渊",
+        "GameOver": "游戏结束",
+        "Tip": "按下回车键开始",
+        "Score": "分数："
+    }
+}
