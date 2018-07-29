@@ -22,9 +22,9 @@
         <td>Particles</td>    
         <td >      
             <ul>
-                <li><a href="https://experdot.github.io/general-engine/views/gallery.html?scene=tree">Particles Tree</a></li>
-                <li><a href="https://experdot.github.io/general-engine/views/gallery.html?scene=flyer">Particles Flyer</a></li>
-                <li><a href="https://experdot.github.io/general-engine/views/gallery.html?scene=walker">Particles Walker</a></li>
+                <li><a href="https://experdot.github.io/general-engine/views/gallery.html?scene=tree">Tree</a></li>
+                <li><a href="https://experdot.github.io/general-engine/views/gallery.html?scene=flyer">Flyer</a></li>
+                <li><a href="https://experdot.github.io/general-engine/views/gallery.html?scene=walker">Walker</a></li>
             </ul>
         </td>  
     </tr>
@@ -32,8 +32,8 @@
         <td>State Machine</td>    
         <td >      
             <ul>
-                <li><a href="https://experdot.github.io/general-engine/views/gallery.html?scene=lsystemtree">L-System Tree</a></li>
-                <li><a href="https://experdot.github.io/general-engine/views/gallery.html?scene=gameoflife">CA GameOfLife</a></li>
+                <li><a href="https://experdot.github.io/general-engine/views/gallery.html?scene=lsystemtree">Tree</a></li>
+                <li><a href="https://experdot.github.io/general-engine/views/gallery.html?scene=gameoflife">GameOfLife</a></li>
             </ul>
         </td>  
     </tr>
@@ -41,7 +41,7 @@
         <td>Audio</td>    
         <td >      
             <ul>
-                <li><a href="https://experdot.github.io/general-engine/views/gallery.html?scene=audiovisualizer">Audio Visualizer</a></li>
+                <li><a href="https://experdot.github.io/general-engine/views/gallery.html?scene=audiovisualizer">Visualizer</a></li>
             </ul>
         </td>  
     </tr>
