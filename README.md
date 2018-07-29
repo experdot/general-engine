@@ -1,7 +1,7 @@
 # general-engine
 [![npm][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![codebeat badge][codebeat-image]][codebeat-url]
 
-> General Engine is an experimental framework to build web applications or games.
+> *General Engine* is an framework to build web applications or games.
 
 ## Gallery
 #### Games
@@ -22,21 +22,21 @@
 ## Install
 Download a [stable release][repo-releases] and include the script in your web page:
 ``` html
-    <script src="general-engine.js" type="text/javascript"></script>
+<script src="general-engine.js" type="text/javascript"></script>
 ```
-You can also install using the package managers [NPM][npm-url].
+You can also install using the package manager [NPM][npm-url].
 ``` bash
-    npm install general-engine
+$ npm install general-engine
 ```
 
 ## Building 
 To build you must first install [node.js](http://nodejs.org/) and [gulp](http://gulpjs.com/), then run
 ``` bash
-    npm install
+$ npm install
 ```
 This will install the required build dependencies, then run
 ``` bash
-    gulp watch
+$ gulp watch
 ```
 to spawn a development server.
 
