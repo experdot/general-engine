@@ -4,48 +4,7 @@
 > *General Engine* is a framework to build web applications or games.
 
 ## Gallery
-
-<table>
-    <tr>
-        <td>Type</td> 
-        <td>Name</td> 
-   </tr>
-    <tr>
-        <td>Game</td>    
-        <td >      
-            <ul>
-                <li><a href="https://experdot.github.io/general-engine/views/gallery.html?scene=endlessabyss">Endless Abyss</a></li>
-            </ul>
-        </td>  
-    </tr>
-    <tr>
-        <td>Particles</td>    
-        <td >      
-            <ul>
-                <li><a href="https://experdot.github.io/general-engine/views/gallery.html?scene=tree">Tree</a></li>
-                <li><a href="https://experdot.github.io/general-engine/views/gallery.html?scene=flyer">Flyer</a></li>
-                <li><a href="https://experdot.github.io/general-engine/views/gallery.html?scene=walker">Walker</a></li>
-            </ul>
-        </td>  
-    </tr>
-    <tr>
-        <td>State Machine</td>    
-        <td >      
-            <ul>
-                <li><a href="https://experdot.github.io/general-engine/views/gallery.html?scene=lsystemtree">Tree</a></li>
-                <li><a href="https://experdot.github.io/general-engine/views/gallery.html?scene=gameoflife">GameOfLife</a></li>
-            </ul>
-        </td>  
-    </tr>
-    <tr>
-        <td>Audio</td>    
-        <td >      
-            <ul>
-                <li><a href="https://experdot.github.io/general-engine/views/gallery.html?scene=audiovisualizer">Visualizer</a></li>
-            </ul>
-        </td>  
-    </tr>
-</table>
+To check out live examples created with general-engine, please visit [gallery][repo-gallery] website.
 
 ## Install
 Download a [stable release][repo-releases] and include the script in your web page:
@@ -72,6 +31,7 @@ to spawn a development server.
 - [MIT](./LICENSE)
 
 [repo-releases]: https://github.com/experdot/general-engine/releases
+[repo-gallery]: https://experdot.github.io/general-engine/views/gallery.html?scene=endlessabyss
 
 [npm-url]: https://www.npmjs.com/package/general-engine
 [npm-image]: https://img.shields.io/npm/v/general-engine.svg
