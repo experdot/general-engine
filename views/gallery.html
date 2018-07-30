@@ -2,8 +2,15 @@
 
 <head>
     <title>Gallery</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- User CSS -->
     <link rel="stylesheet" type="text/css" href="../styles/gallery.min.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+        crossorigin="anonymous">
+
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-117170066-2"></script>
     <script>
@@ -30,12 +37,41 @@
     </header>
     <main>
         <home>
-            <div class="headerbox">
-                <div id="button-viewongithub" class="button-viewongithub">
-                    <a href="https://experdot.github.io/general-engine/">&#10148; General-Engine</a>
+            <div class="fixedlayer">
+                <div class="pos-f-t navigation-bar">
+                    <div class="collapse" id="navbarToggleExternalContent">
+                        <div class="bg-dark p-4">
+                            <h4 class="text-white">General Engine </h4>
+                            <span class="text-muted">An open source javacript framework.</span>
+                            <div>
+                                <a href="https://github.com/experdot/general-engine/" class="badge badge-info">Github</a>
+                                <a href="https://www.npmjs.com/package/general-engine" class="badge badge-secondary">npm</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <nav class="navbar navbar-dark bg-dark">
+                        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent"
+                            aria-expanded="false" aria-label="Toggle navigation">
+                            <span class="navbar-toggler-icon btn-sm"></span>
+                        </button>
+
+                        <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
+                            <div class="btn-group dropleft">
+                                <button type="button" class="btn btn-dark" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">G</button>
+                                <div id="dropdown-gallery" class="dropdown-menu">
+
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-dark" data-toggle="tooltip" data-placement="bottom" title="Restart" id="button-restart">R</button>
+                            <button type="button" class="btn btn-dark" data-toggle="tooltip" data-placement="bottom" title="Fullscreen" id="button-fullscreen">F</button>
+                        </div>
+                        <div id="text-frame" class="text-white">0</div>
+                    </nav>
                 </div>
-                <div id="button-rebuild" class="button-rebuild">&#10227;</div>
-                <div id="text-frame">FPS:0</div>
+                <div id="alert-container">
+
+                </div>
             </div>
             <div id="gamebox" class="gamebox">
                 <div id="canvas-container" class="canvas-container">
@@ -47,6 +83,14 @@
     <footer>
 
     </footer>
+
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.bootcss.com/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.bootcss.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
 </body>
 <foot>
     <script src="../scripts/bundle.min.js" type="text/javascript"></script>

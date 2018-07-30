@@ -17,6 +17,16 @@ const GalleryResources = {
         GameOver: "",
         Tip: "",
         Score: ""
+    },
+    Warnings: {
+        OpenOnPC: {
+            Title: "",
+            Content: ""
+        }
+    },
+    Tooltips: {
+        Restart: "",
+        Fullscreen: ""
     }
 };
 

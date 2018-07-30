@@ -12,5 +12,15 @@
         "GameOver": "游戏结束",
         "Tip": "按下回车键开始",
         "Score": "分数："
+    },
+    "Warnings": {
+        "OpenOnPC": {
+            "Title": "性能优化提示！",
+            "Content": "请在 PC 端打开本页面以获得最佳的画面效果."
+        }
+    },
+    "Tooltips": {
+        "Restart": "重新开始",
+        "Fullscreen": "全屏/取消"
     }
 }

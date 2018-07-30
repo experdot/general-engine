@@ -13,5 +13,15 @@
         "GameOver": "GameOver",
         "Tip": "Press enter key to start",
         "Score": "Score:"
+    },
+    "Warnings": {
+        "OpenOnPC": {
+            "Title": "Performance Tips！",
+            "Content": "Please open this page on the PC to get a better render effect."
+        }
+    },
+    "Tooltips": {
+        "Restart": "Restart",
+        "Fullscreen": "Fullscreen"
     }
 }

@@ -1,73 +1,17 @@
-@import "_modules/font.scss";
-@import "_modules/standard.scss";
-* {
-    box-sizing: border-box;
-}
-
-html {
-    font-size: 5vw;
-}
-
-@media screen and (min-width:1200px) {
-    html {
-        font-size: 1vw;
-    }
-}
-
 body {
-    background: #EEEEEE;
-    margin: 0rem;
+    margin: 0;
 }
 
 home {
-    margin: auto;
-    .headerbox {
+    margin: 0;
+    .fixedlayer {
         position: fixed;
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        z-index: 10;
         width: 100%;
-        background: rgba(0, 0, 0, 0.6);
-        padding: 2px;
-        .button-rebuild {
-            display: none;
-            margin: 0px 2px;
-            color: #CCCCCC;
-            text-align: center;
-            cursor: pointer;
-            font-size: 1rem;
-            user-select: none;
-            &:hover {
-                color: white;
-            }
-        }
-        .button-viewongithub {
-            margin: 0px 2px;
-            text-align: center;
-            cursor: pointer;
-            font-size: 1rem;
-            a {
-                color: #CCCCCC;
-                text-decoration: none;
-                &:hover {
-                    color: white;
-                }
-            }
-            user-select: none;
-        }
-        #text-frame {
-            position: absolute;
-            right: 0;
-            margin: 0px 2px;
-            color: #CCCCCC;
-            user-select: none;
-        }
     }
     .gamebox {
-        margin: auto;
+        margin: 0;
         max-width: 100%;
-        background: black;
+        //background: black;
         .canvas-container {
             width: 100%;
             height: 100%;
