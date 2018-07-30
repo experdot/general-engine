@@ -1,20 +1,30 @@
 body {
     margin: 0;
+    background-color: black !important;
+}
+
+main {
+    background: transparent;
 }
 
 home {
     margin: 0;
+    background: transparent;
     .fixedlayer {
         position: fixed;
         width: 100%;
     }
     .gamebox {
         margin: 0;
-        max-width: 100%;
-        //background: black;
+        max-width: 100%; //background: black;
+        background: transparent;
         .canvas-container {
             width: 100%;
             height: 100%;
+            background: transparent;
+            canvas {
+                background: transparent;
+            }
         }
     }
 }
