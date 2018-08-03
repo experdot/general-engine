@@ -15,8 +15,8 @@
     },
     "Warnings": {
         "OpenOnPC": {
-            "Title": "性能优化提示！",
-            "Content": "请在 PC 端打开本页面以获得最佳的画面效果."
+            "Title": "温馨提示！",
+            "Content": "为获得最佳的画面效果，请在 PC 端打开本页面。"
         }
     },
     "Tooltips": {
