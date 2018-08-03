@@ -5,6 +5,9 @@ import {
     GalleryResourceManager,
     GalleryResources
 } from "./Gallery/Resources/GalleryResource";
+import {
+    PlatformInfo
+} from "./Engine/Platform/PlatformInfo";
 
 let gameStarter = null;
 let gamebox = null;
@@ -79,7 +82,7 @@ function setTooltips() {
 
 function warningOpenOnPC() {
     let flag = sessionStorage.getItem("warningFlag");
-    if (flag == "unknown" && /Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent)) {
+    if (flag == "unknown" && !PlatformInfo.IsMobile) {
         sessionStorage.setItem("warningFlag", "known");
         let warning = GalleryResources.Warnings.OpenOnPC;
         let $alert = $(`                

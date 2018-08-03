@@ -1,13 +1,8 @@
-import {
-    GeneralObject
-} from "./GeneralObject";
-import {
-    ArgumentException
-} from "../Common/Exception";
+import { GeneralObject } from "./GeneralObject";
 
-class GeneralNode extends GeneralObject {
-    public parent: GeneralNode;
-    public children: GeneralNode[];
+export class GeneralNode extends GeneralObject {
+    parent: GeneralNode;
+    children: GeneralNode[];
 
     constructor() {
         super();
@@ -30,7 +25,3 @@ class GeneralNode extends GeneralObject {
         }
     }
 }
-
-export {
-    GeneralNode
-};

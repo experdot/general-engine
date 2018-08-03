@@ -1,17 +1,13 @@
-import {
-    GeneralProcess
-} from "./GeneralProcess";
-import {
-    Identifier
-} from "../Common/Identifier";
+import { Identifier } from "../Common/Identifier";
+import { GeneralProcess } from "./GeneralProcess";
 
 /**
  * Represent a general object
  */
-class GeneralObject {
+export class GeneralObject {
+    identifier: any;
+    joints: any[];
 
-    public identifier: any;
-    public joints: any[];
     constructor() {
         this.identifier = Identifier.Unique;
         this.joints = [];
@@ -41,9 +37,3 @@ class GeneralObject {
         });
     }
 }
-
-
-
-export {
-    GeneralObject
-};

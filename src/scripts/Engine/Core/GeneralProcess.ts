@@ -1,9 +1,7 @@
-import {
-    GeneralTask
-} from "./GeneralTask";
 import { GeneralObject } from "./GeneralObject";
+import { GeneralTask } from "./GeneralTask";
 
-class GeneralProcess {
+export class GeneralProcess {
     static find(object: GeneralObject) {
         let result = [];
         for (const key in object) {
@@ -15,6 +13,7 @@ class GeneralProcess {
                 });
             }
         }
+
         return result;
     }
 
@@ -46,9 +45,9 @@ class GeneralProcess {
         });
     }
 
-    public thisArg: object;
-    public source: object;
-    public tasks: GeneralTask[];
+    thisArg: object;
+    source: object;
+    tasks: GeneralTask[];
 
     constructor(thisArg: object) {
         this.thisArg = thisArg;
@@ -88,7 +87,3 @@ class GeneralProcess {
         this.tasks = [];
     }
 }
-
-export {
-    GeneralProcess
-};

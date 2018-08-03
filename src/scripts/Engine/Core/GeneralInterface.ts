@@ -1,5 +1,5 @@
-class GeneralInterface {
-    public processes: string[];
+export class GeneralInterface {
+    processes: string[];
 
     constructor(processes: string[]) {
         this.processes = [...processes];
@@ -18,7 +18,3 @@ class GeneralInterface {
         return this;
     }
 }
-
-export {
-    GeneralInterface
-};

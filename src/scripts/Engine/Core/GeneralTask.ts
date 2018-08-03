@@ -1,7 +1,7 @@
-class GeneralTask {
-    public action: { (): any };
-    public identifier: number;
-    public enabled: boolean;
+export class GeneralTask {
+    action: { (): any };
+    identifier: number;
+    enabled: boolean;
 
     constructor(action, identifier = Number.MIN_SAFE_INTEGER, enabled = true) {
         this.action = action;
@@ -13,7 +13,3 @@ class GeneralTask {
         this.enabled && this.action && this.action.call(thisArg, ...args);
     }
 }
-
-export {
-    GeneralTask
-};

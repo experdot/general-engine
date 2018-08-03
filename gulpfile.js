@@ -122,7 +122,7 @@ const config = {
         bundle: "general-engine.js",
         bundle_minfify: "general-engine.min.js",
         browserify: {
-            entries: "src/scripts/Engine/_General.js",
+            entries: "src/scripts/Engine/_General.ts",
             standalone: "General",
             transform: [
                 [babelify, {
@@ -144,7 +144,7 @@ const config = {
         suffix: ".min",
         bundle: "index.js",
         browserify: {
-            entries: "src/scripts/Engine/_General.js",
+            entries: "src/scripts/Engine/_General.ts",
             standalone: "General",
             transform: [
                 [babelify, {
