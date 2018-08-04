@@ -82,7 +82,7 @@ function setTooltips() {
 
 function warningOpenOnPC() {
     let flag = sessionStorage.getItem("warningFlag");
-    if (flag == "unknown" && !PlatformInfo.IsMobile) {
+    if (flag == "unknown" && PlatformInfo.IsMobile) {
         sessionStorage.setItem("warningFlag", "known");
         let warning = GalleryResources.Warnings.OpenOnPC;
         let $alert = $(`                
@@ -105,7 +105,7 @@ let galleryDrowdownFlag = false;
 function loadGalleryDropdown() {
     if (!galleryDrowdownFlag) {
         galleryDrowdownFlag = true;
-        let baseUrl = "https://experdot.github.io/general-engine/views/gallery.html?scene="
+        let baseUrl = "./gallery.html?scene="
         let $dropdown = $("#dropdown-gallery");
         let worlds = gameStarter.symbols
         for (let key in worlds) {
