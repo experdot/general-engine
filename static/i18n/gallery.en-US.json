@@ -10,7 +10,7 @@
     "EndlessAbyssWorld": {
         "Title": "Game - EndlessAbyss",
         "GameName": "EndlessAbyss",
-        "GameOver": "GameOver",
+        "GameOver": "Game Over",
         "Tip": "Press enter key to start",
         "Score": "Score:"
     },

@@ -1,74 +1,31 @@
 import { HttpWebRequest } from "../Network/Network";
-import { CultureInfo } from "../Globalization/CultureInfo";
+import { ResourceSet } from "./ResourceSet";
 
 export class ResourceManager {
-    data: any;
-    loaded: boolean;
+    sets: ResourceSet[];
 
     constructor() {
-        this.data = {};
+        this.sets = [];
     }
 
-    get(key: string) {
-        return this.data[key];
+    add(...sets: ResourceSet[]) {
+        this.sets.push(...sets);
     }
 
-    load(src: string, target: any) {
-        this.loaded = false;
-        HttpWebRequest.get(src, (response: any) => {
-            this.data = JSON.parse(response);
-            target && this._attach(target);
-            this.loaded = true;
-        });
+    load(loaded?: Function) {
+        let count = 0;
+        let length = this.sets.length;
+
+        this.sets.forEach(element => {
+            HttpWebRequest.get(element.src, (response: any) => {
+                element.init(JSON.parse(response))
+                count += 1;
+                if (count = length) {
+                    loaded && loaded();
+                }
+            });
+        })
+
         return this;
-    }
-
-    wait(callback: Function, timeout = 10) {
-        let waitHandler = () => {
-            if (this.loaded) {
-                callback && callback();
-            } else {
-                setTimeout(waitHandler, timeout, callback);
-            }
-        };
-        waitHandler();
-    }
-
-    _attach(target: any) {
-        for (let key in target) {
-            target[key] = this.data[key];
-        }
-    }
-}
-
-export class CultureResourceManager extends ResourceManager {
-    config: CultureResourceConfig;
-
-    constructor(config: CultureResourceConfig) {
-        super();
-        this.config = config;
-    }
-
-    load(target: any, culture = CultureInfo.Default) {
-        return super.load(this.config.get(culture.language), target);
-    }
-}
-
-export class CultureResourceConfig {
-    template: string;
-    languages: any[];
-    replace: string;
-
-    constructor(template: string, languages: string[], replace = "{{language}}") {
-        this.template = template;
-        this.languages = languages;
-        this.replace = replace;
-    }
-
-    get(language: string) {
-        if (this.languages.findIndex(v => v === language) < 0) {
-            language = this.languages[0];
-        }
-        return this.template.replace(this.replace, language);
     }
 }

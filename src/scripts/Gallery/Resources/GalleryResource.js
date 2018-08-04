@@ -1,7 +1,7 @@
 import {
     CultureResourceManager,
     CultureResourceConfig
-} from "../../Engine/Resources/ResourceManager";
+} from "../../Engine/Resources/CultureResourceManager";
 
 const GalleryResources = {
     Gallery: "",
@@ -32,7 +32,7 @@ const GalleryResources = {
 
 const config = new CultureResourceConfig("../static/i18n/gallery.{{language}}.json", ["en-US", "zh-CN"]);
 
-const GalleryResourceManager = new CultureResourceManager(config).load(GalleryResources);
+const GalleryResourceManager = new CultureResourceManager(config).attach(GalleryResources);
 
 export {
     GalleryResourceManager,

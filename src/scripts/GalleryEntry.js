@@ -45,8 +45,6 @@ function initialize() {
     if (!sessionStorage.getItem("warningFlag")) {
         sessionStorage.setItem("warningFlag", "unknown");
     }
-
-
 }
 
 function startGame() {
@@ -54,7 +52,7 @@ function startGame() {
     canvas.width = window.document.body.clientWidth;
     canvas.height = window.document.body.clientHeight;
 
-    GalleryResourceManager.wait(() => {
+    GalleryResourceManager.load(() => {
         gameStarter = new GalleryStarter()
 
         setTooltips();
