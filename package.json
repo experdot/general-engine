@@ -58,7 +58,7 @@
     "gulp-watch": "^5.0.1",
     "minimist": "^1.2.0",
     "tsify": "^4.0.0",
-    "typescript": "^2.9.2",
+    "typescript": "^3.0.1",
     "util": "^0.11.0",
     "vinyl-buffer": "^1.0.1",
     "vinyl-source-stream": "^2.0.0"
