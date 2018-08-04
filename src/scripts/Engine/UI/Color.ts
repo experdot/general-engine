@@ -2,12 +2,12 @@
  * Represents a RGBA (red, green, blue, alpha) color.
  */
 export class Color {
-    static fromHex(hex) {
+    static fromHex(hex: string) {
         let value = parseInt(hex.slice(1), 16);
         return new Color(value / 65536, value / 256 % 256, value % 256);
     }
 
-    static fromNumber(number) {
+    static fromNumber(number: number) {
         return new Color(number / 65536, number / 256 % 256, number % 256);
     }
 
@@ -52,7 +52,7 @@ export class Color {
 }
 
 export class ColorHelper {
-    static gradient(color, increment = 1) {
+    static gradient(color: Color, increment = 1) {
         const upon = 255;
 
         var r = color.r;
@@ -70,7 +70,7 @@ export class ColorHelper {
         return new Color(r, g, b, color.a);
     }
 
-    static gradientRandom(color, increment = 1) {
+    static gradientRandom(color: Color, increment = 1) {
         const upon = 255;
         let half = increment / 2;
 

@@ -5,7 +5,7 @@ export class FrameManager {
     frameCount: number;
     framePerSecond: number;
     lastSecondCount: number;
-    timer;
+    timer: DelayTimer;
     onRateChanged: Function;
     stopCallback: Function;
 
@@ -18,9 +18,9 @@ export class FrameManager {
         this.onRateChanged = null;
     }
 
-    loopInvoke(action = null) {
+    loopInvoke(action: Function) {
         this.isLoop = true;
-        let handle;
+        let handle: number;
         let step = () => {
             action && action();
             this.frameCount += 1;
@@ -43,7 +43,7 @@ export class FrameManager {
         step();
     }
 
-    stop(callback = null) {
+    stop(callback?: Function) {
         this.stopCallback = callback;
         this.isLoop = false;
     }

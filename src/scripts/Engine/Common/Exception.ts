@@ -3,7 +3,7 @@
  */
 export class Exception {
     message: string;
-    constructor(message) {
+    constructor(message: string) {
         this.message = message;
     }
 }

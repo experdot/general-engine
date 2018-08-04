@@ -1,7 +1,7 @@
 import { Exception } from "../Common/Exception";
 
 export class FileIO {
-    static openFileDialog(onLoaded, accept = "") {
+    static openFileDialog(onLoaded: Function, accept = "") {
         let input = document.createElement("input");
         input.setAttribute("type", "file");
         input.setAttribute("accept", accept);
@@ -14,19 +14,19 @@ export class FileIO {
         input.remove();
     }
 
-    static readAllText(file, onLoaded) {
-        this._readByFileReader(file, onLoaded, (reader, file) => {
+    static readAllText(file: File, onLoaded: Function) {
+        this._readByFileReader(file, onLoaded, (reader: FileReader, file: File) => {
             reader.readAsText(file);
         });
     }
 
-    static readAsDataURL(file, onLoaded) {
-        this._readByFileReader(file, onLoaded, (reader, file) => {
+    static readAsDataURL(file: File, onLoaded: Function) {
+        this._readByFileReader(file, onLoaded, (reader: FileReader, file: File) => {
             reader.readAsDataURL(file);
         });
     }
 
-    static _readByFileReader(file, onLoaded, action) {
+    static _readByFileReader(file: File, onLoaded: Function, action: (reader: FileReader, file: File) => void) {
         let reader = new FileReader();
         action(reader, file);
         reader.onload = () => {

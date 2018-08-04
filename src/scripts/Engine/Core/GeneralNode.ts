@@ -14,6 +14,7 @@ export class GeneralNode extends GeneralObject {
         child.parent = this;
         this.children.push(child);
         this.joint(child);
+        return this;
     }
 
     removeChild(child: GeneralNode) {
@@ -23,5 +24,6 @@ export class GeneralNode extends GeneralObject {
             child.parent = null;
             this.children.splice(index, 1);
         }
+        return this;
     }
 }

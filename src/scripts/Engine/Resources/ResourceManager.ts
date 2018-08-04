@@ -9,13 +9,13 @@ export class ResourceManager {
         this.data = {};
     }
 
-    get(key) {
+    get(key: string) {
         return this.data[key];
     }
 
-    load(src, target) {
+    load(src: string, target: any) {
         this.loaded = false;
-        HttpWebRequest.get(src, response => {
+        HttpWebRequest.get(src, (response: any) => {
             this.data = JSON.parse(response);
             target && this._attach(target);
             this.loaded = true;
@@ -23,7 +23,7 @@ export class ResourceManager {
         return this;
     }
 
-    wait(callback, timeout = 10) {
+    wait(callback: Function, timeout = 10) {
         let waitHandler = () => {
             if (this.loaded) {
                 callback && callback();
@@ -34,7 +34,7 @@ export class ResourceManager {
         waitHandler();
     }
 
-    _attach(target) {
+    _attach(target: any) {
         for (let key in target) {
             target[key] = this.data[key];
         }
@@ -44,12 +44,12 @@ export class ResourceManager {
 export class CultureResourceManager extends ResourceManager {
     config: CultureResourceConfig;
 
-    constructor(config) {
+    constructor(config: CultureResourceConfig) {
         super();
         this.config = config;
     }
 
-    load(target, culture = CultureInfo.Default) {
+    load(target: any, culture = CultureInfo.Default) {
         return super.load(this.config.get(culture.language), target);
     }
 }
@@ -59,13 +59,13 @@ export class CultureResourceConfig {
     languages: any[];
     replace: string;
 
-    constructor(template, languages = [], replace = "{{language}}") {
+    constructor(template: string, languages: string[], replace = "{{language}}") {
         this.template = template;
         this.languages = languages;
         this.replace = replace;
     }
 
-    get(language) {
+    get(language: string) {
         if (this.languages.findIndex(v => v === language) < 0) {
             language = this.languages[0];
         }

@@ -1,7 +1,7 @@
 export class ArrayExtensions {
     static bind(target: any = Array.prototype) {
         if (!target.findIndex) {
-            target.findIndex = function (match) {
+            target.findIndex = function (match: Function) {
                 for (let index = 0; index < this.length; index++) {
                     const element = this[index];
                     if (match(element)) {
@@ -12,7 +12,7 @@ export class ArrayExtensions {
             };
         }
 
-        target.find = function (match) {
+        target.find = function (match: Function) {
             for (let index = 0; index < this.length; index++) {
                 const element = this[index];
                 if (match(element)) {
@@ -34,7 +34,7 @@ export class ArrayExtensions {
          * Retrieves all the elements that match the conditions defined by the specified predicate.
          * @param {any} match - The match that defines the conditions of the elements to search for.
          */
-        target.findAll = function (match) {
+        target.findAll = function (match: Function) {
             let result = [];
             for (let index = 0; index < this.length; index++) {
                 const element = this[index];
@@ -49,7 +49,7 @@ export class ArrayExtensions {
          * Searches for an element that matches the conditions defined by the specified predicate, and returns the last occurrence within the entire Array.
          * @param {*} match - The match that defines the conditions of the last element to search for.
          */
-        target.findLast = function (match) {
+        target.findLast = function (match: Function) {
             return this.findAll(match).last();
         };
 
@@ -57,7 +57,7 @@ export class ArrayExtensions {
          * Determines whether the Array contains elements that match the conditions defined by the specified predicate.
          * @param {any} match - The match that defines the conditions of the elements to search for.
          */
-        target.exists = function (match) {
+        target.exists = function (match: Function) {
             return this.findIndex(match) >= 0;
         };
 
@@ -65,16 +65,16 @@ export class ArrayExtensions {
          * Determines whether an element is in the Array.
          * @param {any} element 
          */
-        target.contains = function (element) {
-            return this.findIndex(e => e === element) >= 0;
+        target.contains = function (element: any) {
+            return this.findIndex((e: any) => e === element) >= 0;
         };
 
         /**
          * Removes the first occurrence of a specific object from the Array.
          * @param {any} element 
          */
-        target.remove = function (element) {
-            let index = this.findIndex(e => e === element);
+        target.remove = function (element: any) {
+            let index = this.findIndex((e: any) => e === element);
             if (index >= 0) {
                 this.splice(index, 1);
             }
@@ -85,7 +85,7 @@ export class ArrayExtensions {
          * Removes all the elements that match the conditions defined by the specified predicate.
          * @param {any} match - The match that defines the conditions of the elements to search for.
          */
-        target.removeAll = function (match) {
+        target.removeAll = function (match: Function) {
             let index = this.findIndex(match);
             while (index > -1) {
                 this.splice(index, 1);

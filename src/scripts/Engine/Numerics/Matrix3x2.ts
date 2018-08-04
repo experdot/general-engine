@@ -1,9 +1,11 @@
+import { Vector2 } from "./Vector2";
+
 export class Matrix3x2 {
     static get Identity() {
         return new Matrix3x2();
     }
 
-    static createScale(xScale, yScale, centerPoint) {
+    static createScale(xScale: number, yScale: number, centerPoint: Vector2) {
         let result = new Matrix3x2();
         let tx = centerPoint.x * (1 - xScale);
         let ty = centerPoint.y * (1 - yScale);
@@ -16,7 +18,7 @@ export class Matrix3x2 {
         return result;
     }
 
-    static createRotation(rotation, centerPoint) {
+    static createRotation(rotation: number, centerPoint: Vector2) {
         let result = new Matrix3x2();
         let c = Math.cos(rotation);
         let s = Math.sin(rotation);
@@ -31,7 +33,7 @@ export class Matrix3x2 {
         return result;
     }
 
-    static createTranslation(position) {
+    static createTranslation(position: Vector2) {
         let result = new Matrix3x2();
         result.M11 = 1.0;
         result.M12 = 0.0;
@@ -69,7 +71,7 @@ export class Matrix3x2 {
         return this;
     }
 
-    transform(x, y, scaleX, scaleY, rotation, originX, originY) {
+    transform(x: number, y: number, scaleX: number, scaleY: number, rotation: number, originX: number, originY: number) {
         var cos = Math.cos(rotation);
         var sin = Math.sin(rotation);
 
@@ -82,7 +84,7 @@ export class Matrix3x2 {
         return this;
     }
 
-    append(a, b, c, d, tx, ty) {
+    append(a: number, b: number, c: number, d: number, tx: number, ty: number) {
         var a1 = this.M11;
         var b1 = this.M12;
         var c1 = this.M21;
@@ -96,7 +98,7 @@ export class Matrix3x2 {
         return this;
     }
 
-    multiply(matrix) {
+    multiply(matrix: Matrix3x2) {
         this.append(matrix.M11, matrix.M12, matrix.M21, matrix.M22, matrix.M31, matrix.M32);
         return this;
     }

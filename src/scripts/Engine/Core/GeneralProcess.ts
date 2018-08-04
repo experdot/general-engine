@@ -25,7 +25,7 @@ export class GeneralProcess {
 
     static combine(source: GeneralObject, target: GeneralObject) {
         GeneralProcess.every(source, target, (s, t) => {
-            s.next((s, ...args) => t.process(...args), target.identifier);
+            s.next((s: GeneralProcess, ...args: any[]) => t.process(...args), target.identifier);
         });
     }
 
@@ -35,7 +35,7 @@ export class GeneralProcess {
         });
     }
 
-    static every(source: GeneralObject, target: GeneralObject, hanlder: { (source: GeneralProcess, target: GeneralProcess, key: string) }) {
+    static every(source: GeneralObject, target: GeneralObject, hanlder: (source: GeneralProcess, target: GeneralProcess, key: string) => void) {
         GeneralProcess.find(source).forEach(element => {
             const sourceProcess = source[element.key];
             const targetProcess = target[element.key];
@@ -59,18 +59,18 @@ export class GeneralProcess {
         this.source = source;
     }
 
-    process(...args) {
+    process(...args: any[]) {
         this.tasks.forEach(element => {
             element.run(this.thisArg, this.source, ...args);
         });
     }
 
-    before(action: { (...args) }, identifier?: number) {
+    before(action: Function, identifier?: number) {
         action && this.tasks.unshift(new GeneralTask(action, identifier));
         return this;
     }
 
-    next(action: { (...args) }, identifier?: number) {
+    next(action: Function, identifier?: number) {
         action && this.tasks.push(new GeneralTask(action, identifier));
         return this;
     }

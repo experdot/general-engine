@@ -5,7 +5,7 @@ import { Events } from "../../Common/Events";
 
 export class GameVisual extends GeneralNode {
 
-    events;
+    events: Events;
 
     constructor() {
         super();
@@ -13,18 +13,18 @@ export class GameVisual extends GeneralNode {
         this.events = new Events();
     }
 
-    on(eventName, handler, force = true) {
+    on(eventName: string, handler: Function, force = true) {
         this.events.addHandler(eventName, handler, force);
     }
 
-    off(eventName, handler) {
+    off(eventName: string, handler: Function) {
         this.events.removeHandler(eventName, handler);
     }
 
-    dispatch(eventName, event) {
-        this.events.raiseEvent(eventName, event);
+    dispatch(eventName: string, ...args: any[]) {
+        this.events.raiseEvent(eventName, ...args);
         this.children.forEach(element => {
-            (element as GameVisual).dispatch(eventName, event);
+            (element as GameVisual).dispatch(eventName, ...args);
         });
     }
 

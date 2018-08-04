@@ -1,8 +1,8 @@
 export class MessageBox {
-    static onNotify: Function;
+    static onNotify: (message: string) => void;
 
-    static show(message = "") {
-        MessageBox.onNotify && MessageBox.onNotify(message);
+    static show(message = ""): void {
+        MessageBox.onNotify(message);
     }
 }
 

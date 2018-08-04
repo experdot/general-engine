@@ -15,17 +15,17 @@ class Array2 {
         }
     }
 
-    set(x: number, y: number, value: any) {
+    set(x: number, y: number, value: any): any {
         this.data[x][y] = value;
         return this.data[x][y];
     }
 
-    get(x: number, y: number) {
+    get(x: number, y: number): any {
         return this.data[x][y];
     }
 
-    forEach(action: { (value: any, x: number, y: number): number }) {
-        this.data.forEach((column, x) => {
+    forEach(action: { (value: any, x: number, y: number): number }): void {
+        this.data.forEach((column: any[], x: number) => {
             column && column.forEach((value, y) => {
                 action && action(value, x, y);
             });

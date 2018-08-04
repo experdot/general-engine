@@ -1,14 +1,15 @@
 import { FrameManager } from "./FrameManager";
+import { GameWorld } from "../GameWorld/GameWorld";
 
 export class GameBox {
 
-    container;
-    canvas;
-    context;
-    world;
-    frameManager;
+    container: HTMLElement;
+    canvas: HTMLCanvasElement;
+    context: CanvasRenderingContext2D;
+    world: GameWorld;
+    frameManager: FrameManager;
 
-    constructor(container, canvas, world) {
+    constructor(container: HTMLElement, canvas: HTMLCanvasElement, world: GameWorld) {
         this.container = container;
         this.canvas = canvas;
         this.context = canvas.getContext("2d");

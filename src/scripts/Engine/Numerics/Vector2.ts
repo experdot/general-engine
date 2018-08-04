@@ -30,34 +30,34 @@ export class Vector2 {
         return new Vector2(-this.x, -this.y);
     }
 
-    add(v) {
+    add(v: Vector2) {
         return new Vector2(this.x + v.x, this.y + v.y);
     }
 
-    subtract(v) {
+    subtract(v: Vector2) {
         return new Vector2(this.x - v.x, this.y - v.y);
     }
 
-    multiply(f) {
+    multiply(f: number) {
         return new Vector2(this.x * f, this.y * f);
     }
 
-    divide(f) {
+    divide(f: number) {
         var invf = 1 / f;
         return new Vector2(this.x * invf, this.y * invf);
     }
 
-    dot(v) {
+    dot(v: Vector2) {
         return this.x * v.x + this.y * v.y;
     }
 
-    rotate(r) {
+    rotate(r: number) {
         var sin = Math.sin(r);
         var cos = Math.cos(r);
         return new Vector2(this.x * cos - this.y * sin, this.y * cos + this.x * sin);
     }
 
-    setLength(t) {
+    setLength(t: number) {
         var len = this.length;
         if (len > 0) {
             this.x = this.x * t / len;
@@ -65,14 +65,14 @@ export class Vector2 {
         }
     }
 
-    limitLength(upon) {
+    limitLength(upon: number) {
         var len = this.length;
         if (len > upon) {
             this.setLength(upon);
         }
     }
 
-    cos(v) {
+    cos(v: Vector2) {
         return this.dot(v) / (this.length * v.length);
     }
 }

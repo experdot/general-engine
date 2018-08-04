@@ -12,7 +12,7 @@ export class Events {
 
     public readonly mode: StrictMode;
 
-    private handlers: {};
+    private handlers: any;
     private dom0Events: any[];
     private dom2Events: any[];
 
@@ -24,7 +24,7 @@ export class Events {
         this.dom2Events = [];
     }
 
-    addHandler(eventName, handler, force = false) {
+    addHandler(eventName: string, handler: Function, force = false) {
         if (this.mode === StrictMode.None || force) {
             this.registEvent(eventName);
         }
@@ -36,8 +36,8 @@ export class Events {
         return handler;
     }
 
-    removeHandler(eventName, handler) {
-        let handlers = this.handlers[eventName];
+    removeHandler(eventName: string, handler: Function) {
+        let handlers = this.handlers[eventName] as Function[];
         if (handlers && handlers.length > 0) {
             let index = handlers.findIndex((value) => {
                 return value === handler;
@@ -48,17 +48,17 @@ export class Events {
         }
     }
 
-    registEvent(eventName) {
+    registEvent(eventName: string) {
         if (!this.handlers[eventName]) {
             this.handlers[eventName] = [];
         }
     }
 
-    registEventDomLevel0(eventTarget, eventName, domEventName) {
+    registEventDomLevel0(eventTarget: EventTarget, eventName: string, domEventName: string) {
         if (!this.handlers[eventName]) {
             this.handlers[eventName] = [];
             if (domEventName && eventTarget) {
-                eventTarget[domEventName] = (event) => {
+                (eventTarget as any)[domEventName] = (event: Event) => {
                     this.raiseEvent(eventName, event);
                 };
                 this.dom0Events.push({
@@ -69,11 +69,11 @@ export class Events {
         }
     }
 
-    registEventDomLevel2(eventTarget, eventName, domEventName, useCapture) {
+    registEventDomLevel2(eventTarget: EventTarget, eventName: string, domEventName: string, useCapture: any) {
         if (!this.handlers[eventName]) {
             this.handlers[eventName] = [];
             if (domEventName && eventTarget) {
-                let listener = (event) => {
+                let listener = (event: Event) => {
                     this.raiseEvent(eventName, event);
                 };
                 eventTarget.addEventListener(domEventName, listener, useCapture);
@@ -86,10 +86,10 @@ export class Events {
         }
     }
 
-    raiseEvent(eventName, args) {
+    raiseEvent(eventName: string, ...args: any[]) {
         if (this.handlers[eventName]) {
-            this.handlers[eventName].forEach(element => {
-                element(args);
+            this.handlers[eventName].forEach((element: Function) => {
+                element(...args);
             });
         }
     }

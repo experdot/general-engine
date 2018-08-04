@@ -5,7 +5,7 @@ export class CultureInfo {
 
     language: string;
 
-    constructor(language) {
+    constructor(language: string) {
         this.language = language;
     }
 }

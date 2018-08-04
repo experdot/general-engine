@@ -1,10 +1,12 @@
+import { Matrix3x2 } from "../Numerics/Matrix3x2";
+
 export class Graphics {
-    static clear(context) {
+    static clear(context: CanvasRenderingContext2D) {
         context.clearRect(0, 0, context.canvas.width, context.canvas.height);
         return this;
     }
 
-    static scaleOffset(context, offsetX = 0, offsetY = 0, alpha = 1) {
+    static scaleOffset(context: CanvasRenderingContext2D, offsetX = 0, offsetY = 0, alpha = 1) {
         let w = context.canvas.width;
         let h = context.canvas.height;
         let rw = w + offsetX;
@@ -17,7 +19,7 @@ export class Graphics {
         return this;
     }
 
-    static rotate(context, rotation, alpha = 1, action) {
+    static rotate(context: CanvasRenderingContext2D, rotation: number, alpha = 1, action: (context: CanvasRenderingContext2D) => void) {
         let w = context.canvas.width;
         let h = context.canvas.height;
         let x = w / 2;
@@ -32,7 +34,7 @@ export class Graphics {
         return this;
     }
 
-    static mirror(context, horizontal, vertical, alpha = 1, action) {
+    static mirror(context: CanvasRenderingContext2D, horizontal: number, vertical: number, alpha = 1, action: (context: CanvasRenderingContext2D) => void) {
         let w = context.canvas.width;
         let h = context.canvas.height;
         let x = w / 2;
@@ -47,15 +49,15 @@ export class Graphics {
         return this;
     }
 
-    static transform(context, matrix, action) {
+    static transform(context: CanvasRenderingContext2D, matrix: Matrix3x2, action: (context: CanvasRenderingContext2D) => void) {
         Graphics.hold(context, () => {
-            context.setTransform(...matrix.toArray());
+            (context.setTransform as Function)(...matrix.toArray());
             action && action(context);
         });
         return this;
     }
 
-    static transparent(context, alpha = 1, action) {
+    static transparent(context: CanvasRenderingContext2D, alpha = 1, action: (context: CanvasRenderingContext2D) => void) {
         Graphics.hold(context, () => {
             context.globalAlpha = alpha;
             action && action(context);
@@ -63,7 +65,7 @@ export class Graphics {
         return this;
     }
 
-    static hold(context, action) {
+    static hold(context: CanvasRenderingContext2D, action: (context: CanvasRenderingContext2D) => void) {
         context.save();
         action && action(context);
         context.restore();

@@ -10,7 +10,7 @@ export class DelayTimer {
         return this;
     }
 
-    delay(interval, action, failed) {
+    delay(interval: number, action?: (interval: number) => void, failed?: (interval: number) => void) {
         let current = new Date().getTime();
         let actual = current - this.lastTime;
         if (actual >= interval) {

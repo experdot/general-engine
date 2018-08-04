@@ -15,11 +15,11 @@ export class GameWorld extends GameVisual {
 
     width: number;
     height: number;
-    world;
-    inputs;
-    ui;
+    world: GameWorld;
+    inputs: Inputs;
+    ui: any;
 
-    constructor(width, height) {
+    constructor(width: number, height: number) {
         super();
 
         this.width = width;
@@ -42,15 +42,16 @@ export class GameWorld extends GameVisual {
 
     createObjects() { }
 
-    initializeUI(container, canvas) {
+    initializeUI(container: HTMLElement, canvas: HTMLCanvasElement) {
         this.ui.container = container;
         this.ui.canvas = canvas;
         this.inputs.launch(this.ui.container);
     }
 
-    addChild(visual) {
+    addChild(visual: GameVisual) {
         super.addChild(visual);
         visual.world = this;
+        return this;
     }
 
     dispose() {

@@ -1,12 +1,13 @@
 import { GeneralObject } from "../../../Core/GeneralObject";
 import { GameEffectInterface } from "../../GameInterface/GameInterface";
-import { ColorHelper, Colors } from "../../../UI/Color";
+import { ColorHelper, Colors, Color } from "../../../UI/Color";
+import { GameVisual } from "../../GameObject/GameVisual";
 
 
 export class GhostEffect extends GeneralObject {
-    fillColor;
-    gradientNumber;
-    direct
+    fillColor: Color;
+    gradientNumber: number;
+    direct: boolean;
 
     constructor(fill = Colors.Black, gradient = 10, direct = true) {
         super();
@@ -17,9 +18,9 @@ export class GhostEffect extends GeneralObject {
         this.implements(GameEffectInterface);
     }
 
-    start(source) {
+    start(source: GameVisual) {
         if (this.direct) {
-            source.$render.before((s, context) => this.effect(context), this.identifier);
+            source.$render.before((s: GameVisual, context: CanvasRenderingContext2D) => this.effect(context), this.identifier);
         }
     }
 
@@ -29,7 +30,7 @@ export class GhostEffect extends GeneralObject {
         }
     }
 
-    effect(context) {
+    effect(context: CanvasRenderingContext2D) {
         const w = context.canvas.width;
         const h = context.canvas.height;
         context.fillStyle = this.fillColor.rgba;
@@ -38,11 +39,11 @@ export class GhostEffect extends GeneralObject {
 }
 
 export class GhostImageEffect extends GeneralObject {
-    image;
-    alpha;
-    direct;
+    image: HTMLImageElement;
+    alpha: number;
+    direct: boolean;
 
-    constructor(src, alpha = 1, direct = true) {
+    constructor(src: string, alpha = 1, direct = true) {
         super();
         this.image = new Image();
         this.image.src = src;
@@ -52,13 +53,13 @@ export class GhostImageEffect extends GeneralObject {
         this.implements(GameEffectInterface);
     }
 
-    start(source) {
+    start(source: GameVisual) {
         if (this.direct) {
-            source.$render.before((s, context) => this.effect(context));
+            source.$render.before((s: GameVisual, context: CanvasRenderingContext2D) => this.effect(context), this.identifier);
         }
     }
 
-    effect(context) {
+    effect(context: CanvasRenderingContext2D) {
         let alpha = context.globalAlpha;
         context.globalAlpha = this.alpha;
         context.drawImage(this.image, 0, 0);

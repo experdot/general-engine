@@ -34,9 +34,10 @@ export enum InputEvents {
 };
 
 export class Inputs {
+    [propName: string]: any;
 
     ui: any;
-    dispatcher: Function;
+    dispatcher: (...args: any[]) => void;
 
     private inputList: any[];
 
@@ -47,12 +48,12 @@ export class Inputs {
         };
     }
 
-    change(handler) {
+    change(handler: (...args: any[]) => void) {
         this.dispatcher = handler;
         return this;
     }
 
-    launch(ui) {
+    launch(ui: HTMLElement) {
         this.release();
         this.ui = ui;
         this.inputList.forEach(element => {
@@ -68,11 +69,11 @@ export class Inputs {
         this.ui = null;
     }
 
-    regist(input) {
+    regist(input: InputBase) {
         input.regist(this);
     }
 
-    addInput(input) {
+    addInput(input: InputBase) {
         this.inputList.push(input);
     }
 }
@@ -85,12 +86,12 @@ export class InputBase {
         this.events = [];
     }
 
-    regist(inputs) {
+    regist(inputs: Inputs) {
         this.inputs = inputs;
     }
 
-    registEvent(sourceName, targetName, before?, after?, uiElement = null) {
-        let listener = (event) => {
+    registEvent(sourceName: string, targetName: string, before?: Function, after?: Function, uiElement: HTMLElement = null) {
+        let listener = (event: Event) => {
             before && before(event);
             this.inputs.dispatcher(targetName, event);
             after && after(event);
@@ -112,7 +113,7 @@ export class InputBase {
 }
 
 export class MouseInput extends InputBase {
-    regist(inputs) {
+    regist(inputs: Inputs) {
         super.regist(inputs);
         if (!inputs.mouse) {
             inputs.mouse = {
@@ -123,7 +124,7 @@ export class MouseInput extends InputBase {
         this._registMouseEvent(inputs);
     }
 
-    _registMouseEvent(inputs) {
+    _registMouseEvent(inputs: Inputs) {
         this.registEvent("click", InputEvents.Click);
         this.registEvent("mouseenter", InputEvents.MouseEnter);
         this.registEvent("mouseleave", InputEvents.MouseLeave, () => {
@@ -135,11 +136,11 @@ export class MouseInput extends InputBase {
         this.registEvent("mouseup", InputEvents.MouseUp, () => {
             inputs.mouse.isPressed = false;
         });
-        this.registEvent("mousemove", InputEvents.MouseMove, event => {
+        this.registEvent("mousemove", InputEvents.MouseMove, (event: MouseEvent) => {
             inputs.mouse.position = new Vector2(event.offsetX, event.offsetY);
         });
 
-        let wheelHandler = (event) => {
+        let wheelHandler = (event: Event) => {
             inputs.dispatcher && inputs.dispatcher(InputEvents.MouseWheel, event);
         };
 
@@ -149,7 +150,7 @@ export class MouseInput extends InputBase {
 }
 
 export class TouchInput extends InputBase {
-    regist(inputs) {
+    regist(inputs: Inputs) {
         super.regist(inputs);
         if (!inputs.touch) {
             inputs.touch = {
@@ -160,7 +161,7 @@ export class TouchInput extends InputBase {
         this._registTouchEvent(inputs);
     }
 
-    _registTouchEvent(inputs) {
+    _registTouchEvent(inputs: Inputs) {
         this.registEvent("tap", InputEvents.Tap);
         this.registEvent("touchStart", InputEvents.TouchStart, () => {
             inputs.touch.isTouching = true;
@@ -168,7 +169,7 @@ export class TouchInput extends InputBase {
         this.registEvent("touchEnd", InputEvents.TouchEnd, () => {
             inputs.touch.isTouching = false;
         });
-        this.registEvent("touchmove", InputEvents.TouchMove, event => {
+        this.registEvent("touchmove", InputEvents.TouchMove, (event: TouchEvent) => {
             event.preventDefault();
             inputs.touch.position = new Vector2(event.changedTouches[0].clientX, event.changedTouches[0].clientY);
         });
@@ -176,7 +177,7 @@ export class TouchInput extends InputBase {
 }
 
 export class PointerInput extends InputBase {
-    regist(inputs) {
+    regist(inputs: Inputs) {
         super.regist(inputs);
         if (!inputs.pointer) {
             inputs.pointer = {
@@ -188,7 +189,7 @@ export class PointerInput extends InputBase {
         this._registTouchEvent(inputs);
     }
 
-    _registMouseEvent(inputs) {
+    _registMouseEvent(inputs: Inputs) {
         this.registEvent("click", InputEvents.PointerClicked);
         this.registEvent("mouseenter", InputEvents.PointerEntered);
         this.registEvent("mouseleave", InputEvents.PointerExited, () => {
@@ -200,17 +201,17 @@ export class PointerInput extends InputBase {
         this.registEvent("mouseup", InputEvents.PointerReleased, () => {
             inputs.pointer.isPressed = false;
         });
-        this.registEvent("mousemove", InputEvents.PointerMoved, event => {
+        this.registEvent("mousemove", InputEvents.PointerMoved, (event: MouseEvent) => {
             inputs.pointer.position = new Vector2(event.offsetX, event.offsetY);
         });
 
-        let wheelHandler = (event) => {
+        let wheelHandler = (event: Event) => {
             inputs.dispatcher && inputs.dispatcher(InputEvents.MouseWheel, event);
         };
         window.onmousewheel = wheelHandler;
         document.onmousewheel = wheelHandler;
     }
-    _registTouchEvent(inputs) {
+    _registTouchEvent(inputs: Inputs) {
         this.registEvent("tap", InputEvents.PointerClicked);
         this.registEvent("touchstart", InputEvents.PointerPressed, () => {
             inputs.pointer.isPressed = true;
@@ -218,7 +219,7 @@ export class PointerInput extends InputBase {
         this.registEvent("touchend", InputEvents.PointerReleased, () => {
             inputs.pointer.isPressed = false;
         });
-        this.registEvent("touchmove", InputEvents.PointerMoved, event => {
+        this.registEvent("touchmove", InputEvents.PointerMoved, (event: TouchEvent) => {
             event.preventDefault();
             inputs.pointer.isPressed = true;
             inputs.pointer.position = new Vector2(event.changedTouches[0].clientX, event.changedTouches[0].clientY);
@@ -227,7 +228,7 @@ export class PointerInput extends InputBase {
 }
 
 export class KeyInput extends InputBase {
-    regist(inputs) {
+    regist(inputs: Inputs) {
         super.regist(inputs);
         if (!inputs.key) {
             inputs.key = {
@@ -237,30 +238,30 @@ export class KeyInput extends InputBase {
 
         this.registEvent("keydown", InputEvents.KeyDown, () => {
             inputs.key.isKeyDown = true;
-        }, null, document);
+        }, null, document.body);
         this.registEvent("keyup", InputEvents.KeyUp, () => {
             inputs.key.isKeyDown = false;
-        }, null, document);
-        this.registEvent("keypress", InputEvents.KeyPress, null, null, document);
+        }, null, document.body);
+        this.registEvent("keypress", InputEvents.KeyPress, null, null, document.body);
     }
 }
 
 export class DragDropInput extends InputBase {
-    regist(inputs) {
+    regist(inputs: Inputs) {
         super.regist(inputs);
-        this.registEvent("drop", InputEvents.Drop, event => {
+        this.registEvent("drop", InputEvents.Drop, (event: DragEvent) => {
             event.stopPropagation();
             event.preventDefault();
         });
-        this.registEvent("dragenter", InputEvents.DragEnter, event => {
+        this.registEvent("dragenter", InputEvents.DragEnter, (event: DragEvent) => {
             event.stopPropagation();
             event.preventDefault();
         });
-        this.registEvent("dragexit", InputEvents.DragExit, event => {
+        this.registEvent("dragexit", InputEvents.DragExit, (event: DragEvent) => {
             event.stopPropagation();
             event.preventDefault();
         });
-        this.registEvent("dragover", InputEvents.DragOver, event => {
+        this.registEvent("dragover", InputEvents.DragOver, (event: DragEvent) => {
             event.stopPropagation();
             event.preventDefault();
         });
