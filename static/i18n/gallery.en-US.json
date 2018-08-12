@@ -23,5 +23,9 @@
     "Tooltips": {
         "Restart": "Restart",
         "Fullscreen": "Fullscreen"
+    },
+    "Title": {
+        "Header": "General Engine",
+        "Description": "Build web app or game by general system."
     }
 }
