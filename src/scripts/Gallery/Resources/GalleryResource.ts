@@ -29,6 +29,10 @@ export const GalleryResources = {
     Tooltips: {
         Restart: "",
         Fullscreen: ""
+    },
+    Title: {
+        Header: "",
+        Description: ""
     }
 };
 

@@ -22,5 +22,9 @@
     "Tooltips": {
         "Restart": "重新开始",
         "Fullscreen": "全屏/取消"
+    },
+    "Title": {
+        "Header": "General Engine",
+        "Description": "使用通用系统构建 Web 应用和游戏。"
     }
 }

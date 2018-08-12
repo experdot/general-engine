@@ -3,12 +3,12 @@ import { GalleryResourceManager, GalleryResources } from "../Resources/GalleryRe
 import { PlatformInfo } from "../../Engine/Platform/PlatformInfo";
 import { GameBox } from "../../Engine/Game/GameBox/GameBox";
 import { GalleryStarter } from "../GalleryStarter";
+import { GalleryNavigator } from "./GalleryNavigator";
 
 export class GalleryApp extends App {
     constructor() {
         super();
-        this.joint(new InitTooltips());
-        this.joint(new GalleryDropdown());
+        this.joint(new GalleryNavigator());
         this.joint(new WarningOpenOnPC());
         this.joint(new GalleryGames());
     }
@@ -17,20 +17,6 @@ export class GalleryApp extends App {
         GalleryResourceManager.load(() => {
             this.$run.process();
         })
-    }
-
-    run() {
-
-    }
-}
-
-class InitTooltips extends App {
-    run() {
-        $("#button-restart").attr("title", GalleryResources.Tooltips.Restart);
-        $("#button-fullscreen").attr("title", GalleryResources.Tooltips.Fullscreen);
-        $(function () {
-            ($("[data-toggle='tooltip']") as any).tooltip();
-        });
     }
 }
 
@@ -43,7 +29,7 @@ class WarningOpenOnPC extends App {
 
     run() {
         let flag = sessionStorage.getItem("warningFlag");
-        if (flag == "unknown" && !PlatformInfo.IsMobile) {
+        if (flag == "unknown" && PlatformInfo.IsMobile) {
             sessionStorage.setItem("warningFlag", "known");
             let warning = GalleryResources.Warnings.OpenOnPC;
             let $alert = $(`                
@@ -62,21 +48,6 @@ class WarningOpenOnPC extends App {
     }
 }
 
-class GalleryDropdown extends App {
-    private static HasRun: boolean;
-
-    run() {
-        if (!GalleryDropdown.HasRun) {
-            GalleryDropdown.HasRun = true;
-            let baseUrl = "./gallery.html?scene="
-            let $dropdown = $("#dropdown-gallery");
-            let worlds = GalleryStarter.Symbols;
-            for (let key in worlds) {
-                $dropdown.append($(`<a class="dropdown-item" href="${baseUrl}${key}">${worlds[key].Title}</a>`));
-            }
-        }
-    }
-}
 
 class GalleryGames extends App {
     private box: GameBox;
@@ -97,8 +68,16 @@ class GalleryGames extends App {
         $("#button-fullscreen").click(() => {
             let methods = ["ms", "moz", "webkit"].map(v => v + (mode ? "RequestFullscreen" : "ExitFullscreen"));
             methods.forEach(v => {
-                let fullScreen: any = mode ? (document.documentElement as any)[v] : (document as any)[v]
-                fullScreen && fullScreen();
+                if (mode) {
+                    if ((document.documentElement as any)[v]) {
+                        (document.documentElement as any)[v]();
+                    }
+                }
+                else {
+                    if ((document as any)[v]) {
+                        (document as any)[v]();
+                    }
+                }
             });
             mode = !mode;
         });
