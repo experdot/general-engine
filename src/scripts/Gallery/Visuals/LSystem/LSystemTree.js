@@ -24,8 +24,8 @@ class LSystemTree extends GameVisual {
     get states() {
         return this.LSystem.states;
     }
-    constructor(view) {
-        super(view);
+    constructor() {
+        super();
 
         this.LSystem = new LSystem();
         this.LSystem.initRoot(new State("F", null, 0));

@@ -27,8 +27,8 @@ import {
 } from "../../../../Engine/Drawing/Graphics";
 
 class ParticlesWalker extends ParticlesBase {
-    constructor(view) {
-        super(view);
+    constructor() {
+        super();
 
         this.random = new Random();
         this.joint(new GhostEffect(new Color(0, 128, 128, 0.006), 40));

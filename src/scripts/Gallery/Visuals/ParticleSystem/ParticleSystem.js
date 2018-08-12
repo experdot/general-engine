@@ -3,8 +3,8 @@ import {
 } from "../../../Engine/Game/GameObject/GameVisual";
 
 class ParticlesBase extends GameVisual {
-    constructor(view) {
-        super(view);
+    constructor() {
+        super();
         this.particles = [];
     }
 }

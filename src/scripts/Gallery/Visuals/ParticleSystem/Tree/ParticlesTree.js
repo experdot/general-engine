@@ -18,8 +18,8 @@ import {
 } from "../../../../Engine/Game/GameObject/GameView";
 
 class ParticlesTree extends ParticlesBase {
-    constructor(view) {
-        super(view);
+    constructor() {
+        super();
         this.spots = [];
         this.generation = [];
         this.random = new Random();

@@ -37,8 +37,8 @@ import {
 } from "../../Resources/GalleryResource";
 
 class EndlessAbyss extends GameVisual {
-    constructor(view) {
-        super(view);
+    constructor() {
+        super();
         this.timer = new DelayTimer();
         this.ghost = new GhostEffect(new Color(0, 0, 0, 0.01), 40, false);
         this.joint(this.ghost);

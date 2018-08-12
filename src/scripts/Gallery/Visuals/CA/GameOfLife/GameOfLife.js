@@ -39,8 +39,8 @@ class GameOfLife extends GameVisual {
         return new Vector2(xOffset, yOffset);
     }
 
-    constructor(view) {
-        super(view);
+    constructor() {
+        super();
 
         this.ghost = new GhostEffect(new Color(0, 0, 0, 0.08), 0);
         this.joint(this.ghost);
