@@ -1,7 +1,7 @@
 class Array2 {
-    private width: number;
-    private height: number;
-    private data: any[];
+    width: number;
+    height: number;
+    data: any[];
 
     constructor(width: number = 1, height: number = 1) {
         this.width = width;
@@ -24,7 +24,7 @@ class Array2 {
         return this.data[x][y];
     }
 
-    forEach(action: { (value: any, x: number, y: number): number }): void {
+    forEach(action: (value: any, x: number, y: number) => void): void {
         this.data.forEach((column: any[], x: number) => {
             column && column.forEach((value, y) => {
                 action && action(value, x, y);

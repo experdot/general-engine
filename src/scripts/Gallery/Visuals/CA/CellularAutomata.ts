@@ -10,7 +10,7 @@ class CellularAutomata extends Array2 {
         return new CellularAutomata(this.width, this.height);
     }
 
-    around(x, y, xOffsets, yOffsets) {
+    around(x: number, y: number, xOffsets: number[], yOffsets: number[]) {
         let result = 0;
         for (let i = 0; i < 8; i++) {
             const tx = x + xOffsets[i];
@@ -22,7 +22,7 @@ class CellularAutomata extends Array2 {
         return result;
     }
 
-    aroundColor(x, y, xOffsets, yOffsets) {
+    aroundColor(x: number, y: number, xOffsets: number[], yOffsets: number[]) {
         let r = 0;
         let g = 0;
         let b = 0;
@@ -40,7 +40,7 @@ class CellularAutomata extends Array2 {
         return new Color(r / count, g / count, b / count);
     }
 
-    grow(growth = 0.001) {
+    grow(growth: number = 0.001) {
         this.forEach(cell => {
             if (cell && cell.scale < 1) {
                 cell.scale += growth;

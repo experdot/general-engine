@@ -8,7 +8,7 @@ import {
     Color
 } from "../../../../Engine/UI/Color";
 import {
-    BlockGroupHelper
+    BlockGroupHelper, BlockGroup
 } from "./BlockGroup";
 import {
     Block
@@ -21,6 +21,24 @@ class BlockGrid extends Array2 {
     get preBlocks() {
         return this._preBlocks;
     }
+
+    public _preBlocks: Block[];
+    public _allBlocks: Block[];
+
+    public onOver: Function;
+    public onFullRow: Function;
+
+    public blockGroups: BlockGroup[];
+
+    private colors: Color[];
+
+    private current: any;
+    private next: any;
+    private upOffset: Vector2;
+    private downOffset: Vector2;
+    private leftOffset: Vector2;
+    private rightOffset: Vector2;
+    private indexOffset: 1;
 
     constructor(width = 1, height = 1) {
         super(width, height);
@@ -75,7 +93,7 @@ class BlockGrid extends Array2 {
     }
 
     reset() {
-        this.forEach((block, x, y) => {
+        this.forEach((block: any, x: number, y: number) => {
             this.set(x, y, null);
         });
     }
@@ -84,7 +102,7 @@ class BlockGrid extends Array2 {
         this.onOver && this.onOver();
     }
 
-    setCurrent(current) {
+    setCurrent(current: any) {
         this.current = current;
     }
 
@@ -97,9 +115,8 @@ class BlockGrid extends Array2 {
     _generateNext() {
         let nextIndex = Math.floor(Math.random() * this.blockGroups.length);
         let nextLocation = new Vector2(Math.floor(this.width * Math.random()), this.height - 1);
-        let nextRotation = Math.floor(Math.random() * 4);
         let color = this.colors[Math.floor(this.colors.length * Math.random())];
-        this.next = this.blockGroups[nextIndex].clone().setLocation(nextLocation).setColor(color).rotate(nextRotation);
+        this.next = this.blockGroups[nextIndex].clone().setLocation(nextLocation).setColor(color).rotate();
     }
 
     _generateInformation() {
@@ -114,7 +131,7 @@ class BlockGrid extends Array2 {
         });
     }
 
-    _checkMoveAvaliable(group, offset = Vector2.Zero(), indexOffset = 0, annular = true) {
+    _checkMoveAvaliable(group: BlockGroup, offset = Vector2.Zero, indexOffset = 0, annular = true) {
         let locations = this.current.getLocations(indexOffset);
         for (let index = 0; index < locations.length; index++) {
             const location = locations[index].add(offset);
@@ -131,7 +148,7 @@ class BlockGrid extends Array2 {
         return true;
     }
 
-    _combineBlock(target, annular = true) {
+    _combineBlock(target: BlockGroup, annular = true) {
         target.getBlocks().forEach(block => {
             if (block) {
                 if (annular) {
@@ -173,13 +190,13 @@ class BlockGrid extends Array2 {
         }
         return max;
     }
-    _clearSingleRow(y) {
+    _clearSingleRow(y: number) {
         for (let x = 0; x < this.width; x++) {
             this.data[x].splice(y, 1);
             this.data[x].push(null);
         }
     }
-    _checkFullRow(y) {
+    _checkFullRow(y: number) {
         for (let x = 0; x < this.width; x++) {
             if (!this.get(x, y)) {
                 return false;

@@ -1,16 +1,23 @@
+import { Color } from "../../../Engine/UI/Color";
+
 class Cell {
-    constructor(color, scale = 0) {
+    color: Color;
+    scale: number;
+
+    constructor(color: Color, scale = 0) {
         this.color = color;
         this.scale = scale;
     }
 
-    setColor(color) {
+    setColor(color: Color) {
         this.color = color;
         return this;
     }
 }
 
 class ScaleCell {
+    scale: number;
+
     constructor(scale = 0) {
         this.scale = scale;
     }

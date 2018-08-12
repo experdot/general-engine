@@ -10,6 +10,7 @@ import {
 import {
     InputEvents
 } from "../../../Engine/Common/Inputs";
+import { Vector2 } from "../../../Engine/Numerics/Vector2";
 class VisualPointer extends GameVisual {
     constructor() {
         super();
@@ -18,7 +19,7 @@ class VisualPointer extends GameVisual {
         this.joint(new VisualPointerView());
     }
 
-    start(source) {
+    start(source: any) {
         this.cache.container = source.world.ui.container;
         this.cache.cursor = this.cache.container.style.cursor;
         this.cache.container.style.cursor = "none";
@@ -34,19 +35,19 @@ class VisualPointer extends GameVisual {
         }
     }
 
-    dispose(source) {
+    dispose() {
         super.dispose();
         this.cache.container.style.cursor = this.cache.cursor;
-        source.off(InputEvents.PointerMoved, this.cache.handler);
+        arguments[0].off(InputEvents.PointerMoved, this.cache.handler);
     }
 }
 
 class VisualPointerView extends GameView {
-    render(source, context) {
+    render(source: any, context: CanvasRenderingContext2D) {
         Graphics.hold(context, () => {
             if (source.pointers.length > 0) {
                 context.beginPath();
-                source.pointers.forEach(p => {
+                source.pointers.forEach((p: Vector2) => {
                     context.lineTo(p.x, p.y);
                 });
                 context.lineWidth = 10;

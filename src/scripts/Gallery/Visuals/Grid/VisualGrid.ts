@@ -14,7 +14,7 @@ class GridView extends GameView {
         };
     }
 
-    render(source, context) {
+    render(source: any, context: CanvasRenderingContext2D) {
         let width = source.world.width;
         let height = source.world.height;
 
@@ -26,7 +26,7 @@ class GridView extends GameView {
         }
     }
 
-    drawLine(context, v1, v2) {
+    drawLine(context: CanvasRenderingContext2D, v1: Vector2, v2: Vector2) {
         context.beginPath();
         context.moveTo(v1.x, v1.y);
         context.lineTo(v2.x, v2.y);

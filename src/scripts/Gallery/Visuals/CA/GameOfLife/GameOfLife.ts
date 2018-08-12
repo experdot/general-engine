@@ -15,7 +15,7 @@ import {
     Vector2
 } from "../../../../Engine/Numerics/Vector2";
 import {
-    ScaleCell
+    ScaleCell, Cell
 } from "../Cell";
 import {
     GameView
@@ -38,6 +38,9 @@ class GameOfLife extends GameVisual {
         let yOffset = -(size - initial) * this.CA.height / 2;
         return new Vector2(xOffset, yOffset);
     }
+
+    private CA: CellularAutomata;
+    private timers: { generate: DelayTimer; exchange: DelayTimer; grow: DelayTimer };
 
     constructor() {
         super();
@@ -75,7 +78,7 @@ class GameOfLife extends GameVisual {
 
         this.CA = new CellularAutomata(cw, ch);
 
-        this.CA.forEach((cell, x, y) => {
+        this.CA.forEach((cell: Cell, x: number, y: number) => {
             if (Math.random() > 0.9) {
                 this.CA.data[x][y] = new ScaleCell();
             }
@@ -88,7 +91,7 @@ class GameOfLife extends GameVisual {
         this.timers.exchange.delay(1000, () => {
             this.settings.progress = 0;
             this._exchange(this.CA);
-        }, actual => {
+        }, (actual: number) => {
             this.settings.progress = actual / 1000;
         });
 
@@ -148,14 +151,14 @@ class GameOfLife extends GameVisual {
         this.CA = generation;
     }
 
-    _exchange(ca) {
+    _exchange(ca: CellularAutomata) {
         let columns = ca.data.splice(0, 1);
         ca.data.push(columns[0]);
     }
 }
 
 class GameOfLifeView extends GameView {
-    render(source, context) {
+    render(source: any, context: CanvasRenderingContext2D) {
         let offset = source.offset;
         let size = source.settings.size;
         let offsetX = 1 - source.settings.progress;
@@ -163,7 +166,7 @@ class GameOfLifeView extends GameView {
 
         Graphics.rotate(context, source.settings.rotation, 1, () => {
             context.beginPath();
-            source.CA.forEach((cell, x, y) => {
+            source.CA.forEach((cell: Cell, x: number, y: number) => {
                 if (cell) {
                     let p = new Vector2((x + offsetX) * size, y * size).add(offset);
                     let real = size * cell.scale;

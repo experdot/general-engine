@@ -2,6 +2,10 @@
  * Represents a 2-demesional vector
  */
 export class Vector2 {
+    static get Zero() {
+        return new Vector2(0, 0);
+    }
+
     get length() {
         return Math.sqrt(this.x * this.x + this.y * this.y);
     }

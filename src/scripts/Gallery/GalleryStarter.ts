@@ -24,6 +24,11 @@ import {
 } from "../Engine/Game/GameBox/GameBox";
 
 class GalleryStarter {
+
+    static Symbols: {};
+
+    symbols: {};
+
     constructor() {
         this.symbols = {};
         this.addSymbol("flyer", ParticlesFlyerWorld);
@@ -33,6 +38,8 @@ class GalleryStarter {
         this.addSymbol("gameoflife", GameOfLifeWorld);
         this.addSymbol("audiovisualizer", AudioVisualizerWorld);
         this.addSymbol("endlessabyss", EndlessAbyssWorld);
+
+        GalleryStarter.Symbols = this.symbols;
     }
 
     addSymbol(name, symbol) {
@@ -50,7 +57,7 @@ class GalleryStarter {
             document.title = World.Title;
             return new GameBox(container, canvas, new World(canvas.width, canvas.height));
         } else {
-            window.location = "../";
+            (window.location as any) = "../";
         }
     }
 

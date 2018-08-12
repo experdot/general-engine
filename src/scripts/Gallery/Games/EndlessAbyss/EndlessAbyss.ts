@@ -37,6 +37,9 @@ import {
 } from "../../Resources/GalleryResource";
 
 class EndlessAbyss extends GameVisual {
+    private timer: DelayTimer;
+    private ghost: GhostEffect;
+
     constructor() {
         super();
         this.timer = new DelayTimer();
@@ -73,7 +76,7 @@ class EndlessAbyss extends GameVisual {
             this.timer.delay(this.settings.delayTime, () => {
                 this.blockGrid.down();
                 this.settings.progress = 0;
-            }, (actual) => {
+            }, (actual: number) => {
                 this.settings.progress = actual / this.settings.delayTime;
             });
         }
@@ -81,7 +84,7 @@ class EndlessAbyss extends GameVisual {
     }
 
     _registEvents() {
-        this.on(InputEvents.KeyPress, (event) => {
+        this.on(InputEvents.KeyPress, (event: KeyboardEvent) => {
             if (!this.settings.playing) {
                 if (event.key === "Enter") {
                     this.settings.playing = true;
@@ -103,14 +106,14 @@ class EndlessAbyss extends GameVisual {
             }
         });
 
-        this.on(InputEvents.PointerPressed, (event) => {
+        this.on(InputEvents.PointerPressed, (event: MouseEvent | TouchEvent) => {
             let pointer = this.settings.pointer;
             pointer.position = EventHelper.getEventClientPositon(event);
             pointer.rotation = this.settings.rotation;
             pointer.count = 0;
         });
 
-        this.on(InputEvents.PointerMoved, (event) => {
+        this.on(InputEvents.PointerMoved, (event: MouseEvent | TouchEvent) => {
             if (this.world.inputs.pointer.isPressed) {
                 let pointer = this.settings.pointer;
                 let end = EventHelper.getEventClientPositon(event);
@@ -133,7 +136,7 @@ class EndlessAbyss extends GameVisual {
             this.settings.score = 0;
         };
 
-        this.blockGrid.onFullRow = (count) => {
+        this.blockGrid.onFullRow = (count: number) => {
             this.settings.score += 10 * Math.pow(2, count - 1);
         };
     }
@@ -169,11 +172,11 @@ class EndlessAbyssView extends GameView {
         this.joint(new StaticLayerView());
     }
 
-    render(source) {
+    render(source: any) {
         this.target = source;
     }
 
-    drawAll(context, size, dynamic = true) {
+    drawAll(context: CanvasRenderingContext2D, size: any, dynamic = true) {
         const radius = 50;
         const split = this.target.blockGrid.width;
         const height = this.target.blockGrid.height;
@@ -212,10 +215,10 @@ class EndlessAbyssView extends GameView {
         }
     }
 
-    drawBlocks(context, blocks, args, style) {
+    drawBlocks(context: CanvasRenderingContext2D, blocks: any, args: any, style: any) {
         let angle = Math.PI / args.split;
         let actualHeight = args.blockHeight - args.blockBorder;
-        blocks.forEach(block => {
+        blocks.forEach((block: any) => {
             if (block) {
                 let x = block.location.x;
                 let y = block.location.y + args.yOffset;
@@ -236,7 +239,7 @@ class EndlessAbyssView extends GameView {
         });
     }
 
-    drawSingle(context, args, stroke, fill) {
+    drawSingle(context: CanvasRenderingContext2D, args: any, stroke: Color, fill: Color) {
         context.beginPath();
         context.arc(args.center.x, args.center.y, args.radius, args.start, args.end, false);
         context.arc(args.center.x, args.center.y, args.radius + args.height, args.end, args.start, true);
@@ -258,18 +261,18 @@ class DynamicLayerView extends GameView {
         super();
     }
 
-    render(source, context) {
+    render(source: any, context: CanvasRenderingContext2D) {
         if (!this.innerCanvas) {
             this.innerCanvas = new OffscreenCanvas(context.canvas.width, context.canvas.height);
         }
 
         let size = source.target.world.size;
-        this.innerCanvas.draw(innerContext => {
+        this.innerCanvas.draw((innerContext: CanvasRenderingContext2D) => {
             this.drawDynamic(source, innerContext, size);
         }).output(context, 0, 0);
     }
 
-    drawDynamic(source, context, size) {
+    drawDynamic(source: any, context: CanvasRenderingContext2D, size: number) {
         source.target.ghost.effect(context);
         Graphics.scaleOffset(context, 8, 8 * context.canvas.height / context.canvas.width, 0.99);
         source.drawAll(context, size);
@@ -285,12 +288,12 @@ class StaticLayerView extends GameView {
         };
     }
 
-    render(source, context) {
+    render(source: any, context: CanvasRenderingContext2D) {
         let size = source.target.world.size;
         this.drawStatic(source, context, size);
     }
 
-    drawStatic(source, context, size) {
+    drawStatic(source: any, context: CanvasRenderingContext2D, size: any) {
         if (source.target.settings.playing) {
             source.drawAll(context, size, false);
             this.drawScore(context, size, source.target.settings.score);
@@ -305,12 +308,12 @@ class StaticLayerView extends GameView {
         }
     }
 
-    drawMask(context, size) {
+    drawMask(context: CanvasRenderingContext2D, size: any) {
         context.fillStyle = this.fill.mask.rgba;
         context.fillRect(0, 0, size.width, size.height);
     }
 
-    drawTitle(context, size, title) {
+    drawTitle(context: CanvasRenderingContext2D, size: any, title: string) {
         let fonSize = Math.max(size.width / 20, 48);
         context.font = fonSize + "px Arial";
         context.textAlign = "center";
@@ -318,7 +321,7 @@ class StaticLayerView extends GameView {
         context.fillText(title, size.center.x, size.center.y);
     }
 
-    drawNotify(context, size) {
+    drawNotify(context: CanvasRenderingContext2D, size: any) {
         let fonSize = Math.max(size.width / 64, 16);
         context.font = fonSize + "px Arial";
         context.textAlign = "center";
@@ -327,7 +330,7 @@ class StaticLayerView extends GameView {
         context.fillText(GalleryResources.EndlessAbyssWorld.Tip, size.center.x, size.center.y + fonSize * 1.6);
     }
 
-    drawScore(context, size, score) {
+    drawScore(context: CanvasRenderingContext2D, size: any, score: number) {
         let fonSize = Math.max(size.width / 48, 24);
         context.font = fonSize + "px Arial";
         context.textAlign = "right";

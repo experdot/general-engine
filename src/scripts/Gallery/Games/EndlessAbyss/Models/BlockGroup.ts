@@ -8,10 +8,15 @@ import {
     Vector2
 } from "../../../../Engine/Numerics/Vector2";
 import {
-    Colors
+    Colors, Color
 } from "../../../../Engine/UI/Color";
 
 class BlockGroup {
+    location: Vector2;
+    color: Color;
+    offsetMaps: any[];
+    currentIndex: number;
+
     constructor() {
         this.location = new Vector2(0, 0);
         this.color = Colors.White;
@@ -28,23 +33,23 @@ class BlockGroup {
         return result;
     }
 
-    setLocation(location) {
+    setLocation(location: Vector2) {
         this.location = location;
         return this;
     }
 
-    setColor(color) {
+    setColor(color: Color) {
         this.color = color;
         return this;
     }
 
-    addOffsetMap(offsetMap) {
+    addOffsetMap(offsetMap: OffsetMap) {
         this.offsetMaps.push(offsetMap);
         return this;
     }
 
-    addOffsetMapRange(range) {
-        range.forEach(element => {
+    addOffsetMapRange(range: any) {
+        range.forEach((element: any) => {
             this.offsetMaps.push(element);
         });
         return this;
@@ -56,14 +61,14 @@ class BlockGroup {
     }
 
     getBlocks(indexOffset = 0) {
-        let blocks = [];
-        this.getLocations(indexOffset).forEach(location => {
+        let blocks: Block[] = [];
+        this.getLocations(indexOffset).forEach((location: Vector2) => {
             blocks.push(new Block().setLocation(location).setColor(this.color.clone()));
         });
         return blocks;
     }
 
-    move(offset) {
+    move(offset: Vector2) {
         this.location = this.location.add(offset);
         return this;
     }
