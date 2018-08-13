@@ -110,7 +110,7 @@ const config = {
         watch: "static/**/*.json"
     },
     chore: {
-        src: ["README.md", "_config.yml", "LICENSE"],
+        src: ["README.md", "_config.yml", "LICENSE", "CNAME"],
         dest: "dist/"
     },
     clean: {
