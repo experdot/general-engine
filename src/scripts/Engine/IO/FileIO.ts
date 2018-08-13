@@ -33,7 +33,7 @@ export class FileIO {
             onLoaded && onLoaded(reader.result);
         };
         reader.onerror = () => {
-            throw new Exception("Could not read file, error code:" + reader.error.code);
+            throw new Exception("Could not read file, error: " + reader.error);
         };
     }
 }
