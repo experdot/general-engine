@@ -5,10 +5,10 @@ export class ConfigurationManager extends ResourceManager {
     url: string;
     target: any;
 
-    constructor(url: string, target?: object) {
+    constructor(url: string) {
         super()
         this.url = url;
-        this.target = target;
+        this.add(new ResourceSet(this.url));
     }
 
     load(loaded?: Function) {
@@ -19,7 +19,6 @@ export class ConfigurationManager extends ResourceManager {
     }
 
     attach(target) {
-        this.clear().add(new ResourceSet(this.url));
         this.target = target;
         return this;
     }

@@ -35,12 +35,14 @@ export const GalleryResources = {
     }
 };
 
+export const CultureResourceConfigUrl = "../static/i18n/config.json";
+
 export const GalleryResourceManager = new CultureResourceManager();
 
-const configUrl = "../static/i18n/config.json";
-const config = new CultureResourceConfig();
-
-export const GalleryResourceConfig = new ConfigurationManager(configUrl).attach(config).load(() => {
-    GalleryResourceManager.init(config).attach(GalleryResources);
-    GalleryResourceManager.onPrepared();
-});
+GalleryResourceManager.preload = (preloaded: Function) => {
+    const config = new CultureResourceConfig();
+    const configurationManager = new ConfigurationManager(CultureResourceConfigUrl).attach(config).load(() => {
+        GalleryResourceManager.init(config).attach(GalleryResources);
+        preloaded && preloaded();
+    });
+}

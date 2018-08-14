@@ -3,6 +3,7 @@ import { ResourceSet } from "./ResourceSet";
 
 export class ResourceManager {
     sets: ResourceSet[];
+    preload: (preloaded?: Function) => void;
 
     constructor() {
         this.sets = [];
@@ -18,19 +19,14 @@ export class ResourceManager {
     }
 
     load(loaded?: Function) {
-        let count = 0;
-        let length = this.sets.length;
-
-        this.sets.forEach(element => {
-            HttpWebRequest.get(element.src, (response: any) => {
-                element.init(JSON.parse(response))
-                count += 1;
-                if (count = length) {
-                    loaded && loaded();
-                }
+        if (this.preload) {
+            this.preload(() => {
+                this.loading(loaded);
             });
-        })
-
+        }
+        else {
+            this.loading(loaded);
+        }
         return this;
     }
 
@@ -44,5 +40,20 @@ export class ResourceManager {
             }
         });
         return this;
+    }
+
+    private loading(loaded?: Function) {
+        let count = 0;
+        let length = this.sets.length;
+
+        this.sets.forEach(element => {
+            HttpWebRequest.get(element.src, (response: any) => {
+                element.init(JSON.parse(response))
+                count += 1;
+                if (count = length) {
+                    loaded && loaded();
+                }
+            });
+        })
     }
 }
