@@ -2,8 +2,7 @@ import {
     CultureResourceManager,
     CultureResourceConfig
 } from "../../Engine/Resources/CultureResourceManager";
-
-const config = new CultureResourceConfig("../static/i18n/gallery.{{language}}.json", ["en-US", "zh-CN"]);
+import { ConfigurationManager } from "../../Engine/Resources/ConfigurationManager";
 
 export const GalleryResources = {
     Gallery: "",
@@ -36,4 +35,12 @@ export const GalleryResources = {
     }
 };
 
-export const GalleryResourceManager = new CultureResourceManager(config).attach(GalleryResources);
+export const GalleryResourceManager = new CultureResourceManager();
+
+const configUrl = "../static/i18n/config.json";
+const config = new CultureResourceConfig();
+
+export const GalleryResourceConfig = new ConfigurationManager(configUrl).attach(config).load(() => {
+    GalleryResourceManager.init(config).attach(GalleryResources);
+    GalleryResourceManager.onPrepared();
+});

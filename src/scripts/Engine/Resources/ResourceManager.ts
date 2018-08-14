@@ -12,6 +12,11 @@ export class ResourceManager {
         this.sets.push(...sets);
     }
 
+    clear() {
+        this.sets = [];
+        return this;
+    }
+
     load(loaded?: Function) {
         let count = 0;
         let length = this.sets.length;
@@ -26,6 +31,18 @@ export class ResourceManager {
             });
         })
 
+        return this;
+    }
+
+    assign(target: any) {
+        this.sets.forEach(element => {
+            for (let key in target) {
+                let value = element.data[key]
+                if (value !== undefined) {
+                    target[key] = element.data[key];
+                }
+            }
+        });
         return this;
     }
 }

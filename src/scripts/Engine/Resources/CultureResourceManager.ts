@@ -2,44 +2,45 @@
 import { ResourceManager } from "./ResourceManager";
 import { CultureInfo } from "../Globalization/CultureInfo";
 import { ResourceSet } from "./ResourceSet";
+import { ConfigurationManager } from "./ConfigurationManager";
 
 export class CultureResourceManager extends ResourceManager {
     config: CultureResourceConfig;
     target: any;
+    onPrepared: Function;
 
-    constructor(config: CultureResourceConfig) {
+    constructor(config?: CultureResourceConfig) {
         super();
         this.config = config;
+        this.onPrepared = () => { };
+    }
+
+    init(config: CultureResourceConfig) {
+        this.config = config;
+        return this;
     }
 
     load(loaded?: Function) {
-        return super.load(() => {
+        super.load(() => {
             this.target && this.assign(this.target);
             loaded && loaded();
         });
+        return this;
     }
 
     attach(target: any, culture: CultureInfo = CultureInfo.Netural) {
-        this.add(new ResourceSet(this.config.get(culture.language)));
-        this.target = target;
+        if (this.config) {
+            this.add(new ResourceSet(this.config.get(culture.language)));
+            this.target = target;
+        }
         return this;
     }
 
     switch(culture: CultureInfo = CultureInfo.Netural, loaded?: Function) {
-        this.sets = [];
-        this.attach(this.target, culture).load(loaded);
-        return this;
-    }
-
-    assign(target: any) {
-        this.sets.forEach(element => {
-            for (let key in target) {
-                let value = element.data[key]
-                if (value !== undefined) {
-                    target[key] = element.data[key];
-                }
-            }
-        });
+        if (this.config) {
+            this.sets = [];
+            this.attach(this.target, culture).load(loaded);
+        }
         return this;
     }
 }
@@ -49,7 +50,7 @@ export class CultureResourceConfig {
     languages: any[];
     replace: string;
 
-    constructor(template: string, languages: string[], replace = "{{language}}") {
+    constructor(template?: string, languages?: string[], replace = "{{language}}") {
         this.template = template;
         this.languages = languages;
         this.replace = replace;
