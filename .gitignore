@@ -13,6 +13,11 @@ release/
 # package-lock json file
 package-lock.json
 
+# static resources
+static/*.jpg
+static/*.png
+static/*.gif
+
 # Logs
 logs
 *.log
@@ -402,4 +407,3 @@ ASALocalRun/
 
 # MFractors (Xamarin productivity tool) working folder 
 .mfractor/
-
