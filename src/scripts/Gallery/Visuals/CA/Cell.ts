@@ -1,6 +1,6 @@
 import { Color } from "../../../Engine/UI/Color";
 
-class Cell {
+export class Cell {
     color: Color;
     scale: number;
 
@@ -15,15 +15,10 @@ class Cell {
     }
 }
 
-class ScaleCell {
+export class ScaleCell {
     scale: number;
 
     constructor(scale = 0) {
         this.scale = scale;
     }
 }
-
-export {
-    Cell,
-    ScaleCell
-};

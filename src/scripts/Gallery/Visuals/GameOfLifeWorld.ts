@@ -12,7 +12,7 @@ import {
     GalleryResources
 } from "../Resources/GalleryResource";
 
-class GameOfLifeWorld extends GameWorld {
+export class GameOfLifeWorld extends GameWorld {
     static get Title() {
         return GalleryResources.GameOfLifeWorld_Title;
     }
@@ -25,7 +25,3 @@ class GameOfLifeWorld extends GameWorld {
         this.addChild(new GameOfLife().joint(new GameOfLifeView()));
     }
 }
-
-export {
-    GameOfLifeWorld
-};

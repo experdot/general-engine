@@ -30,7 +30,7 @@ import {
     InputEvents
 } from "../../../../Engine/Common/Inputs";
 
-class GameOfLife extends GameVisual {
+export class GameOfLife extends GameVisual {
     get offset() {
         let size = this.settings.size;
         let initial = this.settings.initialSize;
@@ -41,6 +41,7 @@ class GameOfLife extends GameVisual {
 
     private CA: CellularAutomata;
     private timers: { generate: DelayTimer; exchange: DelayTimer; grow: DelayTimer };
+    private settings: any;
 
     constructor() {
         super();
@@ -53,6 +54,8 @@ class GameOfLife extends GameVisual {
             exchange: new DelayTimer(),
             grow: new DelayTimer()
         };
+
+
 
         this.settings = {
             xOffsets: [-1, 0, 1, 1, 1, 0, -1, -1],
@@ -157,7 +160,7 @@ class GameOfLife extends GameVisual {
     }
 }
 
-class GameOfLifeView extends GameView {
+export class GameOfLifeView extends GameView {
     render(source: any, context: CanvasRenderingContext2D) {
         let offset = source.offset;
         let size = source.settings.size;
@@ -179,8 +182,3 @@ class GameOfLifeView extends GameView {
         });
     }
 }
-
-export {
-    GameOfLife,
-    GameOfLifeView
-};

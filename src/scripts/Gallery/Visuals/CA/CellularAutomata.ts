@@ -5,7 +5,7 @@ import {
     Array2
 } from "../../../Engine/Collections/Array2";
 
-class CellularAutomata extends Array2 {
+export class CellularAutomata extends Array2 {
     generate() {
         return new CellularAutomata(this.width, this.height);
     }
@@ -48,7 +48,3 @@ class CellularAutomata extends Array2 {
         });
     }
 }
-
-export {
-    CellularAutomata
-};

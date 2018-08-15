@@ -8,15 +8,15 @@ import {
 class FlyerParticle extends DynamicParticle {
     constructor(location, size = 1, age = 0) {
         super(location, size, age);
-        this.velocityUpon = 6;
-        this.neighbourDistance = 200;
+        this.velocityUpon = 5;
+        this.neighbourDistance = 400;
     }
 
     update(flyers, blocks, mouse) {
         this.alignspeed(flyers);
         this.seperate(flyers);
         this.cohesion(flyers);
-        this.seperate(blocks, 5);
+        //this.seperate(blocks, 5);
 
         mouse && this.follow(mouse, 3);
         //this.checkRadius(mouse, new Vector2(rect.width, rect.height).length / 3);

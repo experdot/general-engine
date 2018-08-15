@@ -8,11 +8,8 @@ import {
     FileIO
 } from "../../../Engine/IO/FileIO";
 import {
-    GhostEffect
+    GhostImageEffect
 } from "../../../Engine/Game/GameComponents/Effect/Effect";
-import {
-    Color
-} from "../../../Engine/UI/Color";
 import {
     MessageBox
 } from "../../../Engine/Application/MessageBox";
@@ -39,7 +36,7 @@ class AudioVisualizer extends GameVisual {
         super();
         this.timer = new DelayTimer();
         this.effects = {
-            ghost: new GhostEffect(new Color(0, 0, 0, 0.01), 40, false)
+            ghost: new GhostImageEffect("https://resources.general-engine.com/image/galaxy.jpg", 0.1, false)
         };
         this.joint(this.effects.ghost);
     }
@@ -124,6 +121,11 @@ class AudioVisualizerView extends GameView {
         let cx = w / 2;
         let cy = h / 2;
 
+        let data = source.FFTData;
+        let value = data.reduce((acc, val) => acc + val, 0) / data.length / 255;
+
+        let scale = value * 25;
+
         source.effects.ghost.effect(context);
 
         if (!source.file.playing) {
@@ -133,7 +135,7 @@ class AudioVisualizerView extends GameView {
             });
         } else {
             this.rotation += 0.001;
-            Graphics.scaleOffset(context, 5, 5, 0.99);
+            Graphics.scaleOffset(context, scale, scale, 0.99);
             Graphics.rotate(context, this.rotation, 1, () => {
                 this.drawFFT(source, context, w, h, cx, cy);
             });
