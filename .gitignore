@@ -14,9 +14,7 @@ release/
 package-lock.json
 
 # static resources
-static/*.jpg
-static/*.png
-static/*.gif
+static/
 
 # Logs
 logs
