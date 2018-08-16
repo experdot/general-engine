@@ -33,8 +33,8 @@ import {
     InputEvents
 } from "../../../Engine/Common/Inputs";
 import {
-    GalleryResources
-} from "../../Resources/GalleryResource";
+    GalleryTexts
+} from "../../Resources/GalleryTexts";
 
 class EndlessAbyss extends GameVisual {
     private timer: DelayTimer;
@@ -300,9 +300,9 @@ class StaticLayerView extends GameView {
         } else {
             this.drawMask(context, size);
             if (source.target.settings.gameover) {
-                this.drawTitle(context, size, GalleryResources.EndlessAbyssWorld.GameOver);
+                this.drawTitle(context, size, GalleryTexts.EndlessAbyssWorld.GameOver);
             } else {
-                this.drawTitle(context, size, GalleryResources.EndlessAbyssWorld.GameName);
+                this.drawTitle(context, size, GalleryTexts.EndlessAbyssWorld.GameName);
             }
             this.drawNotify(context, size);
         }
@@ -327,7 +327,7 @@ class StaticLayerView extends GameView {
         context.textAlign = "center";
         this.single += 0.06;
         context.fillStyle = new Color(255, 255, 255, 0.6 + Math.sin(this.single) * 0.3).rgba;
-        context.fillText(GalleryResources.EndlessAbyssWorld.Tip, size.center.x, size.center.y + fonSize * 1.6);
+        context.fillText(GalleryTexts.EndlessAbyssWorld.Tip, size.center.x, size.center.y + fonSize * 1.6);
     }
 
     drawScore(context: CanvasRenderingContext2D, size: any, score: number) {
@@ -335,7 +335,7 @@ class StaticLayerView extends GameView {
         context.font = fonSize + "px Arial";
         context.textAlign = "right";
         context.fillStyle = new Color(255, 255, 255, 0.9).rgba;
-        context.fillText(GalleryResources.EndlessAbyssWorld.Score + score, size.width * 0.9, size.height * 0.15);
+        context.fillText(GalleryTexts.EndlessAbyssWorld.Score + score, size.width * 0.9, size.height * 0.15);
     }
 }
 

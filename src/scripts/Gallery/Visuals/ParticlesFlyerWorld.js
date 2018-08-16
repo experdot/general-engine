@@ -9,12 +9,12 @@ import {
     ParticlesFlyerView
 } from "./ParticleSystem/Flyer/ParticlesFlyer";
 import {
-    GalleryResources
-} from "../Resources/GalleryResource";
+    GalleryTexts
+} from "../Resources/GalleryTexts";
 
 class ParticlesFlyerWorld extends GameWorld {
     static get Title() {
-        return GalleryResources.ParticlesFlyerWorld_Title;
+        return GalleryTexts.ParticlesFlyerWorld_Title;
     }
 
     initialize() {

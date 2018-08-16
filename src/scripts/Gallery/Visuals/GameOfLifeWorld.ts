@@ -9,12 +9,12 @@ import {
     GameOfLifeView
 } from "./CA/GameOfLife/GameOfLife";
 import {
-    GalleryResources
-} from "../Resources/GalleryResource";
+    GalleryTexts
+} from "../Resources/GalleryTexts";
 
 export class GameOfLifeWorld extends GameWorld {
     static get Title() {
-        return GalleryResources.GameOfLifeWorld_Title;
+        return GalleryTexts.GameOfLifeWorld_Title;
     }
 
     initialize() {

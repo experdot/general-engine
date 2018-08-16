@@ -13,12 +13,12 @@ import {
     VisualPointer
 } from "../Visuals/VisualPointer/VisualPointer";
 import {
-    GalleryResources
-} from "../Resources/GalleryResource";
+    GalleryTexts
+} from "../Resources/GalleryTexts";
 
 class EndlessAbyssWorld extends GameWorld {
     static get Title() {
-        return GalleryResources.EndlessAbyssWorld.Title;
+        return GalleryTexts.EndlessAbyssWorld.Title;
     }
 
     initialize() {

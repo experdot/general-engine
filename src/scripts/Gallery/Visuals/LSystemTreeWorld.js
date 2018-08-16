@@ -6,12 +6,12 @@ import {
     LSystemTreeView
 } from "./LSystem/LSystemTree";
 import {
-    GalleryResources
-} from "../Resources/GalleryResource";
+    GalleryTexts
+} from "../Resources/GalleryTexts";
 
 class LSystemTreeWorld extends GameWorld {
     static get Title() {
-        return GalleryResources.LSystemTreeWorld_Title;
+        return GalleryTexts.LSystemTreeWorld_Title;
     }
 
     initialize() {

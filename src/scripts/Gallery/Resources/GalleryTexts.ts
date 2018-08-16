@@ -4,7 +4,7 @@ import {
 } from "../../Engine/Resources/CultureResourceManager";
 import { ConfigurationManager } from "../../Engine/Resources/ConfigurationManager";
 
-export const GalleryResources = {
+export const GalleryTexts = {
     Gallery: "",
     AudioVisualizerWorld_Title: "",
     GameOfLifeWorld_Title: "",
@@ -35,14 +35,14 @@ export const GalleryResources = {
     }
 };
 
-export const CultureResourceConfigUrl = "../static/i18n/config.json";
+export const TextResourceConfigUrl = "https://resources.general-engine.com/i18n/gallery-i18n.json";
 
-export const GalleryResourceManager = new CultureResourceManager();
+export const GalleryTextResourceManager = new CultureResourceManager();
 
-GalleryResourceManager.preload = (preloaded: Function) => {
+GalleryTextResourceManager.preload = (preloaded: Function) => {
     const config = new CultureResourceConfig();
-    const configurationManager = new ConfigurationManager(CultureResourceConfigUrl).attach(config).load(() => {
-        GalleryResourceManager.init(config).attach(GalleryResources);
+    const configurationManager = new ConfigurationManager(TextResourceConfigUrl).attach(config).load(() => {
+        GalleryTextResourceManager.init(config).attach(GalleryTexts);
         preloaded && preloaded();
     });
 }

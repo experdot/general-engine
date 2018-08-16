@@ -1,5 +1,5 @@
 import { App } from "../../Engine/Application/AppObject/App";
-import { GalleryResources } from "../Resources/GalleryResource";
+import { GalleryTexts } from "../Resources/GalleryTexts";
 import { GalleryStarter } from "../GalleryStarter";
 
 export class GalleryNavigator extends App {
@@ -13,15 +13,15 @@ export class GalleryNavigator extends App {
 
 class NavigatorTitle extends App {
     run() {
-        $("#title-header").text(GalleryResources.Title.Header);
-        $("#title-description").text(GalleryResources.Title.Description);
+        $("#title-header").text(GalleryTexts.Title.Header);
+        $("#title-description").text(GalleryTexts.Title.Description);
     }
 }
 
 class NavigatorTooltips extends App {
     run() {
-        $("#button-restart").attr("title", GalleryResources.Tooltips.Restart);
-        $("#button-fullscreen").attr("title", GalleryResources.Tooltips.Fullscreen);
+        $("#button-restart").attr("title", GalleryTexts.Tooltips.Restart);
+        $("#button-fullscreen").attr("title", GalleryTexts.Tooltips.Fullscreen);
         $(function () {
             ($("[data-toggle='tooltip']") as any).tooltip();
         });

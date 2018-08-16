@@ -1,9 +1,10 @@
 import { App } from "../../Engine/Application/AppObject/App";
-import { GalleryResourceManager, GalleryResources } from "../Resources/GalleryResource";
+import { GalleryTextResourceManager, GalleryTexts } from "../Resources/GalleryTexts";
 import { PlatformInfo } from "../../Engine/Platform/PlatformInfo";
 import { GameBox } from "../../Engine/Game/GameBox/GameBox";
 import { GalleryStarter } from "../GalleryStarter";
 import { GalleryNavigator } from "./GalleryNavigator";
+import { GalleryImageResourceManager } from "../Resources/GalleryImages";
 
 export class GalleryApp extends App {
     constructor() {
@@ -14,8 +15,10 @@ export class GalleryApp extends App {
     }
 
     launch() {
-        GalleryResourceManager.load(() => {
-            this.$run.process();
+        GalleryTextResourceManager.load(() => {
+            GalleryImageResourceManager.load(() => {
+                this.$run.process();
+            })
         })
     }
 }
@@ -31,7 +34,7 @@ class WarningOpenOnPC extends App {
         let flag = sessionStorage.getItem("warningFlag");
         if (flag == "unknown" && PlatformInfo.IsMobile) {
             sessionStorage.setItem("warningFlag", "known");
-            let warning = GalleryResources.Warnings.OpenOnPC;
+            let warning = GalleryTexts.Warnings.OpenOnPC;
             let $alert = $(`                
             <div class="alert alert-warning alert-dismissible fade show" role="alert">
                 <strong>${warning.Title}</strong> ${warning.Content}

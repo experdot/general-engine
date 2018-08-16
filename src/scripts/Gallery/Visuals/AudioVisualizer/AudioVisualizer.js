@@ -25,6 +25,7 @@ import {
 import {
     InputEvents
 } from "../../../Engine/Common/Inputs";
+import { GalleryImages } from "../../Resources/GalleryImages";
 
 class AudioVisualizer extends GameVisual {
     get FFTData() {
@@ -36,7 +37,7 @@ class AudioVisualizer extends GameVisual {
         super();
         this.timer = new DelayTimer();
         this.effects = {
-            ghost: new GhostImageEffect("https://resources.general-engine.com/image/galaxy.jpg", 0.1, false)
+            ghost: new GhostImageEffect(GalleryImages.Galaxy, 0.1, false)
         };
         this.joint(this.effects.ghost);
     }

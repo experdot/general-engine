@@ -27,6 +27,7 @@ import {
     FlyerParticle
 } from "./FlyerParticle";
 import { OffscreenCanvas } from "../../../../Engine/Drawing/OffscreenCanvas";
+import { GalleryImages } from "../../../Resources/GalleryImages";
 
 class ParticlesFlyer extends ParticlesBase {
     constructor() {
@@ -210,7 +211,7 @@ class MainLayerView extends GameView {
     constructor() {
         super();
         this.bird = new Image(128, 128);
-        this.bird.src = "https://resources.general-engine.com/image/bird.png";
+        this.bird.src = GalleryImages.Bird;
 
         //this.clound = new Image();
         //this.clound.src = "../static/clound.png";
