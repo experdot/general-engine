@@ -1,7 +1,0 @@
-{
-    "template": "../static/i18n/gallery.{{language}}.json",
-    "languages": [
-        "en-US",
-        "zh-CN"
-    ]
-}
