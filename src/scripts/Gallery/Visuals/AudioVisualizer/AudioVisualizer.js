@@ -8,7 +8,7 @@ import {
     FileIO
 } from "../../../Engine/IO/FileIO";
 import {
-    GhostImageEffect
+    GhostImageEffect, GhostEffect
 } from "../../../Engine/Game/GameComponents/Effect/Effect";
 import {
     MessageBox
@@ -37,7 +37,7 @@ class AudioVisualizer extends GameVisual {
         super();
         this.timer = new DelayTimer();
         this.effects = {
-            ghost: new GhostImageEffect(GalleryImages.Galaxy, 0.1, false)
+            ghost: new GhostImageEffect(GalleryImages.Galaxy, 0.1, false),
         };
         this.joint(this.effects.ghost);
     }
@@ -125,22 +125,24 @@ class AudioVisualizerView extends GameView {
         let data = source.FFTData;
         let value = data.reduce((acc, val) => acc + val, 0) / data.length / 255;
 
-        let scale = value * 25;
+        let scale = value * 100;
+
+        this.rotation2 = value;
 
         source.effects.ghost.effect(context);
 
         if (!source.file.playing) {
             this.drawText(source, context, w, h, cx, cy);
-            Graphics.mirror(context, 1, -1, 0.01, () => {
+            Graphics.mirror(context, 1, -1, 0.02, () => {
                 context.drawImage(context.canvas, 0, 0);
             });
         } else {
             this.rotation += 0.001;
-            Graphics.scaleOffset(context, scale, scale, 0.99);
-            Graphics.rotate(context, this.rotation, 1, () => {
-                this.drawFFT(source, context, w, h, cx, cy);
+            Graphics.scaleOffset(context, scale, scale, 0.999);
+            Graphics.rotate(context, this.rotation + value, 1, () => {
+                this.drawFFT(source, context, w, h, cx, cy, 1 + value * 10);
             });
-            Graphics.rotate(context, Math.PI, 1, () => {
+            Graphics.rotate(context, Math.PI / 9, 1, () => {
                 context.drawImage(context.canvas, 0, 0, w, h);
             });
         }
@@ -155,18 +157,18 @@ class AudioVisualizerView extends GameView {
         context.fillRect(0, cy - 2, w, 4);
     }
 
-    drawFFT(source, context, w, h, cx, cy) {
+    drawFFT(source, context, w, h, cx, cy, lineScale = 1) {
         let data = source.FFTData;
+        let min = Math.min(w, h) / 2;
         context.beginPath();
-        this.rotation2 += 0.002;
         for (let index = 0; index < data.length; index++) {
             let value = data[index];
-            let x = index / data.length * w;
+            let x = index / data.length * min + min;
             let y = cy + value + Math.sin(x / (100 + Math.sin(this.rotation2) * 50)) * 100;
             context.lineTo(x, y);
         }
-        context.lineWidth = w / data.length;
-        context.strokeStyle = "#FFF";
+        context.lineWidth = w / data.length * lineScale;
+        context.strokeStyle = "#FFFFFF";
         context.stroke();
     }
 
