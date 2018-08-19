@@ -114,11 +114,9 @@ export class GameOfLife extends GameVisual {
 
     _bindEvents() {
         this.on(InputEvents.PointerMoved, () => {
-            event.preventDefault();
             this._delete();
         });
         this.on(InputEvents.PointerPressed, () => {
-            event.preventDefault();
             this._delete();
         });
     }

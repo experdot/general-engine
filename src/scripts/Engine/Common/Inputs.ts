@@ -164,9 +164,11 @@ export class TouchInput extends InputBase {
     _registTouchEvent(inputs: Inputs) {
         this.registEvent("tap", InputEvents.Tap);
         this.registEvent("touchStart", InputEvents.TouchStart, () => {
+            event.preventDefault();
             inputs.touch.isTouching = true;
         });
         this.registEvent("touchEnd", InputEvents.TouchEnd, () => {
+            event.preventDefault();
             inputs.touch.isTouching = false;
         });
         this.registEvent("touchmove", InputEvents.TouchMove, (event: TouchEvent) => {
@@ -214,9 +216,11 @@ export class PointerInput extends InputBase {
     _registTouchEvent(inputs: Inputs) {
         this.registEvent("tap", InputEvents.PointerClicked);
         this.registEvent("touchstart", InputEvents.PointerPressed, () => {
+            event.preventDefault();
             inputs.pointer.isPressed = true;
         });
         this.registEvent("touchend", InputEvents.PointerReleased, () => {
+            event.preventDefault();
             inputs.pointer.isPressed = false;
         });
         this.registEvent("touchmove", InputEvents.PointerMoved, (event: TouchEvent) => {
