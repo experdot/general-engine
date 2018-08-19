@@ -38,8 +38,7 @@ class WarningOpenOnPC extends App {
             let warning = GalleryTexts.Warnings.OpenOnPC;
             let $alert = $(`                
             <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                <strong>${warning.Title}</strong> ${warning.Content}<br>
-                To edit settings, press <kbd><kbd>ctrl</kbd> + <kbd>,</kbd></kbd>
+                <strong>${warning.Title}</strong> ${warning.Content}
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
