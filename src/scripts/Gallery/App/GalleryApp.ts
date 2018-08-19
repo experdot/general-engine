@@ -19,8 +19,8 @@ export class GalleryApp extends App {
         GalleryTextResourceManager.load(() => {
             GalleryImageResourceManager.load(() => {
                 this.$run.process();
-            })
-        })
+            });
+        });
     }
 }
 
@@ -47,24 +47,20 @@ class WarningOpenOnPC extends App {
             $("#alert-container").append($alert);
             setTimeout(() => {
                 ($alert as any).alert("close");
-            }, 6000)
+            }, 6000);
         }
     }
 }
 
 class LayerProgress extends App {
-    launch() {
-        $("#game-layer-progress").addClass("show");
-    }
-
     run() {
         setTimeout(() => {
             let layer = $("#game-layer-progress");
             layer.removeClass("show");
             setTimeout(() => {
                 layer.remove();
-            }, 400);
-        }, 600);
+            }, 150);
+        }, 850);
     }
 }
 
