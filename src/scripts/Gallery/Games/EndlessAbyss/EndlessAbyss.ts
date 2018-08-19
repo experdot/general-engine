@@ -107,6 +107,7 @@ class EndlessAbyss extends GameVisual {
         });
 
         this.on(InputEvents.PointerPressed, (event: MouseEvent | TouchEvent) => {
+            event.preventDefault();
             let pointer = this.settings.pointer;
             pointer.position = EventHelper.getEventClientPositon(event);
             pointer.rotation = this.settings.rotation;
@@ -114,6 +115,7 @@ class EndlessAbyss extends GameVisual {
         });
 
         this.on(InputEvents.PointerMoved, (event: MouseEvent | TouchEvent) => {
+            event.preventDefault();
             if (this.world.inputs.pointer.isPressed) {
                 let pointer = this.settings.pointer;
                 let end = EventHelper.getEventClientPositon(event);

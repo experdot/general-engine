@@ -24,6 +24,7 @@ class VisualPointer extends GameVisual {
         this.cache.cursor = this.cache.container.style.cursor;
         this.cache.container.style.cursor = "none";
         this.cache.handler = () => {
+            event.preventDefault();
             this.pointers.push(source.world.inputs.pointer.position.clone());
         };
         source.on(InputEvents.PointerMoved, this.cache.handler);
