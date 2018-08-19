@@ -11,6 +11,7 @@ export class GalleryApp extends App {
         super();
         this.joint(new GalleryNavigator());
         this.joint(new WarningOpenOnPC());
+        this.joint(new LayerProgress);
         this.joint(new GalleryGames());
     }
 
@@ -37,7 +38,8 @@ class WarningOpenOnPC extends App {
             let warning = GalleryTexts.Warnings.OpenOnPC;
             let $alert = $(`                
             <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                <strong>${warning.Title}</strong> ${warning.Content}
+                <strong>${warning.Title}</strong> ${warning.Content}<br>
+                To edit settings, press <kbd><kbd>ctrl</kbd> + <kbd>,</kbd></kbd>
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -48,6 +50,22 @@ class WarningOpenOnPC extends App {
                 ($alert as any).alert("close");
             }, 6000)
         }
+    }
+}
+
+class LayerProgress extends App {
+    launch() {
+        $("#game-layer-progress").addClass("show");
+    }
+
+    run() {
+        setTimeout(() => {
+            let layer = $("#game-layer-progress");
+            layer.removeClass("show");
+            setTimeout(() => {
+                layer.remove();
+            }, 400);
+        }, 600);
     }
 }
 
@@ -91,7 +109,7 @@ class GalleryGames extends App {
         canvas.width = window.document.body.clientWidth;
         canvas.height = window.document.body.clientHeight;
 
-        this.box = this.starter.launch(document.getElementById("canvas-container"), canvas);
+        this.box = this.starter.launch(document.getElementById("game-layer-canvas"), canvas);
         this.box.frameManager.onRateChanged = (rate: number) => {
             let frame = $("#text-frame")
             if (frame) {

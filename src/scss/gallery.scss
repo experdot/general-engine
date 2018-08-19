@@ -10,15 +10,12 @@ main {
 home {
     margin: 0;
     background: transparent;
-    .fixedlayer {
-        position: fixed;
-        width: 100%;
-    }
-    .gamebox {
+    .gallery-game {
         margin: 0;
         max-width: 100%; //background: black;
         background: transparent;
-        .canvas-container {
+        position: relative;
+        .layer-canvas {
             width: 100%;
             height: 100%;
             background: transparent;
@@ -26,5 +23,26 @@ home {
                 background: transparent;
             }
         }
+        .layer-progress{
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+
+            .progress{
+                position: absolute;
+                top:50%;
+                left:31%;
+                width: 38%;
+            }
+        }
+    }
+    .gallery-fixed {
+        position: fixed;
+        left: 0;
+        top:0;
+        width: 100%;
     }
 }

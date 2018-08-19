@@ -37,7 +37,18 @@
     </header>
     <main>
         <home>
-            <div class="fixedlayer">
+            <div id="gallery-game" class="gallery-game">
+                <div id="game-layer-canvas" class="layer-canvas">
+                    <canvas id="canvas">Your browser doesn't support the canvas tag.</canvas>
+                </div>
+                <div id="game-layer-progress" class="layer-progress fade">
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-striped bg-info progress-bar-animated" role="progressbar" aria-valuenow="100" aria-valuemin="0"
+                            aria-valuemax="100" style="width: 100%"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="gallery-fixed">
                 <div class="pos-f-t navigation-bar">
                     <div class="collapse" id="navbarToggleExternalContent">
                         <div class="bg-dark p-4">
@@ -71,11 +82,6 @@
                 </div>
                 <div id="alert-container">
 
-                </div>
-            </div>
-            <div id="gamebox" class="gamebox">
-                <div id="canvas-container" class="canvas-container">
-                    <canvas id="canvas">Your browser doesn't support the canvas tag.</canvas>
                 </div>
             </div>
         </home>

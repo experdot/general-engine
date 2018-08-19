@@ -8,7 +8,7 @@ import {
     FileIO
 } from "../../../Engine/IO/FileIO";
 import {
-    GhostImageEffect, GhostEffect
+    GhostImageEffect
 } from "../../../Engine/Game/GameComponents/Effect/Effect";
 import {
     MessageBox
