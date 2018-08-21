@@ -142,8 +142,11 @@ class AudioVisualizerView extends GameView {
             Graphics.rotate(context, this.rotation + value, 1, () => {
                 this.drawFFT(source, context, w, h, cx, cy, 1 + value * 10);
             });
-            Graphics.rotate(context, Math.PI / 9, 1, () => {
+            Graphics.rotate(context, Math.PI / 6, 1, () => {
                 context.drawImage(context.canvas, 0, 0, w, h);
+            });
+            Graphics.mirror(context, -1, -1, 0.6, () => {
+                context.drawImage(context.canvas, 0, 0);
             });
         }
     }

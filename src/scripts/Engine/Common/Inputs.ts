@@ -164,15 +164,15 @@ export class TouchInput extends InputBase {
     _registTouchEvent(inputs: Inputs) {
         this.registEvent("tap", InputEvents.Tap);
         this.registEvent("touchStart", InputEvents.TouchStart, () => {
-            event.preventDefault();
+            event.stopPropagation();
             inputs.touch.isTouching = true;
         });
         this.registEvent("touchEnd", InputEvents.TouchEnd, () => {
-            event.preventDefault();
+            event.stopPropagation();
             inputs.touch.isTouching = false;
         });
         this.registEvent("touchmove", InputEvents.TouchMove, (event: TouchEvent) => {
-            event.preventDefault();
+            event.stopPropagation();
             inputs.touch.position = new Vector2(event.changedTouches[0].clientX, event.changedTouches[0].clientY);
         });
     }
@@ -216,15 +216,15 @@ export class PointerInput extends InputBase {
     _registTouchEvent(inputs: Inputs) {
         this.registEvent("tap", InputEvents.PointerClicked);
         this.registEvent("touchstart", InputEvents.PointerPressed, () => {
-            event.preventDefault();
+            event.stopPropagation();
             inputs.pointer.isPressed = true;
         });
         this.registEvent("touchend", InputEvents.PointerReleased, () => {
-            event.preventDefault();
+            event.stopPropagation();
             inputs.pointer.isPressed = false;
         });
         this.registEvent("touchmove", InputEvents.PointerMoved, (event: TouchEvent) => {
-            event.preventDefault();
+            event.stopPropagation();
             inputs.pointer.isPressed = true;
             inputs.pointer.position = new Vector2(event.changedTouches[0].clientX, event.changedTouches[0].clientY);
         });
