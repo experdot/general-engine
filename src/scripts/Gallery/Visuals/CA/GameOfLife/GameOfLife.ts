@@ -32,11 +32,14 @@ import {
 
 export class GameOfLife extends GameVisual {
     get offset() {
-        let size = this.settings.size;
-        let initial = this.settings.initialSize;
-        let xOffset = -(size - initial) * this.CA.width / 2;
-        let yOffset = -(size - initial) * this.CA.height / 2;
-        return new Vector2(xOffset, yOffset);
+        if (this.settings && this.CA) {
+            let size = this.settings.size;
+            let initial = this.settings.initialSize;
+            let xOffset = -(size - initial) * this.CA.width / 2;
+            let yOffset = -(size - initial) * this.CA.height / 2;
+            return new Vector2(xOffset, yOffset);
+        }
+        return null;
     }
 
     private CA: CellularAutomata;
@@ -55,7 +58,7 @@ export class GameOfLife extends GameVisual {
             grow: new DelayTimer()
         };
 
-
+        console.log("a");
 
         this.settings = {
             xOffsets: [-1, 0, 1, 1, 1, 0, -1, -1],
@@ -67,6 +70,8 @@ export class GameOfLife extends GameVisual {
             rangeSize: 16,
             rotation: 0
         };
+
+        console.log("b");
     }
 
     start() {
