@@ -58,8 +58,6 @@ export class GameOfLife extends GameVisual {
             grow: new DelayTimer()
         };
 
-        console.log("a");
-
         this.settings = {
             xOffsets: [-1, 0, 1, 1, 1, 0, -1, -1],
             yOffsets: [-1, -1, -1, 0, 1, 1, 1, 0],
@@ -70,8 +68,6 @@ export class GameOfLife extends GameVisual {
             rangeSize: 16,
             rotation: 0
         };
-
-        console.log("b");
     }
 
     start() {
