@@ -10,10 +10,12 @@ export class GeneralObject {
 
     identifier: any;
     joints: GeneralObject[];
+    processes: { [names: string]: GeneralProcess };
 
     constructor() {
         this.identifier = Identifier.Unique;
         this.joints = [];
+        this.processes = {};
     }
 
     joint(object: GeneralObject) {
@@ -34,8 +36,8 @@ export class GeneralObject {
 
     implements(generalInterface: GeneralInterface) {
         generalInterface.processes.forEach(element => {
-            if (!this[element]) {
-                this[element] = new GeneralProcess(this).next(this[element.slice(1)]);
+            if (!this.processes[element]) {
+                this.processes[element] = new GeneralProcess(this).next(this[element]);
             }
         });
     }

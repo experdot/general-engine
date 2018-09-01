@@ -18,7 +18,7 @@ export class GalleryApp extends App {
     launch() {
         GalleryTextResourceManager.load(() => {
             GalleryImageResourceManager.load(() => {
-                this.$run.process();
+                this.processes.run.process();
             });
         });
     }

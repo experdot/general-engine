@@ -20,7 +20,7 @@ export class GhostEffect extends GeneralObject {
 
     start(source: GameVisual) {
         if (this.direct) {
-            source.$render.before((s: GameVisual, context: CanvasRenderingContext2D) => this.effect(context), this.identifier);
+            source.processes.render.before((s: GameVisual, context: CanvasRenderingContext2D) => this.effect(context), this.identifier);
         }
     }
 
@@ -55,7 +55,7 @@ export class GhostImageEffect extends GeneralObject {
 
     start(source: GameVisual) {
         if (this.direct) {
-            source.$render.before((s: GameVisual, context: CanvasRenderingContext2D) => this.effect(context), this.identifier);
+            source.processes.render.before((s: GameVisual, context: CanvasRenderingContext2D) => this.effect(context), this.identifier);
         }
     }
 

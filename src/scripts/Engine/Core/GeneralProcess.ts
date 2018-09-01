@@ -2,18 +2,15 @@ import { GeneralObject } from "./GeneralObject";
 import { GeneralTask } from "./GeneralTask";
 
 export class GeneralProcess {
-    static find(object: GeneralObject) {
-        let result = [];
-        for (const key in object) {
-            const value = object[key];
-            if (value instanceof GeneralProcess) {
-                result.push({
-                    key,
-                    value
-                });
-            }
+    static find(object: GeneralObject): GeneralProcessKeyValuePair[] {
+        let result: GeneralProcessKeyValuePair[] = [];
+        let processes = object.processes;
+        for (const key in processes) {
+            result.push({
+                key: key,
+                value: processes[key]
+            });
         }
-
         return result;
     }
 
@@ -36,9 +33,11 @@ export class GeneralProcess {
     }
 
     static every(source: GeneralObject, target: GeneralObject, hanlder: (source: GeneralProcess, target: GeneralProcess, key: string) => void) {
+        const sourceProcesses = source.processes;
+        const targetProcesses = target.processes;
         GeneralProcess.find(source).forEach(element => {
-            const sourceProcess = source[element.key];
-            const targetProcess = target[element.key];
+            const sourceProcess = sourceProcesses[element.key];
+            const targetProcess = targetProcesses[element.key];
             if (targetProcess instanceof GeneralProcess) {
                 hanlder(sourceProcess, targetProcess, element.key);
             }
@@ -86,4 +85,10 @@ export class GeneralProcess {
     clear() {
         this.tasks = [];
     }
+}
+
+
+class GeneralProcessKeyValuePair {
+    key: string;
+    value: GeneralProcess;
 }

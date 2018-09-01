@@ -2,7 +2,6 @@ import { FrameManager } from "./FrameManager";
 import { GameWorld } from "../GameWorld/GameWorld";
 
 export class GameBox {
-
     container: HTMLElement;
     canvas: HTMLCanvasElement;
     context: CanvasRenderingContext2D;
@@ -19,11 +18,11 @@ export class GameBox {
     }
 
     run() {
-        this.world.$start.process();
-        this.world.$gui.process(this.container);
+        this.world.processes.start.process();
+        this.world.processes.gui.process(this.container);
         this.frameManager.loopInvoke(() => {
-            this.world.$render.process(this.context);
-            this.world.$update.process();
+            this.world.processes.render.process(this.context);
+            this.world.processes.update.process();
         });
     }
 
@@ -31,6 +30,6 @@ export class GameBox {
         this.frameManager.stop(() => {
             this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
         });
-        this.world.$dispose.process();
+        this.world.processes.dispose.process();
     }
 }
