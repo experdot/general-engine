@@ -5,6 +5,7 @@ import { GameBox } from "../../Engine/Game/GameBox/GameBox";
 import { GalleryStarter } from "../GalleryStarter";
 import { GalleryNavigator } from "./GalleryNavigator";
 import { GalleryImageResourceManager } from "../Resources/GalleryImages";
+import { Utilities } from "../../Engine/Common/Utilities";
 
 export class GalleryApp extends App {
     constructor() {
@@ -80,22 +81,8 @@ class GalleryGames extends App {
             this.run();
         });
 
-        let mode = true;
         $("#button-fullscreen").click(() => {
-            let methods = ["ms", "moz", "webkit"].map(v => v + (mode ? "RequestFullscreen" : "ExitFullscreen"));
-            methods.forEach(v => {
-                if (mode) {
-                    if ((document.documentElement as any)[v]) {
-                        (document.documentElement as any)[v]();
-                    }
-                }
-                else {
-                    if ((document as any)[v]) {
-                        (document as any)[v]();
-                    }
-                }
-            });
-            mode = !mode;
+            Utilities.requestFullScreen(true, document.querySelector("#gallery-game"));
         });
     }
 
