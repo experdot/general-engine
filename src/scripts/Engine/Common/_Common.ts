@@ -4,6 +4,7 @@ import * as Exception from "./Exception";
 import * as Inputs from "./Inputs";
 import * as DelayTimer from "./DelayTimer";
 import * as Identifier from "./Identifier";
+import * as Utilities from "./Identifier";
 
 export const Common = {
     EventArgs,
@@ -11,5 +12,6 @@ export const Common = {
     Exception,
     Inputs,
     DelayTimer,
-    Identifier
+    Identifier,
+    Utilities
 };
