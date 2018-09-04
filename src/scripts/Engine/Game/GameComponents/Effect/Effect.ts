@@ -1,10 +1,10 @@
 import { GeneralObject } from "../../../Core/GeneralObject";
-import { GameEffectInterface } from "../../GameInterface/GameInterface";
+import { GameEffectInterface, IGameEffectProcesses } from "../../GameInterface/GameInterface";
 import { ColorHelper, Colors, Color } from "../../../UI/Color";
 import { GameVisual } from "../../GameObject/GameVisual";
 
 
-export class GhostEffect extends GeneralObject {
+export class GhostEffect extends GeneralObject<IGameEffectProcesses> {
     fillColor: Color;
     gradientNumber: number;
     direct: boolean;
@@ -38,7 +38,7 @@ export class GhostEffect extends GeneralObject {
     }
 }
 
-export class GhostImageEffect extends GeneralObject {
+export class GhostImageEffect extends GeneralObject<IGameEffectProcesses> {
     image: HTMLImageElement;
     alpha: number;
     direct: boolean;

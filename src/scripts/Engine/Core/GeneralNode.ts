@@ -1,8 +1,8 @@
 import { GeneralObject } from "./GeneralObject";
 
-export class GeneralNode extends GeneralObject {
-    parent: GeneralNode;
-    children: GeneralNode[];
+export class GeneralNode<T> extends GeneralObject<T> {
+    parent: GeneralNode<any>;
+    children: GeneralNode<any>[];
 
     constructor() {
         super();
@@ -10,14 +10,14 @@ export class GeneralNode extends GeneralObject {
         this.children = [];
     }
 
-    addChild(child: GeneralNode) {
+    addChild(child: GeneralNode<any>) {
         child.parent = this;
         this.children.push(child);
         this.joint(child);
         return this;
     }
 
-    removeChild(child: GeneralNode) {
+    removeChild(child: GeneralNode<any>) {
         let index = this.children.indexOf(child);
         if (index >= 0) {
             this.disjoint(child);

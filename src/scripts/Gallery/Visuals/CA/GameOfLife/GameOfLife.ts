@@ -18,7 +18,7 @@ import {
     ScaleCell, Cell
 } from "../Cell";
 import {
-    GameView
+    GameView, TypedGameView
 } from "../../../../Engine/Game/GameObject/GameView";
 import {
     Graphics
@@ -30,21 +30,33 @@ import {
     InputEvents
 } from "../../../../Engine/Common/Inputs";
 
+interface IGameOfLifeSettings {
+    xOffsets: Array<number>;
+    yOffsets: Array<number>;
+    progress: number;
+    sin: number;
+    size: number;
+    initialSize: number;
+    rangeSize: number;
+    rotation: number;
+}
+
 export class GameOfLife extends GameVisual {
     get offset() {
-        if (this.settings && this.CA) {
+        if (this.settings && this.automata) {
             let size = this.settings.size;
             let initial = this.settings.initialSize;
-            let xOffset = -(size - initial) * this.CA.width / 2;
-            let yOffset = -(size - initial) * this.CA.height / 2;
+            let xOffset = -(size - initial) * this.automata.width / 2;
+            let yOffset = -(size - initial) * this.automata.height / 2;
             return new Vector2(xOffset, yOffset);
         }
         return null;
     }
 
-    private CA: CellularAutomata;
+    automata: CellularAutomata;
+    settings: IGameOfLifeSettings;
+
     private timers: { generate: DelayTimer; exchange: DelayTimer; grow: DelayTimer };
-    private settings: any;
 
     constructor() {
         super();
@@ -80,11 +92,11 @@ export class GameOfLife extends GameVisual {
         let cw = Math.round(w / this.settings.initialSize);
         let ch = Math.round(h / this.settings.initialSize);
 
-        this.CA = new CellularAutomata(cw, ch);
+        this.automata = new CellularAutomata(cw, ch);
 
-        this.CA.forEach((cell: Cell, x: number, y: number) => {
+        this.automata.forEach((cell: Cell, x: number, y: number) => {
             if (Math.random() > 0.9) {
-                this.CA.data[x][y] = new ScaleCell();
+                this.automata.data[x][y] = new ScaleCell();
             }
         });
 
@@ -94,7 +106,7 @@ export class GameOfLife extends GameVisual {
     update() {
         this.timers.exchange.delay(1000, () => {
             this.settings.progress = 0;
-            this._exchange(this.CA);
+            this._exchange(this.automata);
         }, (actual: number) => {
             this.settings.progress = actual / 1000;
         });
@@ -104,7 +116,7 @@ export class GameOfLife extends GameVisual {
         });
 
         this.timers.grow.delay(100, () => {
-            this.CA.grow(0.005);
+            this.automata.grow(0.005);
         });
 
         this.settings.rotation += 0.0001;
@@ -133,18 +145,18 @@ export class GameOfLife extends GameVisual {
             for (let i = 0; i < 4; i++) {
                 let dx = x + Math.round(Math.random() * 2 - 1);
                 let dy = y + Math.round(Math.random() * 2 - 1);
-                this.CA.data[dx][dy] = null;
+                this.automata.data[dx][dy] = null;
             }
         }
     }
 
     _generate() {
-        let generation = this.CA.generate();
-        this.CA.forEach((cell, x, y) => {
-            let count = this.CA.around(x, y, this.settings.xOffsets, this.settings.yOffsets);
+        let generation = this.automata.generate();
+        this.automata.forEach((cell, x, y) => {
+            let count = this.automata.around(x, y, this.settings.xOffsets, this.settings.yOffsets);
             if (cell) {
                 if (count === 2 || count === 3 || count === 4) {
-                    generation.data[x][y] = this.CA.data[x][y];
+                    generation.data[x][y] = this.automata.data[x][y];
                 }
             } else {
                 if (count === 3) {
@@ -152,17 +164,17 @@ export class GameOfLife extends GameVisual {
                 }
             }
         });
-        this.CA = generation;
+        this.automata = generation;
     }
 
-    _exchange(ca: CellularAutomata) {
-        let columns = ca.data.splice(0, 1);
-        ca.data.push(columns[0]);
+    _exchange(automata: CellularAutomata) {
+        let columns = automata.data.splice(0, 1);
+        automata.data.push(columns[0]);
     }
 }
 
-export class GameOfLifeView extends GameView {
-    render(source: any, context: CanvasRenderingContext2D) {
+export class GameOfLifeView extends TypedGameView<GameOfLife> {
+    render(source: GameOfLife, context: CanvasRenderingContext2D) {
         let offset = source.offset;
         let size = source.settings.size;
         let offsetX = 1 - source.settings.progress;
@@ -170,7 +182,7 @@ export class GameOfLifeView extends GameView {
 
         Graphics.rotate(context, source.settings.rotation, 1, () => {
             context.beginPath();
-            source.CA.forEach((cell: Cell, x: number, y: number) => {
+            source.automata.forEach((cell: Cell, x: number, y: number) => {
                 if (cell) {
                     let p = new Vector2((x + offsetX) * size, y * size).add(offset);
                     let real = size * cell.scale;

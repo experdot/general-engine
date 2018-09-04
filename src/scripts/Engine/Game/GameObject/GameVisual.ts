@@ -1,9 +1,9 @@
 import { GeneralNode } from "../../Core/GeneralNode";
-import { GameVisualInterface } from "../GameInterface/GameInterface";
+import { GameVisualInterface, IGameVsiualProcesses } from "../GameInterface/GameInterface";
 import { Events } from "../../Common/Events";
+import { TypedGeneralProcess } from "../../Core/GeneralProcess";
 
-
-export class GameVisual extends GeneralNode {
+export class GameVisual extends GeneralNode<IGameVsiualProcesses> {
 
     events: Events;
 

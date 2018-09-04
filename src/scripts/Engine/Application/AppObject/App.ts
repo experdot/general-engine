@@ -1,7 +1,7 @@
 import { GeneralObject } from "../../Core/GeneralObject";
-import { AppInterface } from "../AppInterface/AppInterface";
+import { AppInterface, IAppProcesses } from "../AppInterface/AppInterface";
 
-export class App extends GeneralObject {
+export class App extends GeneralObject<IAppProcesses> {
     constructor() {
         super();
         this.implements(AppInterface);

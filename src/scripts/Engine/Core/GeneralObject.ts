@@ -1,24 +1,24 @@
 import { Identifier } from "../Common/Identifier";
-import { GeneralProcess } from "./GeneralProcess";
+import { GeneralProcess, TypedGeneralProcess } from "./GeneralProcess";
 import { GeneralInterface } from "./GeneralInterface";
 
 /**
  * Represent a general object
  */
-export class GeneralObject {
+export class GeneralObject<T> {
     [propName: string]: any;
 
     identifier: any;
-    joints: GeneralObject[];
-    processes: { [names: string]: GeneralProcess };
+    joints: GeneralObject<any>[];
+    processes: T;
 
     constructor() {
         this.identifier = Identifier.Unique;
         this.joints = [];
-        this.processes = {};
+        (this.processes as any) = {};
     }
 
-    joint(object: GeneralObject) {
+    joint(object: GeneralObject<any>) {
         GeneralProcess.setObjectSource(object, this);
         GeneralProcess.combine(this, object);
         this.joints.push(object);
@@ -26,7 +26,7 @@ export class GeneralObject {
         return this;
     }
 
-    disjoint(object: GeneralObject) {
+    disjoint(object: GeneralObject<any>) {
         this.joints.splice(this.joints.indexOf(object), 1);
         object.joints.splice(object.joints.indexOf(this), 1);
         GeneralProcess.seperate(this, object);
