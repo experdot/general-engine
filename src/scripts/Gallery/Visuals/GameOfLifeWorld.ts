@@ -13,7 +13,7 @@ import {
 } from "../Resources/GalleryTexts";
 
 export class GameOfLifeWorld extends GameWorld {
-    static get Title() {
+    static get Title(): string {
         return GalleryTexts.GameOfLifeWorld_Title;
     }
 

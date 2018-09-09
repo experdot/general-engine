@@ -4,9 +4,20 @@ import {
 import {
     Random
 } from "../../../../Engine/Numerics/Random";
+import { Vector2 } from "../../../../Engine/Numerics/Vector2";
 
 class WalkerParticle extends DynamicParticle {
-    constructor(location, size = 1, age = 0) {
+    static StaticGravityRatio: number = 0;
+
+    origin: Vector2;
+    direction: Vector2;
+    parent: WalkerParticle;
+
+    random: Random;
+    maxSize: number;
+    maxAge: number;
+
+    constructor(location?: Vector2, size: number = 1, age: number = 0) {
         super(location, size, age);
         this.random = new Random();
         this.maxSize = 1;

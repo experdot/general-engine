@@ -9,8 +9,8 @@ import {
     GalleryTexts
 } from "../Resources/GalleryTexts";
 
-class LSystemTreeWorld extends GameWorld {
-    static get Title() {
+export class LSystemTreeWorld extends GameWorld {
+    static get Title(): string {
         return GalleryTexts.LSystemTreeWorld_Title;
     }
 
@@ -22,7 +22,3 @@ class LSystemTreeWorld extends GameWorld {
         this.addChild(new LSystemTree().joint(new LSystemTreeView()));
     }
 }
-
-export {
-    LSystemTreeWorld
-};

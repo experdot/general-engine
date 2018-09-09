@@ -1,17 +1,13 @@
-import {
-    GameVisual
-} from "../../../Engine/Game/GameObject/GameVisual";
-import {
-    GameView
-} from "../../../Engine/Game/GameObject/GameView";
-import {
-    Graphics
-} from "../../../Engine/Drawing/Graphics";
-import {
-    InputEvents
-} from "../../../Engine/Common/Inputs";
+import { GameVisual } from "../../../Engine/Game/GameObject/GameVisual";
+import { GameView } from "../../../Engine/Game/GameObject/GameView";
+import { Graphics } from "../../../Engine/Drawing/Graphics";
+import { InputEvents } from "../../../Engine/Common/Inputs";
 import { Vector2 } from "../../../Engine/Numerics/Vector2";
-class VisualPointer extends GameVisual {
+
+export class VisualPointer extends GameVisual {
+    pointers: Vector2[];
+    cache: { container?: HTMLElement, cursor?: string, handler?: Function };
+
     constructor() {
         super();
         this.pointers = [];
@@ -42,7 +38,7 @@ class VisualPointer extends GameVisual {
     }
 }
 
-class VisualPointerView extends GameView {
+export class VisualPointerView extends GameView {
     render(source: any, context: CanvasRenderingContext2D) {
         Graphics.hold(context, () => {
             if (source.pointers.length > 0) {
@@ -57,7 +53,3 @@ class VisualPointerView extends GameView {
         });
     }
 }
-
-export {
-    VisualPointer
-};

@@ -59,7 +59,7 @@ class LSystemTreeView extends GameView {
         this.lineColor = new Color(255, 255, 255, 1);
         this.animation = true;
     }
-    
+
     render(source, context) {
         if (this.animation) {
             this.singleNumber = (this.singleNumber + 0.1 * Math.random()) % (Math.PI * 2);

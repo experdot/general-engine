@@ -29,9 +29,20 @@ import { GalleryImages } from "../../Resources/GalleryImages";
 
 class AudioVisualizer extends GameVisual {
     get FFTData() {
-        this.audioAnalyzer.getByteFrequencyData(this.freqByteData);
-        return this.freqByteData;
+        this.audioAnalyzer.getByteFrequencyData(this.frequncyBytes);
+        return this.frequncyBytes;
     }
+
+    audio: HTMLAudioElement;
+    audioSource: MediaElementAudioSourceNode;
+    audioContext: AudioContext;
+    audioAnalyzer: AnalyserNode;
+
+    fftSize: number;
+    frequncyBytes: Uint8Array;
+    fileInfo: { name: string, playing: boolean };
+
+    timer: DelayTimer;
 
     constructor() {
         super();
@@ -59,10 +70,10 @@ class AudioVisualizer extends GameVisual {
         this.audioContext.close();
         if (this.audio) {
             this.audio.remove();
-        }
+        };
     }
 
-    initAudio() {
+    private initAudio(): void {
         this.audioContext = new AudioContext();
 
         this.audio = document.createElement("audio");
@@ -74,24 +85,24 @@ class AudioVisualizer extends GameVisual {
 
         this.fftSize = this.world.width > 1200 ? 2048 : 1024;
         this.audioAnalyzer.fftSize = this.fftSize;
-        this.freqByteData = new Uint8Array(this.audioAnalyzer.frequencyBinCount);
+        this.frequncyBytes = new Uint8Array(this.audioAnalyzer.frequencyBinCount);
 
         this.audioSource.connect(this.audioAnalyzer);
         this.audioAnalyzer.connect(this.audioContext.destination);
 
-        this.file = {
+        this.fileInfo = {
             name: "",
             playing: false
         };
     }
 
-    loadFile(file) {
+    loadFile(file: File) {
         if (file && file.type.indexOf("audio") === 0) {
             this.audio.src = URL.createObjectURL(file);
             this.audio.autoplay = true;
             this.audio.play();
-            this.file.playing = true;
-            this.file.name = file.name.split(".").shift();
+            this.fileInfo.playing = true;
+            this.fileInfo.name = file.name.split(".").slice(-1)[0];
         } else {
             MessageBox.show("Please select a valid audio file.");
         }
@@ -99,13 +110,16 @@ class AudioVisualizer extends GameVisual {
 }
 
 class AudioVisualizerView extends GameView {
+
+    innerCanvas: OffscreenCanvas;
+
     constructor() {
         super();
         this.rotation = 0;
         this.rotation2 = 0;
     }
 
-    render(source, context) {
+    render(source, context: CanvasRenderingContext2D) {
         if (!this.innerCanvas) {
             this.innerCanvas = new OffscreenCanvas(context.canvas.width, context.canvas.height);
         }
@@ -116,7 +130,7 @@ class AudioVisualizerView extends GameView {
         this.drawStatic(source, context);
     }
 
-    drawDynamic(source, context) {
+    drawDynamic(source, context: CanvasRenderingContext2D) {
         let w = source.world.width;
         let h = source.world.height;
         let cx = w / 2;
@@ -131,7 +145,7 @@ class AudioVisualizerView extends GameView {
 
         source.effects.ghost.effect(context);
 
-        if (!source.file.playing) {
+        if (!source.fileInfo.playing) {
             this.drawText(source, context, w, h, cx, cy);
             Graphics.mirror(context, 1, -1, 0.02, () => {
                 context.drawImage(context.canvas, 0, 0);
@@ -151,7 +165,7 @@ class AudioVisualizerView extends GameView {
         }
     }
 
-    drawText(source, context, w, h, cx, cy) {
+    drawText(source, context: CanvasRenderingContext2D, w, h, cx, cy) {
         let size = Math.max(w / 30, 32);
         context.font = size + "px Arial";
         context.textAlign = "center";
@@ -160,7 +174,7 @@ class AudioVisualizerView extends GameView {
         context.fillRect(0, cy - 2, w, 4);
     }
 
-    drawFFT(source, context, w, h, cx, cy, lineScale = 1) {
+    drawFFT(source, context: CanvasRenderingContext2D, w, h, cx, cy, lineScale = 1) {
         let data = source.FFTData;
         let min = Math.min(w, h) / 2;
         context.beginPath();
@@ -175,22 +189,22 @@ class AudioVisualizerView extends GameView {
         context.stroke();
     }
 
-    drawStatic(source, context) {
+    drawStatic(source, context: CanvasRenderingContext2D) {
         let w = source.world.width;
         let h = source.world.height;
         this.drawFileinfo(source, context, w, h);
     }
 
-    drawFileinfo(source, context, w, h) {
-        let file = source.file;
-        if (file.playing) {
+    drawFileinfo(source, context: CanvasRenderingContext2D, w, h) {
+        let fileInfo = source.fileInfo;
+        if (fileInfo.playing) {
             let size = Math.max(w / 48, 16);
             let x = w * 0.1;
             let y = h * 0.8;
             context.font = size + "px Arial";
             context.textAlign = "left";
             context.fillStyle = "#FFF";
-            context.fillText(file.name, x, y);
+            context.fillText(fileInfo.name, x, y);
 
             let width = w * 0.8;
             let progress = source.audio.currentTime / source.audio.duration;

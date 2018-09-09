@@ -4,28 +4,33 @@ import {
 import {
     State
 } from "./State/State";
+import { IRule } from "./Rule/RuleBase";
 
 class LSystem {
+
+    states: State[];
+    ruleSets: { [name: string]: RuleSet<string> };
+    root: State;
+
     constructor() {
         this.states = [];
         this.ruleSets = {};
-        this.root = {};
     }
 
-    initRoot(root) {
+    initRoot(root: State) {
         this.root = root;
         this.states = [];
         this.states.push(root);
     }
 
-    addRule(rule) {
+    addRule(rule: IRule<string>) {
         if (!this.ruleSets[rule.target]) {
             this.ruleSets[rule.target] = new RuleSet();
         }
         this.ruleSets[rule.target].add(rule);
     }
-    
-    generate(count = 1) {
+
+    generate(count: number = 1) {
         for (let index = 0; index < count; index++) {
             let tempStates = [];
             this.states.forEach(state => {
@@ -42,13 +47,13 @@ class LSystem {
         }
     }
 
-    _getDefaultState(state) {
+    _getDefaultState(state: State) {
         let result = [];
         result.push(new State(state.id, state, state.generation + 1));
         return result;
     }
 
-    _combineArray(array1, array2) {
+    _combineArray(array1: any[], array2: any[]) {
         array2.forEach(element => {
             array1.push(element);
         });

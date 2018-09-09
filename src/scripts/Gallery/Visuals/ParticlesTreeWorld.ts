@@ -9,8 +9,8 @@ import {
     GalleryTexts
 } from "../Resources/GalleryTexts";
 
-class ParticlesTreeWorld extends GameWorld {
-    static get Title() {
+export class ParticlesTreeWorld extends GameWorld {
+    static get Title(): string {
         return GalleryTexts.ParticlesTreeWorld_Title;
     }
 
@@ -22,7 +22,3 @@ class ParticlesTreeWorld extends GameWorld {
         this.addChild(new ParticlesTree().joint(new ParticlesTreeView()));
     }
 }
-
-export {
-    ParticlesTreeWorld
-};

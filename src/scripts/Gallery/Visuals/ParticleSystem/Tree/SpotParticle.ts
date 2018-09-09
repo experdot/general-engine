@@ -12,6 +12,9 @@ import {
 } from "../../../../Engine/UI/Color";
 
 class SpotParticle extends DynamicParticle {
+    angleOffset: number;
+    random: Random;
+
     constructor(location, size = 1, age = 0) {
         super(location, size, age);
 
@@ -38,7 +41,7 @@ class SpotParticle extends DynamicParticle {
             }
         } else {
             this.velocity = new Vector2(-1, -1);
-            this.isDead = true;
+            this.dead = true;
         }
     }
 

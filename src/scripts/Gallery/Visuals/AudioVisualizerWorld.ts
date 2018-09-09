@@ -13,8 +13,8 @@ import {
     GalleryTexts
 } from "../Resources/GalleryTexts";
 
-class AudioVisualizerWorld extends GameWorld {
-    static get Title() {
+export class AudioVisualizerWorld extends GameWorld {
+    static get Title(): string {
         return GalleryTexts.AudioVisualizerWorld_Title;
     }
 
@@ -27,7 +27,3 @@ class AudioVisualizerWorld extends GameWorld {
         this.addChild(new AudioVisualizer().joint(new AudioVisualizerView()));
     }
 }
-
-export {
-    AudioVisualizerWorld
-};

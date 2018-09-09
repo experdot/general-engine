@@ -44,8 +44,8 @@ class ParticlesFlyer extends ParticlesBase {
         this.flyers = [];
 
         const screen = new Vector2(w, h).length;
-        const flyersCount = parseInt(screen / 16) / 2;
-        const maxSize = parseInt(screen / 60);
+        const flyersCount = Math.floor(screen / 16) / 2;
+        const maxSize = Math.floor(screen / 60);
         const fieldWidth = w * 0.8;
         const fieldHeight = h * 0.8;
         for (let i = 0; i < flyersCount; i++) {

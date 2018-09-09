@@ -12,8 +12,8 @@ import {
     GalleryTexts
 } from "../Resources/GalleryTexts";
 
-class ParticlesWalkerWorld extends GameWorld {
-    static get Title() {
+export class ParticlesWalkerWorld extends GameWorld {
+    static get Title(): string {
         return GalleryTexts.PartilesWalkerWorld_Title;
     }
 
@@ -25,7 +25,3 @@ class ParticlesWalkerWorld extends GameWorld {
         this.addChild(new ParticlesWalker().joint(new ParticlesWalkerView()));
     }
 }
-
-export {
-    ParticlesWalkerWorld
-};

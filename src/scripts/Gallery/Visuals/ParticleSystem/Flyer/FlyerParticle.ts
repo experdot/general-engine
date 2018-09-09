@@ -6,7 +6,9 @@ import {
 } from "../../../../Engine/Numerics/Vector2";
 
 class FlyerParticle extends DynamicParticle {
-    constructor(location, size = 1, age = 0) {
+    neighbourDistance: number;
+
+    constructor(location?: Vector2, size = 1, age = 0) {
         super(location, size, age);
         this.velocityUpon = 5;
         this.neighbourDistance = 400;

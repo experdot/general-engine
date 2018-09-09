@@ -52,7 +52,7 @@ class ParticlesWalker extends ParticlesBase {
         particle.direction = new Vector2(0, -this.world.width / 10);
         this.walkers.push(particle);
 
-        this.maxDepth = 6 + parseInt(w / 600);
+        this.maxDepth = 6 + Math.floor(w / 600);
         this.createNodes(this.walkers, particle, this.maxDepth, this.split, 1);
 
         this.rotationDelta = Math.PI * 2 / Math.floor(Math.random() * 8 + 2);

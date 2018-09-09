@@ -3,6 +3,9 @@ import {
 } from "../../../../Engine/Collections/Array2";
 
 class ArrayGrid extends Array2 {
+    offsetX: number[];
+    offsetY: number[];
+    
     constructor(w, h) {
         super(w, h);
 
