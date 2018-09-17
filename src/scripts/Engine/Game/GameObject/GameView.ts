@@ -1,13 +1,13 @@
 import { GeneralObject } from "../../Core/GeneralObject";
-import { GameViewInterface, IGameViewProcesses } from "../GameInterface/GameInterface";
+import { GameViewInterface } from "../GameInterface/GameInterface";
 
 /** 
  * Represents a view to present the visual object
  */
-export class GameView extends GeneralObject<IGameViewProcesses> {
+export class GameView extends GeneralObject<GameViewInterface> {
     constructor() {
         super();
-        this.implements(GameViewInterface);
+        this.implements(new GameViewInterface());
     }
 }
 
@@ -17,7 +17,7 @@ export class GameView extends GeneralObject<IGameViewProcesses> {
 export abstract class TypedGameView<T> extends GameView {
     constructor() {
         super();
-        this.implements(GameViewInterface);
+        this.implements(new GameViewInterface());
     }
 
     abstract render(source: T, context: CanvasRenderingContext2D);

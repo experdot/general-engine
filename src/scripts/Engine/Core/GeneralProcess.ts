@@ -1,7 +1,7 @@
 import { GeneralObject } from "./GeneralObject";
 import { GeneralTask } from "./GeneralTask";
 
-export class GeneralProcess {
+export class GeneralProcess<T extends any[]> {
     static find(object: GeneralObject<any>): GeneralProcessKeyValuePair[] {
         let result: GeneralProcessKeyValuePair[] = [];
         let processes = object.processes;
@@ -22,7 +22,7 @@ export class GeneralProcess {
 
     static combine(source: GeneralObject<any>, target: GeneralObject<any>) {
         GeneralProcess.every(source, target, (s, t) => {
-            s.next((s: GeneralProcess, ...args: any[]) => t.process(...args), target.identifier);
+            s.next((s: GeneralProcess<any>, ...args: any[]) => t.process(...args), target.identifier);
         });
     }
 
@@ -32,7 +32,7 @@ export class GeneralProcess {
         });
     }
 
-    static every(source: GeneralObject<any>, target: GeneralObject<any>, hanlder: (source: GeneralProcess, target: GeneralProcess, key: string) => void) {
+    static every(source: GeneralObject<any>, target: GeneralObject<any>, hanlder: (source: GeneralProcess<any>, target: GeneralProcess<any>, key: string) => void) {
         const sourceProcesses = source.processes;
         const targetProcesses = target.processes;
         GeneralProcess.find(source).forEach(element => {
@@ -59,7 +59,7 @@ export class GeneralProcess {
         return this;
     }
 
-    process(...args: any[]): this {
+    process<T extends any[]>(...args: T): this {
         this.tasks.forEach(element => {
             element.run(this.thisArg, this.source, ...args);
         });
@@ -91,32 +91,7 @@ export class GeneralProcess {
     }
 }
 
-export interface VoidGeneralProcess extends GeneralProcess {
-    process(): this;
-}
-
-export interface TypedGeneralProcess<T> extends GeneralProcess {
-    process(arg: T): this;
-}
-
-export interface TypedGeneralProcess2<T1, T2> extends GeneralProcess {
-    process(arg1: T1, arg2: T2): this;
-}
-
-export interface TypedGeneralProcess3<T1, T2, T3> extends GeneralProcess {
-    process(arg1: T1, arg2: T2, arg3: T3): this;
-}
-
-export interface TypedGeneralProcess4<T1, T2, T3, T4> extends GeneralProcess {
-    process(arg1: T1, arg2: T2, arg3: T3, arg4: T4): this;
-}
-
-export interface TypedGeneralProcess5<T1, T2, T3, T4, T5> extends GeneralProcess {
-    process(arg1: T1, arg2: T2, arg3: T3, arg4: T4, arg5: T5): this;
-}
-
-
 class GeneralProcessKeyValuePair {
     key: string;
-    value: GeneralProcess;
+    value: GeneralProcess<any>;
 }

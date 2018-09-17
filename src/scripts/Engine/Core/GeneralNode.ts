@@ -1,6 +1,6 @@
-import { GeneralObject } from "./GeneralObject";
+import { GeneralObject, GeneralInterface } from "./GeneralObject";
 
-export class GeneralNode<T> extends GeneralObject<T> {
+export class GeneralNode<T extends GeneralInterface> extends GeneralObject<T> {
     parent: GeneralNode<any>;
     children: GeneralNode<any>[];
 

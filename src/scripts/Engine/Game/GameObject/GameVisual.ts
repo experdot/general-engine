@@ -1,15 +1,13 @@
 import { GeneralNode } from "../../Core/GeneralNode";
-import { GameVisualInterface, IGameVsiualProcesses } from "../GameInterface/GameInterface";
+import { GameVsiualInterface } from "../GameInterface/GameInterface";
 import { Events } from "../../Common/Events";
-import { TypedGeneralProcess } from "../../Core/GeneralProcess";
 
-export class GameVisual extends GeneralNode<IGameVsiualProcesses> {
-
+export class GameVisual extends GeneralNode<GameVsiualInterface> {
     events: Events;
 
     constructor() {
         super();
-        this.implements(GameVisualInterface);
+        this.implements(new GameVsiualInterface());
         this.events = new Events();
     }
 

@@ -1,33 +1,25 @@
-import { GeneralInterface } from "../../Core/GeneralInterface";
-import { TypedGeneralProcess, VoidGeneralProcess } from "../../Core/GeneralProcess";
+import { GeneralInterface } from "../../Core/GeneralObject";
 
-export const GameObjectInterface = new GeneralInterface(["start", "dispose"]);
-
-export const GameViewInterface = GameObjectInterface.clone().extends(["render"]);
-export const GameGUIInterface = GameObjectInterface.clone().extends(["gui"]);
-export const GameEffectInterface = GameObjectInterface.clone().extends(["update"]);
-
-export const GameVisualInterface = GameObjectInterface.clone().extends(["update", "gui", "render"]);
-
-
-export interface IGameObjectProcesses {
-    start: VoidGeneralProcess;
-    dispose: VoidGeneralProcess;
+export class GameObjectInterface extends GeneralInterface {
+    start = [];
+    dispose = [];
 }
 
-export interface IGameViewProcesses extends IGameObjectProcesses {
-    render: TypedGeneralProcess<CanvasRenderingContext2D>;
+export class GameViewInterface extends GameObjectInterface {
+    render = [CanvasRenderingContext2D];
 }
 
-export interface IGameGUIProcesses extends IGameObjectProcesses {
-    gui: TypedGeneralProcess<HTMLElement>;
+export class GameGUIInterface extends GameObjectInterface {
+    gui = [HTMLElement];
 }
 
-export interface IGameEffectProcesses extends IGameObjectProcesses {
-    update: VoidGeneralProcess;
+export class GameEffectInterface extends GameObjectInterface {
+    update = [];
 }
 
-export interface IGameVsiualProcesses extends IGameObjectProcesses, IGameViewProcesses, IGameGUIProcesses, IGameEffectProcesses {
-
+export class GameVsiualInterface extends GameObjectInterface {
+    render = [CanvasRenderingContext2D];
+    gui = [HTMLElement];
+    update = [];
 }
 

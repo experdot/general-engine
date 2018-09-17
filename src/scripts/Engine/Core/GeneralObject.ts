@@ -1,16 +1,23 @@
 import { Identifier } from "../Common/Identifier";
-import { GeneralProcess, TypedGeneralProcess } from "./GeneralProcess";
-import { GeneralInterface } from "./GeneralInterface";
+import { GeneralProcess } from "./GeneralProcess";
+
+export class GeneralInterface {
+    [name: string]: any[];
+}
+
+type GeneralProcessType<T extends GeneralInterface> = {
+    [P in keyof T]?: GeneralProcess<T[P]>;
+}
 
 /**
  * Represent a general object
  */
-export class GeneralObject<T> {
+export class GeneralObject<T extends GeneralInterface> {
     [propName: string]: any;
 
     identifier: any;
     joints: GeneralObject<any>[];
-    processes: T;
+    processes: GeneralProcessType<T>;
 
     constructor() {
         this.identifier = Identifier.Unique;
@@ -34,11 +41,12 @@ export class GeneralObject<T> {
         return this;
     }
 
-    implements(generalInterface: GeneralInterface) {
-        generalInterface.processes.forEach(element => {
-            if (!this.processes[element]) {
-                this.processes[element] = new GeneralProcess(this).next(this[element]);
+    implements(generalInterface: T) {
+        console.log(generalInterface)
+        for (let key in generalInterface) {
+            if (generalInterface[key] instanceof Array) {
+                this.processes[key] = new GeneralProcess(this).next(this[key]);
             }
-        });
+        }
     }
 }
