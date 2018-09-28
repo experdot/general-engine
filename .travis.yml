@@ -44,7 +44,7 @@ script:
   # move distributing files
   - mv ./dist/* ${Deployment_Folder}
 
-deploy:
+after_success:
   - if [ "$TRAVIS_EVENT_TYPE" = "push" ]; then
       cd ${Deployment_Folder};
       git add --force .;
