@@ -42,7 +42,6 @@ export class GeneralObject<T extends GeneralInterface> {
     }
 
     implements(generalInterface: T) {
-        console.log(generalInterface)
         for (let key in generalInterface) {
             if (generalInterface[key] instanceof Array) {
                 this.processes[key] = new GeneralProcess(this).next(this[key]);
