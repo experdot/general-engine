@@ -5,5 +5,5 @@ export const GalleryImages = {
     Galaxy: ""
 }
 
-export const ImageResourceConfigUrl = "https://resources.general-engine.com/image/gallery-image.json";
+export const ImageResourceConfigUrl = "https://general-gallery-1253318267.cos.ap-beijing.myqcloud.com/config/gallery-image.json";
 export const GalleryImageResourceManager = new ConfigurationManager(ImageResourceConfigUrl).attach(GalleryImages);

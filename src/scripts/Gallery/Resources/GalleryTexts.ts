@@ -35,7 +35,7 @@ export const GalleryTexts = {
     }
 };
 
-export const TextResourceConfigUrl = "https://resources.general-engine.com/i18n/gallery-i18n.json";
+export const TextResourceConfigUrl = "https://general-gallery-1253318267.cos.ap-beijing.myqcloud.com/config/gallery-i18n.json";
 
 export const GalleryTextResourceManager = new CultureResourceManager();
 
