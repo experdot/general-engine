@@ -102,7 +102,7 @@ class AudioVisualizer extends GameVisual {
             this.audio.autoplay = true;
             this.audio.play();
             this.fileInfo.playing = true;
-            this.fileInfo.name = file.name.split(".").slice(-1)[0];
+            this.fileInfo.name = file.name.split(".")[0];
         } else {
             MessageBox.show("Please select a valid audio file.");
         }
@@ -139,7 +139,7 @@ class AudioVisualizerView extends GameView {
         let data = source.FFTData;
         let value = data.reduce((acc, val) => acc + val, 0) / data.length / 255;
 
-        let scale = value * 100;
+        let scale = value * Math.min(w, h) / 10;
 
         this.rotation2 = value;
 
@@ -177,11 +177,12 @@ class AudioVisualizerView extends GameView {
     drawFFT(source, context: CanvasRenderingContext2D, w, h, cx, cy, lineScale = 1) {
         let data = source.FFTData;
         let min = Math.min(w, h) / 2;
+        let offsetY = Math.min(w, h) / 10;
         context.beginPath();
         for (let index = 0; index < data.length; index++) {
             let value = data[index];
             let x = index / data.length * min + min;
-            let y = cy + value + Math.sin(x / (100 + Math.sin(this.rotation2) * 50)) * 100;
+            let y = cy + value + Math.sin(x / (100 + Math.sin(this.rotation2) * offsetY / 2)) * offsetY;
             context.lineTo(x, y);
         }
         context.lineWidth = w / data.length * lineScale;
