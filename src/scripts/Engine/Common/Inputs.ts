@@ -10,7 +10,6 @@ export enum InputEvents {
     MouseLeave = "MouseLeave",
     MouseWheel = "MouseWheel",
 
-    Tap = "Tap",
     TouchStart = "TouchStart",
     TouchEnd = "TouchEnd",
     TouchMove = "TouchMove",
@@ -162,19 +161,13 @@ export class TouchInput extends InputBase {
     }
 
     _registTouchEvent(inputs: Inputs) {
-        this.registEvent("tap", InputEvents.Tap);
-        this.registEvent("touchStart", InputEvents.TouchStart, () => {
-            event.stopPropagation();
-            event.preventDefault();
+        this.registEvent("touchstart", InputEvents.TouchStart, () => {
             inputs.touch.isTouching = true;
         });
-        this.registEvent("touchEnd", InputEvents.TouchEnd, () => {
-            event.stopPropagation();
-            event.preventDefault();
+        this.registEvent("touchend", InputEvents.TouchEnd, () => {
             inputs.touch.isTouching = false;
         });
         this.registEvent("touchmove", InputEvents.TouchMove, (event: TouchEvent) => {
-            event.stopPropagation();
             event.preventDefault();
             inputs.touch.position = new Vector2(event.changedTouches[0].clientX, event.changedTouches[0].clientY);
         });
@@ -217,19 +210,19 @@ export class PointerInput extends InputBase {
         document.onmousewheel = wheelHandler;
     }
     _registTouchEvent(inputs: Inputs) {
-        this.registEvent("tap", InputEvents.PointerClicked);
-        this.registEvent("touchstart", InputEvents.PointerPressed, () => {
-            event.stopPropagation();
+        this.registEvent("touchstart", InputEvents.PointerPressed, (event: TouchEvent) => {
             event.preventDefault();
             inputs.pointer.isPressed = true;
         });
         this.registEvent("touchend", InputEvents.PointerReleased, () => {
-            event.stopPropagation();
             event.preventDefault();
+            let isRaiseClickEvent = inputs.pointer.isPressed;
             inputs.pointer.isPressed = false;
+            if (isRaiseClickEvent) {
+                (inputs.ui as HTMLElement).click();
+            }
         });
         this.registEvent("touchmove", InputEvents.PointerMoved, (event: TouchEvent) => {
-            event.stopPropagation();
             event.preventDefault();
             inputs.pointer.isPressed = true;
             inputs.pointer.position = new Vector2(event.changedTouches[0].clientX, event.changedTouches[0].clientY);
