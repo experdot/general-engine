@@ -26,20 +26,30 @@ import {
     InputEvents
 } from "../../../Engine/Common/Inputs";
 import { GalleryImages } from "../../Resources/GalleryImages";
+import { Color } from "../../../Engine/UI/Color";
 
 class AudioVisualizer extends GameVisual {
-    get FFTData() {
+    get fftData() {
         this.audioAnalyzer.getByteFrequencyData(this.frequncyBytes);
         return this.frequncyBytes;
     }
 
-    audio: HTMLAudioElement;
-    audioSource: MediaElementAudioSourceNode;
-    audioContext: AudioContext;
-    audioAnalyzer: AnalyserNode;
+    get timeDomainData() {
+        this.audioAnalyzer.getByteTimeDomainData(this.timeDomainBytes);
+        return this.timeDomainBytes;
+    }
 
-    fftSize: number;
-    frequncyBytes: Uint8Array;
+    private audio: HTMLAudioElement;
+    private audioSource: MediaElementAudioSourceNode;
+    private audioContext: AudioContext;
+    private audioAnalyzer: AnalyserNode;
+
+    private fftSize: number;
+    private frequncyBytes: Uint8Array;
+
+    private timeDomainSize: number;
+    private timeDomainBytes: Uint8Array;
+
     fileInfo: { name: string, playing: boolean };
 
     timer: DelayTimer;
@@ -87,6 +97,9 @@ class AudioVisualizer extends GameVisual {
         this.audioAnalyzer.fftSize = this.fftSize;
         this.frequncyBytes = new Uint8Array(this.audioAnalyzer.frequencyBinCount);
 
+        this.timeDomainSize = this.audioAnalyzer.frequencyBinCount * 2;
+        this.timeDomainBytes = new Uint8Array(this.timeDomainSize);
+
         this.audioSource.connect(this.audioAnalyzer);
         this.audioAnalyzer.connect(this.audioContext.destination);
 
@@ -110,13 +123,13 @@ class AudioVisualizer extends GameVisual {
 }
 
 class AudioVisualizerView extends GameView {
-
     innerCanvas: OffscreenCanvas;
 
     constructor() {
         super();
         this.rotation = 0;
         this.rotation2 = 0;
+        this.rotation3 = 0;
     }
 
     render(source, context: CanvasRenderingContext2D) {
@@ -136,7 +149,7 @@ class AudioVisualizerView extends GameView {
         let cx = w / 2;
         let cy = h / 2;
 
-        let data = source.FFTData;
+        let data = source.fftData;
         let value = data.reduce((acc, val) => acc + val, 0) / data.length / 255;
 
         let scale = value * Math.min(w, h) / 10;
@@ -146,8 +159,11 @@ class AudioVisualizerView extends GameView {
         source.effects.ghost.effect(context);
 
         if (!source.fileInfo.playing) {
-            this.drawText(source, context, w, h, cx, cy);
-            Graphics.mirror(context, 1, -1, 0.02, () => {
+            this.rotation3 += 0.04;
+            let sc = Math.sin(this.rotation3) * 2 - 1;
+            Graphics.scaleOffset(context, sc, sc, 0.999);
+            this.drawText(source, context, w, h, cx, cy, 1);
+            Graphics.mirror(context, 1, -1, 0.2, () => {
                 context.drawImage(context.canvas, 0, 0);
             });
         } else {
@@ -156,26 +172,26 @@ class AudioVisualizerView extends GameView {
             Graphics.rotate(context, this.rotation + value, 1, () => {
                 this.drawFFT(source, context, w, h, cx, cy, 1 + value * 10);
             });
-            Graphics.rotate(context, Math.PI / 6, 1, () => {
+            Graphics.rotate(context, Math.PI * (value / 2), 1, () => {
                 context.drawImage(context.canvas, 0, 0, w, h);
             });
-            Graphics.mirror(context, -1, -1, 0.6, () => {
+            Graphics.mirror(context, -(1 + value / 3), -(1 + value / 3), 0.6, () => {
                 context.drawImage(context.canvas, 0, 0);
             });
         }
     }
 
-    drawText(source, context: CanvasRenderingContext2D, w, h, cx, cy) {
+    drawText(source, context: CanvasRenderingContext2D, w, h, cx, cy, alpha = 1) {
         let size = Math.max(w / 30, 32);
         context.font = size + "px Arial";
         context.textAlign = "center";
-        context.fillStyle = "#FFF";
+        context.fillStyle = new Color(255, 255, 255, 1).rgba;
         context.fillText("Drag an audio file here.", cx, cy - size / 2.5);
         context.fillRect(0, cy - 2, w, 4);
     }
 
     drawFFT(source, context: CanvasRenderingContext2D, w, h, cx, cy, lineScale = 1) {
-        let data = source.FFTData;
+        let data = source.fftData;
         let min = Math.min(w, h) / 2;
         let offsetY = Math.min(w, h) / 10;
         context.beginPath();
@@ -183,6 +199,22 @@ class AudioVisualizerView extends GameView {
             let value = data[index];
             let x = index / data.length * min + min;
             let y = cy + value + Math.sin(x / (100 + Math.sin(this.rotation2) * offsetY / 2)) * offsetY;
+            context.lineTo(x, y);
+        }
+        context.lineWidth = w / data.length * lineScale;
+        context.strokeStyle = "#FFFFFF";
+        context.stroke();
+    }
+
+    drawTimeDomain(source, context: CanvasRenderingContext2D, w, h, cx, cy, lineScale = 1) {
+        let data = source.timeDomainData;
+        let offsetX = w * 0.001;
+        let xLength = w - offsetX * 2;
+        context.beginPath();
+        for (let index = 0; index < data.length; index++) {
+            let value = data[index];
+            let x = index / data.length * xLength + offsetX;
+            let y = cy + value - 128;
             context.lineTo(x, y);
         }
         context.lineWidth = w / data.length * lineScale;
@@ -209,9 +241,10 @@ class AudioVisualizerView extends GameView {
 
             let width = w * 0.8;
             let progress = source.audio.currentTime / source.audio.duration;
+            let current = width * progress;
             context.strokeStyle = "#FFF";
-            context.strokeRect(x, y + size, width, size / 3);
-            context.fillRect(x, y + size, width * progress, size / 3);
+            context.strokeRect(x + current, y + size, width - current, size / 3);
+            context.fillRect(x, y + size, current, size / 3);
         }
     }
 }

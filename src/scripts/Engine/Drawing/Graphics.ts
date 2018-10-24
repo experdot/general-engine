@@ -6,6 +6,17 @@ export class Graphics {
         return this;
     }
 
+    static shadow(context: CanvasRenderingContext2D, blur: number, color: string, offsetX: number, offsetY: number, action: (context: CanvasRenderingContext2D) => void) {
+        Graphics.hold(context, () => {
+            context.shadowBlur = blur;
+            context.shadowColor = color;
+            context.shadowOffsetX = offsetX;
+            context.shadowOffsetY = offsetY;
+            action && action(context);
+        });
+        return this;
+    }
+
     static scaleOffset(context: CanvasRenderingContext2D, offsetX = 0, offsetY = 0, alpha = 1) {
         let w = context.canvas.width;
         let h = context.canvas.height;

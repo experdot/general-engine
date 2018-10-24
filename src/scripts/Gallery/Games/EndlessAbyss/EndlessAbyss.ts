@@ -299,11 +299,13 @@ class StaticLayerView extends GameView {
             this.drawScore(context, size, source.target.settings.score);
         } else {
             this.drawMask(context, size);
-            if (source.target.settings.gameover) {
-                this.drawTitle(context, size, GalleryTexts.EndlessAbyssWorld.GameOver);
-            } else {
-                this.drawTitle(context, size, GalleryTexts.EndlessAbyssWorld.GameName);
-            }
+            Graphics.shadow(context, 3, "rgba(0,0,0,0.38)", 3, 3, () => {
+                if (source.target.settings.gameover) {
+                    this.drawTitle(context, size, GalleryTexts.EndlessAbyssWorld.GameOver);
+                } else {
+                    this.drawTitle(context, size, GalleryTexts.EndlessAbyssWorld.GameName);
+                }
+            });
             this.drawNotify(context, size);
         }
     }

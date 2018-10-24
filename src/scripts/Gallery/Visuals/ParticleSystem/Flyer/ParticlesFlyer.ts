@@ -244,7 +244,9 @@ class MainLayerView extends GameView {
                     //this.drawParticle(context, element);
                 });
 
-                this.drawInfo(innerContext, source.world.size);
+                Graphics.shadow(innerContext, 3, "rgba(0,0,0,0.38)", 3, 3, () => {
+                    this.drawInfo(innerContext, source.world.size);
+                });
 
                 //context.drawImage(this.clound, 0, 0);
 
