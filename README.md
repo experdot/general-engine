@@ -6,6 +6,20 @@
 ## Gallery
 To check out live examples created with general-engine, please visit [gallery][repo-gallery] website.
 
+ 🌳 [Tree](https://general-engine.com/views/gallery.html?scene=tree)
+
+ 🕊 [Flyer](https://general-engine.com/views/gallery.html?scene=flyer)
+ 
+ 💥 [Walker](https://general-engine.com/views/gallery.html?scene=walker)
+ 
+ 🌀 [Endless Abyss](https://general-engine.com/views/gallery.html?scene=endlessabyss)
+ 
+ ⚔ [Game of life](https://general-engine.com/views/gallery.html?scene=gameoflife)
+ 
+ 🌿 [L-System Tree](https://general-engine.com/views/gallery.html?scene=lsystemtree)
+ 
+ 🎵 [Audio Visualizer](https://general-engine.com/views/gallery.html?scene=audiovisualizer)
+
 ## Install
 Download a [stable release][repo-releases] and include the script in your web page:
 ``` html
