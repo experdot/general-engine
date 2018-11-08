@@ -19,29 +19,98 @@ import {
 import {
     Vector2
 } from "../../../Engine/Numerics/Vector2";
+import { Random } from "../../../Engine/Numerics/Random";
+import { InputEvents } from "../../../Engine/Common/Inputs";
 
 class LSystemTree extends GameVisual {
     get states() {
         return this.LSystem.states;
     }
+
+    offset: Vector2 = Vector2.Zero;
+    lineLengthRatio: number = 1;
+
+    private letters: string[] = ["F", "[", "]", "+", "-", ".", "*", "(", ")"];
+
+    private letters1: string[] = ["F", "[", "]", "+", "-", ".", "*", "(", ")"];
+    private letters2: string[] = ["F", "]", "[", "-", "+", "*", ".", ")", "("];
+
+    private random: Random = new Random();
+
     constructor() {
         super();
 
         this.LSystem = new LSystem();
         this.LSystem.initRoot(new State("F", null, 0));
 
-        let letters = [
+        let rules = [
+            "FF+[+F-F-F]-[-F+F+F]",
             "F[+F-F+F+FF]F[-F+F-F-FF]F",
             "FF[-F-FF--F][+F+FF-F]FF",
             "F[.--F++F-.F][.++F--F+.F][.-F++F][.+F--F].F",
             "F-F-F+F++F+F-F-F",
-            "F--F+F+F+F+F--F"
+            "F--F+F+F+F+F--F",
+            "F[-F-FF--F][+F+FF-F]F",
+            "F[-FF--F][+FF-F]FF",
+            "F[-F-FF][+F+FF]F",
+            "F-F[-FFF-F][+FFF-F]F+F",
+            "F+[-FF-F][+FF-F]F-F",
+            "F-[-FF-F][+FF-F]+F",
         ];
-        let index = 0; //Math.floor(Math.random() * letters.length);
-        this.LSystem.addRule(new RuleGrammar("F", 0, letters[index]));
+        
+        let i = Math.floor(Math.random() * rules.length);
+        this.LSystem.addRule(new RuleGrammar("F", 0, rules[i]));
+
+        for (let index = 1; index < this.letters.length; index++) {
+            this.LSystem.addRule(new RuleGrammar(this.letters[index], 0, this.generate()));
+        }
 
         this.depth = 3;
         this.LSystem.generate(this.depth);
+
+        let isMouseDown: boolean = false;
+        let startPos: Vector2;
+        let startOffset: Vector2;
+        this.on(InputEvents.PointerPressed, () => {
+            isMouseDown = true;
+            startPos = this.world.inputs.pointer.position;
+            startOffset = this.offset.clone();
+        });
+
+        this.on(InputEvents.PointerMoved, () => {
+            if (isMouseDown) {
+                let curPos: Vector2 = this.world.inputs.pointer.position;
+                this.offset = startOffset.add(curPos.subtract(startPos));
+            }
+        });
+
+        this.on(InputEvents.PointerReleased, () => {
+            isMouseDown = false;
+        });
+
+        this.on(InputEvents.MouseWheel, (e: MouseWheelEvent) => {
+            this.lineLengthRatio *= Math.pow(1.2, Math.sign(e.deltaY));
+        });
+    }
+
+
+    private generate() {
+        let count = this.random.range(1, 12);
+
+        let result1: string = "";
+        let result2: string = "";
+        for (let index = 0; index < count; index++) {
+            const i = Math.floor(Math.random() * this.letters.length)
+            result1 = result1 + this.letters1[i];
+            if (Math.random() > 0.5) {
+                result2 = result2 + this.letters2[i];
+            }
+            else {
+                result2 = this.letters2[i] + result2;
+            }
+        }
+
+        return result1 + "F" + result2;
     }
 }
 
@@ -60,7 +129,7 @@ class LSystemTreeView extends GameView {
         this.animation = true;
     }
 
-    render(source, context) {
+    render(source: LSystemTree, context) {
         if (this.animation) {
             this.singleNumber = (this.singleNumber + 0.1 * Math.random()) % (Math.PI * 2);
             this.rotateRatio = 6.2 + Math.sin(this.singleNumber) * 0.3;
@@ -73,8 +142,8 @@ class LSystemTreeView extends GameView {
         }
 
         if (this.animation || !this.center) {
-            this.center = new Vector2(source.world.width / 2, source.world.height * 0.9);
-            this.lengthOfLine = source.world.height * (1 / Math.pow(3, source.depth + 1)) * 1;
+            this.center = new Vector2(source.world.width / 2, source.world.height * 0.7).add(source.offset);
+            this.lengthOfLine = source.world.height * (1 / Math.pow(3, source.depth + 1)) * source.lineLengthRatio;
             this.offset = new Vector2(0, -this.lengthOfLine);
         }
 
@@ -115,15 +184,21 @@ class LSystemTreeView extends GameView {
                 this.lengthOfLine /= 0.618;
                 this.offset.setLength(this.lengthOfLine);
                 break;
+            case "(":
+                this.rotateRatio *= 0.618;
+                break;
+            case ")":
+                this.rotateRatio /= 0.618;
+                break;
             case "[":
                 this.centerStack.push(this.center.clone());
                 this.offsetStack.push(this.offset.clone());
                 this.lengthStack.push(this.lengthOfLine);
                 break;
             case "]":
-                this.center = this.centerStack.pop();
-                this.offset = this.offsetStack.pop();
-                this.lengthOfLine = this.lengthStack.pop();
+                this.center = this.centerStack.pop() || this.center;
+                this.offset = this.offsetStack.pop() || this.offset;
+                this.lengthOfLine = this.lengthStack.pop() || this.lengthOfLine;
                 break;
             default:
                 break;

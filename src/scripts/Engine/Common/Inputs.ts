@@ -213,11 +213,12 @@ export class PointerInput extends InputBase {
         this.registEvent("touchstart", InputEvents.PointerPressed, (event: TouchEvent) => {
             event.preventDefault();
             inputs.pointer.isPressed = true;
+            inputs.pointer.position = new Vector2(event.changedTouches[0].clientX, event.changedTouches[0].clientY);
         });
-        this.registEvent("touchend", InputEvents.PointerReleased, () => {
+        this.registEvent("touchend", InputEvents.PointerReleased, (event: TouchEvent) => {
             event.preventDefault();
             let isRaiseClickEvent = inputs.pointer.isPressed;
-            inputs.pointer.isPressed = false;
+            inputs.pointer.position = new Vector2(event.changedTouches[0].clientX, event.changedTouches[0].clientY);
             if (isRaiseClickEvent) {
                 (inputs.ui as HTMLElement).click();
             }

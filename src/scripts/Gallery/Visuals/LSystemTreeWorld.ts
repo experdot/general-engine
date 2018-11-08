@@ -8,6 +8,7 @@ import {
 import {
     GalleryTexts
 } from "../Resources/GalleryTexts";
+import { PointerInput } from "../../Engine/Common/Inputs";
 
 export class LSystemTreeWorld extends GameWorld {
     static get Title(): string {
@@ -15,7 +16,7 @@ export class LSystemTreeWorld extends GameWorld {
     }
 
     initialize() {
-
+        this.inputs.addInput(new PointerInput());
     }
 
     createObjects() {
