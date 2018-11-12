@@ -35,7 +35,7 @@ class ParticlesTree extends ParticlesBase {
             drawMax: 1000
         };
 
-        //this.joint(new GhostEffect(new Color(0, 128, 128, 0.006), 30));
+        this.joint(new GhostEffect(new Color(0, 128, 128, 0.006), 30));
     }
 
     start() {
@@ -83,7 +83,7 @@ class ParticlesTreeView extends GameView {
         if (!this.backLayer) {
             this.backLayer = new OffscreenCanvas(context.canvas.width, context.canvas.height);
         }
-        //Graphics.scaleOffset(context, 12, 12 * context.canvas.height / context.canvas.width, 1);
+        Graphics.scaleOffset(context, 12, 12 * context.canvas.height / context.canvas.width, 1);
         this.backLayer.draw((ctx) => {
             this.drawByFillCircle(source, ctx);
         }).output(context, 0, 0);
