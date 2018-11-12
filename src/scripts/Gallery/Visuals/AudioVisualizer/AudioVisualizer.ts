@@ -161,14 +161,14 @@ class AudioVisualizerView extends GameView {
         if (!source.fileInfo.playing) {
             this.rotation3 += 0.04;
             let sc = Math.sin(this.rotation3) * 2 - 1;
-            Graphics.scaleOffset(context, sc, sc, 0.999);
+            Graphics.scaleOffset(context, sc, sc, 0.96);
             this.drawText(source, context, w, h, cx, cy, 1);
             Graphics.mirror(context, 1, -1, 0.2, () => {
                 context.drawImage(context.canvas, 0, 0);
             });
         } else {
             this.rotation += 0.001;
-            Graphics.scaleOffset(context, scale, scale, 0.999);
+            Graphics.scaleOffset(context, scale, scale, 0.9);
             Graphics.rotate(context, this.rotation + value, 1, () => {
                 this.drawFFT(source, context, w, h, cx, cy, 1 + value * 10);
             });

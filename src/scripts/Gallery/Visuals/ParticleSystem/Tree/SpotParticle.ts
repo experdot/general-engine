@@ -10,6 +10,7 @@ import {
 import {
     ColorHelper
 } from "../../../../Engine/UI/Color";
+import { ParticlesBase } from "../ParticleSystem";
 
 class SpotParticle extends DynamicParticle {
     angleOffset: number;
@@ -58,8 +59,7 @@ class SpotParticle extends DynamicParticle {
                 let particle = new SpotParticle(this.location, newSize);
                 particle.velocity = this.velocity.rotate(this.random.normal(-100, 100) * config.divideRotateRatio).multiply(config.divideLengthRatio);
                 particle.age = this.random.normal(0, 40);
-                particle.color = ColorHelper.gradient(this.color, config.gradientColorIncrement);
-                particle.color.a = 0.96;
+                particle.color = ColorHelper.gradientRandom2(this.color, config.gradientColorIncrement * particle.size / 6);
                 generation.push(particle);
             }
         }

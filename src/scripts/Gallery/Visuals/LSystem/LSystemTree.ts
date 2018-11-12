@@ -21,27 +21,32 @@ import {
 } from "../../../Engine/Numerics/Vector2";
 import { Random } from "../../../Engine/Numerics/Random";
 import { InputEvents } from "../../../Engine/Common/Inputs";
+import { GhostEffect } from "../../../Engine/Game/GameComponents/Effect/Effect";
+import { Graphics } from "../../../Engine/Drawing/Graphics";
 
 class LSystemTree extends GameVisual {
     get states() {
-        return this.LSystem.states;
+        return this.lSystem.states;
     }
 
     offset: Vector2 = Vector2.Zero;
-    lineLengthRatio: number = 1;
+    lineLengthRatio: number = 3;
 
-    private letters: string[] = ["F", "[", "]", "+", "-", ".", "*", "(", ")"];
+    depth: number = 3;
+    lSystem: LSystem;
 
-    private letters1: string[] = ["F", "[", "]", "+", "-", ".", "*", "(", ")"];
-    private letters2: string[] = ["F", "]", "[", "-", "+", "*", ".", ")", "("];
+    private letters: string[] = ["F", "[", "]", "+", "-", ".", "*", "(", ")", "R", "G", "B", "r", "g", "b"];
+
+    private letters1: string[] = ["F", "[", "]", "+", "-", ".", "*", "(", ")", "R", "G", "B", "r", "g", "b"];
+    private letters2: string[] = ["F", "]", "[", "-", "+", "*", ".", ")", "(", "r", "g", "b", "R", "G", "B"];
 
     private random: Random = new Random();
 
     constructor() {
         super();
 
-        this.LSystem = new LSystem();
-        this.LSystem.initRoot(new State("F", null, 0));
+        this.lSystem = new LSystem();
+        this.lSystem.initRoot(new State("F", null, 0));
 
         let rules = [
             "FF+[+F-F-F]-[-F+F+F]",
@@ -57,16 +62,19 @@ class LSystemTree extends GameVisual {
             "F+[-FF-F][+FF-F]F-F",
             "F-[-FF-F][+FF-F]+F",
         ];
-        
-        let i = Math.floor(Math.random() * rules.length);
-        this.LSystem.addRule(new RuleGrammar("F", 0, rules[i]));
 
-        for (let index = 1; index < this.letters.length; index++) {
-            this.LSystem.addRule(new RuleGrammar(this.letters[index], 0, this.generate()));
+        //let i = Math.floor(Math.random() * rules.length);
+        //this.lSystem.addRule(new RuleGrammar("F", rules[i]));
+
+        let maxCount = window.document.body.clientWidth / 50;
+
+        for (let k = 0; k < this.depth; k++) {
+            for (let index = 0; index < this.letters.length; index++) {
+                this.lSystem.addRule(new RuleGrammar(this.letters[index], this.generate(maxCount)));
+            }
         }
 
-        this.depth = 3;
-        this.LSystem.generate(this.depth);
+        this.lSystem.generate(this.depth);
 
         let isMouseDown: boolean = false;
         let startPos: Vector2;
@@ -91,11 +99,13 @@ class LSystemTree extends GameVisual {
         this.on(InputEvents.MouseWheel, (e: MouseWheelEvent) => {
             this.lineLengthRatio *= Math.pow(1.2, Math.sign(e.deltaY));
         });
+
+        this.joint(new GhostEffect(new Color(0, 128, 128, 0.006), 40));
     }
 
 
-    private generate() {
-        let count = this.random.range(1, 12);
+    private generate(maxCount = 50) {
+        let count = this.random.normal(1, maxCount);
 
         let result1: string = "";
         let result2: string = "";
@@ -115,30 +125,44 @@ class LSystemTree extends GameVisual {
 }
 
 class LSystemTreeView extends GameView {
+
+    centerStack: Vector2[];
+    offsetStack: Vector2[];
+    lengthStack: number[];
+    lineWidthStack: number[];
+
+    singleNumber: number;
+    rotateRatio: number;
+    lineWidthRatio: number;
+    lineColor: Color;
+
     constructor() {
         super();
         this.centerStack = [];
         this.offsetStack = [];
         this.lengthStack = [];
+        this.lineWidthStack = [];
         this.currentIndex = 0;
+
+        this.lineWidthRatio = 1;
+        this.lineColor = new Color(255, 255, 255, 1);
 
         this.singleNumber = 0;
         this.rotateRatio = 6;
-
-        this.lineColor = new Color(255, 255, 255, 1);
         this.animation = true;
     }
 
     render(source: LSystemTree, context) {
         if (this.animation) {
-            this.singleNumber = (this.singleNumber + 0.1 * Math.random()) % (Math.PI * 2);
-            this.rotateRatio = 6.2 + Math.sin(this.singleNumber) * 0.3;
+            this.singleNumber = (this.singleNumber + 0.01 * Math.random()) % (Math.PI * 2);
+            this.rotateRatio = 6.2 + Math.sin(this.singleNumber) * 2.3;
             this.centerStack = [];
             this.offsetStack = [];
             this.lengthStack = [];
             this.currentIndex = 0;
-            this.lineColor = new Color(255, 255, 255, 1);
-            context.clearRect(0, 0, source.world.width, source.world.height);
+            this.lineColor = new Color(128, 218, 128, 1);
+            //context.clearRect(0, 0, source.world.width, source.world.height);
+            Graphics.scaleOffset(context, 8, 8 * context.canvas.height / context.canvas.width, 0.99);
         }
 
         if (this.animation || !this.center) {
@@ -151,7 +175,7 @@ class LSystemTreeView extends GameView {
         let stepBound = this.animation ? 10000 : 1000;
         let states = source.states;
         for (let i = this.currentIndex; i < states.length; i++) {
-            this.mapped(states[i].id, context);
+            this.mapped(states[i].value, context);
             this.currentIndex = i + 1;
             stepIndex += 1;
             if (stepIndex > stepBound) {
@@ -164,10 +188,8 @@ class LSystemTreeView extends GameView {
         /* eslint-disable */
         switch (id) {
             case "F":
-                this.drawLineBranch(context, this.center, this.offset);
-                this.center = this.center.add(this.offset);
-                break;
-            case "M":
+                //this.drawLineBranch(context, this.center, this.offset, 1 || this.lineWidthRatio, this.lineColor);
+                this.drawCircleBranch(context, this.center, this.offset);
                 this.center = this.center.add(this.offset);
                 break;
             case "+":
@@ -177,18 +199,54 @@ class LSystemTreeView extends GameView {
                 this.offset = this.offset.rotate(-Math.PI / this.rotateRatio);
                 break;
             case ".":
-                this.lengthOfLine *= 0.618;
+                this.lengthOfLine += 10;
                 this.offset.setLength(this.lengthOfLine);
                 break;
             case "*":
-                this.lengthOfLine /= 0.618;
+                this.lengthOfLine -= 10;
                 this.offset.setLength(this.lengthOfLine);
                 break;
             case "(":
-                this.rotateRatio *= 0.618;
+                this.rotateRatio *= 0.5;
                 break;
             case ")":
-                this.rotateRatio /= 0.618;
+                this.rotateRatio /= 0.5;
+                break;
+            case "R":
+                this.lineColor.r += 25;
+                if (this.lineColor.r > 255) {
+                    this.lineColor.r = 255;
+                }
+                break;
+            case "G":
+                this.lineColor.g += 25;
+                if (this.lineColor.g > 255) {
+                    this.lineColor.g = 255;
+                }
+                break;
+            case "B":
+                this.lineColor.b += 25;
+                if (this.lineColor.b > 255) {
+                    this.lineColor.b = 255;
+                }
+                break;
+            case "r":
+                this.lineColor.r -= 25;
+                if (this.lineColor.r < 0) {
+                    this.lineColor.r = 0;
+                }
+                break;
+            case "g":
+                this.lineColor.g -= 25;
+                if (this.lineColor.g < 0) {
+                    this.lineColor.g = 0;
+                }
+                break;
+            case "b":
+                this.lineColor.b -= 25;
+                if (this.lineColor.b < 0) {
+                    this.lineColor.b = 0;
+                }
                 break;
             case "[":
                 this.centerStack.push(this.center.clone());
@@ -206,9 +264,10 @@ class LSystemTreeView extends GameView {
         /* eslint-enable */
     }
 
-    drawLineBranch(context, center, offset) {
+    drawLineBranch(context: CanvasRenderingContext2D, center, offset, lineWidth = 1, color: Color) {
         let target = center.add(offset);
-        context.strokeStyle = this.lineColor.rgba;
+        context.strokeStyle = color.rgb;
+        context.lineWidth = lineWidth;
         context.beginPath();
         context.moveTo(center.x, center.y);
         context.lineTo(target.x, target.y);
@@ -216,13 +275,15 @@ class LSystemTreeView extends GameView {
         context.stroke();
     }
 
-    drawCircleBranch(context, center, offset) {
+    drawCircleBranch(context: CanvasRenderingContext2D, center, offset) {
         let circle = center.add(offset.multiply(0.5));
         context.beginPath();
         context.arc(circle.x, circle.y, offset.length / 2, 0, Math.PI * 2, false);
         context.closePath();
+        //context.strokeStyle = this.lineColor.rgba;
+        //context.stroke();
         context.fillStyle = this.lineColor.rgba;
-        context.fill();
+        context.fill()
     }
 }
 

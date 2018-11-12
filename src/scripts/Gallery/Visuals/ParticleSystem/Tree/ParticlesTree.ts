@@ -16,6 +16,9 @@ import {
 import {
     GameView
 } from "../../../../Engine/Game/GameObject/GameView";
+import { Graphics } from "../../../../Engine/Drawing/Graphics";
+import { OffscreenCanvas } from "../../../../Engine/Drawing/OffscreenCanvas";
+import { GhostEffect } from "../../../../Engine/Game/GameComponents/Effect/Effect";
 
 class ParticlesTree extends ParticlesBase {
     constructor() {
@@ -31,6 +34,8 @@ class ParticlesTree extends ParticlesBase {
             drawIndex: 0,
             drawMax: 1000
         };
+
+        //this.joint(new GhostEffect(new Color(0, 128, 128, 0.006), 30));
     }
 
     start() {
@@ -41,7 +46,7 @@ class ParticlesTree extends ParticlesBase {
         root.velocity = new Vector2(0, -16 * ratio);
         root.size = 256 * ratio;
         root.age = 20;
-        root.color = new Color(0, 0, 0);
+        root.color = new Color(0, 0, 0, 1);
         this.spots.push(root);
         this.particles = this.spots;
     }
@@ -72,8 +77,16 @@ class ParticlesTree extends ParticlesBase {
 }
 
 class ParticlesTreeView extends GameView {
+    backLayer: OffscreenCanvas;
+
     render(source, context) {
-        this.drawByFillCircle(source, context);
+        if (!this.backLayer) {
+            this.backLayer = new OffscreenCanvas(context.canvas.width, context.canvas.height);
+        }
+        //Graphics.scaleOffset(context, 12, 12 * context.canvas.height / context.canvas.width, 1);
+        this.backLayer.draw((ctx) => {
+            this.drawByFillCircle(source, ctx);
+        }).output(context, 0, 0);
     }
 
     drawByFillCircle(source, context) {

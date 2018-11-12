@@ -61,7 +61,7 @@ export class GameOfLife extends GameVisual {
     constructor() {
         super();
 
-        this.ghost = new GhostEffect(new Color(0, 0, 0, 0.08), 0);
+        this.ghost = new GhostEffect(new Color(0, 0, 0, 0.08), 10);
         this.joint(this.ghost);
 
         this.timers = {

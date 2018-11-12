@@ -8,16 +8,16 @@ import { IRule } from "./Rule/RuleBase";
 
 class LSystem {
 
-    states: State[];
+    states: State<string>[];
     ruleSets: { [name: string]: RuleSet<string> };
-    root: State;
+    root: State<string>;
 
     constructor() {
         this.states = [];
         this.ruleSets = {};
     }
 
-    initRoot(root: State) {
+    initRoot(root: State<string>) {
         this.root = root;
         this.states = [];
         this.states.push(root);
@@ -34,26 +34,26 @@ class LSystem {
         for (let index = 0; index < count; index++) {
             let tempStates = [];
             this.states.forEach(state => {
-                if (this.ruleSets[state.id]) {
-                    state.children = this.ruleSets[state.id].rules[0].generate(state);
-                    this._combineArray(tempStates, state.children);
+                if (this.ruleSets[state.value]) {
+                    state.children = this.ruleSets[state.value].generate(state, index);
+                    this.combineArray(tempStates, state.children);
                 } else {
-                    state.children = this._getDefaultState(state);
-                    this._combineArray(tempStates, state.children);
+                    state.children = this.getDefaultState(state);
+                    this.combineArray(tempStates, state.children);
                 }
             });
             this.states = [];
-            this._combineArray(this.states, tempStates);
+            this.combineArray(this.states, tempStates);
         }
     }
 
-    _getDefaultState(state: State) {
+    private getDefaultState(state: State<string>) {
         let result = [];
-        result.push(new State(state.id, state, state.generation + 1));
+        result.push(new State(state.value, state, state.generation + 1));
         return result;
     }
 
-    _combineArray(array1: any[], array2: any[]) {
+    private combineArray(array1: any[], array2: any[]) {
         array2.forEach(element => {
             array1.push(element);
         });

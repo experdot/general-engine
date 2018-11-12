@@ -1,17 +1,21 @@
 /**
  * Represent a state with parent and children state.
  */
-class State {
-    id: string;
-    parent: State;
-    children: State[];
+class State<T> {
+    value: T;
+    parent: State<T>;
+    children: State<T>[];
     generation: number;
 
-    constructor(id: string, parent: State, generation: number) {
-        this.id = id;
+    constructor(value: T, parent: State<T>, generation: number) {
+        this.value = value;
         this.parent = parent;
         this.children = [];
         this.generation = generation;
+    }
+
+    next() {
+        return new State(this.value, this.parent, this.generation + 1);
     }
 }
 export {

@@ -69,6 +69,11 @@ class ParticlesWalker extends ParticlesBase {
         this.transform.center = new Vector2(rect.width / 2, rect.height / 2);
         this.transform.rotation = this.transform.rotation + this.rotationDelta;
 
+        if (this.transform.rotation > Math.PI * 10000) {
+            this.transform.rotation = 0;
+            this.rotationDelta = Math.PI * 2 / Math.floor(Math.random() * 8 + 2);
+        }
+
         this.walkers.forEach((element, index) => {
             element.update(rect, index === 0 ? this.center : element.parent.location);
         });
@@ -114,6 +119,7 @@ class ParticlesWalker extends ParticlesBase {
 
 class ParticlesWalkerView extends GameView {
     render(source, context) {
+        Graphics.scaleOffset(context, 2, 2 * context.canvas.height / context.canvas.width, 1);
         Graphics.transform(context, source.transform.toMatrix3x2(), () => {
             for (let index = 0; index < source.particles.length; index++) {
                 const element = source.particles[index];

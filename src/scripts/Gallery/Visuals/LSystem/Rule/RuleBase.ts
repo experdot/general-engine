@@ -4,22 +4,19 @@ import {
 
 export interface IRule<T> {
     target: T;
-    priority: number;
-    generate: (parent: State) => State[];
+    generate: (parent: State<T>) => State<T>[];
 }
 
 export class RuleGrammar implements IRule<string> {
     target: string;
-    priority: number;
     states: string[];
 
-    constructor(target: string, priority: number, letters: string = "") {
+    constructor(target: string, letters: string = "") {
         this.target = target;
-        this.priority = priority;
         this.states = letters.split("");
     }
 
-    generate(parent: State): State[] {
+    generate(parent: State<string>): State<string>[] {
         let result = [];
         this.states.forEach(element => {
             result.push(new State(element, parent, parent.generation + 1));

@@ -88,6 +88,26 @@ export class ColorHelper {
 
         return new Color(r, g, b, color.a);
     }
+
+    
+    static gradientRandom2(color: Color, increment = 1) {
+        const upon = 255;
+        let half = increment / 8;
+
+        var r = color.r;
+        r += Math.random() * increment - half;
+        r = Math.min(upon, Math.max(0, r));
+
+        var g = color.g;
+        g += Math.random() * increment - half;
+        g = Math.min(upon, Math.max(0, g));
+
+        var b = color.b;
+        b += Math.random() * increment - half;
+        b = Math.min(upon, Math.max(0, b));
+
+        return new Color(r, g, b, color.a);
+    }
 }
 
 export class Colors {
