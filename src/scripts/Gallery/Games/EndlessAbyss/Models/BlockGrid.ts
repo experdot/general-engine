@@ -22,22 +22,24 @@ class BlockGrid extends Array2 {
         return this._preBlocks;
     }
 
-    public _preBlocks: Block[];
-    public _allBlocks: Block[];
+    onOver: Function;
+    onFullRow: Function;
 
-    public onOver: Function;
-    public onFullRow: Function;
-
-    public blockGroups: BlockGroup[];
+    blockGroups: BlockGroup[];
 
     private colors: Color[];
 
+    private _preBlocks: Block[];
+    private _allBlocks: Block[];
+
     private current: any;
     private next: any;
+
     private upOffset: Vector2;
     private downOffset: Vector2;
     private leftOffset: Vector2;
     private rightOffset: Vector2;
+
     private indexOffset: 1;
 
     constructor(width = 1, height = 1) {
@@ -62,13 +64,13 @@ class BlockGrid extends Array2 {
     }
 
     up() {
-        if (this._checkMoveAvaliable(this.current, this.upOffset, this.indexOffset)) {
+        if (this._checkMoveAvailable(this.current, this.upOffset, this.indexOffset)) {
             this.current.move(this.upOffset).rotate(this.indexOffset);
         }
     }
 
     down() {
-        if (this._checkMoveAvaliable(this.current, this.downOffset)) {
+        if (this._checkMoveAvailable(this.current, this.downOffset)) {
             this.current.move(this.downOffset);
         } else {
             if (this.current.location.y === this.height - 1) {
@@ -81,13 +83,13 @@ class BlockGrid extends Array2 {
     }
 
     left() {
-        if (this._checkMoveAvaliable(this.current, this.leftOffset)) {
+        if (this._checkMoveAvailable(this.current, this.leftOffset)) {
             this.current.move(this.leftOffset);
         }
     }
 
     right() {
-        if (this._checkMoveAvaliable(this.current, this.rightOffset)) {
+        if (this._checkMoveAvailable(this.current, this.rightOffset)) {
             this.current.move(this.rightOffset);
         }
     }
@@ -106,20 +108,21 @@ class BlockGrid extends Array2 {
         this.current = current;
     }
 
-    _generateCurrent() {
+    private _generateCurrent() {
         this.current = this.next;
         this._generateNext();
         this._generateInformation();
     }
 
-    _generateNext() {
+    private _generateNext() {
         let nextIndex = Math.floor(Math.random() * this.blockGroups.length);
         let nextLocation = new Vector2(Math.floor(this.width * Math.random()), this.height - 1);
-        let color = this.colors[Math.floor(this.colors.length * Math.random())];
+        let index = Math.floor(this.colors.length * Math.random());
+        let color = this.colors[index];
         this.next = this.blockGroups[nextIndex].clone().setLocation(nextLocation).setColor(color).rotate();
     }
 
-    _generateInformation() {
+    private _generateInformation() {
         this._allBlocks = [];
         this._preBlocks = [];
         let maxRow = this._findMaxRow();
@@ -131,7 +134,7 @@ class BlockGrid extends Array2 {
         });
     }
 
-    _checkMoveAvaliable(group: BlockGroup, offset = Vector2.Zero, indexOffset = 0, annular = true) {
+    private _checkMoveAvailable(group: BlockGroup, offset = Vector2.Zero, indexOffset = 0, annular = true) {
         let locations = this.current.getLocations(indexOffset);
         for (let index = 0; index < locations.length; index++) {
             const location = locations[index].add(offset);
@@ -148,7 +151,7 @@ class BlockGrid extends Array2 {
         return true;
     }
 
-    _combineBlock(target: BlockGroup, annular = true) {
+    private _combineBlock(target: BlockGroup, annular = true) {
         target.getBlocks().forEach(block => {
             if (block) {
                 if (annular) {
@@ -163,7 +166,7 @@ class BlockGrid extends Array2 {
         this._combineFullRow();
     }
 
-    _combineFullRow() {
+    private _combineFullRow() {
         let maxRow = this._findMaxRow();
         let combineCount = 0;
         for (let y = maxRow; y >= 0; y--) {
@@ -178,7 +181,7 @@ class BlockGrid extends Array2 {
         }
     }
 
-    _findMaxRow() {
+    private _findMaxRow() {
         let max = -1;
         for (let y = 0; y < this.height; y++) {
             for (let x = 0; x < this.width; x++) {
@@ -190,13 +193,13 @@ class BlockGrid extends Array2 {
         }
         return max;
     }
-    _clearSingleRow(y: number) {
+    private _clearSingleRow(y: number) {
         for (let x = 0; x < this.width; x++) {
             this.data[x].splice(y, 1);
             this.data[x].push(null);
         }
     }
-    _checkFullRow(y: number) {
+    private _checkFullRow(y: number) {
         for (let x = 0; x < this.width; x++) {
             if (!this.get(x, y)) {
                 return false;
@@ -204,7 +207,7 @@ class BlockGrid extends Array2 {
         }
         return true;
     }
-    _updateBlockLocation() {
+    private _updateBlockLocation() {
         this.forEach((block, x, y) => {
             block && block.setLocation(new Vector2(x, y));
         });

@@ -6,10 +6,12 @@ import { GalleryStarter } from "../GalleryStarter";
 import { GalleryNavigator } from "./GalleryNavigator";
 import { GalleryImageResourceManager } from "../Resources/GalleryImages";
 import { Utilities } from "../../Engine/Common/Utilities";
+import { MessageBox } from "../../Engine/Application/MessageBox";
 
 export class GalleryApp extends App {
     constructor() {
         super();
+        this.joint(new AttachAlert());
         this.joint(new GalleryNavigator());
         this.joint(new WarningOpenOnPC());
         this.joint(new LayerProgress);
@@ -25,6 +27,25 @@ export class GalleryApp extends App {
     }
 }
 
+class AttachAlert extends App {
+    launch() {
+        MessageBox.onNotify = (message: string, title?: string, timeout?: number) => {
+            let $alert = $(`                
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                <strong>${title}</strong> ${message}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            `);
+            $("#alert-container").append($alert);
+            setTimeout(() => {
+                ($alert as any).alert("close");
+            }, timeout || 6000);
+        };
+    }
+}
+
 class WarningOpenOnPC extends App {
     launch() {
         if (!sessionStorage.getItem("warningFlag")) {
@@ -34,21 +55,10 @@ class WarningOpenOnPC extends App {
 
     run() {
         let flag = sessionStorage.getItem("warningFlag");
-        if (flag == "unknown" && PlatformInfo.IsMobile) {
+        if (flag == "unknown" && !PlatformInfo.IsMobile) {
             sessionStorage.setItem("warningFlag", "known");
             let warning = GalleryTexts.Warnings.OpenOnPC;
-            let $alert = $(`                
-            <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                <strong>${warning.Title}</strong> ${warning.Content}
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            `);
-            $("#alert-container").append($alert);
-            setTimeout(() => {
-                ($alert as any).alert("close");
-            }, 6000);
+            MessageBox.show(warning.Content, warning.Title, 6000);
         }
     }
 }
@@ -64,7 +74,6 @@ class LayerProgress extends App {
         }, 850);
     }
 }
-
 
 class GalleryGames extends App {
     private box: GameBox;

@@ -168,14 +168,16 @@ class AudioVisualizerView extends GameView {
             });
         } else {
             this.rotation += 0.001;
+
             Graphics.scaleOffset(context, scale, scale, 0.9);
+
             Graphics.rotate(context, this.rotation + value, 1, () => {
                 this.drawFFT(source, context, w, h, cx, cy, 1 + value * 10);
             });
             Graphics.rotate(context, Math.PI * (value / 2), 1, () => {
                 context.drawImage(context.canvas, 0, 0, w, h);
             });
-            Graphics.mirror(context, -(1 + value / 3), -(1 + value / 3), 0.6, () => {
+            Graphics.mirror(context, -(1 + value / 2), -(1 + value / 2), 0.6, () => {
                 context.drawImage(context.canvas, 0, 0);
             });
         }
@@ -197,12 +199,12 @@ class AudioVisualizerView extends GameView {
         context.beginPath();
         for (let index = 0; index < data.length; index++) {
             let value = data[index];
-            let x = index / data.length * min + min;
+            let x = index / data.length * min * lineScale + min;
             let y = cy + value + Math.sin(x / (100 + Math.sin(this.rotation2) * offsetY / 2)) * offsetY;
             context.lineTo(x, y);
         }
         context.lineWidth = w / data.length * lineScale;
-        context.strokeStyle = "#FFFFFF";
+        context.strokeStyle = "#FFF";
         context.stroke();
     }
 

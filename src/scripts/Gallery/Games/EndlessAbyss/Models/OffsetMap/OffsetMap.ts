@@ -11,6 +11,7 @@ export class OffsetMap {
         this.offsets = offsets;
         return this;
     }
+    
     getLocations(location: Vector2) {
         let result: Vector2[] = [];
         this.offsets.forEach((offset: Vector2) => {

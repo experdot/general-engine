@@ -61,7 +61,7 @@ export class GameOfLife extends GameVisual {
     constructor() {
         super();
 
-        this.ghost = new GhostEffect(new Color(0, 0, 0, 0.08), 10);
+        this.ghost = new GhostEffect(new Color(0, 0, 0, 0.006), 20);
         this.joint(this.ghost);
 
         this.timers = {
@@ -178,13 +178,13 @@ export class GameOfLifeView extends TypedGameView<GameOfLife> {
         let offset = source.offset;
         let size = source.settings.size;
         let offsetX = 1 - source.settings.progress;
-        Graphics.scaleOffset(context, -4, -4, 1);
+        Graphics.scaleOffset(context, 4, 4, 1);
 
         Graphics.rotate(context, source.settings.rotation, 1, () => {
             context.beginPath();
             source.automata.forEach((cell: Cell, x: number, y: number) => {
                 if (cell) {
-                    let p = new Vector2((x + offsetX) * size, y * size).add(offset);
+                    let p = new Vector2(x + offsetX, y).multiply(size).add(offset);
                     let real = size * cell.scale;
                     let half = real / 2;
                     context.rect(p.x - half, p.y - half, real, real);
@@ -192,6 +192,10 @@ export class GameOfLifeView extends TypedGameView<GameOfLife> {
             });
             context.fillStyle = Colors.White.rgba;
             context.fill();
+        });
+
+        Graphics.rotate(context, Math.PI / 7, 1, () => {
+            context.drawImage(context.canvas, 0, 0, context.canvas.width, context.canvas.height);
         });
     }
 }

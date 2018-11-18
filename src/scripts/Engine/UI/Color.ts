@@ -89,21 +89,40 @@ export class ColorHelper {
         return new Color(r, g, b, color.a);
     }
 
-    
+
     static gradientRandom2(color: Color, increment = 1) {
         const upon = 255;
-        let half = increment / 8;
 
         var r = color.r;
-        r += Math.random() * increment - half;
+        r += Math.random() * increment + 1;
         r = Math.min(upon, Math.max(0, r));
 
         var g = color.g;
-        g += Math.random() * increment - half;
+        g += Math.random() * increment + 1;
         g = Math.min(upon, Math.max(0, g));
 
         var b = color.b;
-        b += Math.random() * increment - half;
+        b += Math.random() * increment + 1;
+        b = Math.min(upon, Math.max(0, b));
+
+        return new Color(r, g, b, color.a);
+    }
+
+    static gradientRandom3(color: Color, increment = 1) {
+        const upon = 255;
+
+        let v = Math.random() * increment + 1;
+
+        var r = color.r;
+        r += v;
+        r = Math.min(upon, Math.max(0, r));
+
+        var g = color.g;
+        g += v;
+        g = Math.min(upon, Math.max(0, g));
+
+        var b = color.b;
+        b += v;
         b = Math.min(upon, Math.max(0, b));
 
         return new Color(r, g, b, color.a);

@@ -35,6 +35,8 @@ import {
 import {
     GalleryTexts
 } from "../../Resources/GalleryTexts";
+import { MessageBox } from "../../../Engine/Application/MessageBox";
+import { Random } from "../../../Engine/Numerics/Random";
 
 class EndlessAbyss extends GameVisual {
     private timer: DelayTimer;
@@ -43,7 +45,7 @@ class EndlessAbyss extends GameVisual {
     constructor() {
         super();
         this.timer = new DelayTimer();
-        this.ghost = new GhostEffect(new Color(0, 0, 0, 0.01), 40, false);
+        this.ghost = new GhostEffect(new Color(0, 0, 0, 0.005), 30, false);
         this.joint(this.ghost);
     }
 
@@ -52,11 +54,12 @@ class EndlessAbyss extends GameVisual {
         let h = this.world.height;
 
         this.settings = {
-            width: 10,
+            width: new Random().range(10, 30),
             rotation: 0,
             center: new Vector2(w / 2, h / 2),
             playing: false,
             gameover: false,
+            mocking: true,
             score: 0,
             progress: 0,
             delayTime: 500,
@@ -72,12 +75,13 @@ class EndlessAbyss extends GameVisual {
     }
 
     update() {
-        if (this.settings.playing) {
-            this.timer.delay(this.settings.delayTime, () => {
+        if (this.settings.playing || this.settings.mocking) {
+            let delay = this.settings.mocking ? 200 : this.settings.delayTime;
+            this.timer.delay(delay, () => {
                 this.blockGrid.down();
                 this.settings.progress = 0;
             }, (actual: number) => {
-                this.settings.progress = actual / this.settings.delayTime;
+                this.settings.progress = actual / delay;
             });
         }
         this.settings.rotation += 0.002;
@@ -90,8 +94,11 @@ class EndlessAbyss extends GameVisual {
                     this.settings.playing = true;
                     if (this.settings.gameover) {
                         this.settings.gameover = false;
-                        this.blockGrid.reset();
                     }
+                    if (this.settings.mocking) {
+                        this.settings.mocking = false;
+                    }
+                    this.blockGrid.reset();
                 }
                 return;
             }
@@ -103,6 +110,10 @@ class EndlessAbyss extends GameVisual {
                 this.blockGrid.up();
             } else if (event.key === "s") {
                 this.blockGrid.down();
+            }
+
+            if (event.key === "") {
+
             }
         });
 
@@ -131,8 +142,17 @@ class EndlessAbyss extends GameVisual {
         });
 
         this.blockGrid.onOver = () => {
-            this.settings.playing = false;
-            this.settings.gameover = true;
+            if (this.settings.mocking) {
+                this.settings.playing = false;
+                this.settings.mocking = true;
+                this.settings.gameover = false;
+                this.blockGrid.reset();
+            }
+            else {
+                this.settings.playing = false;
+                this.settings.mocking = false;
+                this.settings.gameover = true;
+            }
             this.settings.score = 0;
         };
 
@@ -176,7 +196,7 @@ class EndlessAbyssView extends GameView {
         this.target = source;
     }
 
-    drawAll(context: CanvasRenderingContext2D, size: any, dynamic = true) {
+    drawAll(context: CanvasRenderingContext2D, size: any, dynamic = true, ignoreFix = false) {
         const radius = 50;
         const split = this.target.blockGrid.width;
         const height = this.target.blockGrid.height;
@@ -201,14 +221,14 @@ class EndlessAbyssView extends GameView {
         };
 
         if (dynamic) {
-            this.drawBlocks(context, allBlocks, args, this.styles[0]);
             this.drawBlocks(context, fixBlocks, args, this.styles[1]);
             this.drawBlocks(context, preBlocks, args, this.styles[2]);
             args.yOffset = 4;
             this.drawBlocks(context, next, args, this.styles[3]);
             args.yOffset = 0;
         } else {
-            this.drawBlocks(context, fixBlocks, args, this.styles[4]);
+            //this.drawBlocks(context, allBlocks, args, this.styles[0]);
+            !ignoreFix && this.drawBlocks(context, fixBlocks, args, this.styles[4]);
             args.yOffset = yOffset;
             this.drawBlocks(context, current, args, this.styles[5]);
             args.yOffset = 0;
@@ -274,7 +294,10 @@ class DynamicLayerView extends GameView {
 
     drawDynamic(source: any, context: CanvasRenderingContext2D, size: number) {
         source.target.ghost.effect(context);
-        Graphics.scaleOffset(context, 8, 8 * context.canvas.height / context.canvas.width, 0.99);
+        Graphics.scaleOffset(context, 8, 8 * context.canvas.height / context.canvas.width, 1);
+        Graphics.rotate(context, Math.PI / 160, 1, () => {
+            context.drawImage(context.canvas, 0, 0, context.canvas.width, context.canvas.height);
+        });
         source.drawAll(context, size);
     }
 }
@@ -295,9 +318,13 @@ class StaticLayerView extends GameView {
 
     drawStatic(source: any, context: CanvasRenderingContext2D, size: any) {
         if (source.target.settings.playing) {
-            source.drawAll(context, size, false);
+            source.drawAll(context, size, false, false);
             this.drawScore(context, size, source.target.settings.score);
-        } else {
+        }
+        if (source.target.settings.mocking) {
+            source.drawAll(context, size, false, true);
+        }
+        if (!source.target.settings.playing) {
             this.drawMask(context, size);
             Graphics.shadow(context, 3, "rgba(0,0,0,0.38)", 3, 3, () => {
                 if (source.target.settings.gameover) {
