@@ -55,7 +55,7 @@ class WarningOpenOnPC extends App {
 
     run() {
         let flag = sessionStorage.getItem("warningFlag");
-        if (flag == "unknown" && !PlatformInfo.IsMobile) {
+        if (flag == "unknown" && PlatformInfo.IsMobile) {
             sessionStorage.setItem("warningFlag", "known");
             let warning = GalleryTexts.Warnings.OpenOnPC;
             MessageBox.show(warning.Content, warning.Title, 6000);
