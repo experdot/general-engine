@@ -32,8 +32,8 @@ export class ResourceManager {
 
     assign(target: any) {
         this.sets.forEach(element => {
-            for (let key in target) {
-                let value = element.data[key]
+            for (const key in target) {
+                const value = element.data[key]
                 if (value !== undefined) {
                     target[key] = element.data[key];
                 }
@@ -44,13 +44,13 @@ export class ResourceManager {
 
     private loading(loaded?: Function) {
         let count = 0;
-        let length = this.sets.length;
+        const length = this.sets.length;
 
         this.sets.forEach(element => {
             HttpWebRequest.get(element.src, (response: any) => {
                 element.init(JSON.parse(response))
                 count += 1;
-                if (count = length) {
+                if (count === length) {
                     loaded && loaded();
                 }
             });

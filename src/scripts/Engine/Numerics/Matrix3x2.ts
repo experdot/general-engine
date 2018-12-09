@@ -6,9 +6,9 @@ export class Matrix3x2 {
     }
 
     static createScale(xScale: number, yScale: number, centerPoint: Vector2) {
-        let result = new Matrix3x2();
-        let tx = centerPoint.x * (1 - xScale);
-        let ty = centerPoint.y * (1 - yScale);
+        const result = new Matrix3x2();
+        const tx = centerPoint.x * (1 - xScale);
+        const ty = centerPoint.y * (1 - yScale);
         result.M11 = xScale;
         result.M12 = 0.0;
         result.M21 = 0.0;
@@ -19,11 +19,11 @@ export class Matrix3x2 {
     }
 
     static createRotation(rotation: number, centerPoint: Vector2) {
-        let result = new Matrix3x2();
-        let c = Math.cos(rotation);
-        let s = Math.sin(rotation);
-        let x = centerPoint.x * (1 - c) + centerPoint.y * s;
-        let y = centerPoint.y * (1 - c) - centerPoint.x * s;
+        const result = new Matrix3x2();
+        const c = Math.cos(rotation);
+        const s = Math.sin(rotation);
+        const x = centerPoint.x * (1 - c) + centerPoint.y * s;
+        const y = centerPoint.y * (1 - c) - centerPoint.x * s;
         result.M11 = c;
         result.M12 = s;
         result.M21 = -s;
@@ -34,7 +34,7 @@ export class Matrix3x2 {
     }
 
     static createTranslation(position: Vector2) {
-        let result = new Matrix3x2();
+        const result = new Matrix3x2();
         result.M11 = 1.0;
         result.M12 = 0.0;
         result.M21 = 0.0;
@@ -104,12 +104,12 @@ export class Matrix3x2 {
     }
 
     invert() {
-        let a1 = this.M11;
-        let b1 = this.M12;
-        let c1 = this.M21;
-        let d1 = this.M22;
-        let tx1 = this.M31;
-        let n = a1 * d1 - b1 * c1;
+        const a1 = this.M11;
+        const b1 = this.M12;
+        const c1 = this.M21;
+        const d1 = this.M22;
+        const tx1 = this.M31;
+        const n = a1 * d1 - b1 * c1;
 
         this.M11 = d1 / n;
         this.M12 = -b1 / n;

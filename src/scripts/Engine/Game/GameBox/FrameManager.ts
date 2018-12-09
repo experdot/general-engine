@@ -21,7 +21,7 @@ export class FrameManager {
     loopInvoke(action: Function) {
         this.isLoop = true;
         let handle: number;
-        let step = () => {
+        const step = () => {
             action && action();
             this.frameCount += 1;
             this.timer.delay(1000, (actual) => {

@@ -1,6 +1,8 @@
 export class Utilities {
-    static requestFullScreen(mode = false, element?: HTMLElement) {
-        let methods = ["ms", "moz", "webkit"].map(v => v + (mode ? "RequestFullscreen" : "ExitFullscreen"));
+    private static browsersPrefix = ["ms", "moz", "webkit"];
+
+    static requestFullScreen(mode = false, element: HTMLElement = document.documentElement) {
+        const methods = Utilities.browsersPrefix.map(v => v + (mode ? "RequestFullscreen" : "ExitFullscreen"));
         methods.forEach(v => {
             if (mode) {
                 element[v] && element[v]();
@@ -12,14 +14,7 @@ export class Utilities {
     }
 
     static isFullScreen() {
-        let methods = ["ms", "moz", "webkit"].map(v => v + "IsFullScreen");
-
-        let result = false;
-        methods.forEach(v => {
-            if (document[v]) {
-                result = true;
-            }
-        })
-        return result;
+        const methods = Utilities.browsersPrefix.map(v => v + "IsFullScreen");
+        return methods.some(v => document[v]);
     }
 }

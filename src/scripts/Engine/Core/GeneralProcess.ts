@@ -3,8 +3,8 @@ import { GeneralTask } from "./GeneralTask";
 
 export class GeneralProcess<T extends any[]> {
     static find(object: GeneralObject<any>): GeneralProcessKeyValuePair[] {
-        let result: GeneralProcessKeyValuePair[] = [];
-        let processes = object.processes;
+        const result: GeneralProcessKeyValuePair[] = [];
+        const processes = object.processes;
         for (const key in processes) {
             result.push({
                 key: key,
@@ -77,9 +77,9 @@ export class GeneralProcess<T extends any[]> {
     }
 
     remove(identifier?: number): this {
-        let tasks = this.tasks.filter(v => v.identifier === identifier);
+        const tasks = this.tasks.filter(v => v.identifier === identifier);
         tasks.forEach(task => {
-            let index = this.tasks.indexOf(task);
+            const index = this.tasks.indexOf(task);
             this.tasks.splice(index, 1);
         });
         return this;

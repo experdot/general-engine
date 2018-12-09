@@ -1,7 +1,7 @@
 import { NotImplementedException } from "./Exception";
 import { Vector2 } from "../Numerics/Vector2";
 
-export enum InputEvents {
+export const enum InputEvents {
     Click = "Click",
     MouseDown = "MouseDown",
     MouseUp = "MouseUp",
@@ -28,20 +28,38 @@ export enum InputEvents {
 
     Drop = "Drop",
     DragEnter = "DragEnter",
-    DragExit = "DragExit",
+    DragLeave = "DragLeave",
     DragOver = "DragOver",
 };
+
+export interface MouseDescription {
+    isPressed: boolean;
+    position: Vector2;
+}
+
+export interface TouchDescription {
+    isTouching: boolean;
+    position: Vector2;
+}
+
+export interface PointerDescription {
+    isPressed: boolean;
+    position: Vector2;
+}
 
 export class Inputs {
     [propName: string]: any;
 
-    ui: any;
+    mouse?: MouseDescription;
+    touch?: TouchDescription;
+    pointer?: PointerDescription;
+
+    ui: HTMLElement;
     dispatcher: (...args: any[]) => void;
 
-    private inputList: any[];
+    private inputList: InputBase[] = [];
 
     constructor() {
-        this.inputList = [];
         this.dispatcher = () => {
             throw new NotImplementedException("The dispatcher event handler is not configured.");
         };
@@ -90,7 +108,7 @@ export class InputBase {
     }
 
     registEvent(sourceName: string, targetName: string, before?: Function, after?: Function, uiElement: HTMLElement = null) {
-        let listener = (event: Event) => {
+        const listener = (event: Event) => {
             before && before(event);
             this.inputs.dispatcher(targetName, event);
             after && after(event);
@@ -120,10 +138,10 @@ export class MouseInput extends InputBase {
                 position: new Vector2(0, 0)
             };
         }
-        this._registMouseEvent(inputs);
+        this.registMouseEvent(inputs);
     }
 
-    _registMouseEvent(inputs: Inputs) {
+    private registMouseEvent(inputs: Inputs) {
         this.registEvent("click", InputEvents.Click);
         this.registEvent("mouseenter", InputEvents.MouseEnter);
         this.registEvent("mouseleave", InputEvents.MouseLeave, () => {
@@ -139,12 +157,11 @@ export class MouseInput extends InputBase {
             inputs.mouse.position = new Vector2(event.offsetX, event.offsetY);
         });
 
-        let wheelHandler = (event: Event) => {
+        const wheelHandler = (event: Event) => {
             inputs.dispatcher && inputs.dispatcher(InputEvents.MouseWheel, event);
         };
 
         window.onmousewheel = wheelHandler;
-        document.onmousewheel = wheelHandler;
     }
 }
 
@@ -157,10 +174,10 @@ export class TouchInput extends InputBase {
                 position: new Vector2(0, 0)
             };
         }
-        this._registTouchEvent(inputs);
+        this.registTouchEvent(inputs);
     }
 
-    _registTouchEvent(inputs: Inputs) {
+    private registTouchEvent(inputs: Inputs) {
         this.registEvent("touchstart", InputEvents.TouchStart, () => {
             inputs.touch.isTouching = true;
         });
@@ -183,11 +200,11 @@ export class PointerInput extends InputBase {
                 position: new Vector2(0, 0)
             };
         }
-        this._registMouseEvent(inputs);
-        this._registTouchEvent(inputs);
+        this.registMouseEvent(inputs);
+        this.registTouchEvent(inputs);
     }
 
-    _registMouseEvent(inputs: Inputs) {
+    private registMouseEvent(inputs: Inputs) {
         this.registEvent("click", InputEvents.PointerClicked);
         this.registEvent("mouseenter", InputEvents.PointerEntered);
         this.registEvent("mouseleave", InputEvents.PointerExited, () => {
@@ -203,13 +220,13 @@ export class PointerInput extends InputBase {
             inputs.pointer.position = new Vector2(event.offsetX, event.offsetY);
         });
 
-        let wheelHandler = (event: Event) => {
+        const wheelHandler = (event: Event) => {
             inputs.dispatcher && inputs.dispatcher(InputEvents.MouseWheel, event);
         };
         window.onmousewheel = wheelHandler;
-        document.onmousewheel = wheelHandler;
     }
-    _registTouchEvent(inputs: Inputs) {
+
+    private registTouchEvent(inputs: Inputs) {
         this.registEvent("touchstart", InputEvents.PointerPressed, (event: TouchEvent) => {
             event.preventDefault();
             inputs.pointer.isPressed = true;
@@ -217,7 +234,7 @@ export class PointerInput extends InputBase {
         });
         this.registEvent("touchend", InputEvents.PointerReleased, (event: TouchEvent) => {
             event.preventDefault();
-            let isRaiseClickEvent = inputs.pointer.isPressed;
+            const isRaiseClickEvent = inputs.pointer.isPressed;
             inputs.pointer.position = new Vector2(event.changedTouches[0].clientX, event.changedTouches[0].clientY);
             if (isRaiseClickEvent) {
                 (inputs.ui as HTMLElement).click();
@@ -261,7 +278,7 @@ export class DragDropInput extends InputBase {
             event.stopPropagation();
             event.preventDefault();
         });
-        this.registEvent("dragexit", InputEvents.DragExit, (event: DragEvent) => {
+        this.registEvent("dragleave", InputEvents.DragLeave, (event: DragEvent) => {
             event.stopPropagation();
             event.preventDefault();
         });

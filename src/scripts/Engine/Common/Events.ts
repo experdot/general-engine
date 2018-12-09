@@ -37,9 +37,9 @@ export class Events {
     }
 
     removeHandler(eventName: string, handler: Function) {
-        let handlers = this.handlers[eventName] as Function[];
+        const handlers = this.handlers[eventName] as Function[];
         if (handlers && handlers.length > 0) {
-            let index = handlers.findIndex((value) => {
+            const index = handlers.findIndex((value) => {
                 return value === handler;
             });
             if (index >= 0) {
@@ -73,7 +73,7 @@ export class Events {
         if (!this.handlers[eventName]) {
             this.handlers[eventName] = [];
             if (domEventName && eventTarget) {
-                let listener = (event: Event) => {
+                const listener = (event: Event) => {
                     this.raiseEvent(eventName, event);
                 };
                 eventTarget.addEventListener(domEventName, listener, useCapture);

@@ -18,10 +18,10 @@ export class Graphics {
     }
 
     static scaleOffset(context: CanvasRenderingContext2D, offsetX = 0, offsetY = 0, alpha = 1) {
-        let w = context.canvas.width;
-        let h = context.canvas.height;
-        let rw = w + offsetX;
-        let rh = h + offsetY;
+        const w = context.canvas.width;
+        const h = context.canvas.height;
+        const rw = w + offsetX;
+        const rh = h + offsetY;
         Graphics.hold(context, () => {
             context.globalAlpha = alpha;
             context.translate(w / 2, h / 2);
@@ -31,10 +31,10 @@ export class Graphics {
     }
 
     static rotate(context: CanvasRenderingContext2D, rotation: number, alpha = 1, action: (context: CanvasRenderingContext2D) => void) {
-        let w = context.canvas.width;
-        let h = context.canvas.height;
-        let x = w / 2;
-        let y = h / 2;
+        const w = context.canvas.width;
+        const h = context.canvas.height;
+        const x = w / 2;
+        const y = h / 2;
         Graphics.hold(context, () => {
             context.translate(x, y);
             context.rotate(rotation);
@@ -46,10 +46,10 @@ export class Graphics {
     }
 
     static mirror(context: CanvasRenderingContext2D, horizontal: number, vertical: number, alpha = 1, action: (context: CanvasRenderingContext2D) => void) {
-        let w = context.canvas.width;
-        let h = context.canvas.height;
-        let x = w / 2;
-        let y = h / 2;
+        const w = context.canvas.width;
+        const h = context.canvas.height;
+        const x = w / 2;
+        const y = h / 2;
         Graphics.hold(context, () => {
             context.translate(x, y);
             context.scale(horizontal, vertical);

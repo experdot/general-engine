@@ -19,7 +19,7 @@ export class OffscreenCanvas {
         return this;
     }
 
-    output(context: CanvasRenderingContext2D, ...args: any[]) {
+    output(context: CanvasRenderingContext2D, ...args: number[]) {
         (context.drawImage as Function)(this.canvas, ...args);
         return this;
     }

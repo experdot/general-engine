@@ -60,7 +60,7 @@ export class GhostImageEffect extends GeneralObject<GameEffectInterface> {
     }
 
     effect(context: CanvasRenderingContext2D) {
-        let alpha = context.globalAlpha;
+        const alpha = context.globalAlpha;
         context.globalAlpha = this.alpha;
         context.drawImage(this.image, 0, 0);
         context.globalAlpha = alpha;

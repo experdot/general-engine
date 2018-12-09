@@ -1,7 +1,7 @@
 class Array2 {
     width: number;
     height: number;
-    data: any[];
+    data: any[][];
 
     constructor(width: number = 1, height: number = 1) {
         this.width = width;

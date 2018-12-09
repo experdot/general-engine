@@ -1,6 +1,11 @@
 import { GameVisual } from "../GameObject/GameVisual";
 import { Inputs } from "../../Common/Inputs";
 
+export interface UIDescription {
+    container: HTMLElement;
+    canvas: HTMLCanvasElement;
+}
+
 export class GameWorld extends GameVisual {
     get size() {
         return {
@@ -17,7 +22,7 @@ export class GameWorld extends GameVisual {
     height: number;
     world: GameWorld;
     inputs: Inputs;
-    ui: any;
+    ui: UIDescription;
 
     constructor(width: number, height: number) {
         super();

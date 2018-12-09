@@ -35,7 +35,7 @@ export class ArrayExtensions {
          * @param {any} match - The match that defines the conditions of the elements to search for.
          */
         target.findAll = function (match: Function) {
-            let result = [];
+            const result = [];
             for (let index = 0; index < this.length; index++) {
                 const element = this[index];
                 if (match(element)) {
@@ -74,7 +74,7 @@ export class ArrayExtensions {
          * @param {any} element 
          */
         target.remove = function (element: any) {
-            let index = this.findIndex((e: any) => e === element);
+            const index = this.findIndex((e: any) => e === element);
             if (index >= 0) {
                 this.splice(index, 1);
             }

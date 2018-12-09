@@ -15,15 +15,9 @@ type GeneralProcessType<T extends GeneralInterface> = {
 export class GeneralObject<T extends GeneralInterface> {
     [propName: string]: any;
 
-    identifier: any;
-    joints: GeneralObject<any>[];
-    processes: GeneralProcessType<T>;
-
-    constructor() {
-        this.identifier = Identifier.Unique;
-        this.joints = [];
-        (this.processes as any) = {};
-    }
+    identifier: number = Identifier.unique;
+    joints: GeneralObject<any>[] = [];
+    processes: GeneralProcessType<T> = {};
 
     joint(object: GeneralObject<any>) {
         GeneralProcess.setObjectSource(object, this);
@@ -42,7 +36,7 @@ export class GeneralObject<T extends GeneralInterface> {
     }
 
     implements(generalInterface: T) {
-        for (let key in generalInterface) {
+        for (const key in generalInterface) {
             if (generalInterface[key] instanceof Array) {
                 this.processes[key] = new GeneralProcess(this).next(this[key]);
             }

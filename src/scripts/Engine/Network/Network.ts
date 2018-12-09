@@ -4,7 +4,7 @@ export class HttpWebRequest {
     }
 
     static request(requestMethod: string, requestURL: string, onload: Function) {
-        let request = new XMLHttpRequest();
+        const request = new XMLHttpRequest();
         request.open(requestMethod, requestURL);
         request.send();
         request.onload = () => {

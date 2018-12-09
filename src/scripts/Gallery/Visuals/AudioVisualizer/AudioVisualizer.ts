@@ -70,7 +70,7 @@ class AudioVisualizer extends GameVisual {
         });
         this.on(InputEvents.PointerClicked, () => {
             FileIO.openFileDialog(event => {
-                this.loadFile(event.target.files[0]);
+                this.loadFile((event.target as HTMLInputElement).files[0]);
             }, "audio/*");
         });
     }

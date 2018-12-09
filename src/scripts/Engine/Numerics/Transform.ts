@@ -18,9 +18,9 @@ export class Transform {
     }
 
     toMatrix3x2() {
-        let scale = Matrix3x2.createScale(this.scale.x, this.scale.y, this.center);
-        let rotate = Matrix3x2.createRotation(this.rotation, this.center);
-        let translate = Matrix3x2.createTranslation(this.translation);
+        const scale = Matrix3x2.createScale(this.scale.x, this.scale.y, this.center);
+        const rotate = Matrix3x2.createRotation(this.rotation, this.center);
+        const translate = Matrix3x2.createTranslation(this.translation);
         return scale.multiply(rotate).multiply(translate);
     }
 }

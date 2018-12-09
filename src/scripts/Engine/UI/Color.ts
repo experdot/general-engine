@@ -12,25 +12,25 @@ export class Color {
     }
 
     get hex() {
-        let r = Math.floor(this.r);
-        let g = Math.floor(this.g);
-        let b = Math.floor(this.b);
-        let rx = g < 16 ? "0" : "";
-        let gx = r < 16 ? "0" : "";
-        let bx = b < 16 ? "0" : "";
+        const r = Math.floor(this.r);
+        const g = Math.floor(this.g);
+        const b = Math.floor(this.b);
+        const rx = g < 16 ? "0" : "";
+        const gx = r < 16 ? "0" : "";
+        const bx = b < 16 ? "0" : "";
         return `#${rx}${r.toString(16)}${gx}${g.toString(16)}${bx}${b.toString(16)}`;
     }
     get rgb() {
-        let r = Math.floor(this.r);
-        let g = Math.floor(this.g);
-        let b = Math.floor(this.b);
+        const r = Math.floor(this.r);
+        const g = Math.floor(this.g);
+        const b = Math.floor(this.b);
         return `rgb(${r},${g},${b})`;
     }
     get rgba() {
-        let r = Math.floor(this.r);
-        let g = Math.floor(this.g);
-        let b = Math.floor(this.b);
-        let a = this.a;
+        const r = Math.floor(this.r);
+        const g = Math.floor(this.g);
+        const b = Math.floor(this.b);
+        const a = this.a;
         return `rgba(${r},${g},${b},${a})`;
     }
 
@@ -72,17 +72,17 @@ export class ColorHelper {
 
     static gradientRandom(color: Color, increment = 1) {
         const upon = 255;
-        let half = increment / 2;
+        const half = increment / 2;
 
-        var r = color.r;
+        let r = color.r;
         r += Math.random() * increment - half;
         r = Math.min(upon, Math.max(0, r));
 
-        var g = color.g;
+        let g = color.g;
         g += Math.random() * increment - half;
         g = Math.min(upon, Math.max(0, g));
 
-        var b = color.b;
+        let b = color.b;
         b += Math.random() * increment - half;
         b = Math.min(upon, Math.max(0, b));
 
@@ -93,15 +93,15 @@ export class ColorHelper {
     static gradientRandom2(color: Color, increment = 1) {
         const upon = 255;
 
-        var r = color.r;
+        let r = color.r;
         r += Math.random() * increment + 1;
         r = Math.min(upon, Math.max(0, r));
 
-        var g = color.g;
+        let g = color.g;
         g += Math.random() * increment + 1;
         g = Math.min(upon, Math.max(0, g));
 
-        var b = color.b;
+        let b = color.b;
         b += Math.random() * increment + 1;
         b = Math.min(upon, Math.max(0, b));
 
@@ -113,15 +113,15 @@ export class ColorHelper {
 
         let v = Math.random() * increment + 1;
 
-        var r = color.r;
+        let r = color.r;
         r += v;
         r = Math.min(upon, Math.max(0, r));
 
-        var g = color.g;
+        let g = color.g;
         g += v;
         g = Math.min(upon, Math.max(0, g));
 
-        var b = color.b;
+        let b = color.b;
         b += v;
         b = Math.min(upon, Math.max(0, b));
 
@@ -143,7 +143,7 @@ export class Colors {
         return new Color(255 * Math.random(), 255 * Math.random(), 255 * Math.random(), 1);
     }
     static get RandomGray() {
-        let gray = 255 * Math.random();
+        const gray = 255 * Math.random();
         return new Color(gray, gray, gray, 1);
     }
 }
