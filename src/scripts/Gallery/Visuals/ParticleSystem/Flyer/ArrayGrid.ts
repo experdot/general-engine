@@ -2,19 +2,16 @@ import {
     Array2
 } from "../../../../Engine/Collections/Array2";
 
-class ArrayGrid extends Array2 {
-    offsetX: number[];
-    offsetY: number[];
-    
+export class ArrayGrid extends Array2 {
+    offsetX: number[] = [0, -1, 0, 1, 1, 1, 0, -1, -1];
+    offsetY: number[] = [0, -1, -1, -1, 0, 1, 1, 1, 0];
+
     constructor(w, h) {
         super(w, h);
 
         this.forEach((cell, x, y) => {
             this.data[x][y] = [];
         });
-
-        this.offsetX = [0, -1, 0, 1, 1, 1, 0, -1, -1];
-        this.offsetY = [0, -1, -1, -1, 0, 1, 1, 1, 0];
     }
 
     clear() {
@@ -24,7 +21,7 @@ class ArrayGrid extends Array2 {
     }
 
     neighbours(x, y) {
-        let result = [];
+        const result = [];
         for (let i = 0; i < 9; i++) {
             let dx = x + this.offsetX[i];
             let dy = y + this.offsetY[i];
@@ -35,7 +32,3 @@ class ArrayGrid extends Array2 {
         return result;
     }
 }
-
-export {
-    ArrayGrid
-};

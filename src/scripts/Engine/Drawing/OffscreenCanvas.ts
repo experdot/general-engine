@@ -1,6 +1,6 @@
 export class OffscreenCanvas {
-    private canvas: HTMLCanvasElement;
-    private context: CanvasRenderingContext2D;
+    canvas: HTMLCanvasElement;
+    context: CanvasRenderingContext2D;
 
     constructor(width: number, height: number) {
         this.canvas = document.createElement("canvas");

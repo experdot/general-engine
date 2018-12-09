@@ -5,7 +5,7 @@ import {
     Vector2
 } from "../../../../Engine/Numerics/Vector2";
 
-class FlyerParticle extends DynamicParticle {
+export class FlyerParticle extends DynamicParticle {
     neighbourDistance: number;
 
     constructor(location?: Vector2, size = 1, age = 0) {
@@ -18,7 +18,7 @@ class FlyerParticle extends DynamicParticle {
         this.alignspeed(flyers);
         this.seperate(flyers);
         this.cohesion(flyers);
-        //this.seperate(blocks, 5);
+        this.cohesion(blocks, 6);
 
         mouse && this.follow(mouse, 3);
         //this.checkRadius(mouse, new Vector2(rect.width, rect.height).length / 3);
@@ -30,7 +30,7 @@ class FlyerParticle extends DynamicParticle {
     alignspeed(flyers) {
         let sum = new Vector2();
         let sumCount = 0;
-        this._forEachDistance(flyers, (element, offset, distance) => {
+        this.forEachDistance(flyers, (element, offset, distance) => {
             if (distance < this.neighbourDistance) {
                 sum = sum.add(element.velocity);
                 sumCount++;
@@ -48,7 +48,7 @@ class FlyerParticle extends DynamicParticle {
     seperate(flyers, ratio = 1) {
         let sum = new Vector2();
         let sumCount = 0;
-        this._forEachDistance(flyers, (element, offset, distance) => {
+        this.forEachDistance(flyers, (element, offset, distance) => {
             let minDistance = (this.size + element.size) / 2 + 5;
             if (distance > 0 && distance < minDistance) {
                 offset.normalize();
@@ -67,10 +67,10 @@ class FlyerParticle extends DynamicParticle {
         }
     }
 
-    cohesion(flyers) {
+    cohesion(flyers, ratio = 1) {
         let sum = new Vector2();
         let sumCount = 0;
-        this._forEachDistance(flyers, (element, offset, distance) => {
+        this.forEachDistance(flyers, (element, offset, distance) => {
             if (distance < this.neighbourDistance) {
                 sum = sum.add(element.location);
                 sumCount++;
@@ -78,14 +78,14 @@ class FlyerParticle extends DynamicParticle {
         });
         if (sumCount > 0) {
             sum = sum.divide(sumCount);
-            let steer = this.seek(sum);
+            let steer = this.seekDefault(sum);
             steer.limitLength(0.1);
-            this.applyForce(steer);
+            this.applyForce(steer.multiply(ratio));
         }
     }
 
     follow(target, ratio = 1) {
-        this.applyForce(this.seek(target).multiply(ratio));
+        this.applyForce(this.seekDefault(target).multiply(ratio));
     }
 
     checkRadius(mouse, maxRadius = 100) {
@@ -125,12 +125,11 @@ class FlyerParticle extends DynamicParticle {
         }
     }
 
-    seek(target) {
-        return this._seek(this.location, target, this.velocity);
+    seekDefault(target) {
+        return this.seek(this.location, target, this.velocity);
     }
 
-
-    _seek(source, target, velocity) {
+    private seek(source, target, velocity) {
         let desired = target.subtract(source);
         desired.normalize();
         desired.multiply(this.velocityUpon);
@@ -139,16 +138,11 @@ class FlyerParticle extends DynamicParticle {
         return steer;
     }
 
-    _forEachDistance(flyers, action) {
+    private forEachDistance(flyers, action) {
         flyers.forEach(element => {
             let offset = this.location.subtract(element.location);
             let distance = offset.length;
             action && action(element, offset, distance);
         });
     }
-
 }
-
-export {
-    FlyerParticle
-};

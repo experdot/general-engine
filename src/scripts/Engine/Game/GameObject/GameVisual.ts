@@ -1,9 +1,11 @@
 import { GeneralNode } from "../../Core/GeneralNode";
 import { GameVsiualInterface } from "../GameInterface/GameInterface";
 import { Events } from "../../Common/Events";
+import { GameWorld } from "../GameWorld/GameWorld";
 
 export class GameVisual extends GeneralNode<GameVsiualInterface> {
     events: Events;
+    world: GameWorld;
 
     constructor() {
         super();

@@ -20,7 +20,7 @@ export class GameWorld extends GameVisual {
 
     width: number;
     height: number;
-    world: GameWorld;
+
     inputs: Inputs;
     ui: UIDescription;
 
