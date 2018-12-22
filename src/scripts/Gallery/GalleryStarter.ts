@@ -22,6 +22,7 @@ import {
 import {
     GameBox
 } from "../Engine/Game/GameBox/GameBox";
+import { ParticlesCircularWorld } from "./Visuals/ParticlesCircularWorld";
 
 class GalleryStarter {
 
@@ -38,6 +39,7 @@ class GalleryStarter {
         this.addSymbol("gameoflife", GameOfLifeWorld);
         this.addSymbol("audiovisualizer", AudioVisualizerWorld);
         this.addSymbol("endlessabyss", EndlessAbyssWorld);
+        this.addSymbol("circular", ParticlesCircularWorld);
 
         GalleryStarter.Symbols = this.symbols;
     }

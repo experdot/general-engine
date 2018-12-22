@@ -20,10 +20,9 @@ import { Graphics } from "../../../../Engine/Drawing/Graphics";
 import { OffscreenCanvas } from "../../../../Engine/Drawing/OffscreenCanvas";
 import { GhostEffect } from "../../../../Engine/Game/GameComponents/Effect/Effect";
 
-class ParticlesTree extends ParticlesBase {
+class ParticlesTree extends ParticlesBase<SpotParticle> {
     constructor() {
         super();
-        this.spots = [];
         this.generation = [];
         this.random = new Random();
 
@@ -47,15 +46,14 @@ class ParticlesTree extends ParticlesBase {
         root.size = 256 * ratio;
         root.age = 20;
         root.color = new Color(0, 0, 0, 1);
-        this.spots.push(root);
-        this.particles = this.spots;
+        this.particles.push(root);
     }
 
     update() {
         if (this.settings.update) {
             let count = 0;
-            for (let index = this.settings.updateIndex; index < this.spots.length; index++) {
-                const element = this.spots[index];
+            for (let index = this.settings.updateIndex; index < this.particles.length; index++) {
+                const element = this.particles[index];
                 element.update(this.generation, Math.ceil(this.random.normal(1, 3)));
                 count += 1;
                 this.settings.updateIndex += 1;
@@ -63,13 +61,12 @@ class ParticlesTree extends ParticlesBase {
                     break;
                 }
             }
-            if (this.settings.updateIndex >= this.spots.length) {
+            if (this.settings.updateIndex >= this.particles.length) {
                 this.settings.updateIndex = 0;
                 this.settings.update = false;
-                this.spots.push(...this.generation);
+                this.particles.push(...this.generation);
                 this.generation = [];
-                this.spots = this.spots.filter(p => !p.isDead);
-                this.particles = this.spots;
+                this.particles = this.particles.filter(p => !p.dead);
             }
         }
     }

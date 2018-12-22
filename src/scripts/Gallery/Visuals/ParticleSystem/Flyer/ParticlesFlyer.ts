@@ -29,8 +29,7 @@ import {
 import { OffscreenCanvas } from "../../../../Engine/Drawing/OffscreenCanvas";
 import { GalleryImages } from "../../../Resources/GalleryImages";
 
-export class ParticlesFlyer extends ParticlesBase {
-    flyers: FlyerParticle[] = [];
+export class ParticlesFlyer extends ParticlesBase<FlyerParticle> {
     blocks: FlyerParticle[] = [];
     grid: ArrayGrid;
 
@@ -63,16 +62,15 @@ export class ParticlesFlyer extends ParticlesBase {
         this.fieldWidth = w * 0.8;
         this.fieldHeight = h * 0.8;
 
-        // Create flyers
+        // Create particles
         for (let i = 0; i < flyersCount; i++) {
             const particle = new FlyerParticle();
             particle.location = center.add(new Vector2(this.fieldWidth * Math.random() - this.fieldWidth / 2, this.fieldHeight * Math.random() - this.fieldHeight / 2));
             particle.velocity = new Vector2(10 * Math.random() - 5, 10 * Math.random() - 5);
             particle.size = this.random.normal(10, 10 + maxSize);
             particle.color = Colors.White;
-            this.flyers.push(particle);
+            this.particles.push(particle);
         }
-        this.particles = this.flyers;
 
         const blocksCount = 5;
         const areaSize = 2;
@@ -113,11 +111,11 @@ export class ParticlesFlyer extends ParticlesBase {
             mouse = this.world.inputs.pointer.position.add(this.offset);
         }
 
-        this.flyers.forEach(element => {
-            element.update(this.flyers, this.blocks, mouse);
+        this.particles.forEach(element => {
+            element.update(this.particles, this.blocks, mouse);
         });
 
-        //this.locateParticles(this.flyers);
+        //this.locateParticles(this.particles);
         this.locateParticles(this.blocks);
 
 
@@ -281,7 +279,7 @@ class MainLayerView extends GameView {
                 });
 
                 // Draw birds
-                realSource.flyers.forEach(element => {
+                realSource.particles.forEach(element => {
                     this.drawBirdImage(innerContext, element);
                 });
 
