@@ -20,7 +20,6 @@ export class GeneralObject<T extends GeneralInterface> {
     processes: GeneralProcessType<T> = {};
 
     joint(object: GeneralObject<any>) {
-        GeneralProcess.setObjectSource(object, this);
         GeneralProcess.combine(this, object);
         this.joints.push(object);
         object.joints.push(this);
@@ -33,7 +32,7 @@ export class GeneralObject<T extends GeneralInterface> {
             this.joints.splice(this.joints.indexOf(object), 1);
             object.joints.splice(object.joints.indexOf(this), 1);
             GeneralProcess.seperate(this, object);
-            GeneralProcess.setObjectSource(object, object);
+            return this.disjoint(object); // Disjoint duplicate objects
         }
         return this;
     }

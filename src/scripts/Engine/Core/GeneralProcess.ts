@@ -20,15 +20,9 @@ export class GeneralProcess<T extends any[]> {
         return result;
     }
 
-    static setObjectSource(object: GeneralObject<GeneralInterface>, source: GeneralObject<GeneralInterface>) {
-        GeneralProcess.find(object).forEach(element => {
-            element.value.setSource(source);
-        });
-    }
-
     static combine(source: GeneralObject<GeneralInterface>, target: GeneralObject<GeneralInterface>) {
         GeneralProcess.every(source, target, (s, t) => {
-            s.next((s: GeneralProcess<any>, ...args: any[]) => t.process(...args), target.identifier);
+            s.next((s: GeneralProcess<any>, ...args: any[]) => t.process(source, ...args), target.identifier);
         });
     }
 
@@ -51,23 +45,16 @@ export class GeneralProcess<T extends any[]> {
     }
 
     thisArg: GeneralObject<GeneralInterface>;
-    source: GeneralObject<GeneralInterface>;
     tasks: GeneralTask[];
 
     constructor(thisArg: GeneralObject<GeneralInterface>) {
         this.thisArg = thisArg;
-        this.source = thisArg;
         this.tasks = [];
     }
 
-    setSource(source: GeneralObject<GeneralInterface>): this {
-        this.source = source;
-        return this;
-    }
-
-    process<T extends any[]>(...args: T): this {
+    process<T extends any[]>(source: GeneralObject<GeneralInterface> = this.thisArg, ...args: T): this {
         this.tasks.forEach(task => {
-            task.run(this.thisArg, this.source, ...args);
+            task.run(this.thisArg, source, ...args);
         });
         return this;
     }

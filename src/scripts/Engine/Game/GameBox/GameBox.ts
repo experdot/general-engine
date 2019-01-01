@@ -19,9 +19,9 @@ export class GameBox {
 
     run() {
         this.world.processes.start.process();
-        this.world.processes.gui.process(this.container);
+        this.world.processes.gui.process(this.world, this.container);
         this.frameManager.loopInvoke(() => {
-            this.world.processes.render.process(this.context);
+            this.world.processes.render.process(this.world, this.context);
             this.world.processes.update.process();
         });
     }
