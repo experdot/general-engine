@@ -19,9 +19,6 @@ export class GameOfLifeWorld extends GameWorld {
 
     initialize() {
         this.inputs.addInput(new PointerInput());
-    }
-
-    createObjects() {
         this.addChild(new GameOfLife().joint(new GameOfLifeView()));
     }
 }

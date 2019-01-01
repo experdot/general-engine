@@ -24,8 +24,7 @@ import {
 } from "../Engine/Game/GameBox/GameBox";
 import { ParticlesCircularWorld } from "./Visuals/ParticlesCircularWorld";
 
-class GalleryStarter {
-
+export class GalleryStarter {
     static Symbols: {};
 
     symbols: {};
@@ -53,8 +52,8 @@ class GalleryStarter {
     }
 
     launch(container, canvas) {
-        let request = this._getRequest();
-        let World = this.getSymbolByName(request["scene"]);
+        const request = this.getSearchKeyValuePair();
+        const World = this.getSymbolByName(request["scene"]);
         if (World) {
             document.title = World.Title;
             return new GameBox(container, canvas, new World(canvas.width, canvas.height));
@@ -63,12 +62,12 @@ class GalleryStarter {
         }
     }
 
-    _getRequest() {
-        let result = {};
-        let search = location.search;
+    private getSearchKeyValuePair() {
+        const result = {};
+        const search = location.search;
         if (search.indexOf("?") >= 0) {
-            let str = search.substr(1);
-            let pairs = str.split("&");
+            const str = search.substr(1);
+            const pairs = str.split("&");
             for (var i = 0; i < pairs.length; i++) {
                 result[pairs[i].split("=")[0]] = unescape(pairs[i].split("=")[1]);
             }
@@ -76,6 +75,3 @@ class GalleryStarter {
         return result;
     }
 }
-export {
-    GalleryStarter
-};

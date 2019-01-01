@@ -6,20 +6,19 @@ export class GameObjectInterface extends GeneralInterface {
 }
 
 export class GameViewInterface extends GameObjectInterface {
-    render = [CanvasRenderingContext2D];
+    render: [CanvasRenderingContext2D] = [] as any;
 }
 
 export class GameGUIInterface extends GameObjectInterface {
-    gui = [HTMLElement];
+    gui: [HTMLElement] = [] as any;
 }
 
 export class GameEffectInterface extends GameObjectInterface {
-    update = [];
+    update: [] = [] as any;
 }
 
 export class GameVsiualInterface extends GameObjectInterface {
-    render = [CanvasRenderingContext2D];
-    gui = [HTMLElement];
-    update = [];
+    render: [CanvasRenderingContext2D] = [] as any;
+    gui: [HTMLElement] = [] as any;
+    update: [] = [] as any;
 }
-

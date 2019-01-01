@@ -7,6 +7,11 @@ interface GeneralProcessKeyValuePair {
     value: GeneralProcess<any>;
 }
 
+interface Test {
+    a: string;
+    b: number;
+}
+
 export class GeneralProcess<T extends any[]> {
     static find(object: GeneralObject<GeneralInterface>): GeneralProcessKeyValuePair[] {
         const result: GeneralProcessKeyValuePair[] = [];
@@ -52,7 +57,7 @@ export class GeneralProcess<T extends any[]> {
         this.tasks = [];
     }
 
-    process<T extends any[]>(source: GeneralObject<GeneralInterface> = this.thisArg, ...args: T): this {
+    process(source: GeneralObject<GeneralInterface> = this.thisArg, ...args: T): this {
         this.tasks.forEach(task => {
             task.run(this.thisArg, source, ...args);
         });

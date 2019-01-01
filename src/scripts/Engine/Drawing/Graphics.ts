@@ -35,9 +35,6 @@ export class Graphics {
         const h = context.canvas.height;
         Graphics.hold(context, () => {
             context.globalAlpha = alpha;
-            //const data = context.getImageData(0, 0, w, h);
-            //context.clearRect(0, 0, w, h);
-            //context.putImageData(data, offsetX, offsetY);
             context.drawImage(context.canvas, offsetX, offsetY, w, h);
         });
         return this;

@@ -2,7 +2,6 @@
 import { ResourceManager } from "./ResourceManager";
 import { CultureInfo } from "../Globalization/CultureInfo";
 import { ResourceSet } from "./ResourceSet";
-import { ConfigurationManager } from "./ConfigurationManager";
 
 export class CultureResourceManager extends ResourceManager {
     config: CultureResourceConfig;

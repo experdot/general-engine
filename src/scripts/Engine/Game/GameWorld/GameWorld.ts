@@ -40,17 +40,6 @@ export class GameWorld extends GameVisual {
         };
 
         this.initialize();
-        this.createObjects();
-    }
-
-    initialize() { }
-
-    createObjects() { }
-
-    initializeUI(container: HTMLElement, canvas: HTMLCanvasElement) {
-        this.ui.container = container;
-        this.ui.canvas = canvas;
-        this.inputs.launch(this.ui.container);
     }
 
     addChild(visual: GameVisual) {
@@ -62,5 +51,15 @@ export class GameWorld extends GameVisual {
     dispose() {
         super.dispose();
         this.inputs.release();
+    }
+
+    initialize() {
+
+    }
+
+    initializeUI(container: HTMLElement, canvas: HTMLCanvasElement) {
+        this.ui.container = container;
+        this.ui.canvas = canvas;
+        this.inputs.launch(this.ui.container);
     }
 }

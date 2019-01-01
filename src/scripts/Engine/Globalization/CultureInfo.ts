@@ -31,7 +31,7 @@ export class CultureInfo {
 
 }
 
-export const Languages: any = {
+export const Languages = {
     "en-US": "English(United States)",
     "zh-CN": "简体中文"
 };

@@ -13,9 +13,6 @@ export class ParticlesCircularWorld extends GameWorld {
 
     initialize() {
         this.inputs.addInput(new PointerInput());
-    }
-
-    createObjects() {
         this.addChild(new ParticlesCircular().joint(new ParticlesCircularView()));
     }
 }

@@ -15,10 +15,10 @@ export class FlyerParticle extends DynamicParticle {
     }
 
     update(flyers, blocks, mouse) {
-        this.alignspeed(flyers);
+        this.alignspeed(flyers, 2);
         this.seperate(flyers);
-        this.cohesion(flyers);
-        this.cohesion(blocks, 6);
+        this.cohesion(flyers, 2);
+        this.seperate(blocks, 3);
 
         mouse && this.follow(mouse, 3);
         //this.checkRadius(mouse, new Vector2(rect.width, rect.height).length / 3);
@@ -27,7 +27,7 @@ export class FlyerParticle extends DynamicParticle {
         //this.checkBorder(rect);
     }
 
-    alignspeed(flyers) {
+    alignspeed(flyers, ratio = 1) {
         let sum = new Vector2();
         let sumCount = 0;
         this.forEachDistance(flyers, (element, offset, distance) => {
@@ -41,7 +41,7 @@ export class FlyerParticle extends DynamicParticle {
             sum.limitLength(this.velocityUpon);
             let steer = sum.subtract(this.velocity);
             steer.limitLength(1);
-            this.applyForce(steer);
+            this.applyForce(steer.multiply(ratio));
         }
     }
 

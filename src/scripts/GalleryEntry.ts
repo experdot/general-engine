@@ -1,4 +1,4 @@
 import { GalleryApp } from "./Gallery/App/GalleryApp";
 
-let app = new GalleryApp();
+const app = new GalleryApp();
 app.processes.launch.process();

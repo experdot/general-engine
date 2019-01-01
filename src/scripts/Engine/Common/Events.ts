@@ -9,8 +9,7 @@ export enum StrictMode {
  * Represents an event system
  */
 export class Events {
-
-    public readonly mode: StrictMode;
+    readonly mode: StrictMode;
 
     private handlers: any;
     private dom0Events: any[];

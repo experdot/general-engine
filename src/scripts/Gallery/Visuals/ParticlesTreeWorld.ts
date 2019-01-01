@@ -15,10 +15,6 @@ export class ParticlesTreeWorld extends GameWorld {
     }
 
     initialize() {
-
-    }
-
-    createObjects() {
         this.addChild(new ParticlesTree().joint(new ParticlesTreeView()));
     }
 }

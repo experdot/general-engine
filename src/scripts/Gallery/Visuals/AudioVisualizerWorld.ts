@@ -21,9 +21,6 @@ export class AudioVisualizerWorld extends GameWorld {
     initialize() {
         this.inputs.addInput(new PointerInput());
         this.inputs.addInput(new DragDropInput());
-    }
-
-    createObjects() {
         this.addChild(new AudioVisualizer().joint(new AudioVisualizerView()));
     }
 }

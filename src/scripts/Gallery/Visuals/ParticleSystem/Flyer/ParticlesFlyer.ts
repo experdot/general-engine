@@ -42,6 +42,9 @@ export class ParticlesFlyer extends ParticlesBase<FlyerParticle> {
     areaWidth: number;
     areaHeight: number;
 
+    scaleDelta: number = 0;
+    scale: number = 2;
+
     ghost: GhostEffect;
     random: Random = new Random();
 
@@ -73,7 +76,7 @@ export class ParticlesFlyer extends ParticlesBase<FlyerParticle> {
         }
 
         const blocksCount = 5;
-        const areaSize = 2;
+        const areaSize = 4;
         this.areaWidth = this.fieldWidth * areaSize;
         this.areaHeight = this.fieldHeight * areaSize;
 
@@ -101,14 +104,14 @@ export class ParticlesFlyer extends ParticlesBase<FlyerParticle> {
         const center = new Vector2(size.width / 2, size.height / 2);
 
         this.average = this.getAverateLocation(this.particles)
-        this.offset = this.average.subtract(center);
-
+        const target = this.average.multiply(this.scale).subtract(center);
+        this.offset = this.offset.add(target.subtract(this.offset).multiply(0.1));
         //this.grid.clear();
         //this.allocateGrid(this.grid, this.particles, this.offset, this.revolution);
 
         let mouse = null;
         if (this.world.inputs.pointer.isPressed) {
-            mouse = this.world.inputs.pointer.position.add(this.offset);
+            mouse = this.world.inputs.pointer.position.add(this.average.subtract(center));
         }
 
         this.particles.forEach(element => {
@@ -127,6 +130,9 @@ export class ParticlesFlyer extends ParticlesBase<FlyerParticle> {
         //         });
         //     }
         // });
+
+        this.scaleDelta = (this.scaleDelta + 0.002) % (Math.PI * 2);
+        this.scale = 2 + Math.sin(this.scaleDelta) * 1.5;
     }
 
     private createGrid(width, height, revolution = 10) {
@@ -191,7 +197,6 @@ export class ParticlesFlyerView<T extends ParticlesFlyer> extends TypedGameView<
     }
 }
 
-
 class BackLayerView extends GameView {
     backLayer: OffscreenCanvas;
 
@@ -203,17 +208,18 @@ class BackLayerView extends GameView {
         const realSource = source.target;
 
         this.backLayer.draw((innerContext) => {
+            const offset = realSource.offset;
             Graphics.clear(innerContext).hold(innerContext, () => {
-                innerContext.translate(-realSource.offset.x, -realSource.offset.y);
-                this.drawGrid(innerContext, realSource.world.size, realSource.offset);
-                innerContext.translate(realSource.offset.x, realSource.offset.y);
+                innerContext.translate(-offset.x, -offset.y);
+                this.drawGrid(innerContext, realSource.world.size, offset, realSource.scale);
+                innerContext.translate(offset.x, offset.y);
             });
         }).output(context, 0, 0);
     }
 
-    private drawGrid(context: CanvasRenderingContext2D, size, offset: Vector2) {
+    private drawGrid(context: CanvasRenderingContext2D, size, offset: Vector2, scale = 1) {
         const split = 20;
-        const csize = Math.max(size.width, size.height) / split;
+        const csize = Math.max(size.width, size.height) / split * scale;
         const cw = Math.ceil(size.width / csize) + 1;
         const ch = Math.ceil(size.height / csize) + 1;
 
@@ -271,25 +277,27 @@ class MainLayerView extends GameView {
                 context.drawImage(this.mainLayer.canvas, 0, 0);
                 context.globalAlpha = 1;
 
-                innerContext.translate(-realSource.offset.x, -realSource.offset.y);
+                const offset = realSource.offset;
+
+                innerContext.translate(-offset.x, -offset.y);
 
                 // Draw blocks
                 realSource.blocks.forEach(element => {
-                    this.drawBlocks(innerContext, element);
+                    this.drawBlocks(innerContext, element, realSource.scale);
                 });
 
                 // Draw birds
                 realSource.particles.forEach(element => {
-                    this.drawBirdImage(innerContext, element);
+                    this.drawBirdImage(innerContext, element, realSource.scale);
                 });
 
-                Graphics.shadow(innerContext, 3, "rgba(0,0,0,0.38)", 3, 3, () => {
-                    this.drawInfo(innerContext, realSource.world.size);
-                });
+                // Graphics.shadow(innerContext, 3, "rgba(0,0,0,0.38)", 3, 3, () => {
+                //     this.drawInfo(innerContext, realSource.world.size, realSource.scale);
+                // });
 
                 //context.drawImage(this.clound, 0, 0);
 
-                innerContext.translate(realSource.offset.x, realSource.offset.y);
+                innerContext.translate(offset.x, offset.y);
             });
         }).output(context, 0, 0);
 
@@ -300,19 +308,20 @@ class MainLayerView extends GameView {
         });
     }
 
-    private drawBlocks(context: CanvasRenderingContext2D, particle: FlyerParticle) {
-        const p = particle.location;
+    private drawBlocks(context: CanvasRenderingContext2D, particle: FlyerParticle, scale) {
+        const p = particle.location.multiply(scale);
         context.beginPath();
-        context.arc(p.x, p.y, particle.size / 2, 0, Math.PI * 2, false);
+        context.arc(p.x, p.y, particle.size / 2 * scale, 0, Math.PI * 2, false);
         context.closePath();
         context.strokeStyle = particle.color.rgba;
         context.stroke();
     }
 
-    private drawBirdImage(context: CanvasRenderingContext2D, particle: FlyerParticle) {
-        const p = particle.location;
+    private drawBirdImage(context: CanvasRenderingContext2D, particle: FlyerParticle, scale) {
+        const p = particle.location.multiply(scale);
         const v = particle.velocity;
-        const size = particle.size / 2;
+        const a = particle.acceleration;
+        const size = particle.size / 2 * scale;
         const size2 = size * 2;
         Graphics.hold(context, () => {
             context.translate(p.x, p.y);
@@ -322,11 +331,11 @@ class MainLayerView extends GameView {
         });
     }
 
-    private drawInfo(context: CanvasRenderingContext2D, size) {
-        const fonSize = Math.max(size.width / 20, 32);
+    private drawInfo(context: CanvasRenderingContext2D, size, scale) {
+        const fonSize = Math.max(size.width / 20, 32) * scale;
         context.font = fonSize + "px Arial";
         context.textAlign = "center";
         context.fillStyle = "#FFF";
-        context.fillText("Press And Move Pointer!", size.center.x, size.center.y);
+        context.fillText("Press And Move Pointer!", size.center.x * scale, size.center.y * scale);
     }
 }

@@ -19,9 +19,6 @@ export class ParticlesFlyerWorld extends GameWorld {
 
     initialize() {
         this.inputs.addInput(new PointerInput());
-    }
-
-    createObjects() {
         this.addChild(new ParticlesFlyer().joint(new ParticlesFlyerView()));
     }
 }
