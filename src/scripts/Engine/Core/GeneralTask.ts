@@ -1,3 +1,5 @@
+import { GeneralObject, GeneralInterface } from "./GeneralObject";
+
 export class GeneralTask {
     action: Function;
     identifier: number;
@@ -9,7 +11,7 @@ export class GeneralTask {
         this.enabled = enabled;
     }
 
-    run(thisArg: object, ...args: any[]) {
+    run(thisArg: GeneralObject<GeneralInterface>, ...args: any[]) {
         this.enabled && this.action && this.action.call(thisArg, ...args);
     }
 }

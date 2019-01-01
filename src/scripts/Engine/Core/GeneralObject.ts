@@ -28,10 +28,13 @@ export class GeneralObject<T extends GeneralInterface> {
     }
 
     disjoint(object: GeneralObject<any>) {
-        this.joints.splice(this.joints.indexOf(object), 1);
-        object.joints.splice(object.joints.indexOf(this), 1);
-        GeneralProcess.seperate(this, object);
-        GeneralProcess.setObjectSource(object, object);
+        const index = this.joints.indexOf(object);
+        if (index >= 0) {
+            this.joints.splice(this.joints.indexOf(object), 1);
+            object.joints.splice(object.joints.indexOf(this), 1);
+            GeneralProcess.seperate(this, object);
+            GeneralProcess.setObjectSource(object, object);
+        }
         return this;
     }
 

@@ -1,8 +1,14 @@
-import { GeneralObject } from "./GeneralObject";
+import { GeneralObject, GeneralInterface } from "./GeneralObject";
 import { GeneralTask } from "./GeneralTask";
 
+
+interface GeneralProcessKeyValuePair {
+    key: string;
+    value: GeneralProcess<any>;
+}
+
 export class GeneralProcess<T extends any[]> {
-    static find(object: GeneralObject<any>): GeneralProcessKeyValuePair[] {
+    static find(object: GeneralObject<GeneralInterface>): GeneralProcessKeyValuePair[] {
         const result: GeneralProcessKeyValuePair[] = [];
         const processes = object.processes;
         for (const key in processes) {
@@ -14,25 +20,25 @@ export class GeneralProcess<T extends any[]> {
         return result;
     }
 
-    static setObjectSource(object: GeneralObject<any>, source: GeneralObject<any>) {
+    static setObjectSource(object: GeneralObject<GeneralInterface>, source: GeneralObject<GeneralInterface>) {
         GeneralProcess.find(object).forEach(element => {
             element.value.setSource(source);
         });
     }
 
-    static combine(source: GeneralObject<any>, target: GeneralObject<any>) {
+    static combine(source: GeneralObject<GeneralInterface>, target: GeneralObject<GeneralInterface>) {
         GeneralProcess.every(source, target, (s, t) => {
             s.next((s: GeneralProcess<any>, ...args: any[]) => t.process(...args), target.identifier);
         });
     }
 
-    static seperate(source: GeneralObject<any>, target: GeneralObject<any>) {
+    static seperate(source: GeneralObject<GeneralInterface>, target: GeneralObject<GeneralInterface>) {
         GeneralProcess.every(source, target, (s) => {
             s.remove(target.identifier);
         });
     }
 
-    static every(source: GeneralObject<any>, target: GeneralObject<any>, hanlder: (source: GeneralProcess<any>, target: GeneralProcess<any>, key: string) => void) {
+    static every(source: GeneralObject<GeneralInterface>, target: GeneralObject<GeneralInterface>, hanlder: (source: GeneralProcess<any>, target: GeneralProcess<any>, key: string) => void) {
         const sourceProcesses = source.processes;
         const targetProcesses = target.processes;
         GeneralProcess.find(source).forEach(element => {
@@ -44,24 +50,24 @@ export class GeneralProcess<T extends any[]> {
         });
     }
 
-    thisArg: object;
-    source: object;
+    thisArg: GeneralObject<GeneralInterface>;
+    source: GeneralObject<GeneralInterface>;
     tasks: GeneralTask[];
 
-    constructor(thisArg: object) {
+    constructor(thisArg: GeneralObject<GeneralInterface>) {
         this.thisArg = thisArg;
         this.source = thisArg;
         this.tasks = [];
     }
 
-    setSource(source: object): this {
+    setSource(source: GeneralObject<GeneralInterface>): this {
         this.source = source;
         return this;
     }
 
     process<T extends any[]>(...args: T): this {
-        this.tasks.forEach(element => {
-            element.run(this.thisArg, this.source, ...args);
+        this.tasks.forEach(task => {
+            task.run(this.thisArg, this.source, ...args);
         });
         return this;
     }
@@ -80,7 +86,9 @@ export class GeneralProcess<T extends any[]> {
         const tasks = this.tasks.filter(v => v.identifier === identifier);
         tasks.forEach(task => {
             const index = this.tasks.indexOf(task);
-            this.tasks.splice(index, 1);
+            if (index >= 0) {
+                this.tasks.splice(index, 1);
+            }
         });
         return this;
     }
@@ -89,9 +97,4 @@ export class GeneralProcess<T extends any[]> {
         this.tasks = [];
         return this;
     }
-}
-
-class GeneralProcessKeyValuePair {
-    key: string;
-    value: GeneralProcess<any>;
 }
