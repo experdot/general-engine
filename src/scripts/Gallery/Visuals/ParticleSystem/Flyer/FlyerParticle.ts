@@ -4,6 +4,7 @@ import {
 import {
     Vector2
 } from "../../../../Engine/Numerics/Vector2";
+import { RandomEmoji } from "../../../../Engine/UI/Font";
 
 export class FlyerParticle extends DynamicParticle {
     neighbourDistance: number;
@@ -12,10 +13,13 @@ export class FlyerParticle extends DynamicParticle {
 
     count: number = 0;
 
+    emoji: string;
+
     constructor(location?: Vector2, size = 1, age = 0) {
         super(location, size, age);
         this.velocityUpon = 5;
         this.neighbourDistance = 400;
+        this.emoji = RandomEmoji.one;
     }
 
     update(flyers, blocks, mouse) {

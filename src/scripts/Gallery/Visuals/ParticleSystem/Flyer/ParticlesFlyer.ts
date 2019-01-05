@@ -5,7 +5,7 @@ import {
     Random
 } from "../../../../Engine/Numerics/Random";
 import {
-    GhostEffect
+    GhostEffect, GhostImageEffect
 } from "../../../../Engine/Game/GameComponents/Effect/Effect";
 import {
     Color,
@@ -45,14 +45,7 @@ export class ParticlesFlyer extends ParticlesBase<FlyerParticle> {
     scaleDelta: number = 0;
     scale: number = 2;
 
-    ghost: GhostEffect;
     random: Random = new Random();
-
-    constructor() {
-        super();
-        this.ghost = new GhostEffect(new Color(0, 0, 255, 0.1), 10, false);
-        this.joint(this.ghost);
-    }
 
     start() {
         const w = this.world.width;
@@ -60,7 +53,7 @@ export class ParticlesFlyer extends ParticlesBase<FlyerParticle> {
         const center = new Vector2(w * 0.5, h * 0.5);
 
         const screen = new Vector2(w, h).length;
-        const flyersCount = 12; // Math.floor(screen / 16) / 3;
+        const flyersCount = 12; // Math.floor(screen / 32) / 4;
         const maxSize = Math.floor(screen / 60);
         this.fieldWidth = w * 0.8;
         this.fieldHeight = h * 0.8;
@@ -189,9 +182,11 @@ export class ParticlesFlyerView<T extends ParticlesFlyer> extends TypedGameView<
 
     constructor() {
         super();
-
+        //this.joint(new GhostLayerView());
         this.joint(new BackLayerView());
+        //this.joint(new SmokeLayerView());
         this.joint(new MainLayerView());
+        this.joint(new InfoLayerView());
     }
 
     render(source: T, context: CanvasRenderingContext2D) {
@@ -201,21 +196,48 @@ export class ParticlesFlyerView<T extends ParticlesFlyer> extends TypedGameView<
     }
 }
 
-class BackLayerView extends GameView {
-    backLayer: OffscreenCanvas;
+class GhostLayerView extends GameView {
+    ghost: GhostEffect;
+    layer: OffscreenCanvas;
+
+    constructor() {
+        super();
+        this.ghost = new GhostEffect(new Color(0, 0, 255, 0.1), 10, false);
+    }
 
     render(source: ParticlesFlyerView<ParticlesFlyer>, context: CanvasRenderingContext2D) {
-        if (!this.backLayer) {
-            this.backLayer = new OffscreenCanvas(context.canvas.width, context.canvas.height);
+        if (!this.layer) {
+            this.layer = new OffscreenCanvas(context.canvas.width, context.canvas.height);
+        }
+        this.layer.draw((innerContext) => {
+            this.ghost.update();
+            this.ghost.effect(context);
+        }).output(context, 0, 0);
+    }
+}
+
+class BackLayerView extends GameView {
+    clound: HTMLImageElement;
+    layer: OffscreenCanvas;
+
+    constructor() {
+        super();
+        //this.clound = new Image();
+        //this.clound.src = "../static/back.jpg";
+    }
+
+    render(source: ParticlesFlyerView<ParticlesFlyer>, context: CanvasRenderingContext2D) {
+        if (!this.layer) {
+            this.layer = new OffscreenCanvas(context.canvas.width, context.canvas.height);
         }
 
-        const realSource = source.target;
-
-        this.backLayer.draw((innerContext) => {
-            const offset = realSource.offset;
+        const real = source.target;
+        this.layer.draw((innerContext) => {
+            const offset = real.offset;
             Graphics.clear(innerContext).hold(innerContext, () => {
+                //innerContext.drawImage(this.clound, 0, 0);
                 innerContext.translate(-offset.x, -offset.y);
-                this.drawGrid(innerContext, realSource.world.size, offset, realSource.scale);
+                this.drawGrid(innerContext, real.world.size, offset, real.scale);
                 innerContext.translate(offset.x, offset.y);
             });
         }).output(context, 0, 0);
@@ -243,9 +265,51 @@ class BackLayerView extends GameView {
             }
         }
         context.closePath();
-
         context.fillStyle = "rgba(0,0,0,0.05)";
         context.fill();
+    }
+}
+
+class SmokeLayerView extends GameView {
+    layer: OffscreenCanvas;
+
+    render(source: ParticlesFlyerView<ParticlesFlyer>, context: CanvasRenderingContext2D) {
+        if (!this.layer) {
+            this.layer = new OffscreenCanvas(context.canvas.width, context.canvas.height);
+        }
+
+        const real = source.target;
+        this.layer.draw((innerContext) => {
+            Graphics.clear(innerContext);
+            Graphics.hold(innerContext, (innerContext) => {
+                const offset = real.offset;
+                innerContext.translate(-offset.x, -offset.y);
+                real.particles.forEach(element => {
+                    this.drawBirdSmoke(innerContext, element, real.scale);
+                });
+                innerContext.translate(offset.x, offset.y);
+            });
+        }).output(context, 0, 0);
+    }
+
+    private drawBirdSmoke(context: CanvasRenderingContext2D, particle: FlyerParticle, scale) {
+        Graphics.hold(context, () => {
+            const history = [...particle.history, particle.location];
+            const length = history.length;
+            if (length > 1) {
+                for (let index = 1; index < length; index++) {
+                    const pre = history[index - 1].multiply(scale);
+                    const cur = history[index].multiply(scale);
+                    context.beginPath();
+                    context.moveTo(pre.x, pre.y);
+                    context.lineTo(cur.x, cur.y);
+                    context.closePath();
+                    context.lineWidth = (1 + (particle.size * scale / 10)) * (index / length);
+                    context.strokeStyle = new Color(255, 255, 255, index / length * 0.8).rgba;
+                    context.stroke();
+                }
+            }
+        });
     }
 }
 
@@ -258,9 +322,6 @@ class MainLayerView extends GameView {
         super();
         this.bird = new Image(128, 128);
         this.bird.src = GalleryImages.Bird;
-
-        //this.clound = new Image();
-        //this.clound.src = "../static/clound.png";
     }
 
     render(source: ParticlesFlyerView<ParticlesFlyer>, context: CanvasRenderingContext2D) {
@@ -269,34 +330,20 @@ class MainLayerView extends GameView {
             this.cache = new OffscreenCanvas(context.canvas.width, context.canvas.height);
         }
 
-        const realSource = source.target;
-
+        const real = source.target;
         this.mainLayer.draw((innerContext) => {
             Graphics.clear(innerContext).hold(innerContext, (innerContext) => {
-                realSource.ghost.effect(innerContext);
-
+                //real.effects.ghost.effect(innerContext);
                 innerContext.drawImage(this.cache.canvas, 0, 0);
 
-                const offset = realSource.offset;
-
+                const offset = real.offset;
                 innerContext.translate(-offset.x, -offset.y);
-
-                // Draw blocks
-                realSource.blocks.forEach(element => {
-                    this.drawBlocks(innerContext, element, realSource.scale);
+                real.blocks.forEach(element => {
+                    this.drawBlocks(innerContext, element, real.scale);
                 });
-
-                // Draw birds
-                realSource.particles.forEach(element => {
-                    this.drawBirdImage(innerContext, element, realSource.scale);
+                real.particles.forEach(element => {
+                    this.drawBirdImage(innerContext, element, real.scale);
                 });
-
-                // Graphics.shadow(innerContext, 3, "rgba(0,0,0,0.38)", 3, 3, () => {
-                //     this.drawInfo(innerContext, realSource.world.size, realSource.scale);
-                // });
-
-                //context.drawImage(this.clound, 0, 0);
-
                 innerContext.translate(offset.x, offset.y);
             });
         }).output(context, 0, 0);
@@ -310,8 +357,9 @@ class MainLayerView extends GameView {
 
     private drawBlocks(context: CanvasRenderingContext2D, particle: FlyerParticle, scale) {
         const p = particle.location.multiply(scale);
+        const size = particle.size * scale;
         context.beginPath();
-        context.arc(p.x, p.y, particle.size / 2 * scale, 0, Math.PI * 2, false);
+        context.arc(p.x, p.y, size / 2, 0, Math.PI * 2, false);
         context.closePath();
         context.strokeStyle = particle.color.rgba;
         context.stroke();
@@ -321,8 +369,8 @@ class MainLayerView extends GameView {
         const p = particle.location.multiply(scale);
         const v = particle.velocity;
         const a = particle.acceleration;
-        const size = particle.size / 2 * scale;
-        const size2 = size * 2;
+        const size = particle.size * scale;
+        const sizeHalf = size / 2
 
         Graphics.hold(context, () => {
             const history = [...particle.history, particle.location];
@@ -336,7 +384,7 @@ class MainLayerView extends GameView {
                     context.lineTo(cur.x, cur.y);
                     context.closePath();
                     context.lineWidth = (1 + (particle.size * scale / 10)) * (index / length);
-                    context.strokeStyle = new Color(255, 255, 255, index / length * 0.3).rgba;
+                    context.strokeStyle = new Color(255, 255, 255, index / length * 0.8).rgba;
                     context.stroke();
                 }
             }
@@ -346,15 +394,41 @@ class MainLayerView extends GameView {
             context.translate(p.x, p.y);
             context.rotate(Math.atan2(v.y, v.x) + Math.PI / 2);
             context.translate(-p.x, -p.y);
-            context.drawImage(this.bird, p.x - size, p.y - size, size2, size2);
+
+            //context.drawImage(this.bird, p.x - sizeHalf, p.y - sizeHalf, size, size);
+            this.drawText(context, particle.emoji, p, sizeHalf);
         });
     }
 
+    private drawText(context: CanvasRenderingContext2D, text: string, location: Vector2, size: number) {
+        context.font = Math.round(size) + "px Arial";
+        context.textAlign = "center";
+        context.fillStyle = "#FFF";
+        context.fillText(text, location.x, location.y);
+    }
+}
+
+class InfoLayerView extends GameView {
+    layer: OffscreenCanvas;
+
+    render(source: ParticlesFlyerView<ParticlesFlyer>, context: CanvasRenderingContext2D) {
+        if (!this.layer) {
+            this.layer = new OffscreenCanvas(context.canvas.width, context.canvas.height);
+        }
+
+        const real = source.target;
+        this.layer.draw((innerContext) => {
+            Graphics.clear(innerContext).hold(innerContext, () => {
+                this.drawInfo(innerContext, real.world.size, real.scale);
+            });
+        }).output(context, 0, 0);
+    }
+
     private drawInfo(context: CanvasRenderingContext2D, size, scale) {
-        const fonSize = Math.max(size.width / 20, 32) * scale;
+        const fonSize = Math.max(size.width / 20, 32);
         context.font = fonSize + "px Arial";
         context.textAlign = "center";
         context.fillStyle = "#FFF";
-        context.fillText("Press And Move Pointer!", size.center.x * scale, size.center.y * scale);
+        context.fillText("Just Fly", size.center.x, size.center.y);
     }
 }
