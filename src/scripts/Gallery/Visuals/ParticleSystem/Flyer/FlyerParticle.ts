@@ -8,6 +8,10 @@ import {
 export class FlyerParticle extends DynamicParticle {
     neighbourDistance: number;
 
+    history: Vector2[] = [];
+
+    count: number = 0;
+
     constructor(location?: Vector2, size = 1, age = 0) {
         super(location, size, age);
         this.velocityUpon = 5;
@@ -15,16 +19,24 @@ export class FlyerParticle extends DynamicParticle {
     }
 
     update(flyers, blocks, mouse) {
-        this.alignspeed(flyers, 2);
-        this.seperate(flyers);
+        this.alignspeed(flyers, 3);
+        this.seperate(flyers, 1);
         this.cohesion(flyers, 2);
-        this.seperate(blocks, 3);
+        this.seperate(blocks, 5);
 
         mouse && this.follow(mouse, 3);
         //this.checkRadius(mouse, new Vector2(rect.width, rect.height).length / 3);
 
         this.move();
         //this.checkBorder(rect);
+
+        this.count = (this.count + 1) % Math.round(this.velocity.length * 2 + 1);
+        if (this.count === 0) {
+            this.history.push(this.location);
+        }
+        if (this.history.length > 30) {
+            this.history.shift();
+        }
     }
 
     alignspeed(flyers, ratio = 1) {
@@ -40,7 +52,7 @@ export class FlyerParticle extends DynamicParticle {
             sum = sum.divide(sumCount);
             sum.limitLength(this.velocityUpon);
             let steer = sum.subtract(this.velocity);
-            steer.limitLength(1);
+            steer.limitLength(10);
             this.applyForce(steer.multiply(ratio));
         }
     }
@@ -62,7 +74,7 @@ export class FlyerParticle extends DynamicParticle {
             sum.normalize();
             sum.multiply(this.velocityUpon);
             let steer = sum.subtract(this.velocity);
-            steer.limitLength(10);
+            steer.limitLength(8);
             this.applyForce(steer.multiply(ratio));
         }
     }
@@ -71,10 +83,8 @@ export class FlyerParticle extends DynamicParticle {
         let sum = new Vector2();
         let sumCount = 0;
         this.forEachDistance(flyers, (element, offset, distance) => {
-            if (distance < this.neighbourDistance) {
-                sum = sum.add(element.location);
-                sumCount++;
-            }
+            sum = sum.add(element.location);
+            sumCount++;
         });
         if (sumCount > 0) {
             sum = sum.divide(sumCount);

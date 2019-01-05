@@ -60,7 +60,7 @@ export class ParticlesFlyer extends ParticlesBase<FlyerParticle> {
         const center = new Vector2(w * 0.5, h * 0.5);
 
         const screen = new Vector2(w, h).length;
-        const flyersCount = Math.floor(screen / 16) / 3;
+        const flyersCount = 12; // Math.floor(screen / 16) / 3;
         const maxSize = Math.floor(screen / 60);
         this.fieldWidth = w * 0.8;
         this.fieldHeight = h * 0.8;
@@ -85,7 +85,7 @@ export class ParticlesFlyer extends ParticlesBase<FlyerParticle> {
             const particle = new FlyerParticle();
             particle.location = center.add(new Vector2(this.areaWidth * Math.random() - this.areaWidth / 2, this.areaHeight * Math.random() - this.areaHeight / 2));
             particle.velocity = new Vector2(0, 0);
-            particle.size = 20 + maxSize * Math.random() * 20;
+            particle.age = 20 + maxSize * Math.random() * 20;
             particle.color = Colors.Gray;
             this.blocks.push(particle);
         }
@@ -170,7 +170,11 @@ export class ParticlesFlyer extends ParticlesBase<FlyerParticle> {
     private locateParticles(particles: FlyerParticle[]) {
         const distance = new Vector2(this.fieldWidth, this.fieldHeight).length;
         particles.forEach(element => {
+            if (element.size < element.age) {
+                element.size += 1;
+            }
             if (element.location.subtract(this.average).length > distance) {
+                element.size = 1;
                 element.location = this.average.add(new Vector2(
                     this.areaWidth * Math.random() - this.areaWidth / 2,
                     this.areaHeight * Math.random() - this.areaHeight / 2)
@@ -273,10 +277,6 @@ class MainLayerView extends GameView {
 
                 innerContext.drawImage(this.cache.canvas, 0, 0);
 
-                context.globalAlpha = 0.1;
-                context.drawImage(this.mainLayer.canvas, 0, 0);
-                context.globalAlpha = 1;
-
                 const offset = realSource.offset;
 
                 innerContext.translate(-offset.x, -offset.y);
@@ -303,7 +303,7 @@ class MainLayerView extends GameView {
 
         this.cache.draw((innerContext) => {
             Graphics.clear(innerContext);
-            innerContext.globalAlpha = 0.6;
+            innerContext.globalAlpha = 0.4;
             innerContext.drawImage(this.mainLayer.canvas, 0, 0);
         });
     }
@@ -323,6 +323,25 @@ class MainLayerView extends GameView {
         const a = particle.acceleration;
         const size = particle.size / 2 * scale;
         const size2 = size * 2;
+
+        Graphics.hold(context, () => {
+            const history = [...particle.history, particle.location];
+            const length = history.length;
+            if (length > 1) {
+                for (let index = 1; index < length; index++) {
+                    const pre = history[index - 1].multiply(scale);
+                    const cur = history[index].multiply(scale);
+                    context.beginPath();
+                    context.moveTo(pre.x, pre.y);
+                    context.lineTo(cur.x, cur.y);
+                    context.closePath();
+                    context.lineWidth = (1 + (particle.size * scale / 10)) * (index / length);
+                    context.strokeStyle = new Color(255, 255, 255, index / length * 0.3).rgba;
+                    context.stroke();
+                }
+            }
+        });
+
         Graphics.hold(context, () => {
             context.translate(p.x, p.y);
             context.rotate(Math.atan2(v.y, v.x) + Math.PI / 2);
