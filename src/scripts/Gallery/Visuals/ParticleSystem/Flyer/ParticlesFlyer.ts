@@ -186,7 +186,7 @@ export class ParticlesFlyerView<T extends ParticlesFlyer> extends TypedGameView<
         this.joint(new BackLayerView());
         //this.joint(new SmokeLayerView());
         this.joint(new MainLayerView());
-        this.joint(new InfoLayerView());
+        //this.joint(new InfoLayerView());
     }
 
     render(source: T, context: CanvasRenderingContext2D) {
@@ -395,8 +395,8 @@ class MainLayerView extends GameView {
             context.rotate(Math.atan2(v.y, v.x) + Math.PI / 2);
             context.translate(-p.x, -p.y);
 
-            //context.drawImage(this.bird, p.x - sizeHalf, p.y - sizeHalf, size, size);
-            this.drawText(context, particle.emoji, p, sizeHalf);
+            context.drawImage(this.bird, p.x - sizeHalf, p.y - sizeHalf, size, size);
+            //this.drawText(context, particle.emoji, p, sizeHalf);
         });
     }
 
