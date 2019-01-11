@@ -1,4 +1,4 @@
-import { ParticlesBase } from "../ParticleSystem";
+import { ParticleSystem } from "../ParticleSystem";
 import { GameView } from "../../../../Engine/Game/GameObject/GameView";
 import { CircularParticle } from "./CircularParticle";
 import { Vector2 } from "../../../../Engine/Numerics/Vector2";
@@ -8,7 +8,7 @@ import { OffscreenCanvas } from "../../../../Engine/Drawing/OffscreenCanvas";
 import { Random } from "../../../../Engine/Numerics/Random";
 import { Graphics } from "../../../../Engine/Drawing/Graphics";
 
-export class ParticlesCircular extends ParticlesBase<CircularParticle> {
+export class ParticlesCircular extends ParticleSystem<CircularParticle> {
     center: Vector2;
     random: Random = new Random();
 

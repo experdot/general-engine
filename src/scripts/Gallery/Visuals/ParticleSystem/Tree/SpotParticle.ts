@@ -10,7 +10,7 @@ import {
 import {
     ColorHelper
 } from "../../../../Engine/UI/Color";
-import { ParticlesBase } from "../ParticleSystem";
+import { ParticleSystem } from "../ParticleSystem";
 
 class SpotParticle extends DynamicParticle {
     angleOffset: number;

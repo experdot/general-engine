@@ -22,7 +22,7 @@ export class FlyerParticle extends DynamicParticle {
         this.emoji = RandomEmoji.one;
     }
 
-    update(flyers, blocks, mouse) {
+    update(flyers: FlyerParticle[], blocks: FlyerParticle[], mouse) {
         this.alignspeed(flyers, 3);
         this.seperate(flyers, 1);
         this.cohesion(flyers, 2);
@@ -32,7 +32,6 @@ export class FlyerParticle extends DynamicParticle {
         //this.checkRadius(mouse, new Vector2(rect.width, rect.height).length / 3);
 
         this.move();
-        //this.checkBorder(rect);
 
         this.count = (this.count + 1) % Math.round(this.velocity.length * 2 + 1);
         if (this.count === 0) {
@@ -113,30 +112,6 @@ export class FlyerParticle extends DynamicParticle {
         let real = current + sign * 0.5 * 10;
 
         this.color.r = this.color.g = this.color.b = real;
-    }
-
-    checkBorder(rect) {
-        let p = this.location;
-        let w = rect.width;
-        let h = rect.height;
-
-        let xf = this.size / 2 + 10;
-        let yf = this.size / 2 + 10;
-
-        if (p.x < xf) {
-            p.x = xf;
-            this.velocity.x *= -1;
-        } else if (p.x > w - xf) {
-            p.x = w - xf;
-            this.velocity.x *= -1;
-        }
-        if (p.y < yf) {
-            p.y = yf;
-            this.velocity.y *= -1;
-        } else if (p.y > h - yf) {
-            p.y = h - yf;
-            this.velocity.y *= -1;
-        }
     }
 
     seekDefault(target) {

@@ -1,5 +1,6 @@
 import { GameVisual } from "../GameObject/GameVisual";
 import { Inputs } from "../../Common/Inputs";
+import { Vector2 } from "../../Numerics/Vector2";
 
 export interface UIDescription {
     container: HTMLElement;
@@ -16,6 +17,10 @@ export class GameWorld extends GameVisual {
                 y: this.height / 2,
             }
         };
+    }
+
+    get center() {
+        return new Vector2(this.width / 2, this.height / 2);
     }
 
     width: number;

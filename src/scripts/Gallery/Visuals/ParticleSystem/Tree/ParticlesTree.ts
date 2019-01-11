@@ -8,7 +8,7 @@ import {
     Random
 } from "../../../../Engine/Numerics/Random";
 import {
-    ParticlesBase
+    ParticleSystem
 } from "../ParticleSystem";
 import {
     SpotParticle
@@ -20,7 +20,7 @@ import { Graphics } from "../../../../Engine/Drawing/Graphics";
 import { OffscreenCanvas } from "../../../../Engine/Drawing/OffscreenCanvas";
 import { GhostEffect } from "../../../../Engine/Game/GameComponents/Effect/Effect";
 
-class ParticlesTree extends ParticlesBase<SpotParticle> {
+class ParticlesTree extends ParticleSystem<SpotParticle> {
     constructor() {
         super();
         this.generation = [];

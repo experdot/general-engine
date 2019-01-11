@@ -8,6 +8,9 @@ export class Particle {
     color: Color;
     dead: boolean;
 
+    rotation?: number;
+    alpha?: number;
+
     constructor(location: Vector2 = Vector2.Zero, size = 1, age = 0) {
         this.location = location;
         this.size = size;

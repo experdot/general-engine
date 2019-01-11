@@ -8,7 +8,7 @@ import {
     Random
 } from "../../../../Engine/Numerics/Random";
 import {
-    ParticlesBase
+    ParticleSystem
 } from "../ParticleSystem";
 import {
     WalkerParticle
@@ -26,7 +26,7 @@ import {
     Graphics
 } from "../../../../Engine/Drawing/Graphics";
 
-class ParticlesWalker extends ParticlesBase<WalkerParticle> {
+class ParticlesWalker extends ParticleSystem<WalkerParticle> {
     constructor() {
         super();
 

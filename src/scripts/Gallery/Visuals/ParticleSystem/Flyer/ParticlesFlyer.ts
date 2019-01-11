@@ -1,5 +1,5 @@
 import {
-    ParticlesBase
+    ParticleSystem
 } from "../ParticleSystem";
 import {
     Random
@@ -28,13 +28,15 @@ import {
 } from "./FlyerParticle";
 import { OffscreenCanvas } from "../../../../Engine/Drawing/OffscreenCanvas";
 import { GalleryImages } from "../../../Resources/GalleryImages";
+import { Particle } from "../Particle";
 
-export class ParticlesFlyer extends ParticlesBase<FlyerParticle> {
+export class ParticlesFlyer extends ParticleSystem<FlyerParticle> {
+    clounds: Particle[] = [];
     blocks: FlyerParticle[] = [];
     grid: ArrayGrid;
 
     offset: Vector2;
-    average: Vector2;
+    averageLocation: Vector2;
     revolution: number = 200;
 
     fieldWidth: number;
@@ -83,38 +85,68 @@ export class ParticlesFlyer extends ParticlesBase<FlyerParticle> {
             this.blocks.push(particle);
         }
 
+        const cloundsCount = 50;
+        // Create clounds
+        for (let i = 0; i < cloundsCount; i++) {
+            const particle = new Particle();
+            particle.location = center.add(new Vector2(this.areaWidth * Math.random() - this.areaWidth / 2, this.areaHeight * Math.random() - this.areaHeight / 2));
+            particle.rotation = Math.random() * Math.PI * 2;
+            particle.size = this.random.normal(0.1, 2);
+            particle.alpha = 0;
+            this.clounds.push(particle);
+        }
+
         // Create grid
         this.grid = this.createGrid(w, h, this.revolution);
         this.offset = new Vector2(0, 0);
 
+        // Initialize mouse position
         if (this.world.inputs.pointer.position.length === 0) {
             this.world.inputs.pointer.position = new Vector2(w / 2, h / 2);
         }
     }
 
     update() {
-        const size = this.world.size;
-        const center = new Vector2(size.width / 2, size.height / 2);
+        const center = this.world.center;
 
-        this.average = this.getAverateLocation(this.particles)
-        const target = this.average.multiply(this.scale).subtract(center);
-        this.offset = this.offset.add(target.subtract(this.offset).multiply(0.1));
-        //this.grid.clear();
-        //this.allocateGrid(this.grid, this.particles, this.offset, this.revolution);
+        this.averageLocation = ParticleSystem.calcAverageLocation(this.particles)
+        const targetLocation = this.averageLocation.multiply(this.scale).subtract(center);
+        this.offset = this.offset.add(targetLocation.subtract(this.offset).multiply(0.1));
 
         let mouse = null;
         if (this.world.inputs.pointer.isPressed) {
-            mouse = this.world.inputs.pointer.position.add(this.average.subtract(center));
+            const p = this.offset.add(center).divide(this.scale);
+            mouse = this.world.inputs.pointer.position.divide(this.scale).add(p.subtract(center.divide(this.scale)));
         }
 
         this.particles.forEach(element => {
             element.update(this.particles, this.blocks, mouse);
         });
 
-        //this.locateParticles(this.particles);
-        this.locateParticles(this.blocks);
+        this.blocks.forEach(element => {
+            if (element.size < element.age) {
+                element.size += 1;
+            }
+        });
 
+        this.clounds.forEach(element => {
+            if (element.alpha < 1) {
+                element.alpha += 0.01;
+                if (element.alpha >= 0.99) {
+                    element.alpha = 1;
+                }
+            }
+            element.rotation += 0.0001;
+        })
 
+        this.locateParticles(this.particles, this.areaWidth, this.areaHeight);
+        this.locateParticles(this.blocks, this.areaWidth, this.areaHeight, v => v.size = 1);
+        this.locateParticles(this.clounds, this.areaWidth, this.areaHeight, v => {
+            v.alpha = 0;
+        });
+
+        // this.grid.clear();
+        // this.allocateGrid(this.grid, this.particles, this.offset, this.revolution);
         // this.grid.forEach((cell, x, y) => {
         //     if (cell.length > 0) {
         //         let neighbours = this.grid.neighbours(x, y);
@@ -125,7 +157,7 @@ export class ParticlesFlyer extends ParticlesBase<FlyerParticle> {
         // });
 
         this.scaleDelta = (this.scaleDelta + 0.002) % (Math.PI * 2);
-        this.scale = 2 + Math.sin(this.scaleDelta) * 1.5;
+        this.scale = 0.5;//3 + Math.sin(this.scaleDelta) * 2.5;
     }
 
     private createGrid(width, height, revolution = 10) {
@@ -149,29 +181,15 @@ export class ParticlesFlyer extends ParticlesBase<FlyerParticle> {
         return new Vector2(x, y);
     }
 
-    private getAverateLocation(particles) {
-        if (particles.length > 0) {
-            let sum = new Vector2();
-            particles.forEach(element => {
-                sum = sum.add(element.location);
-            });
-            return sum.divide(particles.length);
-        }
-        return new Vector2();
-    }
-
-    private locateParticles(particles: FlyerParticle[]) {
-        const distance = new Vector2(this.fieldWidth, this.fieldHeight).length;
+    private locateParticles<T extends Particle>(particles: T[], width, height, callback?: (particle: T) => void) {
+        const distance = new Vector2(width, height).length;
         particles.forEach(element => {
-            if (element.size < element.age) {
-                element.size += 1;
-            }
-            if (element.location.subtract(this.average).length > distance) {
-                element.size = 1;
-                element.location = this.average.add(new Vector2(
-                    this.areaWidth * Math.random() - this.areaWidth / 2,
-                    this.areaHeight * Math.random() - this.areaHeight / 2)
+            if (element.location.subtract(this.averageLocation).length > distance) {
+                element.location = this.averageLocation.add(new Vector2(
+                    width * Math.random() - width / 2,
+                    height * Math.random() - height / 2)
                 );
+                callback && callback(element);
             }
         });
     }
@@ -184,8 +202,9 @@ export class ParticlesFlyerView<T extends ParticlesFlyer> extends TypedGameView<
         super();
         //this.joint(new GhostLayerView());
         this.joint(new BackLayerView());
-        //this.joint(new SmokeLayerView());
+        this.joint(new SmokeLayerView());
         this.joint(new MainLayerView());
+        this.joint(new FrontLayerView());
         //this.joint(new InfoLayerView());
     }
 
@@ -217,13 +236,13 @@ class GhostLayerView extends GameView {
 }
 
 class BackLayerView extends GameView {
-    clound: HTMLImageElement;
+    background: HTMLImageElement;
     layer: OffscreenCanvas;
 
     constructor() {
         super();
-        //this.clound = new Image();
-        //this.clound.src = "../static/back.jpg";
+        this.background = new Image();
+        this.background.src = "../static/back.jpg";
     }
 
     render(source: ParticlesFlyerView<ParticlesFlyer>, context: CanvasRenderingContext2D) {
@@ -235,7 +254,7 @@ class BackLayerView extends GameView {
         this.layer.draw((innerContext) => {
             const offset = real.offset;
             Graphics.clear(innerContext).hold(innerContext, () => {
-                //innerContext.drawImage(this.clound, 0, 0);
+                innerContext.drawImage(this.background, 0, 0);
                 innerContext.translate(-offset.x, -offset.y);
                 this.drawGrid(innerContext, real.world.size, offset, real.scale);
                 innerContext.translate(offset.x, offset.y);
@@ -267,6 +286,47 @@ class BackLayerView extends GameView {
         context.closePath();
         context.fillStyle = "rgba(0,0,0,0.05)";
         context.fill();
+    }
+}
+
+
+class FrontLayerView extends GameView {
+    clound: HTMLImageElement;
+    layer: OffscreenCanvas;
+
+    constructor() {
+        super();
+        this.clound = new Image();
+        this.clound.src = "../static/clound.png";
+    }
+
+    render(source: ParticlesFlyerView<ParticlesFlyer>, context: CanvasRenderingContext2D) {
+        if (!this.layer) {
+            this.layer = new OffscreenCanvas(context.canvas.width, context.canvas.height);
+        }
+
+        const real = source.target;
+        this.layer.draw((innerContext) => {
+            Graphics.clear(innerContext).hold(innerContext, () => {
+                const offset = real.offset;
+                innerContext.translate(-offset.x, -offset.y);
+                real.clounds.forEach(element => {
+                    this.drawCloundImage(innerContext, element, real.scale);
+                });
+                innerContext.translate(offset.x, offset.y);
+            });
+        }).output(context, 0, 0);
+    }
+
+    private drawCloundImage(context: CanvasRenderingContext2D, particle: Particle, scale) {
+        const p = particle.location.multiply(scale);
+        Graphics.hold(context, () => {
+            context.globalAlpha = particle.alpha;
+            context.translate(p.x, p.y);
+            context.rotate(particle.rotation);
+            context.translate(-p.x, -p.y);
+            context.drawImage(this.clound, p.x, p.y);
+        });
     }
 }
 
@@ -334,7 +394,7 @@ class MainLayerView extends GameView {
         this.mainLayer.draw((innerContext) => {
             Graphics.clear(innerContext).hold(innerContext, (innerContext) => {
                 //real.effects.ghost.effect(innerContext);
-                innerContext.drawImage(this.cache.canvas, 0, 0);
+                //innerContext.drawImage(this.cache.canvas, 0, 0);
 
                 const offset = real.offset;
                 innerContext.translate(-offset.x, -offset.y);
@@ -348,11 +408,11 @@ class MainLayerView extends GameView {
             });
         }).output(context, 0, 0);
 
-        this.cache.draw((innerContext) => {
-            Graphics.clear(innerContext);
-            innerContext.globalAlpha = 0.4;
-            innerContext.drawImage(this.mainLayer.canvas, 0, 0);
-        });
+        // this.cache.draw((innerContext) => {
+        //     Graphics.clear(innerContext);
+        //     innerContext.globalAlpha = 0.4;
+        //     innerContext.drawImage(this.mainLayer.canvas, 0, 0);
+        // });
     }
 
     private drawBlocks(context: CanvasRenderingContext2D, particle: FlyerParticle, scale) {
@@ -372,23 +432,23 @@ class MainLayerView extends GameView {
         const size = particle.size * scale;
         const sizeHalf = size / 2
 
-        Graphics.hold(context, () => {
-            const history = [...particle.history, particle.location];
-            const length = history.length;
-            if (length > 1) {
-                for (let index = 1; index < length; index++) {
-                    const pre = history[index - 1].multiply(scale);
-                    const cur = history[index].multiply(scale);
-                    context.beginPath();
-                    context.moveTo(pre.x, pre.y);
-                    context.lineTo(cur.x, cur.y);
-                    context.closePath();
-                    context.lineWidth = (1 + (particle.size * scale / 10)) * (index / length);
-                    context.strokeStyle = new Color(255, 255, 255, index / length * 0.8).rgba;
-                    context.stroke();
-                }
-            }
-        });
+        // Graphics.hold(context, () => {
+        //     const history = [...particle.history, particle.location];
+        //     const length = history.length;
+        //     if (length > 1) {
+        //         for (let index = 1; index < length; index++) {
+        //             const pre = history[index - 1].multiply(scale);
+        //             const cur = history[index].multiply(scale);
+        //             context.beginPath();
+        //             context.moveTo(pre.x, pre.y);
+        //             context.lineTo(cur.x, cur.y);
+        //             context.closePath();
+        //             context.lineWidth = (1 + (particle.size * scale / 10)) * (index / length);
+        //             context.strokeStyle = new Color(255, 255, 255, index / length * 0.8).rgba;
+        //             context.stroke();
+        //         }
+        //     }
+        // });
 
         Graphics.hold(context, () => {
             context.translate(p.x, p.y);
