@@ -31,7 +31,7 @@ import { GalleryImages } from "../../../Resources/GalleryImages";
 import { Particle } from "../Particle";
 
 export class ParticlesFlyer extends ParticleSystem<FlyerParticle> {
-    clounds: Particle[] = [];
+    clouds: Particle[] = [];
     blocks: FlyerParticle[] = [];
     grid: ArrayGrid;
 
@@ -85,15 +85,15 @@ export class ParticlesFlyer extends ParticleSystem<FlyerParticle> {
             this.blocks.push(particle);
         }
 
-        const cloundsCount = 50;
-        // Create clounds
-        for (let i = 0; i < cloundsCount; i++) {
+        const cloudsCount = 50;
+        // Create clouds
+        for (let i = 0; i < cloudsCount; i++) {
             const particle = new Particle();
             particle.location = center.add(new Vector2(this.areaWidth * Math.random() - this.areaWidth / 2, this.areaHeight * Math.random() - this.areaHeight / 2));
             particle.rotation = Math.random() * Math.PI * 2;
             particle.size = this.random.normal(0.1, 2);
             particle.alpha = 0;
-            this.clounds.push(particle);
+            this.clouds.push(particle);
         }
 
         // Create grid
@@ -129,7 +129,7 @@ export class ParticlesFlyer extends ParticleSystem<FlyerParticle> {
             }
         });
 
-        this.clounds.forEach(element => {
+        this.clouds.forEach(element => {
             if (element.alpha < 1) {
                 element.alpha += 0.01;
                 if (element.alpha >= 0.99) {
@@ -141,7 +141,7 @@ export class ParticlesFlyer extends ParticleSystem<FlyerParticle> {
 
         this.locateParticles(this.particles, this.areaWidth, this.areaHeight);
         this.locateParticles(this.blocks, this.areaWidth, this.areaHeight, v => v.size = 1);
-        this.locateParticles(this.clounds, this.areaWidth, this.areaHeight, v => {
+        this.locateParticles(this.clouds, this.areaWidth, this.areaHeight, v => {
             v.alpha = 0;
         });
 
@@ -291,13 +291,13 @@ class BackLayerView extends GameView {
 
 
 class FrontLayerView extends GameView {
-    clound: HTMLImageElement;
+    cloud: HTMLImageElement;
     layer: OffscreenCanvas;
 
     constructor() {
         super();
-        this.clound = new Image();
-        this.clound.src = GalleryImages.Clound;;
+        this.cloud = new Image();
+        this.cloud.src = GalleryImages.Cloud;;
     }
 
     render(source: ParticlesFlyerView<ParticlesFlyer>, context: CanvasRenderingContext2D) {
@@ -310,22 +310,22 @@ class FrontLayerView extends GameView {
             Graphics.clear(innerContext).hold(innerContext, () => {
                 const offset = real.offset;
                 innerContext.translate(-offset.x, -offset.y);
-                real.clounds.forEach(element => {
-                    this.drawCloundImage(innerContext, element, real.scale);
+                real.clouds.forEach(element => {
+                    this.drawCloudImage(innerContext, element, real.scale);
                 });
                 innerContext.translate(offset.x, offset.y);
             });
         }).output(context, 0, 0);
     }
 
-    private drawCloundImage(context: CanvasRenderingContext2D, particle: Particle, scale) {
+    private drawCloudImage(context: CanvasRenderingContext2D, particle: Particle, scale) {
         const p = particle.location.multiply(scale);
         Graphics.hold(context, () => {
             context.globalAlpha = particle.alpha;
             context.translate(p.x, p.y);
             context.rotate(particle.rotation);
             context.translate(-p.x, -p.y);
-            context.drawImage(this.clound, p.x, p.y);
+            context.drawImage(this.cloud, p.x, p.y);
         });
     }
 }
