@@ -242,7 +242,7 @@ class BackLayerView extends GameView {
     constructor() {
         super();
         this.background = new Image();
-        this.background.src = "../static/back.jpg";
+        this.background.src = GalleryImages.Galaxy;
     }
 
     render(source: ParticlesFlyerView<ParticlesFlyer>, context: CanvasRenderingContext2D) {
@@ -297,7 +297,7 @@ class FrontLayerView extends GameView {
     constructor() {
         super();
         this.clound = new Image();
-        this.clound.src = "../static/clound.png";
+        this.clound.src = GalleryImages.Clound;;
     }
 
     render(source: ParticlesFlyerView<ParticlesFlyer>, context: CanvasRenderingContext2D) {

@@ -2,8 +2,9 @@ import { ConfigurationManager } from "../../Engine/Resources/ConfigurationManage
 
 export const GalleryImages = {
     Bird: "",
-    Galaxy: ""
+    Galaxy: "",
+    Clound: ""
 }
 
-export const ImageResourceConfigUrl = "https://general-gallery-1253318267.cos.ap-beijing.myqcloud.com/config/gallery-image.json";
+export const ImageResourceConfigUrl = "https://general-gallery-1253318267.cos.ap-beijing.myqcloud.com/config/gallery-config-image.json";
 export const GalleryImageResourceManager = new ConfigurationManager(ImageResourceConfigUrl).attach(GalleryImages);
