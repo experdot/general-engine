@@ -29,6 +29,7 @@ import {
 import { OffscreenCanvas } from "../../../../Engine/Drawing/OffscreenCanvas";
 import { GalleryImages } from "../../../Resources/GalleryImages";
 import { Particle } from "../Particle";
+import { PlatformInfo } from "../../../../Engine/Platform/PlatformInfo";
 
 export class ParticlesFlyer extends ParticleSystem<FlyerParticle> {
     clouds: Particle[] = [];
@@ -204,7 +205,9 @@ export class ParticlesFlyerView<T extends ParticlesFlyer> extends TypedGameView<
         this.joint(new BackLayerView());
         this.joint(new SmokeLayerView());
         this.joint(new MainLayerView());
-        this.joint(new FrontLayerView());
+        if (!PlatformInfo.IsMobile) {
+            this.joint(new FrontLayerView());
+        }
         //this.joint(new InfoLayerView());
     }
 
