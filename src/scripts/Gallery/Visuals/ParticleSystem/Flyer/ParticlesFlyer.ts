@@ -158,7 +158,7 @@ export class ParticlesFlyer extends ParticleSystem<FlyerParticle> {
         // });
 
         this.scaleDelta = (this.scaleDelta + 0.002) % (Math.PI * 2);
-        this.scale = 0.5;//3 + Math.sin(this.scaleDelta) * 2.5;
+        this.scale = 3 - Math.sin(this.scaleDelta) * 2.5;
     }
 
     private createGrid(width, height, revolution = 10) {
@@ -205,9 +205,9 @@ export class ParticlesFlyerView<T extends ParticlesFlyer> extends TypedGameView<
         this.joint(new BackLayerView());
         this.joint(new SmokeLayerView());
         this.joint(new MainLayerView());
-        if (!PlatformInfo.IsMobile) {
-            this.joint(new FrontLayerView());
-        }
+        // if (!PlatformInfo.IsMobile) {
+        //     this.joint(new FrontLayerView());
+        // }
         //this.joint(new InfoLayerView());
     }
 
@@ -244,8 +244,8 @@ class BackLayerView extends GameView {
 
     constructor() {
         super();
-        this.background = new Image();
-        this.background.src = GalleryImages.Galaxy;
+        //this.background = new Image();
+        //this.background.src = GalleryImages.Galaxy;
     }
 
     render(source: ParticlesFlyerView<ParticlesFlyer>, context: CanvasRenderingContext2D) {
@@ -257,7 +257,7 @@ class BackLayerView extends GameView {
         this.layer.draw((innerContext) => {
             const offset = real.offset;
             Graphics.clear(innerContext).hold(innerContext, () => {
-                innerContext.drawImage(this.background, 0, 0);
+                //innerContext.drawImage(this.background, 0, 0);
                 innerContext.translate(-offset.x, -offset.y);
                 this.drawGrid(innerContext, real.world.size, offset, real.scale);
                 innerContext.translate(offset.x, offset.y);
