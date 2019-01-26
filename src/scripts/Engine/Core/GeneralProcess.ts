@@ -7,11 +7,6 @@ interface GeneralProcessKeyValuePair {
     value: GeneralProcess<any>;
 }
 
-interface Test {
-    a: string;
-    b: number;
-}
-
 export class GeneralProcess<T extends any[]> {
     static find(object: GeneralObject<GeneralInterface>): GeneralProcessKeyValuePair[] {
         const result: GeneralProcessKeyValuePair[] = [];
@@ -52,15 +47,19 @@ export class GeneralProcess<T extends any[]> {
     thisArg: GeneralObject<GeneralInterface>;
     tasks: GeneralTask[];
 
+    enabled: boolean = true;
+
     constructor(thisArg: GeneralObject<GeneralInterface>) {
         this.thisArg = thisArg;
         this.tasks = [];
     }
 
     process(source: GeneralObject<GeneralInterface> = this.thisArg, ...args: T): this {
-        this.tasks.forEach(task => {
-            task.run(this.thisArg, source, ...args);
-        });
+        if (this.enabled) {
+            this.tasks.forEach(task => {
+                task.run(this.thisArg, source, ...args);
+            });
+        }
         return this;
     }
 
@@ -87,6 +86,16 @@ export class GeneralProcess<T extends any[]> {
 
     clear(): this {
         this.tasks = [];
+        return this;
+    }
+
+    enable(): this {
+        this.enabled = true;
+        return this;
+    }
+
+    disable(): this {
+        this.enabled = true;
         return this;
     }
 }
