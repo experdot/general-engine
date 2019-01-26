@@ -27,13 +27,13 @@ class BlockGrid extends Array2 {
 
     blockGroups: BlockGroup[];
 
+    current: any;
+    next: any;
+
     private colors: Color[];
 
     private _preBlocks: Block[];
     private _allBlocks: Block[];
-
-    private current: any;
-    private next: any;
 
     private upOffset: Vector2;
     private downOffset: Vector2;

@@ -35,12 +35,36 @@ import {
 import {
     GalleryTexts
 } from "../../Resources/GalleryTexts";
-import { MessageBox } from "../../../Engine/Application/MessageBox";
 import { Random } from "../../../Engine/Numerics/Random";
+import { Keys } from "../../../Engine/Common/Keys";
+import { GameWorld } from "../../../Engine/Game/GameWorld/GameWorld";
 
-class EndlessAbyss extends GameVisual {
+interface EndlessAbyssSettings {
+    width: number;
+    height: number;
+    rotation: number;
+    center: Vector2;
+    delayTime: number;
+    pointer: any;
+}
+
+interface GameStatus {
+    playing: boolean;
+    gameover: boolean;
+    mocking: boolean;
+    score: number;
+    progress: number;
+}
+
+export class EndlessAbyss extends GameVisual {
+    status: GameStatus;
+    settings: EndlessAbyssSettings;
+
+    grid: BlockGrid;
+
+    ghost: GhostEffect;
+
     private timer: DelayTimer;
-    private ghost: GhostEffect;
 
     constructor() {
         super();
@@ -50,18 +74,41 @@ class EndlessAbyss extends GameVisual {
     }
 
     start() {
-        let w = this.world.width;
-        let h = this.world.height;
+        this.initProperties();
+        this.grid = new BlockGrid(this.settings.width, this.settings.height);
+        this.registEvents();
+    }
 
-        this.settings = {
-            width: new Random().range(10, 30),
-            rotation: 0,
-            center: new Vector2(w / 2, h / 2),
+    update() {
+        if (this.status.playing || this.status.mocking) {
+            let delay = this.status.mocking ? 200 : this.settings.delayTime;
+            this.timer.delay(delay, () => {
+                this.grid.down();
+                this.status.progress = 0;
+            }, (actual: number) => {
+                this.status.progress = actual / delay;
+            });
+        }
+        this.settings.rotation += 0.002;
+    }
+
+    private initProperties() {
+        const w = this.world.width;
+        const h = this.world.height;
+
+        this.status = {
             playing: false,
             gameover: false,
             mocking: true,
             score: 0,
             progress: 0,
+        }
+
+        this.settings = {
+            width: new Random().range(10, 30),
+            height: 20,
+            rotation: 0,
+            center: new Vector2(w / 2, h / 2),
             delayTime: 500,
             pointer: {
                 position: new Vector2(),
@@ -69,56 +116,45 @@ class EndlessAbyss extends GameVisual {
                 count: 0
             }
         };
-
-        this.blockGrid = new BlockGrid(this.settings.width, 20);
-        this._registEvents();
     }
 
-    update() {
-        if (this.settings.playing || this.settings.mocking) {
-            let delay = this.settings.mocking ? 200 : this.settings.delayTime;
-            this.timer.delay(delay, () => {
-                this.blockGrid.down();
-                this.settings.progress = 0;
-            }, (actual: number) => {
-                this.settings.progress = actual / delay;
-            });
-        }
-        this.settings.rotation += 0.002;
+    private registEvents() {
+        this.registKeyPressedEvent();
+        this.registPointerEvents();
+        this.registBlockGridEvents();
     }
 
-    _registEvents() {
+    private registKeyPressedEvent() {
         this.on(InputEvents.KeyPress, (event: KeyboardEvent) => {
-            if (!this.settings.playing) {
-                if (event.key === "Enter") {
-                    this.settings.playing = true;
-                    if (this.settings.gameover) {
-                        this.settings.gameover = false;
+            if (!this.status.playing) {
+                if (event.keyCode === Keys.Enter) {
+                    this.status.playing = true;
+                    if (this.status.gameover) {
+                        this.status.gameover = false;
                     }
-                    if (this.settings.mocking) {
-                        this.settings.mocking = false;
+                    if (this.status.mocking) {
+                        this.status.mocking = false;
                     }
-                    this.blockGrid.reset();
+                    this.grid.reset();
                 }
                 return;
             }
+
             if (event.key === "a") {
-                this.blockGrid.left();
+                this.grid.left();
             } else if (event.key === "d") {
-                this.blockGrid.right();
+                this.grid.right();
             } else if (event.key === "w") {
-                this.blockGrid.up();
+                this.grid.up();
             } else if (event.key === "s") {
-                this.blockGrid.down();
-            }
-
-            if (event.key === "") {
-
+                this.grid.down();
             }
         });
+    }
 
+    private registPointerEvents() {
         this.on(InputEvents.PointerPressed, (event: MouseEvent | TouchEvent) => {
-            let pointer = this.settings.pointer;
+            const pointer = this.settings.pointer;
             pointer.position = EventHelper.getEventClientPositon(event);
             pointer.rotation = this.settings.rotation;
             pointer.count = 0;
@@ -140,53 +176,96 @@ class EndlessAbyss extends GameVisual {
                 }
             }
         });
+    }
 
-        this.blockGrid.onOver = () => {
-            if (this.settings.mocking) {
-                this.settings.playing = false;
-                this.settings.mocking = true;
-                this.settings.gameover = false;
-                this.blockGrid.reset();
+    private registBlockGridEvents() {
+        this.grid.onOver = () => {
+            if (this.status.mocking) {
+                this.status.playing = false;
+                this.status.mocking = true;
+                this.status.gameover = false;
+                this.grid.reset();
             }
             else {
-                this.settings.playing = false;
-                this.settings.mocking = false;
-                this.settings.gameover = true;
+                this.status.playing = false;
+                this.status.mocking = false;
+                this.status.gameover = true;
             }
-            this.settings.score = 0;
+            this.status.score = 0;
         };
 
-        this.blockGrid.onFullRow = (count: number) => {
-            this.settings.score += 10 * Math.pow(2, count - 1);
+        this.grid.onFullRow = (count: number) => {
+            this.status.score += 10 * Math.pow(2, count - 1);
         };
     }
 }
 
-class EndlessAbyssView extends GameView {
+interface FillColors {
+    white: Color;
+    blank: Color;
+    mask: Color;
+}
+
+interface StrokeColors {
+    white: Color;
+    black: Color;
+}
+
+interface DrawingArgs {
+    center: Vector2;
+    radius: number;
+    blockHeight: number;
+    blockBorder: number;
+    yOffset: number;
+    split: number;
+}
+
+interface SingleArgs {
+    center: Vector2;
+    radius: number;
+    height: number;
+    start: number;
+    end: number;
+    stroke?: Color;
+    fill?: Color;
+}
+
+class ColorMode {
+    stroke?: Color;
+    fill?: Color;
+    ignoreStroke?: boolean;
+    ignoreFill?: boolean;
+
+    constructor(stroke: Color, fill: Color, ignoreStroke: boolean, ignoreFill: boolean) {
+        this.stroke = stroke;
+        this.fill = fill;
+        this.ignoreStroke = ignoreStroke;
+        this.ignoreFill = ignoreFill;
+    }
+}
+
+interface ViewSettings {
+    radius: number;
+    border: number;
+}
+
+
+export class EndlessAbyssView extends GameView {
+    target: EndlessAbyss;
+
+    fill: FillColors;
+    stroke: StrokeColors;
+
+    colorModes: ColorMode[] = [];
+
+    settings: ViewSettings;
+
+    single: number = 0;
+
     constructor() {
         super();
 
-        this.fill = {
-            white: new Color(255, 255, 255, 0.05),
-            blank: new Color(255, 255, 255, 0.05),
-            mask: new Color(0, 0, 0, 0.6)
-        };
-        this.stroke = {
-            white: new Color(255, 255, 255, 0.05),
-            black: new Color(0, 0, 0, 0.2),
-        };
-
-        let stroke = this.stroke.white;
-        let fill = this.fill.white;
-
-        this.styles = [
-            [stroke, null, false, false],
-            [stroke, fill, false, true],
-            [null, this.fill.blank, false, false],
-            [null, null, true, true],
-            [this.stroke.black, null, false, false],
-            [stroke, null, false, true],
-        ];
+        this.initProperties();
 
         this.joint(new DynamicLayerView());
         this.joint(new StaticLayerView());
@@ -194,24 +273,29 @@ class EndlessAbyssView extends GameView {
 
     render(source: any) {
         this.target = source;
+
+        this.single = (this.single + 0.01) % (Math.PI * 2);
+        this.settings.radius = 100 + 75 * Math.sin(this.single);
+
+        //this.settings.border = 10 + 10 * Math.sin(this.single);
     }
 
     drawAll(context: CanvasRenderingContext2D, size: any, dynamic = true, ignoreFix = false) {
-        const radius = 50;
-        const split = this.target.blockGrid.width;
-        const height = this.target.blockGrid.height;
+        const radius = this.settings.radius;
+        const split = this.target.grid.width;
+        const height = this.target.grid.height;
         const offset = (Math.min(size.width, size.height) * 0.8 - radius * 2) / height / 2;
-        const blockBorder = 0;
+        const blockBorder = this.settings.border;
         const blockHeight = offset + blockBorder;
-        const yOffset = 1 - this.target.settings.progress;
+        const yOffset = 1 - this.target.status.progress;
 
-        let allBlocks = this.target.blockGrid.allBlocks;
-        let preBlocks = this.target.blockGrid.preBlocks;
-        let fixBlocks = this.target.blockGrid;
-        let current = this.target.blockGrid.current.getBlocks();
-        let next = this.target.blockGrid.next.getBlocks();
+        const allBlocks = this.target.grid.allBlocks;
+        const preBlocks = this.target.grid.preBlocks;
+        const fixBlocks = this.target.grid;
+        const current = this.target.grid.current.getBlocks();
+        const next = this.target.grid.next.getBlocks();
 
-        let args = {
+        const args: DrawingArgs = {
             center: size.center,
             radius,
             blockHeight,
@@ -221,78 +305,108 @@ class EndlessAbyssView extends GameView {
         };
 
         if (dynamic) {
-            this.drawBlocks(context, fixBlocks, args, this.styles[1]);
-            this.drawBlocks(context, preBlocks, args, this.styles[2]);
+            this.drawBlocks(context, fixBlocks, args, this.colorModes[1]);
+            this.drawBlocks(context, preBlocks, args, this.colorModes[2]);
             args.yOffset = 4;
-            this.drawBlocks(context, next, args, this.styles[3]);
+            this.drawBlocks(context, next, args, this.colorModes[3]);
             args.yOffset = 0;
         } else {
-            //this.drawBlocks(context, allBlocks, args, this.styles[0]);
-            !ignoreFix && this.drawBlocks(context, fixBlocks, args, this.styles[4]);
+            //this.drawBlocks(context, allBlocks, args, this.colorModes[0]);
+            !ignoreFix && this.drawBlocks(context, fixBlocks, args, this.colorModes[4]);
             args.yOffset = yOffset;
-            this.drawBlocks(context, current, args, this.styles[5]);
+            this.drawBlocks(context, current, args, this.colorModes[5]);
             args.yOffset = 0;
         }
     }
 
-    drawBlocks(context: CanvasRenderingContext2D, blocks: any, args: any, style: any) {
-        let angle = Math.PI / args.split;
-        let actualHeight = args.blockHeight - args.blockBorder;
+    drawBlocks(context: CanvasRenderingContext2D, blocks: any, args: DrawingArgs, style: ColorMode) {
+        const angle = Math.PI / args.split;
+        const actualHeight = args.blockHeight - args.blockBorder;
         blocks.forEach((block: any) => {
             if (block) {
-                let x = block.location.x;
-                let y = block.location.y + args.yOffset;
-                let base = x * angle * 2;
-                let start = base - angle + this.target.settings.rotation;
-                let end = base + angle + this.target.settings.rotation;
-                let actualStroke = style[2] ? block.color : style[0];
-                let actualFill = style[3] ? block.color : style[1];
-                let singleArgs = {
+                const x = block.location.x;
+                const y = block.location.y + args.yOffset;
+                const base = x * angle * 2;
+                const start = base - angle + this.target.settings.rotation;
+                const end = base + angle + this.target.settings.rotation;
+                const actualStroke = style.ignoreStroke ? block.color : style.stroke;
+                const actualFill = style.ignoreFill ? block.color : style.fill;
+                const singleArgs: SingleArgs = {
                     center: args.center,
                     radius: args.radius + y * args.blockHeight,
                     height: actualHeight,
                     start,
-                    end
+                    end,
+                    stroke: actualStroke,
+                    fill: actualFill
                 };
-                this.drawSingle(context, singleArgs, actualStroke, actualFill);
+                this.drawSingleBlock(context, singleArgs);
             }
         });
     }
 
-    drawSingle(context: CanvasRenderingContext2D, args: any, stroke: Color, fill: Color) {
+    drawSingleBlock(context: CanvasRenderingContext2D, args: SingleArgs) {
         context.beginPath();
         context.arc(args.center.x, args.center.y, args.radius, args.start, args.end, false);
         context.arc(args.center.x, args.center.y, args.radius + args.height, args.end, args.start, true);
         context.closePath();
-        if (stroke) {
-            context.strokeStyle = stroke.rgba;
+        if (args.stroke) {
+            context.strokeStyle = args.stroke.rgba;
             context.stroke();
         }
-        if (fill) {
-            context.fillStyle = fill.rgba;
+        if (args.fill) {
+            context.fillStyle = args.fill.rgba;
             context.fill();
+        }
+    }
+
+    private initProperties() {
+        this.fill = {
+            white: new Color(255, 255, 255, 0.05),
+            blank: new Color(255, 255, 255, 0.05),
+            mask: new Color(0, 0, 0, 0.6)
+        };
+
+        this.stroke = {
+            white: new Color(255, 255, 255, 0.05),
+            black: new Color(0, 0, 0, 0.2),
+        };
+
+        const stroke = this.stroke.white;
+        const fill = this.fill.white;
+
+        this.colorModes.push(
+            new ColorMode(stroke, null, false, false),
+            new ColorMode(stroke, fill, false, true),
+            new ColorMode(null, this.fill.blank, false, false),
+            new ColorMode(null, null, true, true),
+            new ColorMode(this.stroke.black, null, false, false),
+            new ColorMode(stroke, null, false, true),
+        );
+
+        this.settings = {
+            radius: 50,
+            border: 0
         }
     }
 }
 
 
 class DynamicLayerView extends GameView {
-    constructor() {
-        super();
-    }
+    layer: OffscreenCanvas;
 
-    render(source: any, context: CanvasRenderingContext2D) {
-        if (!this.innerCanvas) {
-            this.innerCanvas = new OffscreenCanvas(context.canvas.width, context.canvas.height);
+    render(source: EndlessAbyssView, context: CanvasRenderingContext2D) {
+        if (!this.layer) {
+            this.layer = new OffscreenCanvas(context.canvas.width, context.canvas.height);
         }
 
-        let size = source.target.world.size;
-        this.innerCanvas.draw((innerContext: CanvasRenderingContext2D) => {
+        const size = source.target.world.size;
+        this.layer.draw((innerContext: CanvasRenderingContext2D) => {
             this.drawDynamic(source, innerContext, size);
         }).output(context, 0, 0);
     }
 
-    drawDynamic(source: any, context: CanvasRenderingContext2D, size: number) {
+    private drawDynamic(source: EndlessAbyssView, context: CanvasRenderingContext2D, size: any) {
         source.target.ghost.effect(context);
         Graphics.scaleOffset(context, 8, 8 * context.canvas.height / context.canvas.width, 1);
         Graphics.rotate(context, Math.PI / 160, 1, () => {
@@ -303,31 +417,26 @@ class DynamicLayerView extends GameView {
 }
 
 class StaticLayerView extends GameView {
-    constructor() {
-        super();
-        this.single = 0;
-        this.fill = {
-            mask: new Color(0, 0, 0, 0.6)
-        };
-    }
+    mask: Color = new Color(0, 0, 0, 0.6);
+    single: number = 0;
 
-    render(source: any, context: CanvasRenderingContext2D) {
-        let size = source.target.world.size;
+    render(source: EndlessAbyssView, context: CanvasRenderingContext2D) {
+        const size = source.target.world.size;
         this.drawStatic(source, context, size);
     }
 
-    drawStatic(source: any, context: CanvasRenderingContext2D, size: any) {
-        if (source.target.settings.playing) {
+    private drawStatic(source: EndlessAbyssView, context: CanvasRenderingContext2D, size: any) {
+        if (source.target.status.playing) {
             source.drawAll(context, size, false, false);
-            this.drawScore(context, size, source.target.settings.score);
+            this.drawScore(context, size, source.target.status.score);
         }
-        if (source.target.settings.mocking) {
+        if (source.target.status.mocking) {
             source.drawAll(context, size, false, true);
         }
-        if (!source.target.settings.playing) {
+        if (!source.target.status.playing) {
             this.drawMask(context, size);
             Graphics.shadow(context, 3, "rgba(0,0,0,0.38)", 3, 3, () => {
-                if (source.target.settings.gameover) {
+                if (source.target.status.gameover) {
                     this.drawTitle(context, size, GalleryTexts.EndlessAbyssWorld.GameOver);
                 } else {
                     this.drawTitle(context, size, GalleryTexts.EndlessAbyssWorld.GameName);
@@ -337,12 +446,12 @@ class StaticLayerView extends GameView {
         }
     }
 
-    drawMask(context: CanvasRenderingContext2D, size: any) {
-        context.fillStyle = this.fill.mask.rgba;
+    private drawMask(context: CanvasRenderingContext2D, size: any) {
+        context.fillStyle = this.mask.rgba;
         context.fillRect(0, 0, size.width, size.height);
     }
 
-    drawTitle(context: CanvasRenderingContext2D, size: any, title: string) {
+    private drawTitle(context: CanvasRenderingContext2D, size: any, title: string) {
         let fonSize = Math.max(size.width / 20, 48);
         context.font = fonSize + "px Arial";
         context.textAlign = "center";
@@ -350,7 +459,7 @@ class StaticLayerView extends GameView {
         context.fillText(title, size.center.x, size.center.y);
     }
 
-    drawNotify(context: CanvasRenderingContext2D, size: any) {
+    private drawNotify(context: CanvasRenderingContext2D, size: any) {
         let fonSize = Math.max(size.width / 64, 16);
         context.font = fonSize + "px Arial";
         context.textAlign = "center";
@@ -359,7 +468,7 @@ class StaticLayerView extends GameView {
         context.fillText(GalleryTexts.EndlessAbyssWorld.Tip, size.center.x, size.center.y + fonSize * 1.6);
     }
 
-    drawScore(context: CanvasRenderingContext2D, size: any, score: number) {
+    private drawScore(context: CanvasRenderingContext2D, size: any, score: number) {
         let fonSize = Math.max(size.width / 48, 24);
         context.font = fonSize + "px Arial";
         context.textAlign = "right";
@@ -367,9 +476,3 @@ class StaticLayerView extends GameView {
         context.fillText(GalleryTexts.EndlessAbyssWorld.Score + score, size.width * 0.9, size.height * 0.15);
     }
 }
-
-
-export {
-    EndlessAbyss,
-    EndlessAbyssView
-};
