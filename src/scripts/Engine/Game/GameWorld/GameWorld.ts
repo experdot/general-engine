@@ -26,6 +26,8 @@ export class GameWorld extends GameVisual {
     width: number;
     height: number;
 
+    frameCount: number = 0;
+
     inputs: Inputs;
     ui: UIDescription;
 
@@ -45,6 +47,9 @@ export class GameWorld extends GameVisual {
         };
 
         this.initialize();
+
+        this.processes.start.before(this.initFrameCount);
+        this.processes.update.before(this.updateFrameCount);
     }
 
     addChild(visual: GameVisual) {
@@ -66,5 +71,13 @@ export class GameWorld extends GameVisual {
         this.ui.container = container;
         this.ui.canvas = canvas;
         this.inputs.launch(this.ui.container);
+    }
+
+    private initFrameCount() {
+        this.frameCount = 0;
+    }
+
+    private updateFrameCount() {
+        this.frameCount++;
     }
 }

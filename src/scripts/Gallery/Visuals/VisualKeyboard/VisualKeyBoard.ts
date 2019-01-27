@@ -19,6 +19,5 @@ export class VisualKeyBoard extends GameVisual {
     dispose() {
         super.dispose();
         throw new Error("method is not implemented.");
-
     }
 }
