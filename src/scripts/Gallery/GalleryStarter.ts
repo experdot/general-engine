@@ -23,6 +23,7 @@ import {
     GameBox
 } from "../Engine/Game/GameBox/GameBox";
 import { ParticlesCircularWorld } from "./Visuals/ParticlesCircularWorld";
+import { ParticlesFireWorld } from "./Visuals/ParticlesFireWorld";
 
 export class GalleryStarter {
     static Symbols: {};
@@ -39,6 +40,7 @@ export class GalleryStarter {
         this.addSymbol("audiovisualizer", AudioVisualizerWorld);
         this.addSymbol("endlessabyss", EndlessAbyssWorld);
         this.addSymbol("circular", ParticlesCircularWorld);
+        this.addSymbol("fire", ParticlesFireWorld);
 
         GalleryStarter.Symbols = this.symbols;
     }

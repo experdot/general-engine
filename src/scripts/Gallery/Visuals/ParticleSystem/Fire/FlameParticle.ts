@@ -17,13 +17,11 @@ export class FlameParticle extends Particle {
         this.r = rand(20, 30);
         this.life = rand(3, 6);
         this.alive = true; this.c = {
-
             h: Math.floor(rand(2, 40)),
             s: 100,
             l: rand(80, 100),
             a: 0,
             ta: rand(0.8, 0.9)
-
         }
     }
 

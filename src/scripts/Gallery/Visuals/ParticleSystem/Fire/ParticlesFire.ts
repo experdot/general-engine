@@ -29,11 +29,9 @@ export class ParticlesFire extends ParticleSystem<FlameParticle> {
     }
 
     update() {
-        if (this.world.frameCount % 5 === 0) {
-            this.aFires.push(new FlameParticle(this.mouse));
-            this.aSpark.push(new SparkParticle(this.mouse));
-            this.aSpark2.push(new SparkParticle(this.mouse));
-        }
+        this.aFires.push(new FlameParticle(this.mouse));
+        this.aSpark.push(new SparkParticle(this.mouse));
+        this.aSpark2.push(new SparkParticle(this.mouse));
 
         this.updateParticles(this.aFires);
         this.updateParticles(this.aSpark);
@@ -53,19 +51,18 @@ export class ParticlesFire extends ParticleSystem<FlameParticle> {
 export class ParticlesFireView extends GameView {
     render(source: ParticlesFire, context: CanvasRenderingContext2D) {
         const mouse = source.mouse;
-        const size = source.world.size;
 
         Graphics.hold(context, () => {
             this.drawBackground(context);
-            //this.drawGradient(context, mouse);
+            this.drawGradient(context, mouse);
             this.drawParticles(context, source);
         })
     }
 
     private drawBackground(context: CanvasRenderingContext2D) {
         context.globalCompositeOperation = "source-over";
-        // context.fillStyle = "rgba( 15, 5, 2, 1 )";
-        // context.fillRect(0, 0, window.innerWidth, window.innerHeight);
+        context.fillStyle = "rgba(15,5,2,1)";
+        context.fillRect(0, 0, context.canvas.width, context.canvas.height);
     }
 
     private drawGradient(context: CanvasRenderingContext2D, mouse) {
