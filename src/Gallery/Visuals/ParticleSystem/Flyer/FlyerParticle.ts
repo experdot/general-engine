@@ -5,6 +5,7 @@ import {
     Vector2
 } from "../../../../Engine/Numerics/Vector2";
 import { RandomEmoji } from "../../../../Engine/UI/Font";
+import { Speeder } from "../../../../Engine/Common/Speeder";
 
 export class FlyerParticle extends DynamicParticle {
     neighbourDistance: number;
@@ -15,11 +16,16 @@ export class FlyerParticle extends DynamicParticle {
 
     emoji: string;
 
+    speeder: Speeder;
+
+    rndSpeeder: Speeder;
+
     constructor(location?: Vector2, size = 1, age = 0) {
         super(location, size, age);
         this.velocityUpon = 5;
         this.neighbourDistance = 400;
         this.emoji = RandomEmoji.one;
+        this.speeder = new Speeder(1);
     }
 
     update(flyers: FlyerParticle[], blocks: FlyerParticle[], mouse) {
@@ -29,20 +35,18 @@ export class FlyerParticle extends DynamicParticle {
         this.seperate(blocks, 5);
 
         mouse && this.follow(mouse, 3);
-        //this.checkRadius(mouse, new Vector2(rect.width, rect.height).length / 3);
 
-        this.move();
-
-        this.count = (this.count + 1) % Math.round(this.velocity.length * 2 + 1);
-        if (this.count === 0) {
+        const radio = Math.round(this.velocity.length * 2 + 1)
+        this.speeder.change(radio).invoke(() => {
             this.history.push(this.location);
-        }
+        });
+
         if (this.history.length > 30) {
             this.history.shift();
         }
     }
 
-    alignspeed(flyers, ratio = 1) {
+    private alignspeed(flyers, ratio = 1) {
         let sum = new Vector2();
         let sumCount = 0;
         this.forEachDistance(flyers, (element, offset, distance) => {
@@ -60,7 +64,7 @@ export class FlyerParticle extends DynamicParticle {
         }
     }
 
-    seperate(flyers, ratio = 1) {
+    private seperate(flyers, ratio = 1) {
         let sum = new Vector2();
         let sumCount = 0;
         this.forEachDistance(flyers, (element, offset, distance) => {
@@ -82,7 +86,7 @@ export class FlyerParticle extends DynamicParticle {
         }
     }
 
-    cohesion(flyers, ratio = 1) {
+    private cohesion(flyers, ratio = 1) {
         let sum = new Vector2();
         let sumCount = 0;
         this.forEachDistance(flyers, (element, offset, distance) => {
@@ -97,24 +101,11 @@ export class FlyerParticle extends DynamicParticle {
         }
     }
 
-    follow(target, ratio = 1) {
+    private follow(target, ratio = 1) {
         this.applyForce(this.seekDefault(target).multiply(ratio));
     }
 
-    checkRadius(mouse, maxRadius = 100) {
-        let offset = this.location.subtract(mouse);
-        let distance = offset.length;
-        let alpha = Math.max(0.1, Math.min(1, 1 - (distance / maxRadius)));
-
-        let current = this.color.r;
-        let target = 175 + alpha * 80;
-        let sign = Math.sign(target - this.color.r);
-        let real = current + sign * 0.5 * 10;
-
-        this.color.r = this.color.g = this.color.b = real;
-    }
-
-    seekDefault(target) {
+    private seekDefault(target) {
         return this.seek(this.location, target, this.velocity);
     }
 
