@@ -58,9 +58,9 @@ const config = {
         }
     },
     styles: {
-        src: "src/scss/*.scss",
+        src: "scss/*.scss",
         dest: "dist/styles",
-        watch: "src/scss/**/*.scss",
+        watch: "scss/**/*.scss",
         sourcemap: options.env !== "production",
         concat: {
             enabled: false,
@@ -80,7 +80,7 @@ const config = {
     },
     gallery: {
         dest: "dist/scripts",
-        watch: ["src/scripts/**/*.js", "src/scripts/**/*.ts"],
+        watch: ["src/**/*.js", "src/**/*.ts"],
         sourcemap: options.env !== "production",
         bundle: "bundle.js",
         minify: {
@@ -95,7 +95,7 @@ const config = {
             html: "./dist/**/*.html"
         },
         browserify: {
-            entries: "src/scripts/GalleryEntry.ts",
+            entries: "src/GalleryEntry.ts",
             debug: options.env !== "production",
             transform: [
                 [babelify, {
@@ -122,7 +122,7 @@ const config = {
         bundle: "general-engine.js",
         bundle_minfify: "general-engine.min.js",
         browserify: {
-            entries: "src/scripts/Engine/_General.ts",
+            entries: "src/Engine/_General.ts",
             standalone: "General",
             transform: [
                 [babelify, {
@@ -144,7 +144,7 @@ const config = {
         suffix: ".min",
         bundle: "index.js",
         browserify: {
-            entries: "src/scripts/Engine/_General.ts",
+            entries: "src/Engine/_General.ts",
             standalone: "General",
             transform: [
                 [babelify, {
