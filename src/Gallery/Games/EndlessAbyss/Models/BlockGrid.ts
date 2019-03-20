@@ -14,7 +14,7 @@ import {
     Block
 } from "./Block/Block";
 
-class BlockGrid extends Array2 {
+class BlockGrid extends Array2<Block> {
     get allBlocks() {
         return this._allBlocks;
     }

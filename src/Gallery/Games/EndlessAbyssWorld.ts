@@ -4,7 +4,7 @@ import {
 import {
     PointerInput,
     KeyInput
-} from "../../Engine/Common/Inputs";
+} from "../../Engine/Inputs/Inputs";
 import {
     EndlessAbyss,
     EndlessAbyssView

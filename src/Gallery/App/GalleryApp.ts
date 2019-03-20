@@ -5,7 +5,7 @@ import { GameBox } from "../../Engine/Game/GameBox/GameBox";
 import { GalleryStarter } from "../GalleryStarter";
 import { GalleryNavigator } from "./GalleryNavigator";
 import { GalleryImageResourceManager } from "../Resources/GalleryImages";
-import { Utilities } from "../../Engine/Common/Utilities";
+import { Utilities } from "../../Engine/Utilities/Utilities";
 import { MessageBox } from "../../Engine/Application/MessageBox";
 
 export class GalleryApp extends App {

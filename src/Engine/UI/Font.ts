@@ -1,5 +1,3 @@
-import { ValueChangedEventArgs } from "../Common/EventArgs";
-
 export class Emoji {
     static get all() {
         if (!this.values) {

@@ -4,7 +4,7 @@ import {
 import {
     PointerInput,
     DragDropInput
-} from "../../Engine/Common/Inputs";
+} from "../../Engine/Inputs/Inputs";
 import {
     AudioVisualizer,
     AudioVisualizerView

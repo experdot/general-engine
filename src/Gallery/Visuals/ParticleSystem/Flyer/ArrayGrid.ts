@@ -2,7 +2,7 @@ import {
     Array2
 } from "../../../../Engine/Collections/Array2";
 
-export class ArrayGrid extends Array2 {
+export class ArrayGrid extends Array2<any[]> {
     offsetX: number[] = [0, -1, 0, 1, 1, 1, 0, -1, -1];
     offsetY: number[] = [0, -1, -1, -1, 0, 1, 1, 1, 0];
 

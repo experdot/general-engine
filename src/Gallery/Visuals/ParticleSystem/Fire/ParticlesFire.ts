@@ -2,7 +2,7 @@ import { SparkParticle } from "./SparkParticle";
 import { Vector2 } from "../../../../Engine/Numerics/Vector2";
 import { ParticleSystem } from "../ParticleSystem";
 import { FlameParticle } from "./FlameParticle";
-import { InputEvents } from "../../../../Engine/Common/Inputs";
+import { InputEvents } from "../../../../Engine/Inputs/Inputs";
 import { GameView } from "../../../../Engine/Game/GameObject/GameView";
 import { Graphics } from "../../../../Engine/Drawing/Graphics";
 

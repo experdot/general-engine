@@ -15,7 +15,7 @@ import {
     Vector2
 } from "../../../../Engine/Numerics/Vector2";
 import {
-    ScaleCell, Cell
+    Cell
 } from "../Cell";
 import {
     GameView, TypedGameView
@@ -28,7 +28,7 @@ import {
 } from "../../../../Engine/Common/DelayTimer";
 import {
     InputEvents
-} from "../../../../Engine/Common/Inputs";
+} from "../../../../Engine/Inputs/Inputs";
 
 interface IGameOfLifeSettings {
     xOffsets: Array<number>;
@@ -61,7 +61,7 @@ export class GameOfLife extends GameVisual {
     constructor() {
         super();
 
-        this.ghost = new GhostEffect(new Color(0, 0, 0, 0.006), 20);
+        this.ghost = new GhostEffect(new Color(0, 0, 0, 0.05), 15);
         this.joint(this.ghost);
 
         this.timers = {
@@ -83,20 +83,20 @@ export class GameOfLife extends GameVisual {
     }
 
     start() {
-        let w = this.world.width;
-        let h = this.world.height;
+        const w = this.world.width;
+        const h = this.world.height;
 
         this.settings.rangeSize = Math.min(w, h) / 16;
         this.settings.initialSize = Math.min(w, h) / 60;
 
-        let cw = Math.round(w / this.settings.initialSize);
-        let ch = Math.round(h / this.settings.initialSize);
+        const cw = Math.round(w / this.settings.initialSize);
+        const ch = Math.round(h / this.settings.initialSize);
 
         this.automata = new CellularAutomata(cw, ch);
 
         this.automata.forEach((cell: Cell, x: number, y: number) => {
             if (Math.random() > 0.9) {
-                this.automata.data[x][y] = new ScaleCell();
+                this.automata.data[x][y] = new Cell(null, 0);
             }
         });
 
@@ -125,7 +125,7 @@ export class GameOfLife extends GameVisual {
         this.settings.size = this.settings.initialSize + Math.sin(this.settings.sin) * this.settings.rangeSize + this.settings.rangeSize;
     }
 
-    _bindEvents() {
+    private _bindEvents() {
         this.on(InputEvents.PointerMoved, () => {
             this._delete();
         });
@@ -134,7 +134,7 @@ export class GameOfLife extends GameVisual {
         });
     }
 
-    _delete() {
+    private _delete() {
         if (this.world.inputs.pointer.isPressed) {
             let center = new Vector2(this.world.width / 2, this.world.height / 2);
             let pointer = this.world.inputs.pointer.position;
@@ -150,8 +150,8 @@ export class GameOfLife extends GameVisual {
         }
     }
 
-    _generate() {
-        let generation = this.automata.generate();
+    private _generate() {
+        const generation = this.automata.generate();
         this.automata.forEach((cell, x, y) => {
             let count = this.automata.around(x, y, this.settings.xOffsets, this.settings.yOffsets);
             if (cell) {
@@ -160,14 +160,14 @@ export class GameOfLife extends GameVisual {
                 }
             } else {
                 if (count === 3) {
-                    generation.data[x][y] = new ScaleCell();
+                    generation.data[x][y] = new Cell(null, 0);
                 }
             }
         });
         this.automata = generation;
     }
 
-    _exchange(automata: CellularAutomata) {
+    private _exchange(automata: CellularAutomata) {
         let columns = automata.data.splice(0, 1);
         automata.data.push(columns[0]);
     }
@@ -175,27 +175,24 @@ export class GameOfLife extends GameVisual {
 
 export class GameOfLifeView extends TypedGameView<GameOfLife> {
     render(source: GameOfLife, context: CanvasRenderingContext2D) {
-        let offset = source.offset;
-        let size = source.settings.size;
-        let offsetX = 1 - source.settings.progress;
-        Graphics.scaleOffset(context, 4, 4, 1);
+        const offset = source.offset;
+        const size = source.settings.size;
+        const offsetX = 1 - source.settings.progress;
+        //Graphics.scaleOffset(context, 4, 4, 1);
 
         Graphics.rotate(context, source.settings.rotation, 1, () => {
             context.beginPath();
+            context.fillStyle = Colors.White.rgba;
             source.automata.forEach((cell: Cell, x: number, y: number) => {
                 if (cell) {
-                    let p = new Vector2(x + offsetX, y).multiply(size).add(offset);
-                    let real = size * cell.scale;
-                    let half = real / 2;
+                    const p = new Vector2(x + offsetX, y).multiply(size).add(offset);
+                    const real = size * cell.scale;
+                    const half = real / 2;
                     context.rect(p.x - half, p.y - half, real, real);
                 }
             });
             context.fillStyle = Colors.White.rgba;
             context.fill();
-        });
-
-        Graphics.rotate(context, Math.PI / 7, 1, () => {
-            context.drawImage(context.canvas, 0, 0, context.canvas.width, context.canvas.height);
         });
     }
 }

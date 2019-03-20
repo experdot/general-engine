@@ -31,7 +31,7 @@ import {
 } from "../../../Engine/Drawing/OffscreenCanvas";
 import {
     InputEvents
-} from "../../../Engine/Common/Inputs";
+} from "../../../Engine/Inputs/Inputs";
 import {
     GalleryTexts
 } from "../../Resources/GalleryTexts";

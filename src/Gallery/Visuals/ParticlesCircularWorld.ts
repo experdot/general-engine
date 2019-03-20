@@ -3,7 +3,7 @@ import {
 } from "../../Engine/Game/GameWorld/GameWorld";
 import {
     PointerInput
-} from "../../Engine/Common/Inputs";
+} from "../../Engine/Inputs/Inputs";
 import { ParticlesCircular, ParticlesCircularView } from "./ParticleSystem/Circular/ParticlesCircular";
 
 export class ParticlesCircularWorld extends GameWorld {

@@ -1,7 +1,7 @@
-class Array2 {
+class Array2<T> {
     width: number;
     height: number;
-    data: any[][];
+    data: T[][];
 
     constructor(width: number = 1, height: number = 1) {
         this.width = width;
@@ -15,17 +15,17 @@ class Array2 {
         }
     }
 
-    set(x: number, y: number, value: any): any {
+    set(x: number, y: number, value: T): T {
         this.data[x][y] = value;
         return this.data[x][y];
     }
 
-    get(x: number, y: number): any {
+    get(x: number, y: number): T {
         return this.data[x][y];
     }
 
-    forEach(action: (value: any, x: number, y: number) => void): void {
-        this.data.forEach((column: any[], x: number) => {
+    forEach(action: (value: T, x: number, y: number) => void): void {
+        this.data.forEach((column: T[], x: number) => {
             column && column.forEach((value, y) => {
                 action && action(value, x, y);
             });

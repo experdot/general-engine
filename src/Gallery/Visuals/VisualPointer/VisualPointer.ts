@@ -1,7 +1,7 @@
 import { GameVisual } from "../../../Engine/Game/GameObject/GameVisual";
 import { GameView } from "../../../Engine/Game/GameObject/GameView";
 import { Graphics } from "../../../Engine/Drawing/Graphics";
-import { InputEvents } from "../../../Engine/Common/Inputs";
+import { InputEvents } from "../../../Engine/Inputs/Inputs";
 import { Vector2 } from "../../../Engine/Numerics/Vector2";
 
 export class VisualPointer extends GameVisual {

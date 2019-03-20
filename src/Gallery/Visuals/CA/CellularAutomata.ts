@@ -1,11 +1,8 @@
-import {
-    Color
-} from "../../../Engine/UI/Color";
-import {
-    Array2
-} from "../../../Engine/Collections/Array2";
+import { Color } from "../../../Engine/UI/Color";
+import { Array2 } from "../../../Engine/Collections/Array2";
+import { Cell } from "./Cell";
 
-export class CellularAutomata extends Array2 {
+export class CellularAutomata extends Array2<Cell> {
     generate() {
         return new CellularAutomata(this.width, this.height);
     }

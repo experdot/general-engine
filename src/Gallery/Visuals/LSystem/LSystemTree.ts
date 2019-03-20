@@ -20,7 +20,7 @@ import {
     Vector2
 } from "../../../Engine/Numerics/Vector2";
 import { Random } from "../../../Engine/Numerics/Random";
-import { InputEvents } from "../../../Engine/Common/Inputs";
+import { InputEvents } from "../../../Engine/Inputs/Inputs";
 import { GhostEffect } from "../../../Engine/Game/GameComponents/Effect/Effect";
 import { Graphics } from "../../../Engine/Drawing/Graphics";
 

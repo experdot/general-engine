@@ -1,4 +1,4 @@
-import { NotImplementedException } from "./Exception";
+import { NotImplementedException } from "../Common/Exception";
 import { Vector2 } from "../Numerics/Vector2";
 
 export const enum InputEvents {

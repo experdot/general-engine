@@ -1,5 +1,5 @@
 import { GameVisual } from "../GameObject/GameVisual";
-import { Inputs } from "../../Common/Inputs";
+import { Inputs } from "../../Inputs/Inputs";
 import { Vector2 } from "../../Numerics/Vector2";
 
 export interface UIDescription {
