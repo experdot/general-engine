@@ -11,7 +11,7 @@ export class GeneralTask {
         this.enabled = enabled;
     }
 
-    run(thisArg: GeneralObject<GeneralInterface>, ...args: any[]) {
+    run(thisArg: any, ...args: any[]) {
         this.enabled && this.action && this.action.call(thisArg, ...args);
     }
 }

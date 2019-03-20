@@ -1,60 +1,17 @@
-import { GeneralObject, GeneralInterface } from "./GeneralObject";
 import { GeneralTask } from "./GeneralTask";
 
-
-interface GeneralProcessKeyValuePair {
-    key: string;
-    value: GeneralProcess<any>;
-}
-
-export class GeneralProcess<T extends any[]> {
-    static find(object: GeneralObject<GeneralInterface>): GeneralProcessKeyValuePair[] {
-        const result: GeneralProcessKeyValuePair[] = [];
-        const processes = object.processes;
-        for (const key in processes) {
-            result.push({
-                key: key,
-                value: processes[key]
-            });
-        }
-        return result;
-    }
-
-    static combine(source: GeneralObject<GeneralInterface>, target: GeneralObject<GeneralInterface>) {
-        GeneralProcess.every(source, target, (s, t) => {
-            s.next((s: GeneralProcess<any>, ...args: any[]) => t.process(source, ...args), target.identifier);
-        });
-    }
-
-    static seperate(source: GeneralObject<GeneralInterface>, target: GeneralObject<GeneralInterface>) {
-        GeneralProcess.every(source, target, (s) => {
-            s.remove(target.identifier);
-        });
-    }
-
-    static every(source: GeneralObject<GeneralInterface>, target: GeneralObject<GeneralInterface>, hanlder: (source: GeneralProcess<any>, target: GeneralProcess<any>, key: string) => void) {
-        const sourceProcesses = source.processes;
-        const targetProcesses = target.processes;
-        GeneralProcess.find(source).forEach(element => {
-            const sourceProcess = sourceProcesses[element.key];
-            const targetProcess = targetProcesses[element.key];
-            if (targetProcess instanceof GeneralProcess) {
-                hanlder(sourceProcess, targetProcess, element.key);
-            }
-        });
-    }
-
-    thisArg: GeneralObject<GeneralInterface>;
+export class GeneralProcess<TThis,TArgs extends any[]> {
+    thisArg: TThis;
     tasks: GeneralTask[];
 
     enabled: boolean = true;
 
-    constructor(thisArg: GeneralObject<GeneralInterface>) {
+    constructor(thisArg: TThis) {
         this.thisArg = thisArg;
         this.tasks = [];
     }
 
-    process(source: GeneralObject<GeneralInterface> = this.thisArg, ...args: T): this {
+    process(source: TThis = this.thisArg, ...args: TArgs): this {
         if (this.enabled) {
             this.tasks.forEach(task => {
                 task.run(this.thisArg, source, ...args);
@@ -95,7 +52,7 @@ export class GeneralProcess<T extends any[]> {
     }
 
     disable(): this {
-        this.enabled = true;
+        this.enabled = false;
         return this;
     }
 }
