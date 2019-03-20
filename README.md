@@ -32,7 +32,7 @@ $ npm install general-engine
 ## Hello World
 The following is a simple hello-world example.
 
-```
+```ts
 import { GeneralInterface, GeneralObject } from "../src/Engine/Core/GeneralObject";
 
 class IPrintInterface extends GeneralInterface {
