@@ -7,11 +7,11 @@ export class FileIO {
         input.setAttribute("accept", accept);
         input.onchange = (event) => {
             onLoaded && onLoaded(event);
+            input.remove();
         };
         input.style.display = "none";
         document.body.appendChild(input);
         input.click();
-        input.remove();
     }
 
     static readAllText(file: File, onLoaded: Function) {

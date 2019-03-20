@@ -18,8 +18,6 @@ export class FlyerParticle extends DynamicParticle {
 
     speeder: Speeder;
 
-    rndSpeeder: Speeder;
-
     constructor(location?: Vector2, size = 1, age = 0) {
         super(location, size, age);
         this.velocityUpon = 5;
@@ -44,6 +42,8 @@ export class FlyerParticle extends DynamicParticle {
         if (this.history.length > 30) {
             this.history.shift();
         }
+
+        this.move();
     }
 
     private alignspeed(flyers, ratio = 1) {

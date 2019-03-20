@@ -8,7 +8,7 @@ import {
 import {
     GalleryTexts
 } from "../Resources/GalleryTexts";
-import { PointerInput } from "../../Engine/Inputs/Inputs";
+import { PointerInput } from "../../Engine/Inputs/PointerInput";
 
 export class LSystemTreeWorld extends GameWorld {
     static get Title(): string {

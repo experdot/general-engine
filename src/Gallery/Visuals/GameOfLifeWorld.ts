@@ -1,9 +1,7 @@
 import {
     GameWorld
 } from "../../Engine/Game/GameWorld/GameWorld";
-import {
-    PointerInput
-} from "../../Engine/Inputs/Inputs";
+import { PointerInput } from "../../Engine/Inputs/PointerInput";
 import {
     GameOfLife,
     GameOfLifeView

@@ -1,10 +1,7 @@
 import {
     GameWorld
 } from "../../Engine/Game/GameWorld/GameWorld";
-import {
-    PointerInput,
-    DragDropInput
-} from "../../Engine/Inputs/Inputs";
+import { PointerInput } from "../../Engine/Inputs/PointerInput";
 import {
     AudioVisualizer,
     AudioVisualizerView
@@ -12,6 +9,7 @@ import {
 import {
     GalleryTexts
 } from "../Resources/GalleryTexts";
+import { DragDropInput } from "../../Engine/Inputs/DragDropInput";
 
 export class AudioVisualizerWorld extends GameWorld {
     static get Title(): string {

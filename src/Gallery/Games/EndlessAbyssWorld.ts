@@ -2,10 +2,6 @@ import {
     GameWorld
 } from "../../Engine/Game/GameWorld/GameWorld";
 import {
-    PointerInput,
-    KeyInput
-} from "../../Engine/Inputs/Inputs";
-import {
     EndlessAbyss,
     EndlessAbyssView
 } from "./EndlessAbyss/EndlessAbyss";
@@ -15,6 +11,8 @@ import {
 import {
     GalleryTexts
 } from "../Resources/GalleryTexts";
+import { KeyInput } from "../../Engine/Inputs/KeyInput";
+import { PointerInput } from "../../Engine/Inputs/PointerInput";
 
 class EndlessAbyssWorld extends GameWorld {
     static get Title() {
@@ -22,8 +20,8 @@ class EndlessAbyssWorld extends GameWorld {
     }
 
     initialize() {
-        this.inputs.addInput(new PointerInput());
         this.inputs.addInput(new KeyInput());
+        this.inputs.addInput(new PointerInput());
         this.addChild(new EndlessAbyss().joint(new EndlessAbyssView()));
         this.joint(new VisualPointer());
     }

@@ -2,9 +2,6 @@ import {
     GameWorld
 } from "../../Engine/Game/GameWorld/GameWorld";
 import {
-    PointerInput
-} from "../../Engine/Inputs/Inputs";
-import {
     ParticlesWalker,
     ParticlesWalkerView
 } from "./ParticleSystem/Walker/ParticlesWalker";
