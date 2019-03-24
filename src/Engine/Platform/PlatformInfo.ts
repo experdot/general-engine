@@ -1,5 +1,5 @@
 export class PlatformInfo {
-    static get IsMobile() {
+    static get isMobile() {
         return /Android|webOS|iPhone|iPod|BlackBerry/i.test(navigator.userAgent);
     }
 }

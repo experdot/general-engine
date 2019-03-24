@@ -3,7 +3,7 @@
  */
 export class Color {
     static fromHex(hex: string) {
-        let value = parseInt(hex.slice(1), 16);
+        const value = parseInt(hex.slice(1), 16);
         return new Color(value / 65536, value / 256 % 256, value % 256);
     }
 

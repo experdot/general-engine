@@ -41,6 +41,6 @@ export class GalleryGame extends App {
             frameText.text(rate);
         };
 
-        this.box.run();
+        this.box.start();
     }
 }

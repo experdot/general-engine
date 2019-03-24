@@ -60,7 +60,7 @@ export class GameWorld extends GameVisual {
 
     dispose() {
         super.dispose();
-        this.inputs.release();
+        this.inputs.dispose();
     }
 
     initialize() {

@@ -5,6 +5,7 @@ export class GameBox {
     container: HTMLElement;
     canvas: HTMLCanvasElement;
     context: CanvasRenderingContext2D;
+    
     world: GameWorld;
     frameManager: FrameManager;
 
@@ -17,7 +18,7 @@ export class GameBox {
         this.frameManager = new FrameManager();
     }
 
-    run() {
+    start() {
         this.world.processes.start.process();
         this.world.processes.gui.process(this.world, this.container);
         this.frameManager.loopInvoke(() => {

@@ -13,8 +13,8 @@ export class GameVisual extends GeneralNode<GameVsiualInterface> {
         this.events = new Events();
     }
 
-    on(eventName: string, handler: Function, force = true) {
-        this.events.addHandler(eventName, handler, force);
+    on(eventName: string, handler: Function) {
+        this.events.addHandler(eventName, handler);
     }
 
     off(eventName: string, handler: Function) {
@@ -29,6 +29,6 @@ export class GameVisual extends GeneralNode<GameVsiualInterface> {
     }
 
     dispose() {
-        this.events.release();
+        this.events.dispose();
     }
 }

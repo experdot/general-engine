@@ -71,7 +71,7 @@ export class Inputs {
     }
 
     launch(ui: HTMLElement) {
-        this.release();
+        this.dispose();
         this.ui = ui;
         this.inputList.forEach(element => {
             this.regist(element);
@@ -79,7 +79,7 @@ export class Inputs {
         return this;
     }
 
-    release() {
+    dispose() {
         this.inputList.forEach(element => {
             element.release();
         });

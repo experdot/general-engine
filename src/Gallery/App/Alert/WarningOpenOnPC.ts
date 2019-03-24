@@ -9,7 +9,7 @@ const enum SessionStorageIds {
 
 export class WarningOpenOnPC extends App {
     start() {
-        if (PlatformInfo.IsMobile) {
+        if (PlatformInfo.isMobile) {
             const flag = sessionStorage.getItem(SessionStorageIds.WarningOpenOnPC);
             if (!flag) {
                 sessionStorage.setItem(SessionStorageIds.WarningOpenOnPC, "set");

@@ -15,10 +15,5 @@ export class GameView extends GeneralObject<GameViewInterface> {
  * Represents a view to present the visual object
  */
 export abstract class TypedGameView<T> extends GameView {
-    constructor() {
-        super();
-        this.implements(new GameViewInterface());
-    }
-
     abstract render(source: T, context: CanvasRenderingContext2D);
 }
