@@ -1,7 +1,7 @@
 # general-engine
 [![npm][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![codebeat badge][codebeat-image]][codebeat-url]
 
-> *General Engine* is a framework to build web applications or games.
+> *General Engine* is a framework to build creative scenarios.
 
 ## Gallery
 To check out live examples created with general-engine, please visit [gallery][repo-gallery] website.
