@@ -10,12 +10,12 @@ main {
 home {
     margin: 0;
     background: transparent;
-    .gallery-game {
+    #gallery-game-container {
         margin: 0;
         max-width: 100%; //background: black;
         background: transparent;
         position: relative;
-        .layer-canvas {
+        #gallery-game-layer-canvas {
             width: 100%;
             height: 100%;
             background: transparent;
@@ -23,7 +23,7 @@ home {
                 background: transparent;
             }
         }
-        .layer-progress{
+        #gallery-game-layer-progress{
             position: absolute;
             left: 0;
             top: 0;

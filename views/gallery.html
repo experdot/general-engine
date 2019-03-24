@@ -36,11 +36,11 @@
     </header>
     <main>
         <home>
-            <div id="gallery-game" class="gallery-game">
-                <div id="game-layer-canvas" class="layer-canvas">
-                    <canvas id="canvas">Your browser doesn't support the canvas tag.</canvas>
+            <div id="gallery-game-container" class="gallery-game-container">
+                <div id="gallery-game-layer-canvas" class="layer-canvas">
+                    <canvas id="gallery-game-canvas">Your browser doesn't support the canvas tag.</canvas>
                 </div>
-                <div id="game-layer-progress" class="layer-progress fade show">
+                <div id="gallery-game-layer-progress" class="layer-progress fade show">
                     <div class="spinner"><i></i></div>
                 </div>
             </div>
@@ -48,8 +48,8 @@
                 <div class="pos-f-t navigation-bar">
                     <div class="collapse" id="navbarToggleExternalContent">
                         <div class="bg-dark p-4">
-                            <h4 class="text-white" id="title-header">General Engine</h4>
-                            <span class="text-muted" id="title-description">Build web app or game by general system.</span>
+                            <h4 class="text-white" id="gallery-navigator-title-header">General Engine</h4>
+                            <span class="text-muted" id="gallery-navigator-title-description">Build web app or game by general system.</span>
                             <div>
                                 <a href="https://github.com/experdot/general-engine/" class="badge badge-info">Github</a>
                                 <a href="https://www.npmjs.com/package/general-engine" class="badge badge-secondary">npm</a>
@@ -66,17 +66,17 @@
                         <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
                             <div class="btn-group">
                                 <button type="button" class="btn btn-dark" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">G</button>
-                                <div id="dropdown-gallery" class="dropdown-menu">
+                                <div id="gallery-navigator-dropdown" class="dropdown-menu">
 
                                 </div>
                             </div>
-                            <button type="button" class="btn btn-dark" data-toggle="tooltip" data-placement="bottom" title="Restart" id="button-restart">R</button>
-                            <button type="button" class="btn btn-dark" data-toggle="tooltip" data-placement="bottom" title="Fullscreen" id="button-fullscreen">F</button>
+                            <button type="button" class="btn btn-dark" data-toggle="tooltip" data-placement="bottom" title="Restart" id="gallery-navigator-restart">R</button>
+                            <button type="button" class="btn btn-dark" data-toggle="tooltip" data-placement="bottom" title="Fullscreen" id="gallery-navigator-fullscreen">F</button>
                         </div>
-                        <div id="text-frame" class="text-white">&nbsp;0</div>
+                        <div id="gallery-navigator-frame" class="text-white">&nbsp;0</div>
                     </nav>
                 </div>
-                <div id="alert-container">
+                <div id="gallery-alert-container">
 
                 </div>
             </div>
