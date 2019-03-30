@@ -15,8 +15,7 @@ export class GalleryGame extends App {
 
     load() {
         window.addEventListener("resize", () => {
-            this.box.stop();
-            this.start();
+            this.restart();
         });
 
         $(`#${GalleryNavigatorIds.ButtonRestart}`).click(() => {
@@ -31,10 +30,14 @@ export class GalleryGame extends App {
 
     start() {
         const canvas = $(`#${GalleryGameContainerIds.Canvas}`)[0] as HTMLCanvasElement;
-        canvas.width = window.document.body.clientWidth;
-        canvas.height = window.document.body.clientHeight;
+        const container = $(`#${GalleryGameContainerIds.Container}`)[0] as HTMLCanvasElement
 
-        this.box = this.starter.launch($(`#${GalleryGameContainerIds.Container}`)[0], canvas);
+        if (canvas.width !== container.clientWidth || canvas.height !== container.clientHeight) {
+            canvas.width = container.clientWidth;
+            canvas.height = container.clientHeight;
+        }
+
+        this.box = this.starter.launch(container, canvas);
 
         const frameText = $(`#${GalleryNavigatorIds.FrameText}`);
         this.box.frameManager.onRateChanged = (rate: number) => {
@@ -42,5 +45,15 @@ export class GalleryGame extends App {
         };
 
         this.box.start();
+    }
+
+    restart() {
+        const canvas = $(`#${GalleryGameContainerIds.Canvas}`)[0] as HTMLCanvasElement;
+        const container = $(`#${GalleryGameContainerIds.Container}`)[0] as HTMLCanvasElement
+
+        if (canvas.width !== container.clientWidth || canvas.height !== container.clientHeight) {
+            this.box.stop();
+            this.start();
+        }
     }
 }
