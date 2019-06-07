@@ -30,15 +30,18 @@ class LSystemTree extends GameVisual {
     }
 
     offset: Vector2 = Vector2.Zero;
-    lineLengthRatio: number = 3;
+    lineLengthRatio: number = 1;
 
     depth: number = 4;
     lSystem: LSystem;
 
-    private letters: string[] = ["F", "C", "[", "]", "+", "-", ".", "*", "(", ")"];
+    changed: boolean = false;
 
-    private letters1: string[] = ["F", "C", "]", ")", "[", "+", "-", ".", "*", "("];
-    private letters2: string[] = ["C", "F", "[", "(", "]", "-", "+", "*", ".", ")"];
+
+    private letters: string[] = ["F", "U", "D", "L", "R", "[", "]", ".", "*", "+", "-", "(", ")"];
+
+    private letters1: string[] = ["F", "U", "D", "L", "R", "[", "]", ".", "*", "+", "-", "(", ")"];
+    private letters2: string[] = ["F", "D", "U", "R", "L", "]", "[", "*", ".", "-", "+", ")", "("];
 
     private random: Random = new Random();
 
@@ -46,7 +49,7 @@ class LSystemTree extends GameVisual {
         super();
 
         this.lSystem = new LSystem();
-        this.lSystem.initRoot(new State("F", null, 0));
+        this.lSystem.initRoot(new State("U", null, 0));
 
         const rules = [
             "FF+[+F-F-F]-[-F+F+F]",
@@ -67,17 +70,25 @@ class LSystemTree extends GameVisual {
         //this.lSystem.addRule(new RuleGrammar("F", rules[i]));
 
         //const maxCount = window.document.body.clientWidth / 50;
-        const maxCount = 20;
+        const maxCount = 10;
+
+        // this.lSystem.addRule(new RuleGrammar("U", "URRRUUDL"));
+        // this.lSystem.addRule(new RuleGrammar("R", "RDDDRRLU"));
+        // this.lSystem.addRule(new RuleGrammar("D", "DLLLDDUR"));
+        // this.lSystem.addRule(new RuleGrammar("L", "LUUULLRD"));
+
 
         for (let k = 0; k < this.depth; k++) {
             for (let index = 0; index < this.letters.length; index++) {
-                const rule = this.generate(maxCount);
+                const rule = this.generate(maxCount, index);
                 console.log(rule);
                 this.lSystem.addRule(new RuleGrammar(this.letters[index], rule));
             }
         }
 
         this.lSystem.generate(this.depth);
+
+        console.log(this.states);
 
         let isMouseDown: boolean = false;
         let startPos: Vector2;
@@ -92,6 +103,7 @@ class LSystemTree extends GameVisual {
             if (isMouseDown) {
                 let curPos: Vector2 = this.world.inputs.pointer.position;
                 this.offset = startOffset.add(curPos.subtract(startPos));
+                this.changed = true;
             }
         });
 
@@ -100,19 +112,25 @@ class LSystemTree extends GameVisual {
         });
 
         this.on(InputEvents.MouseWheel, (e: MouseWheelEvent) => {
-            this.lineLengthRatio *= Math.pow(1.2, Math.sign(e.deltaY));
+            const ratio = Math.pow(1.2, Math.sign(e.deltaY))
+            this.lineLengthRatio *= ratio;
+            this.offset = this.offset.multiply(ratio);
+            this.changed = true;
         });
+
+        //this.joint(new GhostEffect(new Color(0, 128, 128, 0.5), 20));
     }
 
 
-    private generate(maxCount = 50) {
+    private generate(maxCount = 50, v: number = 0) {
         let count = this.random.normal(1, maxCount);
 
         let result1: string = "";
         let result2: string = "";
         for (let index = 0; index < count; index++) {
-            const i = Math.floor(Math.random() * this.letters.length)
+            let i = Math.floor(Math.random() * this.letters.length)
             result1 = result1 + this.letters1[i];
+            i = Math.floor(Math.random() * this.letters.length)
             if (Math.random() > 0.5) {
                 result2 = result2 + this.letters2[i];
             }
@@ -121,7 +139,7 @@ class LSystemTree extends GameVisual {
             }
         }
 
-        return result1 + "F" + result2;
+        return result1 + this.letters[v] + result2;
     }
 }
 
@@ -142,7 +160,7 @@ class LSystemTreeView extends GameView {
         this.lengthStack = [];
         this.currentIndex = 0;
 
-        this.lineColor = new Color(255, 255, 255, 1);
+        this.lineColor = new Color(0, 0, 0, 1);
 
         this.singleNumber = 0;
         this.rotateRatio = 6;
@@ -150,21 +168,26 @@ class LSystemTreeView extends GameView {
     }
 
     render(source: LSystemTree, context) {
-        if (this.animation) {
+        if (this.animation || source.changed) {
             this.singleNumber = (this.singleNumber + 0.01 * Math.random()) % (Math.PI * 2);
             this.rotateRatio = 6.2 + Math.sin(this.singleNumber) * 2.4;
             this.centerStack = [];
             this.offsetStack = [];
             this.lengthStack = [];
             this.currentIndex = 0;
-            this.lineColor = new Color(0, 0, 0, 1);
             context.clearRect(0, 0, source.world.width, source.world.height);
+            //this.animation = false;
         }
 
-        if (this.animation || !this.center) {
+        this.lineWidthRatio = Math.max(1, source.lineLengthRatio / 10);
+
+        //Graphics.scaleOffset(context, 8, 8 * context.canvas.height / context.canvas.width, 0.99);
+
+        if (this.animation || !this.center || source.changed) {
             this.center = new Vector2(source.world.width / 2, source.world.height * 0.7).add(source.offset);
             this.lengthOfLine = source.world.height * (1 / Math.pow(3, source.depth + 1)) * source.lineLengthRatio;
             this.offset = new Vector2(0, -this.lengthOfLine);
+            source.changed = false;
         }
 
         let stepIndex = 0;
@@ -184,19 +207,38 @@ class LSystemTreeView extends GameView {
         /* eslint-disable */
         switch (id) {
             case "F":
-                this.drawLineBranch(context, this.center, this.offset, 1 || this.lineWidthRatio, this.lineColor);
+                this.drawLineBranch(context, this.center, this.offset, this.lineWidthRatio, this.lineColor);
                 //this.drawCircleBranch(context, this.center, this.offset);
                 this.center = this.center.add(this.offset);
                 break;
-            case "C":
-                this.drawLineBranch(context, this.center, this.offset.multiply(-1), 1 || this.lineWidthRatio, this.lineColor);
+            case "U":
+                this.offset = new Vector2(0, -this.lengthOfLine).rotate(2.4 / this.rotateRatio);;
+                this.drawLineBranch(context, this.center, this.offset, this.lineWidthRatio, this.lineColor);
+                this.center = this.center.add(this.offset);
                 //this.drawCircleBranch(context, this.center, this.offset);
-                this.center = this.center.subtract(this.offset);
                 break;
-            case "+":
+            case "D":
+                this.offset = new Vector2(0, this.lengthOfLine).rotate(2.4 / this.rotateRatio);;
+                this.drawLineBranch(context, this.center, this.offset, this.lineWidthRatio, this.lineColor);
+                //this.drawCircleBranch(context, this.center, this.offset);
+                this.center = this.center.add(this.offset);
+                break;
+            case "L":
+                this.offset = new Vector2(-this.lengthOfLine, 0).rotate(2.4 / this.rotateRatio);;
+                this.drawLineBranch(context, this.center, this.offset, this.lineWidthRatio, this.lineColor);
+                //this.drawCircleBranch(context, this.center, this.offset);
+                this.center = this.center.add(this.offset);
+                break;
+            case "R":
+                this.offset = new Vector2(this.lengthOfLine, 0).rotate(2.4 / this.rotateRatio);;
+                this.drawLineBranch(context, this.center, this.offset, this.lineWidthRatio, this.lineColor);
+                this.center = this.center.add(this.offset);
+                //this.drawCircleBranch(context, this.center, this.offset);
+                break;
+            case "(":
                 this.offset = this.offset.rotate(2.4 / this.rotateRatio);
                 break;
-            case "-":
+            case ")":
                 this.offset = this.offset.rotate(-2.4 / this.rotateRatio);
                 break;
             case ".":
@@ -207,11 +249,11 @@ class LSystemTreeView extends GameView {
                 this.lengthOfLine /= 0.618;
                 this.offset.setLength(this.lengthOfLine);
                 break;
-            case "(":
-                //this.rotateRatio *= 0.618;
+            case "+":
+                this.rotateRatio *= 0.618;
                 break;
-            case ")":
-                //this.rotateRatio /= 0.618;
+            case "-":
+                this.rotateRatio /= 0.618;
                 break;
             case "[":
                 this.centerStack.push(this.center.clone());
