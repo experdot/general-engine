@@ -30,14 +30,6 @@ export class CultureResourceManager extends ResourceManager {
         }
         return this;
     }
-
-    switch(culture: CultureInfo = CultureInfo.Netural, loaded?: Function) {
-        if (this.config) {
-            this.sets = [];
-            this.attach(this.target, culture).load();
-        }
-        return this;
-    }
 }
 
 export class CultureResourceConfig {
@@ -45,10 +37,10 @@ export class CultureResourceConfig {
     languages: any[];
     replace: string;
 
-    constructor(template?: string, languages?: string[], replace = "{{language}}") {
+    constructor(template?: string, languages?: string[], replacer = "{{language}}") {
         this.template = template;
         this.languages = languages;
-        this.replace = replace;
+        this.replace = replacer;
     }
 
     get(language: string) {

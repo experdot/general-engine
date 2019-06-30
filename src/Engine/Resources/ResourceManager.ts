@@ -2,12 +2,7 @@ import { HttpWebRequest } from "../Network/Network";
 import { ResourceSet } from "./ResourceSet";
 
 export class ResourceManager {
-    sets: ResourceSet[];
-    preload: (preloaded?: Function) => void;
-
-    constructor() {
-        this.sets = [];
-    }
+    sets: ResourceSet[] = [];
 
     add(...sets: ResourceSet[]) {
         this.sets.push(...sets);
@@ -19,9 +14,7 @@ export class ResourceManager {
     }
 
     async load() {
-        const requests = this.sets.map(element => fetch(element.src).then(resposne => resposne.json()).then(json => {
-            element.init(json);
-        }));
+        const requests = this.sets.map(element => element.load());
         await Promise.all(requests);
     }
 

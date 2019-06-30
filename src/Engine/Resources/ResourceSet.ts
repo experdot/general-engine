@@ -1,6 +1,5 @@
 export class ResourceSet {
     src: string;
-    loaded: boolean;
     data: any;
 
     constructor(src: string) {
@@ -9,6 +8,9 @@ export class ResourceSet {
 
     init(data: any) {
         this.data = data;
-        this.loaded = true;
+    }
+
+    async load() {
+        await fetch(this.src).then(response => response.json()).then(data => this.init(data));
     }
 }

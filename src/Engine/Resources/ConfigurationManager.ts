@@ -11,14 +11,14 @@ export class ConfigurationManager extends ResourceManager {
         this.add(new ResourceSet(this.url));
     }
 
+    attach(target) {
+        this.target = target;
+        return this;
+    }
+
     async load() {
         await super.load().then(() => {
             this.target && this.assign(this.target);
         });
-    }
-
-    attach(target) {
-        this.target = target;
-        return this;
     }
 }
