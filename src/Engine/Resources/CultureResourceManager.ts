@@ -6,12 +6,10 @@ import { ResourceSet } from "./ResourceSet";
 export class CultureResourceManager extends ResourceManager {
     config: CultureResourceConfig;
     target: any;
-    onPrepared: Function;
 
     constructor(config?: CultureResourceConfig) {
         super();
         this.config = config;
-        this.onPrepared = () => { };
     }
 
     init(config: CultureResourceConfig) {
@@ -19,12 +17,10 @@ export class CultureResourceManager extends ResourceManager {
         return this;
     }
 
-    load(loaded?: Function) {
-        super.load(() => {
+    async load() {
+        await super.load().then(() => {
             this.target && this.assign(this.target);
-            loaded && loaded();
         });
-        return this;
     }
 
     attach(target: any, culture: CultureInfo = CultureInfo.Netural) {
@@ -38,7 +34,7 @@ export class CultureResourceManager extends ResourceManager {
     switch(culture: CultureInfo = CultureInfo.Netural, loaded?: Function) {
         if (this.config) {
             this.sets = [];
-            this.attach(this.target, culture).load(loaded);
+            this.attach(this.target, culture).load();
         }
         return this;
     }

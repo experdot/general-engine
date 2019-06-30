@@ -1,5 +1,5 @@
 import { App } from "../../Engine/Application/AppObject/App";
-import { GalleryTextResourceManager, GalleryTexts } from "../Resources/GalleryTexts";
+import { GalleryTextResourceManager, GalleryTexts, GalleryTextLoader } from "../Resources/GalleryTexts";
 import { GalleryNavigator } from "./Navigator/GalleryNavigator";
 import { GalleryImageResourceManager } from "../Resources/GalleryImages";
 import { GalleryGame } from "./Game/GalleryGame";
@@ -18,8 +18,8 @@ export class GalleryApp extends App {
     }
 
     load() {
-        GalleryTextResourceManager.load(() => {
-            GalleryImageResourceManager.load(() => {
+        GalleryTextLoader.load().then(() => {
+            GalleryImageResourceManager.load().then(() => {
                 this.processes.start.process();
             });
         });

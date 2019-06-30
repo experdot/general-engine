@@ -11,10 +11,9 @@ export class ConfigurationManager extends ResourceManager {
         this.add(new ResourceSet(this.url));
     }
 
-    load(loaded?: Function) {
-        return super.load(() => {
+    async load() {
+        await super.load().then(() => {
             this.target && this.assign(this.target);
-            loaded && loaded();
         });
     }
 

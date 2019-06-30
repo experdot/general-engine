@@ -18,16 +18,11 @@ export class ResourceManager {
         return this;
     }
 
-    load(loaded?: Function) {
-        if (this.preload) {
-            this.preload(() => {
-                this.loading(loaded);
-            });
-        }
-        else {
-            this.loading(loaded);
-        }
-        return this;
+    async load() {
+        const requests = this.sets.map(element => fetch(element.src).then(resposne => resposne.json()).then(json => {
+            element.init(json);
+        }));
+        await Promise.all(requests);
     }
 
     assign(target: any) {
@@ -40,20 +35,5 @@ export class ResourceManager {
             }
         });
         return this;
-    }
-
-    private loading(loaded?: Function) {
-        let count = 0;
-        const length = this.sets.length;
-
-        this.sets.forEach(element => {
-            HttpWebRequest.get(element.src, (response: any) => {
-                element.init(JSON.parse(response))
-                count += 1;
-                if (count === length) {
-                    loaded && loaded();
-                }
-            });
-        })
     }
 }

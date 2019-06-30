@@ -1,5 +1,3 @@
-import { GeneralObject, GeneralInterface } from "./GeneralObject";
-
 export class GeneralTask {
     action: Function;
     identifier: number;

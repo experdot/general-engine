@@ -3,7 +3,7 @@ export class Speeder {
     radio: number;
 
     constructor(radio: number = 1) {
-        this.radio = radio
+        this.radio = radio;
     }
 
     change(radio: number) {

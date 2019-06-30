@@ -36,13 +36,16 @@ export const GalleryTexts = {
 };
 
 export const TextResourceConfigUrl = "https://general-gallery-1253318267.cos.ap-beijing.myqcloud.com/config/gallery-config-i18n.json";
-
 export const GalleryTextResourceManager = new CultureResourceManager();
 
-GalleryTextResourceManager.preload = (preloaded: Function) => {
-    const config = new CultureResourceConfig();
-    const configurationManager = new ConfigurationManager(TextResourceConfigUrl).attach(config).load(() => {
-        GalleryTextResourceManager.init(config).attach(GalleryTexts);
-        preloaded && preloaded();
-    });
+export class GalleryTextLoader {
+    static load() {
+        const config = new CultureResourceConfig();
+        const configurationManager = new ConfigurationManager(TextResourceConfigUrl).attach(config);
+        return configurationManager.load()
+            .then(() => {
+                GalleryTextResourceManager.init(config).attach(GalleryTexts);
+                return GalleryTextResourceManager.load();
+            });
+    }
 }
