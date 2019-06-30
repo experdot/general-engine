@@ -58,54 +58,15 @@ export class LSystemTree extends GameVisual {
         this.lSystem = new LSystem();
         this.lSystem.initRoot(new State("F", null, 0));
 
-        // const letters = "ABCDEFGHJKLMNOPQRSTUVWXYZ";
-        // const count = 9;
-        // for (let index = 0; index < count; index++) {
-        //     const element = letters[index];
-        //     this.lSystem.states.push(new TwoDementionState(element, null, 1, new Vector2(index % 3, Math.floor(index / 3))));
-        // }
+        //this.buildDefault();
+        //this.buildTwoDemention();
+        this.buildRect();
 
-        // for (let index = 0; index < letters.length; index++) {
-        //     const element = letters[index];
-        //     this.lSystem.addRule(new TwoDementionRule(element, this.generateABCD(letters, count)));
-        // }
-
-        // const rules = [
-        //     "FF+[+F-F-F]-[-F+F+F]",
-        //     "F[+F-F+F+FF]F[-F+F-F-FF]F",
-        //     "FF[-F-FF--F][+F+FF-F]FF",
-        //     "F[.--F++F-.F][.++F--F+.F][.-F++F][.+F--F].F",
-        //     "F-F-F+F++F+F-F-F",
-        //     "F--F+F+F+F+F--F",
-        //     "F[-F-FF--F][+F+FF-F]F",
-        //     "F[-FF--F][+FF-F]FF",
-        //     "F[-F-FF][+F+FF]F",
-        //     "F-F[-FFF-F][+FFF-F]F+F",
-        //     "F+[-FF-F][+FF-F]F-F",
-        //     "F-[-FF-F][+FF-F]+F",
-        // ];
-        // const i = Math.floor(Math.random() * rules.length);
-        // this.lSystem.addRule(new GrammarRule("F", rules[i]));
-
-        // this.lSystem.addRule(new GrammarRule("U", "URRRUUDL"));
-        // this.lSystem.addRule(new GrammarRule("R", "RDDDRRLU"));
-        // this.lSystem.addRule(new GrammarRule("D", "DLLLDDUR"));
-        // this.lSystem.addRule(new GrammarRule("L", "LUUULLRD"));
-
-        const maxCount = 10;
-        for (let index = 0; index < this.letters.length; index++) {
-            const rule = this.generate(maxCount, index);
-            console.log(rule);
-            this.lSystem.addRule(new GrammarRule(this.letters[index], rule));
-        }
-
-        this.depth = 4;
         this.lSystem.generate(this.depth);
-        console.log(this.states);
 
-        //this.joint(new GhostEffect(new Color(0, 128, 128, 0.5), 20));
         this.bindMouseEvents();
     }
+    //this.joint(new GhostEffect(new Color(0, 128, 128, 0.5), 20));
 
     private bindMouseEvents() {
         let isMouseDown: boolean = false;
@@ -137,6 +98,54 @@ export class LSystemTree extends GameVisual {
         });
     }
 
+    private buildDefault() {
+        const rules = [
+            "FF+[+F-F-F]-[-F+F+F]",
+            "F[+F-F+F+FF]F[-F+F-F-FF]F",
+            "FF[-F-FF--F][+F+FF-F]FF",
+            "F[.--F++F-.F][.++F--F+.F][.-F++F][.+F--F].F",
+            "F-F-F+F++F+F-F-F",
+            "F--F+F+F+F+F--F",
+            "F[-F-FF--F][+F+FF-F]F",
+            "F[-FF--F][+FF-F]FF",
+            "F[-F-FF][+F+FF]F",
+            "F-F[-FFF-F][+FFF-F]F+F",
+            "F+[-FF-F][+FF-F]F-F",
+            "F-[-FF-F][+FF-F]+F",
+        ];
+        const i = Math.floor(Math.random() * rules.length);
+        this.lSystem.addRule(new GrammarRule("F", rules[i]));
+    }
+
+    private buildRect() {
+        // this.lSystem.addRule(new GrammarRule("U", "URRRUUDL"));
+        // this.lSystem.addRule(new GrammarRule("R", "RDDDRRLU"));
+        // this.lSystem.addRule(new GrammarRule("D", "DLLLDDUR"));
+        // this.lSystem.addRule(new GrammarRule("L", "LUUULLRD"));
+
+        const maxCount = 15;
+        for (let index = 0; index < this.letters.length; index++) {
+            const rule = this.generate(maxCount, index);
+            this.lSystem.addRule(new GrammarRule(this.letters[index], rule));
+        }
+    }
+
+    private buildTwoDemention() {
+        const letters = "ABCDEFGHJKLMNOPQRSTUVWXYZ";
+        const count = 9;
+        for (let index = 0; index < count; index++) {
+            const element = letters[index];
+            this.lSystem.states.push(new TwoDementionState(element, null, 1, new Vector2(index % 3, Math.floor(index / 3))));
+        }
+
+        for (let index = 0; index < letters.length; index++) {
+            const element = letters[index];
+            this.lSystem.addRule(new TwoDementionRule(element, this.generateABCD(letters, count)));
+        }
+    }
+
+
+
     private generate(maxCount = 50, v: number = 0) {
         let count = this.random.normal(1, maxCount);
 
@@ -157,7 +166,6 @@ export class LSystemTree extends GameVisual {
         for (let index = 0; index < count; index++) {
             result = result + letters[(last + index) % letters.length];
         }
-        console.log(result);
         return result;
     }
 }
@@ -208,8 +216,8 @@ export class LSystemTreeView extends GameView {
         //Graphics.scaleOffset(context, 8, 8 * context.canvas.height / context.canvas.width, 0.99);
 
         if (this.animation || !this.center || source.changed) {
-            this.center = new Vector2(source.world.width / 2, source.world.height * 0.7).add(source.offset);
-            this.lengthOfLine = source.world.height * (1 / Math.pow(3, source.depth + 1)) * source.lineLengthRatio;
+            this.center = new Vector2(source.world.width / 2, source.world.height/2).add(source.offset);
+            this.lengthOfLine = source.world.height * (1 / Math.pow(2, source.depth + 1)) * source.lineLengthRatio;
             //this.lengthOfLine = source.lineLengthRatio;
             this.offset = new Vector2(0, -this.lengthOfLine);
             source.changed = false;
@@ -262,18 +270,18 @@ export class LSystemTreeView extends GameView {
                 this.offset = this.offset.rotate(-2.4 / this.rotateRatio);
                 break;
             case ".":
-                this.lengthOfLine *= 0.9;
+                this.lengthOfLine *= 0.8;
                 this.offset.setLength(this.lengthOfLine);
                 break;
             case "*":
-                this.lengthOfLine /= 0.9;
+                this.lengthOfLine /= 0.8;
                 this.offset.setLength(this.lengthOfLine);
                 break;
             case "(":
-                this.rotateRatio *= 0.9;
+                this.rotateRatio *= 0.6;
                 break;
             case ")":
-                this.rotateRatio /= 0.9;
+                this.rotateRatio /= 0.6;
                 break;
             case "[":
                 this.centerStack.push(this.center.clone());
