@@ -1,5 +1,5 @@
-import { IRule } from "./RuleBase";
-import { State } from "../State/State";
+import { IRule } from "./Rule";
+import { IState } from "../State/State";
 
 class RuleSet<T> {
     rules: IRule<T>[];
@@ -12,7 +12,7 @@ class RuleSet<T> {
         this.rules.push(rule);
     }
 
-    generate(parent: State<T>, generation: number = 0) {
+    generate(parent: IState<T>, generation: number = 0) {
         const rule = this.rules[generation] || this.rules[0];
         return rule ? rule.generate(parent) : [parent.next()];
     }

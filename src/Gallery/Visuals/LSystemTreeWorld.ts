@@ -17,6 +17,6 @@ export class LSystemTreeWorld extends GameWorld {
 
     initialize() {
         this.inputs.addInput(new PointerInput());
-        this.addChild(new LSystemTree().joint(new LSystemTreeView()));
+        this.addChild(new LSystemTree().joint(LSystemTree.defaultView));
     }
 }

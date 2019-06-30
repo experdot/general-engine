@@ -2,22 +2,22 @@ import {
     RuleSet
 } from "./Rule/RuleSet";
 import {
-    State
+    State, IState
 } from "./State/State";
-import { IRule } from "./Rule/RuleBase";
+import { IRule } from "./Rule/Rule";
 
 class LSystem {
 
-    states: State<string>[];
+    states: IState<string>[] = [];
     ruleSets: { [name: string]: RuleSet<string> };
-    root: State<string>;
+    root: IState<string>;
 
     constructor() {
         this.states = [];
         this.ruleSets = {};
     }
 
-    initRoot(root: State<string>) {
+    initRoot(root: IState<string>) {
         this.root = root;
         this.states = [];
         this.states.push(root);
@@ -47,7 +47,7 @@ class LSystem {
         }
     }
 
-    private getDefaultState(state: State<string>) {
+    private getDefaultState(state: IState<string>) {
         let result = [];
         result.push(new State(state.value, state, state.generation + 1));
         return result;
