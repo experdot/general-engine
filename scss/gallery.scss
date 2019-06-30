@@ -1,6 +1,6 @@
 body {
     margin: 0;
-    //background-color: black !important;
+    background-color: black !important;
 }
 
 main {
@@ -8,126 +8,21 @@ main {
 }
 
 .game-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
     overflow: hidden;
     width: 100%;
     height: 100%;
 }
 
-// .game-container-x {
-//     animation: transform-rotate-x 5s ease-in-out alternate infinite
-// }
-
-// .game-container-y {
-//     animation: transform-rotate-y 7s ease-in-out alternate infinite
-// }
-
-// .game-container-z {
-//     animation: transform-rotate-z 9s ease-in-out alternate infinite
-// }
-
 .gallery-game-container {
-    box-shadow: 0 0 4rem 0.25rem rgba(0, 0, 0, 0.3);
     position: relative;
-    border-radius: 0.5rem;
-    animation: box-shadow-blink 2s ease-in-out alternate infinite;
-    width: 1440px;
-    height: 900px;
+    width: 100%;
+    height: 100%;
     border-radius: 1rem;
-}
-
-@media screen and(max-width:1600px) {
-    .gallery-game-container {
-        width: 1440px;
-        height: 900px;
-    }
-}
-
-@media screen and(max-width:1400px) {
-    .gallery-game-container {
-        width: 1280px;
-        height: 720px;
-    }
-}
-
-@media screen and(max-width:1200px) {
-    .gallery-game-container {
-        width: 1024px;
-        height: 768px;
-    }
-}
-
-@media screen and(max-width:1000px) {
-    .gallery-game-container {
-        width: 800px;
-        height: 600px;
-    }
-}
-
-@media screen and(max-width:800px) {
-    .game-container-inner {
-        width: 100%;
-        height: 100%;
-    }
-
-    .gallery-game-container {
-        width: 100%;
-        height: 100px;
-        flex-basis: 0;
-        flex-grow: 1;
-    }
-}
-
-@keyframes box-shadow-blink {
-    0% {
-        box-shadow: 0 0 8rem 0.25rem rgba(0, 0, 0, 0.3);
-    }
-
-    100% {
-        box-shadow: 0 0 4rem 0.25rem rgba(0, 0, 0, 0.3);
-    }
-}
-
-@keyframes transform-rotate-x {
-    0% {
-        transform: perspective(100vw) rotateX(5deg) translateX(1vw) scale(1.1);
-    }
-
-    100% {
-        transform: perspective(120vw) rotateX(-5deg) translateX(-1vw);
-    }
-}
-
-@keyframes transform-rotate-y {
-    0% {
-        transform: perspective(100vw) rotateY(5deg) translateY(1vw);
-    }
-
-    100% {
-        transform: perspective(120vw) rotateY(-5deg) translateY(-1vw);
-    }
-}
-
-@keyframes transform-rotate-z {
-    0% {
-        transform: perspective(100vw) rotateZ(5deg) translateZ(1vmax);
-    }
-
-    100% {
-        transform: perspective(120vw) rotateZ(-5deg) translateZ(-1vmax);
-    }
 }
 
 .game-container-inner {
     display: flex;
     flex-direction: column;
-}
-
-.gallery-navigator-external {
-    border-radius: 0.5rem;
 }
 
 home {
@@ -137,7 +32,6 @@ home {
 
 #gallery-game-container {
     margin: 0;
-    max-width: 100%; //background: black;
     background: transparent;
     position: relative;
 

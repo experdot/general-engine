@@ -42,13 +42,13 @@ export class LSystemTree extends GameVisual {
 
     changed: boolean = false;
 
-    private letters: string[] = ["F", "[", "]", ".", "*", "+", "-", "(", ")"];
-    private letters1: string[] = ["F", "[", "]", ".", "*", "+", "-", "(", ")"];
-    private letters2: string[] = ["F", "]", "[", "*", ".", "-", "+", ")", "("];
+    // private letters: string[] = ["F", "[", "]", ".", "*", "+", "-", "(", ")"];
+    // private letters1: string[] = ["F", "[", "]", ".", "*", "+", "-", "(", ")"];
+    // private letters2: string[] = ["F", "]", "[", "*", ".", "-", "+", ")", "("];
 
-    // private letters: string[] = ["F", "U", "D", "L", "R", "[", "]", ".", "*", "+", "-", "(", ")"];
-    // private letters1: string[] = ["F", "U", "D", "L", "R", "[", "]", ".", "*", "+", "-", "(", ")"];
-    // private letters2: string[] = ["F", "D", "U", "R", "L", "]", "[", "*", ".", "-", "+", ")", "("];
+    private letters: string[] = ["F", "U", "D", "L", "R", "[", "]", ".", "*", "+", "-", "(", ")"];
+    private letters1: string[] = ["F", "U", "D", "L", "R", "[", "]", ".", "*", "+", "-", "(", ")"];
+    private letters2: string[] = ["F", "D", "U", "R", "L", "]", "[", "*", ".", "-", "+", ")", "("];
 
     private random: Random = new Random();
 
@@ -70,22 +70,22 @@ export class LSystemTree extends GameVisual {
         //     this.lSystem.addRule(new TwoDementionRule(element, this.generateABCD(letters, count)));
         // }
 
-        const rules = [
-            "FF+[+F-F-F]-[-F+F+F]",
-            "F[+F-F+F+FF]F[-F+F-F-FF]F",
-            "FF[-F-FF--F][+F+FF-F]FF",
-            "F[.--F++F-.F][.++F--F+.F][.-F++F][.+F--F].F",
-            "F-F-F+F++F+F-F-F",
-            "F--F+F+F+F+F--F",
-            "F[-F-FF--F][+F+FF-F]F",
-            "F[-FF--F][+FF-F]FF",
-            "F[-F-FF][+F+FF]F",
-            "F-F[-FFF-F][+FFF-F]F+F",
-            "F+[-FF-F][+FF-F]F-F",
-            "F-[-FF-F][+FF-F]+F",
-        ];
-        const i = Math.floor(Math.random() * rules.length);
-        this.lSystem.addRule(new GrammarRule("F", rules[i]));
+        // const rules = [
+        //     "FF+[+F-F-F]-[-F+F+F]",
+        //     "F[+F-F+F+FF]F[-F+F-F-FF]F",
+        //     "FF[-F-FF--F][+F+FF-F]FF",
+        //     "F[.--F++F-.F][.++F--F+.F][.-F++F][.+F--F].F",
+        //     "F-F-F+F++F+F-F-F",
+        //     "F--F+F+F+F+F--F",
+        //     "F[-F-FF--F][+F+FF-F]F",
+        //     "F[-FF--F][+FF-F]FF",
+        //     "F[-F-FF][+F+FF]F",
+        //     "F-F[-FFF-F][+FFF-F]F+F",
+        //     "F+[-FF-F][+FF-F]F-F",
+        //     "F-[-FF-F][+FF-F]+F",
+        // ];
+        // const i = Math.floor(Math.random() * rules.length);
+        // this.lSystem.addRule(new GrammarRule("F", rules[i]));
 
         // this.lSystem.addRule(new GrammarRule("U", "URRRUUDL"));
         // this.lSystem.addRule(new GrammarRule("R", "RDDDRRLU"));
@@ -98,7 +98,6 @@ export class LSystemTree extends GameVisual {
             console.log(rule);
             this.lSystem.addRule(new GrammarRule(this.letters[index], rule));
         }
-
 
         this.depth = 4;
         this.lSystem.generate(this.depth);
@@ -183,7 +182,7 @@ export class LSystemTreeView extends GameView {
 
         this.currentIndex = 0;
 
-        this.lineColor = new Color(0, 0, 0, 1);
+        this.lineColor = new Color(255, 255, 255, 1);
 
         this.singleNumber = 0;
         this.rotateRatio = 6;
@@ -236,26 +235,26 @@ export class LSystemTreeView extends GameView {
                 this.drawLineBranch(context, this.center, this.offset, this.lineWidthRatio, this.lineColor);
                 this.center = this.center.add(this.offset);
                 break;
-            // case "U":
-            //     //this.offset = new Vector2(0, -this.lengthOfLine).rotate(2.4 / this.rotateRatio);;
-            //     this.drawLineBranch(context, this.center, this.offset, this.lineWidthRatio, this.lineColor);
-            //     this.center = this.center.add(this.offset);
-            //     break;
-            // case "D":
-            //     //this.offset = new Vector2(0, this.lengthOfLine).rotate(2.4 / this.rotateRatio);;
-            //     this.drawLineBranch(context, this.center, this.offset, this.lineWidthRatio, this.lineColor);
-            //     this.center = this.center.add(this.offset);
-            //     break;
-            // case "L":
-            //     //this.offset = new Vector2(-this.lengthOfLine, 0).rotate(2.4 / this.rotateRatio);;
-            //     this.drawLineBranch(context, this.center, this.offset, this.lineWidthRatio, this.lineColor);
-            //     this.center = this.center.add(this.offset);
-            //     break;
-            // case "R":
-            //     //this.offset = new Vector2(this.lengthOfLine, 0).rotate(2.4 / this.rotateRatio);;
-            //     this.drawLineBranch(context, this.center, this.offset, this.lineWidthRatio, this.lineColor);
-            //     this.center = this.center.add(this.offset);
-            //     break;
+            case "U":
+                this.offset = new Vector2(0, -this.lengthOfLine).rotate(2.4 / this.rotateRatio);;
+                this.drawLineBranch(context, this.center, this.offset, this.lineWidthRatio, this.lineColor);
+                this.center = this.center.add(this.offset);
+                break;
+            case "D":
+                this.offset = new Vector2(0, this.lengthOfLine).rotate(2.4 / this.rotateRatio);;
+                this.drawLineBranch(context, this.center, this.offset, this.lineWidthRatio, this.lineColor);
+                this.center = this.center.add(this.offset);
+                break;
+            case "L":
+                this.offset = new Vector2(-this.lengthOfLine, 0).rotate(2.4 / this.rotateRatio);;
+                this.drawLineBranch(context, this.center, this.offset, this.lineWidthRatio, this.lineColor);
+                this.center = this.center.add(this.offset);
+                break;
+            case "R":
+                this.offset = new Vector2(this.lengthOfLine, 0).rotate(2.4 / this.rotateRatio);;
+                this.drawLineBranch(context, this.center, this.offset, this.lineWidthRatio, this.lineColor);
+                this.center = this.center.add(this.offset);
+                break;
             case "+":
                 this.offset = this.offset.rotate(2.4 / this.rotateRatio);
                 break;
