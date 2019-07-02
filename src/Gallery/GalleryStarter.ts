@@ -24,11 +24,13 @@ import {
 } from "../Engine/Game/GameBox/GameBox";
 import { ParticlesCircularWorld } from "./Visuals/ParticlesCircularWorld";
 import { ParticlesFireWorld } from "./Visuals/ParticlesFireWorld";
+import { AutoPaintWorld } from "./Games/AutoPaintWorld";
+import { GameWorld } from "../Engine/Game/GameWorld/GameWorld";
 
 export class GalleryStarter {
     static Symbols: {};
 
-    symbols: {};
+    symbols: { [name: string]: typeof GameWorld };
 
     constructor() {
         this.symbols = {};
@@ -41,23 +43,24 @@ export class GalleryStarter {
         this.addSymbol("endlessabyss", EndlessAbyssWorld);
         this.addSymbol("circular", ParticlesCircularWorld);
         this.addSymbol("fire", ParticlesFireWorld);
+        this.addSymbol("autopaint", AutoPaintWorld);
 
         GalleryStarter.Symbols = this.symbols;
     }
 
-    addSymbol(name, symbol) {
+    addSymbol(name: string, symbol: typeof GameWorld) {
         this.symbols[name] = symbol;
     }
 
-    getSymbolByName(name) {
+    getSymbolByName(name: string) {
         return this.symbols[name];
     }
 
-    launch(container, canvas) {
+    launch(container: HTMLElement, canvas: HTMLCanvasElement) {
         const request = this.getSearchKeyValuePair();
         const World = this.getSymbolByName(request["scene"]);
         if (World) {
-            document.title = World.Title;
+            document.title = World["Title"] || "<Blank>";
             return new GameBox(container, canvas, new World(canvas.width, canvas.height));
         } else {
             (window.location as any) = "../";
@@ -65,12 +68,12 @@ export class GalleryStarter {
     }
 
     private getSearchKeyValuePair() {
-        const result = {};
+        const result: { [name: string]: string } = {};
         const search = location.search;
         if (search.indexOf("?") >= 0) {
             const str = search.substr(1);
             const pairs = str.split("&");
-            for (var i = 0; i < pairs.length; i++) {
+            for (let i = 0; i < pairs.length; i++) {
                 result[pairs[i].split("=")[0]] = unescape(pairs[i].split("=")[1]);
             }
         }

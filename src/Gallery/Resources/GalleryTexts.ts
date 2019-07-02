@@ -19,6 +19,13 @@ export const GalleryTexts = {
         Tip: "",
         Score: ""
     },
+    AutoPaintWorld: {
+        Title: "Game - AutoPaint",
+        GameName: "",
+        GameOver: "",
+        Tip: "",
+        Score: ""
+    },
     Warnings: {
         OpenOnPC: {
             Title: "",
