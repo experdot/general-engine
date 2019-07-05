@@ -6,6 +6,8 @@ import {
 } from "../../../Engine/Game/GameObject/GameView";
 
 class GridView extends GameView {
+    size: { x: number, y: number };
+
     constructor() {
         super();
         this.size = {

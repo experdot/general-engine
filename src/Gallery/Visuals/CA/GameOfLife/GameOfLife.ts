@@ -55,6 +55,7 @@ export class GameOfLife extends GameVisual {
 
     automata: CellularAutomata;
     settings: IGameOfLifeSettings;
+    ghost: GhostEffect;
 
     private timers: { generate: DelayTimer; exchange: DelayTimer; grow: DelayTimer };
 

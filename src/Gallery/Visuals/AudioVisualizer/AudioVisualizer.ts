@@ -54,6 +54,8 @@ class AudioVisualizer extends GameVisual {
 
     timer: DelayTimer;
 
+    effects: any;
+
     constructor() {
         super();
         this.timer = new DelayTimer();
@@ -124,6 +126,10 @@ class AudioVisualizer extends GameVisual {
 
 class AudioVisualizerView extends GameView {
     innerCanvas: OffscreenCanvas;
+
+    rotation: number;
+    rotation2: number;
+    rotation3: number;
 
     constructor() {
         super();

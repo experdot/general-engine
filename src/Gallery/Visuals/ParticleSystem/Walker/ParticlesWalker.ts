@@ -27,6 +27,13 @@ import {
 } from "../../../../Engine/Drawing/Graphics";
 
 class ParticlesWalker extends ParticleSystem<WalkerParticle> {
+    random: Random;
+    transform: Transform;
+    split: number;
+    center: Vector2;
+    maxDepth: number;
+    rotationDelta: number;
+
     constructor() {
         super();
 

@@ -177,9 +177,18 @@ export class LSystemTreeView extends GameView {
     lengthStack: number[];
     rotateStack: number[];
 
+    currentIndex: number;
+
     singleNumber: number;
     rotateRatio: number;
     lineColor: Color;
+
+    animation: boolean;
+
+    center: Vector2;
+    offset: Vector2;
+    lengthOfLine: number;
+    lineWidthRatio: number;
 
     constructor() {
         super();
@@ -216,7 +225,7 @@ export class LSystemTreeView extends GameView {
         //Graphics.scaleOffset(context, 8, 8 * context.canvas.height / context.canvas.width, 0.99);
 
         if (this.animation || !this.center || source.changed) {
-            this.center = new Vector2(source.world.width / 2, source.world.height/2).add(source.offset);
+            this.center = new Vector2(source.world.width / 2, source.world.height / 2).add(source.offset);
             this.lengthOfLine = source.world.height * (1 / Math.pow(2, source.depth + 1)) * source.lineLengthRatio;
             //this.lengthOfLine = source.lineLengthRatio;
             this.offset = new Vector2(0, -this.lengthOfLine);

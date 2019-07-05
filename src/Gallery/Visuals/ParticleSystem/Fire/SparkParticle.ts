@@ -3,7 +3,18 @@ import { Particle } from "../Particle";
 function rand(min, max) { return Math.random() * (max - min) + min; };
 
 export class SparkParticle extends Particle {
-    [name: string]: any;
+    cx: number;
+    cy: number;
+    x: number;
+    y: number;
+    lx: number;
+    ly: number;
+    vx: number;
+    vy: number;
+    life: number;
+    r: number;
+    alive: boolean;
+    c: { h: number, s: number, l: number; a: number};
 
     constructor(mouse) {
         super();

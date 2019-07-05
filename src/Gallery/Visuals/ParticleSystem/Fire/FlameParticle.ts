@@ -4,7 +4,16 @@ function rand(min, max) { return Math.random() * (max - min) + min; };
 
 
 export class FlameParticle extends Particle {
-    [name: string]: any;
+    cx: number;
+    cy: number;
+    x: number;
+    y: number;
+    vx: number;
+    vy: number;
+    life: number;
+    r: number;
+    alive: boolean;
+    c: { h: number, s: number, l: number; a: number, ta: number };
 
     constructor(mouse: any) {
         super();
@@ -16,7 +25,8 @@ export class FlameParticle extends Particle {
         this.vx = rand(-1, 1);
         this.r = rand(20, 30);
         this.life = rand(3, 6);
-        this.alive = true; this.c = {
+        this.alive = true;
+        this.c = {
             h: Math.floor(rand(2, 40)),
             s: 100,
             l: rand(80, 100),

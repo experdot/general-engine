@@ -21,6 +21,10 @@ import { OffscreenCanvas } from "../../../../Engine/Drawing/OffscreenCanvas";
 import { GhostEffect } from "../../../../Engine/Game/GameComponents/Effect/Effect";
 
 class ParticlesTree extends ParticleSystem<SpotParticle> {
+    generation: [];
+    random: Random;
+    settings: any;
+
     constructor() {
         super();
         this.generation = [];
