@@ -1,7 +1,7 @@
 class Array2<T> {
-    width: number;
-    height: number;
-    data: T[][];
+    readonly width: number;
+    readonly height: number;
+    readonly data: T[][];
 
     constructor(width: number = 1, height: number = 1) {
         this.width = width;

@@ -47,12 +47,15 @@ export interface PointerDescription {
     position: Vector2;
 }
 
-export class Inputs {
-    [propName: string]: any;
+export interface KeyDescription {
+    isKeyDown: boolean;
+}
 
+export class Inputs {
     mouse?: MouseDescription;
     touch?: TouchDescription;
     pointer?: PointerDescription;
+    key?: KeyDescription;
 
     ui: HTMLElement;
     dispatcher: (...args: any[]) => void;

@@ -1,20 +1,19 @@
 export class Speeder {
     count: number = 0;
-    radio: number;
+    speed: number;
 
-    constructor(radio: number = 1) {
-        this.radio = radio;
+    constructor(speed: number = 1) {
+        this.speed = speed;
     }
 
-    change(radio: number) {
-        this.radio = radio;
+    change(speed: number) {
+        this.speed = speed;
         return this;
     }
 
     invoke(action?: Function) {
-        this.count = (this.count + 1) % this.radio;
+        this.count = (this.count + 1) % this.speed;
         if (this.count === 0) {
-            this.count = 0;
             action && action();
         }
         return this;

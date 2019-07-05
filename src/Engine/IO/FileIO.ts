@@ -9,6 +9,9 @@ export class FileIO {
             onLoaded && onLoaded(event);
             input.remove();
         };
+        input.oncancel = () => {
+            input.remove();
+        }
         input.style.display = "none";
         document.body.appendChild(input);
         input.click();

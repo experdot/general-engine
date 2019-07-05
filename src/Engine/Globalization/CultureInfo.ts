@@ -1,10 +1,19 @@
+const enum SessionStorageKey {
+    Language = "General_SessionStorage_Language"
+}
+
+const Languages = {
+    "en-US": "English(United States)",
+    "zh-CN": "简体中文"
+};
+
 export class CultureInfo {
     static get LanguageSessionKey() {
         return "General_SessionStorage_Language";
     }
 
-    static get Netural() {
-        return new CultureInfo(sessionStorage.getItem(CultureInfo.LanguageSessionKey) || navigator.language || "en-US");
+    static get netural() {
+        return new CultureInfo(sessionStorage.getItem(SessionStorageKey.Language) || navigator.language || "en-US");
     }
 
     static get en_US() {
@@ -16,7 +25,7 @@ export class CultureInfo {
     }
 
     static switch(language: string) {
-        sessionStorage.setItem(CultureInfo.LanguageSessionKey, language);
+        sessionStorage.setItem(SessionStorageKey.Language, language);
     }
 
     get displayName(): string {
@@ -31,8 +40,4 @@ export class CultureInfo {
 
 }
 
-export const Languages = {
-    "en-US": "English(United States)",
-    "zh-CN": "简体中文"
-};
 

@@ -13,8 +13,6 @@ type GeneralProcessesType<TThis, T extends GeneralInterface> = {
  * Represent a general object
  */
 export class GeneralObject<T extends GeneralInterface> {
-    [propName: string]: any;
-
     identifier: number = Identifier.unique;
     joints: GeneralObject<any>[] = [];
     processes: GeneralProcessesType<this, T> = {};
@@ -41,7 +39,7 @@ export class GeneralObject<T extends GeneralInterface> {
         for (const key in generalInterface) {
             if (generalInterface[key] instanceof Array) {
                 if (!this.processes[key]) {
-                    this.processes[key] = new GeneralProcess(this).next(this[key]);
+                    this.processes[key] = new GeneralProcess(this).next((this as any)[key]);
                 }
             }
         }
