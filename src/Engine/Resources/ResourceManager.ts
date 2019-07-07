@@ -1,4 +1,3 @@
-import { HttpWebRequest } from "../Network/Network";
 import { ResourceSet } from "./ResourceSet";
 
 export class ResourceManager {

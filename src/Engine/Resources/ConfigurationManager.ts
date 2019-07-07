@@ -11,7 +11,7 @@ export class ConfigurationManager extends ResourceManager {
         this.add(new ResourceSet(this.url));
     }
 
-    attach(target) {
+    attach(target: any) {
         this.target = target;
         return this;
     }

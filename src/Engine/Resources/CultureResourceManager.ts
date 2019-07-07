@@ -23,7 +23,7 @@ export class CultureResourceManager extends ResourceManager {
         });
     }
 
-    attach(target: any, culture: CultureInfo = CultureInfo.Netural) {
+    attach(target: any, culture: CultureInfo = CultureInfo.netural) {
         if (this.config) {
             this.add(new ResourceSet(this.config.get(culture.language)));
             this.target = target;

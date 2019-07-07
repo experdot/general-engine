@@ -47,7 +47,7 @@ export class Vector2 {
     }
 
     divide(f: number) {
-        var invf = 1 / f;
+        const invf = 1 / f;
         return new Vector2(this.x * invf, this.y * invf);
     }
 
@@ -56,13 +56,13 @@ export class Vector2 {
     }
 
     rotate(r: number) {
-        var sin = Math.sin(r);
-        var cos = Math.cos(r);
+        const sin = Math.sin(r);
+        const cos = Math.cos(r);
         return new Vector2(this.x * cos - this.y * sin, this.y * cos + this.x * sin);
     }
 
     setLength(t: number) {
-        var len = this.length;
+        const len = this.length;
         if (len > 0) {
             this.x = this.x * t / len;
             this.y = this.y * t / len;
@@ -70,7 +70,7 @@ export class Vector2 {
     }
 
     limitLength(upon: number) {
-        var len = this.length;
+        const len = this.length;
         if (len > upon) {
             this.setLength(upon);
         }

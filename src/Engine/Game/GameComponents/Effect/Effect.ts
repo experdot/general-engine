@@ -3,7 +3,6 @@ import { ColorHelper, Colors, Color } from "../../../UI/Color";
 import { GameVisual } from "../../GameObject/GameVisual";
 import { GameEffectInterface } from "../../GameInterface/GameInterface";
 
-
 export class GhostEffect extends GeneralObject<GameEffectInterface> {
     fillColor: Color;
     gradientNumber: number;

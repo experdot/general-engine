@@ -1,7 +1,7 @@
 import { Vector2 } from "./Vector2";
 
 export class Matrix3x2 {
-    static get Identity() {
+    static get identity() {
         return new Matrix3x2();
     }
 
