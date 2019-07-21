@@ -5,22 +5,24 @@ import { InputEvents } from "../../../Engine/Inputs/Inputs";
 import { Vector2 } from "../../../Engine/Numerics/Vector2";
 
 export class VisualPointer extends GameVisual {
-    pointers: Vector2[];
-    cache: { container?: HTMLElement, cursor?: string, handler?: Function };
+    pointers: Vector2[] = [];
+    cache: { container?: HTMLElement, cursor?: string, handler?: Function } = {};
+    maxLength: number = 30;
 
     constructor() {
         super();
-        this.pointers = [];
-        this.cache = {};
         this.joint(new VisualPointerView());
     }
 
-    start(source: any) {
+    start(source: GameVisual) {
         this.cache.container = source.world.ui.container;
         this.cache.cursor = this.cache.container.style.cursor;
         this.cache.container.style.cursor = "none";
         this.cache.handler = () => {
             this.pointers.push(source.world.inputs.pointer.position.clone());
+            if (this.pointers.length > this.maxLength) {
+                this.pointers.shift();
+            }
         };
         source.on(InputEvents.PointerMoved, this.cache.handler);
     }
@@ -31,10 +33,10 @@ export class VisualPointer extends GameVisual {
         }
     }
 
-    dispose() {
+    dispose(source?: GameVisual) {
         super.dispose();
         this.cache.container.style.cursor = this.cache.cursor;
-        arguments[0].off(InputEvents.PointerMoved, this.cache.handler);
+        source && source.off(InputEvents.PointerMoved, this.cache.handler);
     }
 }
 
@@ -46,7 +48,12 @@ export class VisualPointerView extends GameView {
                 source.pointers.forEach((p: Vector2) => {
                     context.lineTo(p.x, p.y);
                 });
+                context.closePath();
+
                 context.lineWidth = 10;
+                context.lineCap = "round";
+                context.lineJoin = "round";
+
                 context.strokeStyle = "#FFF";
                 context.stroke();
             }

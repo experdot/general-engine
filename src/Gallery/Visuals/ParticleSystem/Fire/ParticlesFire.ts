@@ -5,6 +5,7 @@ import { FlameParticle } from "./FlameParticle";
 import { InputEvents } from "../../../../Engine/Inputs/Inputs";
 import { GameView } from "../../../../Engine/Game/GameObject/GameView";
 import { Graphics } from "../../../../Engine/Drawing/Graphics";
+import { GameVisual } from "../../../../Engine/Game/GameObject/GameVisual";
 
 export class ParticlesFire extends ParticleSystem<FlameParticle> {
     aFires: FlameParticle[];
@@ -32,6 +33,7 @@ export class ParticlesFire extends ParticleSystem<FlameParticle> {
         this.aFires.push(new FlameParticle(this.mouse));
         this.aSpark.push(new SparkParticle(this.mouse));
         this.aSpark2.push(new SparkParticle(this.mouse));
+
 
         this.updateParticles(this.aFires);
         this.updateParticles(this.aSpark);

@@ -14,7 +14,7 @@ export class SparkParticle extends Particle {
     life: number;
     r: number;
     alive: boolean;
-    c: { h: number, s: number, l: number; a: number};
+    c: { h: number, s: number, l: number; a: number };
 
     constructor(mouse) {
         super();
@@ -27,7 +27,7 @@ export class SparkParticle extends Particle {
         this.vy = rand(-1, 3);
         this.vx = rand(-4, 4);
         this.r = rand(0, 1);
-        this.life = rand(4, 5);
+        this.life = rand(4, 5) * 2;
         this.alive = true;
         this.c = {
             h: Math.floor(rand(2, 40)),
@@ -65,7 +65,7 @@ export class SparkParticle extends Particle {
         ctx.moveTo(this.lx, this.ly);
         ctx.lineTo(this.x, this.y);
         ctx.strokeStyle = "hsla( " + this.c.h + ", " + this.c.s + "%, " + this.c.l + "%, " + (this.c.a / 2) + ")";
-        ctx.lineWidth = this.r * 2;
+        ctx.lineWidth = this.r;
         ctx.lineCap = 'round';
         ctx.stroke();
         ctx.closePath();

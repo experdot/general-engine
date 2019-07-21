@@ -28,7 +28,7 @@ export class GameVisual extends GeneralNode<GameVsiualInterface> {
         });
     }
 
-    dispose() {
+    dispose(source?: any) {
         this.events.dispose();
     }
 }
