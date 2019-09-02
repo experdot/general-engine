@@ -6,15 +6,17 @@ import { GalleryGame } from "./Game/GalleryGame";
 import { AttachAlert } from "./Alert/AttachAlert";
 import { WarningOpenOnPC } from "./Alert/WarningOpenOnPC";
 import { ProgressCover } from "./Progress/ProgressCover";
+import { GalleryCollection } from "../Collection/GalleryCollection";
 
 export class GalleryApp extends App {
+    collection: GalleryCollection = new GalleryCollection();
     constructor() {
         super();
         this.joint(new AttachAlert());
-        this.joint(new GalleryNavigator());
+        this.joint(new GalleryNavigator(this.collection.symbols));
         this.joint(new WarningOpenOnPC());
         this.joint(new ProgressCover);
-        this.joint(new GalleryGame());
+        this.joint(new GalleryGame(this.collection));
     }
 
     load() {

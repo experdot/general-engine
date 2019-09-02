@@ -1,6 +1,6 @@
 import { App } from "../../../Engine/Application/AppObject/App";
 import { GameBox } from "../../../Engine/Game/GameBox/GameBox";
-import { GalleryStarter } from "../../GalleryStarter";
+import { GalleryCollection } from "../../Collection/GalleryCollection";
 import { Utilities } from "../../../Engine/Utilities/Utilities";
 import { GalleryNavigatorIds } from "../Navigator/GalleryNavigator";
 
@@ -10,14 +10,18 @@ const enum GalleryGameContainerIds {
 }
 
 export class GalleryGame extends App {
-    private box: GameBox;
-    private starter: GalleryStarter = new GalleryStarter();
+    box: GameBox;
+    collection: GalleryCollection = new GalleryCollection();
+
+    constructor(collection: GalleryCollection) {
+        super();
+
+        this.collection = collection;
+        this.joint(new GameFrameTooltip());
+        this.joint(new RestartGameWhenResize());
+    }
 
     load() {
-        window.addEventListener("resize", () => {
-            this.restart();
-        });
-
         $(`#${GalleryNavigatorIds.ButtonRestart}`).click(() => {
             this.box.stop();
             this.start();
@@ -37,23 +41,45 @@ export class GalleryGame extends App {
             canvas.height = container.clientHeight;
         }
 
-        this.box = this.starter.launch(container, canvas);
-
-        const frameText = $(`#${GalleryNavigatorIds.FrameText}`);
-        this.box.frameManager.onRateChanged = (rate: number) => {
-            frameText.text(rate);
-        };
-
+        this.box = this.createGameBox(container, canvas);
         this.box.start();
     }
 
-    restart() {
+    private createGameBox(container: HTMLElement, canvas: HTMLCanvasElement) {
+        const request = Utilities.getSearchKeyValuePair();
+        const worldSymbol = this.collection.getSymbolByName(request["scene"]);
+        if (worldSymbol) {
+            document.title = worldSymbol["Title"] || "<Blank>";
+            return new GameBox(container, canvas, new worldSymbol(canvas.width, canvas.height));
+        } else {
+            window.location.assign("../");
+        }
+    }
+}
+
+class RestartGameWhenResize extends App {
+    load(source: GalleryGame) {
+        window.addEventListener("resize", () => {
+            this.restart(source);
+        });
+    }
+
+    private restart(source: GalleryGame) {
         const canvas = $(`#${GalleryGameContainerIds.Canvas}`)[0] as HTMLCanvasElement;
         const container = $(`#${GalleryGameContainerIds.Container}`)[0] as HTMLCanvasElement
 
         if (canvas.width !== container.clientWidth || canvas.height !== container.clientHeight) {
-            this.box.stop();
-            this.start();
+            source.box.stop();
+            source.start();
         }
+    }
+}
+
+class GameFrameTooltip extends App {
+    start(source: GalleryGame) {
+        const frameText = $(`#${GalleryNavigatorIds.FrameText}`);
+        source.box.frameManager.onRateChanged = (rate: number) => {
+            frameText.text(rate);
+        };
     }
 }

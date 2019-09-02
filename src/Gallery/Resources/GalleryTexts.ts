@@ -46,7 +46,7 @@ export const TextResourceConfigUrl = "https://general-gallery-1253318267.cos.ap-
 export const GalleryTextResourceManager = new CultureResourceManager();
 
 export class GalleryTextLoader {
-    static load() {
+    static async load() {
         const config = new CultureResourceConfig();
         const configurationManager = new ConfigurationManager(TextResourceConfigUrl).attach(config);
         return configurationManager.load()
