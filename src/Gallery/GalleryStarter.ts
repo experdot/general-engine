@@ -1,31 +1,14 @@
-import {
-    ParticlesFlyerWorld
-} from "./Visuals/ParticlesFlyerWorld";
-import {
-    ParticlesWalkerWorld
-} from "./Visuals/ParticlesWalkerWorld";
-import {
-    ParticlesTreeWorld
-} from "./Visuals/ParticlesTreeWorld";
-import {
-    LSystemTreeWorld
-} from "./Visuals/LSystemTreeWorld";
-import {
-    GameOfLifeWorld
-} from "./Visuals/GameOfLifeWorld";
-import {
-    AudioVisualizerWorld
-} from "./Visuals/AudioVisualizerWorld";
-import {
-    EndlessAbyssWorld
-} from "./Games/EndlessAbyssWorld";
-import {
-    GameBox
-} from "../Engine/Game/GameBox/GameBox";
-import { ParticlesCircularWorld } from "./Visuals/ParticlesCircularWorld";
-import { ParticlesFireWorld } from "./Visuals/ParticlesFireWorld";
-import { AutoPaintWorld } from "./Games/AutoPaintWorld";
+import { GameBox } from "../Engine/Game/GameBox/GameBox";
 import { GameWorld } from "../Engine/Game/GameWorld/GameWorld";
+import { ParticlesFlyerWorld } from "./Visuals/ParticlesFlyerWorld";
+import { ParticlesWalkerWorld } from "./Visuals/ParticlesWalkerWorld";
+import { ParticlesTreeWorld } from "./Visuals/ParticlesTreeWorld";
+import { LSystemTreeWorld } from "./Visuals/LSystemTreeWorld";
+import { GameOfLifeWorld } from "./Visuals/GameOfLifeWorld";
+import { AudioVisualizerWorld } from "./Visuals/AudioVisualizerWorld";
+import { EndlessAbyssWorld } from "./Games/EndlessAbyssWorld";
+import { ParticlesCircularWorld } from "./Visuals/ParticlesCircularWorld";
+import { AutoPaintWorld } from "./Games/AutoPaintWorld";
 
 export class GalleryStarter {
     static Symbols: {};
@@ -42,7 +25,6 @@ export class GalleryStarter {
         this.addSymbol("audiovisualizer", AudioVisualizerWorld);
         this.addSymbol("endlessabyss", EndlessAbyssWorld);
         this.addSymbol("circular", ParticlesCircularWorld);
-        this.addSymbol("fire", ParticlesFireWorld);
         this.addSymbol("autopaint", AutoPaintWorld);
 
         GalleryStarter.Symbols = this.symbols;
