@@ -62,7 +62,7 @@ export class GameOfLife extends GameVisual {
     constructor() {
         super();
 
-        this.ghost = new GhostEffect(new Color(0, 0, 0, 0.05), 15);
+        this.ghost = new GhostEffect(new Color(0, 0, 0, 0.02), 15);
         this.joint(this.ghost);
 
         this.timers = {
@@ -105,24 +105,25 @@ export class GameOfLife extends GameVisual {
     }
 
     update() {
-        this.timers.exchange.delay(1000, () => {
+        const delay = 1000;
+        this.timers.exchange.delay(delay, () => {
             this.settings.progress = 0;
             this._exchange(this.automata);
         }, (actual: number) => {
-            this.settings.progress = actual / 1000;
+            this.settings.progress = actual / delay;
         });
 
-        this.timers.generate.delay(1000, () => {
+        this.timers.generate.delay(20, () => {
             this._generate();
         });
 
-        this.timers.grow.delay(100, () => {
+        this.timers.grow.delay(200, () => {
             this.automata.grow(0.005);
         });
 
-        this.settings.rotation += 0.0001;
+        this.settings.rotation += 0.005;
 
-        this.settings.sin += 0.0005;
+        this.settings.sin += 0.006;
         this.settings.size = this.settings.initialSize + Math.sin(this.settings.sin) * this.settings.rangeSize + this.settings.rangeSize;
     }
 
