@@ -33,17 +33,16 @@ import { PlatformInfo } from "../../../../Engine/Platform/PlatformInfo";
 
 export class ParticlesFlyer extends ParticleSystem<FlyerParticle> {
     clouds: Particle[] = [];
-    blocks: FlyerParticle[] = [];
     grid: ArrayGrid;
 
     offset: Vector2;
     averageLocation: Vector2;
     revolution: number = 200;
 
-    fieldWidth: number;
-    fieldHeight: number;
-    areaWidth: number;
-    areaHeight: number;
+    flyerFieldWidth: number;
+    flyerFieldHeight: number;
+    cloudFieldWidth: number;
+    cloudFieldHeight: number;
 
     scaleDelta: number = 0;
     scale: number = 2;
@@ -55,47 +54,27 @@ export class ParticlesFlyer extends ParticleSystem<FlyerParticle> {
         const h = this.world.height;
         const center = new Vector2(w * 0.5, h * 0.5);
 
+        // Create flyer particles
+        const flyersCount = this.random.normal(1, 12);
+        const velocity = 500;
+
+        this.flyerFieldWidth = w * 0.8;
+        this.flyerFieldHeight = h * 0.8;
+
         const screen = new Vector2(w, h).length;
-        const flyersCount = 12; // Math.floor(screen / 32) / 4;
-        const maxSize = Math.floor(screen / 60);
-        this.fieldWidth = w * 0.8;
-        this.fieldHeight = h * 0.8;
+        const minSize = Math.max(10, Math.floor(screen / 200));
+        const maxSize = Math.min(60, Math.floor(screen / 60));
 
-        // Create particles
-        for (let i = 0; i < flyersCount; i++) {
-            const particle = new FlyerParticle();
-            particle.location = center.add(new Vector2(this.fieldWidth * Math.random() - this.fieldWidth / 2, this.fieldHeight * Math.random() - this.fieldHeight / 2));
-            particle.velocity = new Vector2(10 * Math.random() - 5, 10 * Math.random() - 5);
-            particle.size = this.random.normal(10, 10 + maxSize);
-            particle.color = Colors.White;
-            this.particles.push(particle);
-        }
+        const flyers = this.createFlyers(flyersCount, velocity, center, minSize, maxSize, this.flyerFieldWidth, this.flyerFieldHeight);
+        this.particles.push(...flyers);
 
-        const blocksCount = 5;
-        const areaSize = 4;
-        this.areaWidth = this.fieldWidth * areaSize;
-        this.areaHeight = this.fieldHeight * areaSize;
-
-        // Create blocks
-        for (let i = 0; i < blocksCount; i++) {
-            const particle = new FlyerParticle();
-            particle.location = center.add(new Vector2(this.areaWidth * Math.random() - this.areaWidth / 2, this.areaHeight * Math.random() - this.areaHeight / 2));
-            particle.velocity = new Vector2(0, 0);
-            particle.age = 20 + maxSize * Math.random() * 20;
-            particle.color = Colors.Gray;
-            this.blocks.push(particle);
-        }
-
-        const cloudsCount = 50;
         // Create clouds
-        for (let i = 0; i < cloudsCount; i++) {
-            const particle = new Particle();
-            particle.location = center.add(new Vector2(this.areaWidth * Math.random() - this.areaWidth / 2, this.areaHeight * Math.random() - this.areaHeight / 2));
-            particle.rotation = Math.random() * Math.PI * 2;
-            particle.size = this.random.normal(0.1, 2);
-            particle.alpha = 0;
-            this.clouds.push(particle);
-        }
+        const cloudsCount = this.random.normal(40, 80);
+        const areaSize = 8;
+        this.cloudFieldWidth = this.flyerFieldWidth * areaSize;
+        this.cloudFieldHeight = this.flyerFieldHeight * areaSize;
+        const clouds = this.createClouds(cloudsCount, center, this.cloudFieldWidth, this.cloudFieldHeight);
+        this.clouds.push(...clouds);
 
         // Create grid
         this.grid = this.createGrid(w, h, this.revolution);
@@ -107,12 +86,46 @@ export class ParticlesFlyer extends ParticleSystem<FlyerParticle> {
         }
     }
 
+    private createFlyers(flyersCount: number, velocity: number, center: Vector2, minSize: number, maxSize: number, fieldWidth: number, fieldHeight: number) {
+        const particles: FlyerParticle[] = [];
+        for (let i = 0; i < flyersCount; i++) {
+            const particle = new FlyerParticle();
+            const x = fieldWidth * (Math.random() - 0.5);
+            const y = fieldHeight * (Math.random() - 0.5);
+            const vx = velocity * (2 * Math.random() - 1);
+            const vy = velocity * (2 * Math.random() - 1);
+            particle.location = center.add(new Vector2(x, y));
+            particle.velocity = new Vector2(vx, vy);
+            particle.size = this.random.normal(minSize, maxSize);
+            particle.color = Colors.White;
+            particles.push(particle);
+        }
+        return particles;
+    }
+
+    private createClouds(cloudsCount: number, center: Vector2, fieldWidth: number, fieldHeight: number) {
+        const particles: Particle[] = [];
+        for (let i = 0; i < cloudsCount; i++) {
+            const particle = new Particle();
+            const x = fieldWidth * (Math.random() - 0.5);
+            const y = fieldHeight * (Math.random() - 0.5);
+            particle.location = center.add(new Vector2(x, y));
+            particle.rotation = Math.random() * Math.PI * 2;
+            particle.size = this.random.normal(0.1, 2);
+            particle.alpha = 0;
+            particle.age = Math.random() > 0.5 ? 0 : 1;
+            particles.push(particle);
+        }
+        return particles;
+    }
+
     update() {
         const center = this.world.center;
 
         this.averageLocation = ParticleSystem.calcAverageLocation(this.particles)
+
         const targetLocation = this.averageLocation.multiply(this.scale).subtract(center);
-        this.offset = this.offset.add(targetLocation.subtract(this.offset).multiply(0.1));
+        this.offset = this.offset.add(targetLocation.subtract(this.offset).multiply(0.3));
 
         let mouse = null;
         if (this.world.inputs.pointer.isPressed) {
@@ -121,14 +134,19 @@ export class ParticlesFlyer extends ParticleSystem<FlyerParticle> {
         }
 
         this.particles.forEach(element => {
-            element.update(this.particles, this.blocks, mouse);
+            element.update(this.particles, mouse);
         });
 
-        this.blocks.forEach(element => {
-            if (element.size < element.age) {
-                element.size += 1;
-            }
-        });
+        // this.grid.clear();
+        // this.allocateGrid(this.grid, this.particles, this.offset, this.revolution);
+        // this.grid.forEach((cells, x, y) => {
+        //     if (cells.length > 0) {
+        //         const neighbours = this.grid.neighbours(x, y);
+        //         cells.forEach(element => {
+        //             element.update(neighbours, mouse);
+        //         });
+        //     }
+        // });
 
         this.clouds.forEach(element => {
             if (element.alpha < 1) {
@@ -140,34 +158,34 @@ export class ParticlesFlyer extends ParticleSystem<FlyerParticle> {
             element.rotation += 0.0001;
         })
 
-        this.locateParticles(this.particles, this.areaWidth, this.areaHeight);
-        this.locateParticles(this.blocks, this.areaWidth, this.areaHeight, v => v.size = 1);
-        this.locateParticles(this.clouds, this.areaWidth, this.areaHeight, v => {
+        this.locateParticles(this.particles, this.cloudFieldWidth, this.cloudFieldHeight);
+        this.locateParticles(this.clouds, this.cloudFieldWidth, this.cloudFieldHeight, v => {
             v.alpha = 0;
         });
 
-        // this.grid.clear();
-        // this.allocateGrid(this.grid, this.particles, this.offset, this.revolution);
-        // this.grid.forEach((cell, x, y) => {
-        //     if (cell.length > 0) {
-        //         let neighbours = this.grid.neighbours(x, y);
-        //         cell.forEach(particle => {
-        //             particle.update(neighbours, [], mouse);
-        //         });
-        //     }
-        // });
-
-        this.scaleDelta = (this.scaleDelta + 0.002) % (Math.PI * 2);
-        this.scale = 3 - Math.sin(this.scaleDelta) * 2.5;
+        this.scaleDelta = (this.scaleDelta + 0.005) % (Math.PI * 2);
+        this.scale = 1.5 - Math.sin(this.scaleDelta) * 1;
     }
 
-    private createGrid(width, height, revolution = 10) {
+    private locateParticles<T extends Particle>(particles: T[], width: number, height: number, callback?: (particle: T) => void) {
+        const distance = new Vector2(width, height).length;
+        particles.forEach(element => {
+            if (element.location.subtract(this.averageLocation).length > distance) {
+                const x = width * (Math.random() - 0.5);
+                const y = height * (Math.random() - 0.5);
+                element.location = this.averageLocation.add(new Vector2(x, y));
+                callback && callback(element);
+            }
+        });
+    }
+
+    private createGrid(width: number, height: number, revolution = 10) {
         const w = Math.ceil(width / revolution);
         const h = Math.ceil(height / revolution);
         return new ArrayGrid(w, h);
     }
 
-    private allocateGrid(grid, particles, offset, revolution = 10) {
+    private allocateGrid<T extends Particle>(grid: ArrayGrid, particles: T[], offset: Vector2, revolution: number) {
         particles.forEach(element => {
             const location = this.mapLocation(element.location.subtract(offset), revolution);
             location.x = Math.min(grid.width - 1, Math.max(0, location.x));
@@ -176,23 +194,10 @@ export class ParticlesFlyer extends ParticleSystem<FlyerParticle> {
         });
     }
 
-    private mapLocation(location, revolution) {
+    private mapLocation(location: Vector2, revolution: number) {
         const x = Math.floor(location.x / revolution);
         const y = Math.floor(location.y / revolution);
         return new Vector2(x, y);
-    }
-
-    private locateParticles<T extends Particle>(particles: T[], width, height, callback?: (particle: T) => void) {
-        const distance = new Vector2(width, height).length;
-        particles.forEach(element => {
-            if (element.location.subtract(this.averageLocation).length > distance) {
-                element.location = this.averageLocation.add(new Vector2(
-                    width * Math.random() - width / 2,
-                    height * Math.random() - height / 2)
-                );
-                callback && callback(element);
-            }
-        });
     }
 }
 
@@ -201,13 +206,19 @@ export class ParticlesFlyerView<T extends ParticlesFlyer> extends TypedGameView<
 
     constructor() {
         super();
-        //this.joint(new GhostLayerView());
-        this.joint(new BackLayerView());
-        this.joint(new SmokeLayerView());
+
+        // Backgrounds
+        this.joint(new GhostLayerView());
+        //this.joint(new BackLayerImageView());
+        //this.joint(new BackLayerGridView());
+        this.joint(new CloudLayerView(0));
+
+        // Main Layer
+        this.joint(new TrailLayerView());
         this.joint(new MainLayerView());
-        // if (!PlatformInfo.IsMobile) {
-        //     this.joint(new FrontLayerView());
-        // }
+
+        // Front Layer
+        this.joint(new CloudLayerView(1));
         //this.joint(new InfoLayerView());
     }
 
@@ -218,54 +229,63 @@ export class ParticlesFlyerView<T extends ParticlesFlyer> extends TypedGameView<
     }
 }
 
-class GhostLayerView extends GameView {
-    ghost: GhostEffect;
+abstract class LayerView extends GameView {
     layer: OffscreenCanvas;
-
-    constructor() {
-        super();
-        this.ghost = new GhostEffect(new Color(0, 0, 255, 0.1), 10, false);
-    }
-
-    render(source: ParticlesFlyerView<ParticlesFlyer>, context: CanvasRenderingContext2D) {
-        if (!this.layer) {
-            this.layer = new OffscreenCanvas(context.canvas.width, context.canvas.height);
-        }
-        this.layer.draw((innerContext) => {
-            this.ghost.update();
-            this.ghost.effect(context);
-        }).output(context, 0, 0);
-    }
-}
-
-class BackLayerView extends GameView {
-    background: HTMLImageElement;
-    layer: OffscreenCanvas;
-
-    constructor() {
-        super();
-        //this.background = new Image();
-        //this.background.src = GalleryImages.Galaxy;
-    }
 
     render(source: ParticlesFlyerView<ParticlesFlyer>, context: CanvasRenderingContext2D) {
         if (!this.layer) {
             this.layer = new OffscreenCanvas(context.canvas.width, context.canvas.height);
         }
 
-        const real = source.target;
         this.layer.draw((innerContext) => {
-            const offset = real.offset;
             Graphics.clear(innerContext).hold(innerContext, () => {
-                //innerContext.drawImage(this.background, 0, 0);
-                innerContext.translate(-offset.x, -offset.y);
-                this.drawGrid(innerContext, real.world.size, offset, real.scale);
-                innerContext.translate(offset.x, offset.y);
+                this.drawLayer(innerContext, source);
             });
         }).output(context, 0, 0);
     }
 
-    private drawGrid(context: CanvasRenderingContext2D, size, offset: Vector2, scale = 1) {
+    abstract drawLayer(context: CanvasRenderingContext2D, source: ParticlesFlyerView<ParticlesFlyer>): void;
+}
+
+class GhostLayerView extends LayerView {
+    ghost: GhostEffect;
+
+    constructor() {
+        super();
+        this.ghost = new GhostEffect(new Color(50, 100, 200), 0, false);
+    }
+
+    drawLayer(context: CanvasRenderingContext2D, source: ParticlesFlyerView<ParticlesFlyer>) {
+        this.ghost.update();
+        this.ghost.effect(context);
+    }
+}
+
+class BackLayerImageView extends LayerView {
+    background: HTMLImageElement;
+
+    constructor() {
+        super();
+        this.background = new Image();
+        this.background.src = GalleryImages.Galaxy;
+    }
+
+    drawLayer(context: CanvasRenderingContext2D, source: ParticlesFlyerView<ParticlesFlyer>) {
+        context.drawImage(this.background, 0, 0);
+    }
+}
+
+class BackLayerGridView extends LayerView {
+    layer: OffscreenCanvas;
+
+    drawLayer(context: CanvasRenderingContext2D, source: ParticlesFlyerView<ParticlesFlyer>) {
+        const offset = source.target.offset;
+        context.translate(-offset.x, -offset.y);
+        this.drawGrid(context, source.target.world.size, offset, source.target.scale);
+        context.translate(offset.x, offset.y);
+    }
+
+    private drawGrid(context: CanvasRenderingContext2D, size: any, offset: Vector2, scale: number = 1) {
         const split = 20;
         const csize = Math.max(size.width, size.height) / split * scale;
         const cw = Math.ceil(size.width / csize) + 1;
@@ -292,70 +312,21 @@ class BackLayerView extends GameView {
     }
 }
 
-
-class FrontLayerView extends GameView {
-    cloud: HTMLImageElement;
+class TrailLayerView extends LayerView {
     layer: OffscreenCanvas;
 
-    constructor() {
-        super();
-        this.cloud = new Image();
-        this.cloud.src = GalleryImages.Cloud;;
-    }
+    drawLayer(context: CanvasRenderingContext2D, source: ParticlesFlyerView<ParticlesFlyer>) {
+        Graphics.clear(context);
 
-    render(source: ParticlesFlyerView<ParticlesFlyer>, context: CanvasRenderingContext2D) {
-        if (!this.layer) {
-            this.layer = new OffscreenCanvas(context.canvas.width, context.canvas.height);
-        }
-
-        const real = source.target;
-        this.layer.draw((innerContext) => {
-            Graphics.clear(innerContext).hold(innerContext, () => {
-                const offset = real.offset;
-                innerContext.translate(-offset.x, -offset.y);
-                real.clouds.forEach(element => {
-                    this.drawCloudImage(innerContext, element, real.scale);
-                });
-                innerContext.translate(offset.x, offset.y);
-            });
-        }).output(context, 0, 0);
-    }
-
-    private drawCloudImage(context: CanvasRenderingContext2D, particle: Particle, scale) {
-        const p = particle.location.multiply(scale);
-        Graphics.hold(context, () => {
-            context.globalAlpha = particle.alpha;
-            context.translate(p.x, p.y);
-            context.rotate(particle.rotation);
-            context.translate(-p.x, -p.y);
-            context.drawImage(this.cloud, p.x, p.y);
+        const offset = source.target.offset;
+        context.translate(-offset.x, -offset.y);
+        source.target.particles.forEach(element => {
+            this.drawBirdTrail(context, element, source.target.scale);
         });
-    }
-}
-
-class SmokeLayerView extends GameView {
-    layer: OffscreenCanvas;
-
-    render(source: ParticlesFlyerView<ParticlesFlyer>, context: CanvasRenderingContext2D) {
-        if (!this.layer) {
-            this.layer = new OffscreenCanvas(context.canvas.width, context.canvas.height);
-        }
-
-        const real = source.target;
-        this.layer.draw((innerContext) => {
-            Graphics.clear(innerContext);
-            Graphics.hold(innerContext, (innerContext) => {
-                const offset = real.offset;
-                innerContext.translate(-offset.x, -offset.y);
-                real.particles.forEach(element => {
-                    this.drawBirdSmoke(innerContext, element, real.scale);
-                });
-                innerContext.translate(offset.x, offset.y);
-            });
-        }).output(context, 0, 0);
+        context.translate(offset.x, offset.y);
     }
 
-    private drawBirdSmoke(context: CanvasRenderingContext2D, particle: FlyerParticle, scale) {
+    private drawBirdTrail(context: CanvasRenderingContext2D, particle: FlyerParticle, scale: number) {
         Graphics.hold(context, () => {
             const history = [...particle.history, particle.location];
             const length = history.length;
@@ -401,12 +372,11 @@ class MainLayerView extends GameView {
 
                 const offset = real.offset;
                 innerContext.translate(-offset.x, -offset.y);
-                real.blocks.forEach(element => {
-                    this.drawBlocks(innerContext, element, real.scale);
-                });
+
                 real.particles.forEach(element => {
                     this.drawBirdImage(innerContext, element, real.scale);
                 });
+
                 innerContext.translate(offset.x, offset.y);
             });
         }).output(context, 0, 0);
@@ -418,40 +388,11 @@ class MainLayerView extends GameView {
         // });
     }
 
-    private drawBlocks(context: CanvasRenderingContext2D, particle: FlyerParticle, scale) {
-        const p = particle.location.multiply(scale);
-        const size = particle.size * scale;
-        context.beginPath();
-        context.arc(p.x, p.y, size / 2, 0, Math.PI * 2, false);
-        context.closePath();
-        context.strokeStyle = particle.color.rgba;
-        context.stroke();
-    }
-
     private drawBirdImage(context: CanvasRenderingContext2D, particle: FlyerParticle, scale) {
         const p = particle.location.multiply(scale);
         const v = particle.velocity;
-        const a = particle.acceleration;
         const size = particle.size * scale;
         const sizeHalf = size / 2
-
-        // Graphics.hold(context, () => {
-        //     const history = [...particle.history, particle.location];
-        //     const length = history.length;
-        //     if (length > 1) {
-        //         for (let index = 1; index < length; index++) {
-        //             const pre = history[index - 1].multiply(scale);
-        //             const cur = history[index].multiply(scale);
-        //             context.beginPath();
-        //             context.moveTo(pre.x, pre.y);
-        //             context.lineTo(cur.x, cur.y);
-        //             context.closePath();
-        //             context.lineWidth = (1 + (particle.size * scale / 10)) * (index / length);
-        //             context.strokeStyle = new Color(255, 255, 255, index / length * 0.8).rgba;
-        //             context.stroke();
-        //         }
-        //     }
-        // });
 
         Graphics.hold(context, () => {
             context.translate(p.x, p.y);
@@ -471,27 +412,48 @@ class MainLayerView extends GameView {
     }
 }
 
-class InfoLayerView extends GameView {
-    layer: OffscreenCanvas;
+class CloudLayerView extends LayerView {
+    cloud: HTMLImageElement;
+    allowAge: number = 0;
 
-    render(source: ParticlesFlyerView<ParticlesFlyer>, context: CanvasRenderingContext2D) {
-        if (!this.layer) {
-            this.layer = new OffscreenCanvas(context.canvas.width, context.canvas.height);
-        }
-
-        const real = source.target;
-        this.layer.draw((innerContext) => {
-            Graphics.clear(innerContext).hold(innerContext, () => {
-                this.drawInfo(innerContext, real.world.size, real.scale);
-            });
-        }).output(context, 0, 0);
+    constructor(allowAge: number) {
+        super();
+        this.allowAge = allowAge;
+        this.cloud = new Image();
+        this.cloud.src = GalleryImages.Cloud;;
     }
 
-    private drawInfo(context: CanvasRenderingContext2D, size, scale) {
-        const fonSize = Math.max(size.width / 20, 32);
+    drawLayer(context: CanvasRenderingContext2D, source: ParticlesFlyerView<ParticlesFlyer>) {
+        const offset = source.target.offset;
+        context.translate(-offset.x, -offset.y);
+        source.target.clouds.filter(v => v.age === this.allowAge).forEach(element => {
+            this.drawCloudImage(context, element, source.target.scale);
+        });
+        context.translate(offset.x, offset.y);
+    }
+
+    private drawCloudImage(context: CanvasRenderingContext2D, particle: Particle, scale: number) {
+        const p = particle.location.multiply(scale);
+        Graphics.hold(context, () => {
+            context.globalAlpha = particle.alpha;
+            context.translate(p.x, p.y);
+            context.rotate(particle.rotation);
+            context.translate(-p.x, -p.y);
+            context.drawImage(this.cloud, p.x, p.y, this.cloud.width * scale, this.cloud.height * scale);
+        });
+    }
+}
+
+class InfoLayerView extends LayerView {
+    drawLayer(context: CanvasRenderingContext2D, source: ParticlesFlyerView<ParticlesFlyer>) {
+        this.drawInfo(context, source.target.world.size, source.target.scale);
+    }
+
+    private drawInfo(context: CanvasRenderingContext2D, size: any, scale: number) {
+        const fonSize = Math.max(64);
         context.font = fonSize + "px Arial";
         context.textAlign = "center";
         context.fillStyle = "#FFF";
-        context.fillText("Just Fly", size.center.x, size.center.y);
+        context.fillText("JUST FLY", size.center.x, size.center.y * 1.5);
     }
 }

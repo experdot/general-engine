@@ -26,11 +26,10 @@ export class FlyerParticle extends DynamicParticle {
         this.speeder = new Speeder(1);
     }
 
-    update(flyers: FlyerParticle[], blocks: FlyerParticle[], mouse) {
+    update(flyers: FlyerParticle[], mouse) {
         this.alignspeed(flyers, 3);
         this.seperate(flyers, 1);
         this.cohesion(flyers, 2);
-        this.seperate(blocks, 5);
 
         mouse && this.follow(mouse, 3);
 

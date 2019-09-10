@@ -62,7 +62,7 @@ export class GameOfLife extends GameVisual {
     constructor() {
         super();
 
-        this.ghost = new GhostEffect(new Color(0, 0, 0, 0.02), 15);
+        this.ghost = new GhostEffect(new Color(0, 0, 0, 0.05), 15);
         this.joint(this.ghost);
 
         this.timers = {
@@ -113,12 +113,12 @@ export class GameOfLife extends GameVisual {
             this.settings.progress = actual / delay;
         });
 
-        this.timers.generate.delay(20, () => {
+        this.timers.generate.delay(10, () => {
             this._generate();
         });
 
-        this.timers.grow.delay(200, () => {
-            this.automata.grow(0.005);
+        this.timers.grow.delay(10, () => {
+            this.automata.grow(0.01);
         });
 
         this.settings.rotation += 0.005;
@@ -137,7 +137,7 @@ export class GameOfLife extends GameVisual {
     }
 
     private _delete() {
-        if (this.world.inputs.pointer.isPressed) {
+        if (true || this.world.inputs.pointer.isPressed) {
             let center = new Vector2(this.world.width / 2, this.world.height / 2);
             let pointer = this.world.inputs.pointer.position;
             let real = center.add(pointer.subtract(center).rotate(-this.settings.rotation));
@@ -170,7 +170,7 @@ export class GameOfLife extends GameVisual {
     }
 
     private _exchange(automata: CellularAutomata) {
-        let columns = automata.data.splice(0, 1);
+        const columns = automata.data.splice(0, 1);
         automata.data.push(columns[0]);
     }
 }
@@ -180,21 +180,22 @@ export class GameOfLifeView extends TypedGameView<GameOfLife> {
         const offset = source.offset;
         const size = source.settings.size;
         const offsetX = 1 - source.settings.progress;
-        //Graphics.scaleOffset(context, 4, 4, 1);
+        Graphics.scaleOffset(context, 4, 4, 1);
 
         Graphics.rotate(context, source.settings.rotation, 1, () => {
-            context.beginPath();
-            context.fillStyle = Colors.White.rgba;
+            //context.beginPath();
             source.automata.forEach((cell: Cell, x: number, y: number) => {
                 if (cell) {
                     const p = new Vector2(x + offsetX, y).multiply(size).add(offset);
                     const real = size * cell.scale;
                     const half = real / 2;
-                    context.rect(p.x - half, p.y - half, real, real);
+                    context.fillStyle = new Color(255, 255, 255, cell.scale ** 5).rgba;
+                    context.fillRect(p.x - half, p.y - half, real, real)
                 }
             });
-            context.fillStyle = Colors.White.rgba;
-            context.fill();
+            // context.closePath();
+            // context.fillStyle = Colors.White.rgba;
+            // context.fill();
         });
     }
 }
