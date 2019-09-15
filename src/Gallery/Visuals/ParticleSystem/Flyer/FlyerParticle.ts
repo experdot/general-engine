@@ -8,6 +8,10 @@ import { RandomEmoji } from "../../../../Engine/UI/Font";
 import { Speeder } from "../../../../Engine/Common/Speeder";
 
 export class FlyerParticle extends DynamicParticle {
+    get trail(): Vector2 {
+        return this.location.add(new Vector2(0, this.size / 2).rotate(Math.atan2(this.velocity.y, this.velocity.x) + Math.PI / 2));
+    }
+
     neighbourDistance: number;
 
     history: Vector2[] = [];
@@ -20,7 +24,7 @@ export class FlyerParticle extends DynamicParticle {
 
     constructor(location?: Vector2, size = 1, age = 0) {
         super(location, size, age);
-        this.velocityUpon = 5;
+        this.velocityUpon = 50;
         this.neighbourDistance = 400;
         this.emoji = RandomEmoji.one;
         this.speeder = new Speeder(1);
@@ -28,19 +32,19 @@ export class FlyerParticle extends DynamicParticle {
 
     update(flyers: FlyerParticle[], mouse) {
         this.alignspeed(flyers, 3);
-        this.seperate(flyers, 1);
-        this.cohesion(flyers, 2);
+        this.seperate(flyers, 2);
+        this.cohesion(flyers, 3);
 
         mouse && this.follow(mouse, 3);
 
-        const radio = Math.round(this.velocity.length * 2 + 1)
-        this.speeder.change(radio).invoke(() => {
-            this.history.push(this.location);
-        });
+        // const radio = Math.round(this.velocity.length * 2 + 1)
+        // this.speeder.change(radio).invoke(() => {
+        //     this.history.push(this.trail);
+        // });
 
-        if (this.history.length > 30) {
-            this.history.shift();
-        }
+        // if (this.history.length > 30) {
+        //     this.history.shift();
+        // }
 
         this.move();
     }
@@ -58,7 +62,7 @@ export class FlyerParticle extends DynamicParticle {
             sum = sum.divide(sumCount);
             sum.limitLength(this.velocityUpon);
             let steer = sum.subtract(this.velocity);
-            steer.limitLength(10);
+            steer.limitLength(5);
             this.applyForce(steer.multiply(ratio));
         }
     }
@@ -80,7 +84,7 @@ export class FlyerParticle extends DynamicParticle {
             sum.normalize();
             sum.multiply(this.velocityUpon);
             let steer = sum.subtract(this.velocity);
-            steer.limitLength(8);
+            steer.limitLength(5);
             this.applyForce(steer.multiply(ratio));
         }
     }
@@ -95,7 +99,7 @@ export class FlyerParticle extends DynamicParticle {
         if (sumCount > 0) {
             sum = sum.divide(sumCount);
             let steer = this.seekDefault(sum);
-            steer.limitLength(0.1);
+            steer.limitLength(0.01);
             this.applyForce(steer.multiply(ratio));
         }
     }

@@ -7,7 +7,6 @@ import { LSystemTreeWorld } from "../Visuals/LSystemTreeWorld";
 import { GameOfLifeWorld } from "../Visuals/GameOfLifeWorld";
 import { AudioVisualizerWorld } from "../Visuals/AudioVisualizerWorld";
 import { EndlessAbyssWorld } from "../Games/EndlessAbyssWorld";
-import { ParticlesCircularWorld } from "../Visuals/ParticlesCircularWorld";
 import { AutoPaintWorld } from "../Games/AutoPaintWorld";
 
 export type GameWorldSymbols = {
@@ -26,7 +25,6 @@ export class GalleryCollection {
         this.addSymbol("gameoflife", GameOfLifeWorld);
         this.addSymbol("audiovisualizer", AudioVisualizerWorld);
         this.addSymbol("endlessabyss", EndlessAbyssWorld);
-        this.addSymbol("circular", ParticlesCircularWorld);
         this.addSymbol("autopaint", AutoPaintWorld);
     }
 

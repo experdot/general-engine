@@ -29,7 +29,6 @@ import {
 import { OffscreenCanvas } from "../../../../Engine/Drawing/OffscreenCanvas";
 import { GalleryImages } from "../../../Resources/GalleryImages";
 import { Particle } from "../Particle";
-import { PlatformInfo } from "../../../../Engine/Platform/PlatformInfo";
 
 export class ParticlesFlyer extends ParticleSystem<FlyerParticle> {
     clouds: Particle[] = [];
@@ -38,6 +37,7 @@ export class ParticlesFlyer extends ParticleSystem<FlyerParticle> {
     offset: Vector2;
     averageLocation: Vector2;
     revolution: number = 200;
+    cameraSpeed: number = 0.99;
 
     flyerFieldWidth: number;
     flyerFieldHeight: number;
@@ -55,15 +55,18 @@ export class ParticlesFlyer extends ParticleSystem<FlyerParticle> {
         const center = new Vector2(w * 0.5, h * 0.5);
 
         // Create flyer particles
-        const flyersCount = this.random.normal(1, 12);
-        const velocity = 500;
+        const flyersCount = this.random.normal(1, 3);
+        const velocity = 10;
 
         this.flyerFieldWidth = w * 0.8;
         this.flyerFieldHeight = h * 0.8;
 
         const screen = new Vector2(w, h).length;
-        const minSize = Math.max(10, Math.floor(screen / 200));
-        const maxSize = Math.min(60, Math.floor(screen / 60));
+        const minSize = Math.max(10, Math.floor(screen / 10));
+        const maxSize = Math.min(60, Math.floor(screen / 6));
+
+        this.cameraSpeed = Math.max(0.1, Math.min(1, 0.5 + 1000 / screen));
+        console.log(this.cameraSpeed);
 
         const flyers = this.createFlyers(flyersCount, velocity, center, minSize, maxSize, this.flyerFieldWidth, this.flyerFieldHeight);
         this.particles.push(...flyers);
@@ -125,7 +128,7 @@ export class ParticlesFlyer extends ParticleSystem<FlyerParticle> {
         this.averageLocation = ParticleSystem.calcAverageLocation(this.particles)
 
         const targetLocation = this.averageLocation.multiply(this.scale).subtract(center);
-        this.offset = this.offset.add(targetLocation.subtract(this.offset).multiply(0.3));
+        this.offset = this.offset.add(targetLocation.subtract(this.offset).multiply(this.cameraSpeed));
 
         let mouse = null;
         if (this.world.inputs.pointer.isPressed) {
@@ -214,12 +217,12 @@ export class ParticlesFlyerView<T extends ParticlesFlyer> extends TypedGameView<
         this.joint(new CloudLayerView(0));
 
         // Main Layer
-        this.joint(new TrailLayerView());
+        // this.joint(new TrailLayerView());
         this.joint(new MainLayerView());
 
         // Front Layer
         this.joint(new CloudLayerView(1));
-        //this.joint(new InfoLayerView());
+        this.joint(new InfoLayerView());
     }
 
     render(source: T, context: CanvasRenderingContext2D) {
@@ -236,7 +239,6 @@ abstract class LayerView extends GameView {
         if (!this.layer) {
             this.layer = new OffscreenCanvas(context.canvas.width, context.canvas.height);
         }
-
         this.layer.draw((innerContext) => {
             Graphics.clear(innerContext).hold(innerContext, () => {
                 this.drawLayer(innerContext, source);
@@ -286,7 +288,7 @@ class BackLayerGridView extends LayerView {
     }
 
     private drawGrid(context: CanvasRenderingContext2D, size: any, offset: Vector2, scale: number = 1) {
-        const split = 20;
+        const split = 1;
         const csize = Math.max(size.width, size.height) / split * scale;
         const cw = Math.ceil(size.width / csize) + 1;
         const ch = Math.ceil(size.height / csize) + 1;
@@ -328,7 +330,7 @@ class TrailLayerView extends LayerView {
 
     private drawBirdTrail(context: CanvasRenderingContext2D, particle: FlyerParticle, scale: number) {
         Graphics.hold(context, () => {
-            const history = [...particle.history, particle.location];
+            const history = [...particle.history, particle.trail];
             const length = history.length;
             if (length > 1) {
                 for (let index = 1; index < length; index++) {
@@ -355,7 +357,7 @@ class MainLayerView extends GameView {
     constructor() {
         super();
         this.bird = new Image(128, 128);
-        this.bird.src = GalleryImages.Bird;
+        this.bird.src = "../static/plane.png" || GalleryImages.Plane;
     }
 
     render(source: ParticlesFlyerView<ParticlesFlyer>, context: CanvasRenderingContext2D) {
@@ -368,13 +370,13 @@ class MainLayerView extends GameView {
         this.mainLayer.draw((innerContext) => {
             Graphics.clear(innerContext).hold(innerContext, (innerContext) => {
                 //real.effects.ghost.effect(innerContext);
-                //innerContext.drawImage(this.cache.canvas, 0, 0);
+                innerContext.drawImage(this.cache.canvas, 0, 0);
 
                 const offset = real.offset;
                 innerContext.translate(-offset.x, -offset.y);
 
                 real.particles.forEach(element => {
-                    this.drawBirdImage(innerContext, element, real.scale);
+                    this.drawBirdImage(innerContext, element, real.scale, source);
                 });
 
                 innerContext.translate(offset.x, offset.y);
@@ -383,12 +385,12 @@ class MainLayerView extends GameView {
 
         // this.cache.draw((innerContext) => {
         //     Graphics.clear(innerContext);
-        //     innerContext.globalAlpha = 0.4;
+        //     innerContext.globalAlpha = 0.8;
         //     innerContext.drawImage(this.mainLayer.canvas, 0, 0);
         // });
     }
 
-    private drawBirdImage(context: CanvasRenderingContext2D, particle: FlyerParticle, scale) {
+    private drawBirdImage(context: CanvasRenderingContext2D, particle: FlyerParticle, scale: number, source: ParticlesFlyerView<ParticlesFlyer>) {
         const p = particle.location.multiply(scale);
         const v = particle.velocity;
         const size = particle.size * scale;
@@ -398,8 +400,11 @@ class MainLayerView extends GameView {
             context.translate(p.x, p.y);
             context.rotate(Math.atan2(v.y, v.x) + Math.PI / 2);
             context.translate(-p.x, -p.y);
-
             context.drawImage(this.bird, p.x - sizeHalf, p.y - sizeHalf, size, size);
+            context.globalCompositeOperation = "destination-out";
+            context.fillStyle = `rgba(0,0,0,${0.5 - source.target.scale * 0.2})`
+            context.fillRect(p.x - sizeHalf, p.y - sizeHalf, size, size);
+            context.globalCompositeOperation = "source-atop";
             //this.drawText(context, particle.emoji, p, sizeHalf);
         });
     }
@@ -446,14 +451,18 @@ class CloudLayerView extends LayerView {
 
 class InfoLayerView extends LayerView {
     drawLayer(context: CanvasRenderingContext2D, source: ParticlesFlyerView<ParticlesFlyer>) {
+        const offset = source.target.offset;
+        context.translate(-offset.x, -offset.y);
         this.drawInfo(context, source.target.world.size, source.target.scale);
+        context.translate(offset.x, offset.y);
     }
 
     private drawInfo(context: CanvasRenderingContext2D, size: any, scale: number) {
-        const fonSize = Math.max(64);
+        const fonSize = Math.max(size.height / 2 * scale);
         context.font = fonSize + "px Arial";
         context.textAlign = "center";
+        context.textBaseline = "middle";
         context.fillStyle = "#FFF";
-        context.fillText("JUST FLY", size.center.x, size.center.y * 1.5);
+        context.fillText("JUST FLY", size.center.x * scale, size.center.y * scale);
     }
 }
