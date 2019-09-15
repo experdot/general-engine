@@ -357,7 +357,7 @@ class MainLayerView extends GameView {
     constructor() {
         super();
         this.bird = new Image(128, 128);
-        this.bird.src = "../static/plane.png" || GalleryImages.Plane;
+        this.bird.src = GalleryImages.Plane;
     }
 
     render(source: ParticlesFlyerView<ParticlesFlyer>, context: CanvasRenderingContext2D) {
