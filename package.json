@@ -1,10 +1,10 @@
 {
   "name": "general-engine",
-  "version": "0.1.8",
+  "version": "0.2.0",
   "lockfileVersion": 1,
   "main": "lib/index.js",
   "author": "experdot",
-  "description": "An experimental framework to build apps or games.",
+  "description": "Implementation of general system",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -19,7 +19,7 @@
   ],
   "files": [
     "lib/",
-    "src/scripts/Engine",
+    "src/Core",
     "CHANGELOG.md"
   ],
   "dependencies": {},

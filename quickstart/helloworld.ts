@@ -1,4 +1,4 @@
-import { GeneralInterface, GeneralObject } from "../src/Engine/Core/GeneralObject";
+import { GeneralInterface, GeneralObject } from "../src/Core/GeneralObject";
 
 class IPrintInterface extends GeneralInterface {
     print = [];

@@ -1,4 +1,4 @@
-import { GeneralInterface } from "../../Core/GeneralObject";
+import { GeneralInterface } from "../../../Core/GeneralObject";
 
 export class GameObjectInterface extends GeneralInterface {
     start = [];

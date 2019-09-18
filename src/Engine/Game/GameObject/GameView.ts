@@ -1,4 +1,4 @@
-import { GeneralObject } from "../../Core/GeneralObject";
+import { GeneralObject } from "../../../Core/GeneralObject";
 import { GameViewInterface } from "../GameInterface/GameInterface";
 
 /** 

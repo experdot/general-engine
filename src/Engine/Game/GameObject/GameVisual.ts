@@ -1,4 +1,4 @@
-import { GeneralNode } from "../../Core/GeneralNode";
+import { GeneralNode } from "../../../Core/GeneralNode";
 import { GameVsiualInterface } from "../GameInterface/GameInterface";
 import { Events } from "../../Common/Events";
 import { GameWorld } from "../GameWorld/GameWorld";

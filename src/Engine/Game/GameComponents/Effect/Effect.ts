@@ -1,4 +1,4 @@
-import { GeneralObject } from "../../../Core/GeneralObject";
+import { GeneralObject } from "../../../../Core/GeneralObject";
 import { ColorHelper, Colors, Color } from "../../../UI/Color";
 import { GameVisual } from "../../GameObject/GameVisual";
 import { GameEffectInterface } from "../../GameInterface/GameInterface";

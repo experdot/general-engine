@@ -23,7 +23,7 @@ To check out live examples created with general-engine, please visit [gallery][r
 ## Install
 Download a [stable release][repo-releases] and include the script in your web page:
 ``` html
-<script src="general-engine.js" type="text/javascript"></script>
+<script src="general-engine.core.js" type="text/javascript"></script>
 ```
 You can also install using the package manager [NPM][npm-url].
 ``` bash
@@ -33,7 +33,7 @@ $ npm install general-engine
 The following is a simple hello-world example.
 
 ```ts
-import { GeneralInterface, GeneralObject } from "../src/Engine/Core/GeneralObject";
+import { GeneralInterface, GeneralObject } from "../src/Core/GeneralObject";
 
 class IPrintInterface extends GeneralInterface {
     print = [];

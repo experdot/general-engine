@@ -1,4 +1,4 @@
-import { Identifier } from "../Common/Identifier";
+import { Identifier } from "../Engine/Common/Identifier";
 import { GeneralProcess } from "./GeneralProcess";
 
 export class GeneralInterface {

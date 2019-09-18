@@ -119,10 +119,10 @@ const config = {
     release: {
         dest: "release/",
         suffix: ".min",
-        bundle: "general-engine.js",
-        bundle_minfify: "general-engine.min.js",
+        bundle: "general-engine.core.js",
+        bundle_minfify: "general-engine.core.min.js",
         browserify: {
-            entries: "src/Engine/_General.ts",
+            entries: "src/Core/GeneralNode.ts",
             standalone: "General",
             transform: [
                 [babelify, {
@@ -134,8 +134,8 @@ const config = {
             src: [
                 "CHANGELOG.md",
                 "LICENSE",
-                "release/general-engine.js",
-                "release/general-engine.min.js"
+                "release/general-engine.core.js",
+                "release/general-engine.core.min.js"
             ]
         }
     },
@@ -144,7 +144,7 @@ const config = {
         suffix: ".min",
         bundle: "index.js",
         browserify: {
-            entries: "src/Engine/_General.ts",
+            entries: "src/Core/GeneralNode.ts",
             standalone: "General",
             transform: [
                 [babelify, {
