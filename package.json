@@ -12,10 +12,8 @@
   },
   "homepage": "https://github.com/experdot/general-engine",
   "keywords": [
-    "game engine",
-    "canvas",
-    "html5",
-    "javascript"
+    "general system",
+    "typescript"
   ],
   "files": [
     "lib/",

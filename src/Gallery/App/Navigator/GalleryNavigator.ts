@@ -1,7 +1,6 @@
 import { App } from "../../../Engine/Application/AppObject/App";
 import { GalleryTexts } from "../../Resources/GalleryTexts";
-import { GalleryCollection, GameWorldSymbols } from "../../Collection/GalleryCollection";
-import { GameWorld } from "../../../Engine/Game/GameWorld/GameWorld";
+import { WorldInfos, GalleryCollection } from "../../Collection/GalleryCollection";
 
 export const enum GalleryNavigatorIds {
     TilteHeader = "gallery-navigator-tiltle-header",
@@ -13,11 +12,11 @@ export const enum GalleryNavigatorIds {
 }
 
 export class GalleryNavigator extends App {
-    constructor(symbols: GameWorldSymbols) {
+    constructor(collection: GalleryCollection) {
         super();
         this.joint(new NavigatorTitle());
         this.joint(new NavigatorTooltips());
-        this.joint(new NavigatorDropdown(symbols));
+        this.joint(new NavigatorDropdown(collection));
     }
 }
 
@@ -39,17 +38,17 @@ class NavigatorTooltips extends App {
 }
 
 class NavigatorDropdown extends App {
-    symbols: GameWorldSymbols;
-    constructor(symbols: GameWorldSymbols) {
+    collection: GalleryCollection;
+    constructor(collection: GalleryCollection) {
         super();
-        this.symbols = symbols;
+        this.collection = collection;
     }
     start() {
         const baseUrl = "./gallery.html?scene="
         const $dropdown = $(`#${GalleryNavigatorIds.Dropdown}`);
         $dropdown.empty();
-        for (const key in this.symbols) {
-            $dropdown.append($(`<a class="dropdown-item" href="${baseUrl}${key}">${this.symbols[key]["Title"]}</a>`));
+        for (const key in this.collection.infos) {
+            $dropdown.append($(`<a class="dropdown-item" href="${baseUrl}${key}">${this.collection.infos[key].title}</a>`));
         }
     }
 }

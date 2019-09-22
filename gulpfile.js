@@ -122,7 +122,7 @@ const config = {
         bundle: "general-engine.core.js",
         bundle_minfify: "general-engine.core.min.js",
         browserify: {
-            entries: "src/Core/GeneralNode.ts",
+            entries: "src/Core/_Entry.ts",
             standalone: "General",
             transform: [
                 [babelify, {

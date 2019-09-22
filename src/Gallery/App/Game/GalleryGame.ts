@@ -11,7 +11,7 @@ const enum GalleryGameContainerIds {
 
 export class GalleryGame extends App {
     box: GameBox;
-    collection: GalleryCollection = new GalleryCollection();
+    collection: GalleryCollection;
 
     constructor(collection: GalleryCollection) {
         super();
@@ -47,10 +47,10 @@ export class GalleryGame extends App {
 
     private createGameBox(container: HTMLElement, canvas: HTMLCanvasElement) {
         const request = Utilities.getSearchKeyValuePair();
-        const worldSymbol = this.collection.getSymbolByName(request["scene"]);
-        if (worldSymbol) {
-            document.title = worldSymbol["Title"] || "<Blank>";
-            return new GameBox(container, canvas, new worldSymbol(canvas.width, canvas.height));
+        const worldInfo = this.collection.infos[request["scene"]];
+        if (worldInfo) {
+            document.title = worldInfo.title || "<Blank>";
+            return new GameBox(container, canvas, new worldInfo.symbol(canvas.width, canvas.height));
         } else {
             window.location.assign("../");
         }

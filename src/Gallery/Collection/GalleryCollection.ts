@@ -8,31 +8,38 @@ import { GameOfLifeWorld } from "../Visuals/GameOfLifeWorld";
 import { AudioVisualizerWorld } from "../Visuals/AudioVisualizerWorld";
 import { EndlessAbyssWorld } from "../Games/EndlessAbyssWorld";
 import { AutoPaintWorld } from "../Games/AutoPaintWorld";
+import { GalleryTexts } from "../Resources/GalleryTexts";
+import { App } from "../../Engine/Application/AppObject/App";
 
-export type GameWorldSymbols = {
-    [name: string]: typeof GameWorld
+export type WorldInfo = {
+    title: string;
+    symbol: typeof GameWorld;
 }
 
-export class GalleryCollection {
-    symbols: GameWorldSymbols;
+export type WorldInfos = {
+    [name: string]: WorldInfo;
+}
 
-    constructor() {
-        this.symbols = {};
-        this.addSymbol("flyer", ParticlesFlyerWorld);
-        this.addSymbol("walker", ParticlesWalkerWorld);
-        this.addSymbol("tree", ParticlesTreeWorld);
-        this.addSymbol("lsystemtree", LSystemTreeWorld);
-        this.addSymbol("gameoflife", GameOfLifeWorld);
-        this.addSymbol("audiovisualizer", AudioVisualizerWorld);
-        this.addSymbol("endlessabyss", EndlessAbyssWorld);
-        this.addSymbol("autopaint", AutoPaintWorld);
+export class GalleryCollection extends App {
+    infos: WorldInfos;
+
+    start() {
+        this.infos = {};
+        this.addWorld("flyer", GalleryTexts.ParticlesFlyerWorld_Title, ParticlesFlyerWorld);
+        this.addWorld("walker", GalleryTexts.PartilesWalkerWorld_Title, ParticlesWalkerWorld);
+        this.addWorld("tree", GalleryTexts.ParticlesTreeWorld_Title, ParticlesTreeWorld);
+        this.addWorld("lsystemtree", GalleryTexts.LSystemTreeWorld_Title, LSystemTreeWorld);
+        this.addWorld("gameoflife", GalleryTexts.GameOfLifeWorld_Title, GameOfLifeWorld);
+        this.addWorld("audiovisualizer", GalleryTexts.AudioVisualizerWorld_Title, AudioVisualizerWorld);
+        this.addWorld("endlessabyss", GalleryTexts.EndlessAbyssWorld.Title, EndlessAbyssWorld);
+        this.addWorld("autopaint", "AutoPaint", AutoPaintWorld);
     }
 
-    addSymbol(name: string, symbol: typeof GameWorld) {
-        this.symbols[name] = symbol;
+    addWorld(name: string, title: string, symbol: typeof GameWorld) {
+        this.infos[name] = { title, symbol };
     }
 
     getSymbolByName(name: string) {
-        return this.symbols[name];
+        return this.infos[name] && this.infos[name].symbol;
     }
 }

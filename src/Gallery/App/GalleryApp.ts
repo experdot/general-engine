@@ -12,8 +12,9 @@ export class GalleryApp extends App {
     collection: GalleryCollection = new GalleryCollection();
     constructor() {
         super();
+        this.joint(this.collection);
         this.joint(new AttachAlert());
-        this.joint(new GalleryNavigator(this.collection.symbols));
+        this.joint(new GalleryNavigator(this.collection));
         this.joint(new WarningOpenOnPC());
         this.joint(new ProgressCover);
         this.joint(new GalleryGame(this.collection));
