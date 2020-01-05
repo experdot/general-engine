@@ -33,6 +33,13 @@ export class Color {
         const a = this.a;
         return `rgba(${r},${g},${b},${a})`;
     }
+    get rgbaAbs() {
+        const r = Math.min(255, Math.floor(Math.abs(this.r)));
+        const g = Math.min(255, Math.floor(Math.abs(this.g)));
+        const b = Math.min(255, Math.floor(Math.abs(this.b)));
+        const a = this.a;
+        return `rgba(${r},${g},${b},${a})`;
+    }
 
     r: number;
     g: number;
@@ -71,6 +78,68 @@ export class ColorHelper {
     }
 
     static gradientRandom(color: Color, increment = 1) {
+        const upon = 255;
+
+
+        let r = color.r;
+        r += increment;
+        r = (r + 255) % upon;
+
+        let g = color.g;
+        g += increment * 1;
+        g = (g + 255) % upon;
+
+        let b = color.b;
+        b += increment * 1;
+        b = (b + 255) % upon;
+
+        return new Color(r, g, b, color.a);
+    }
+
+    static gradientRandomRGB(color: Color, rIncrement: number, gIncrement: number, bIncrement: number, ) {
+        const upon = 255;
+
+
+        let r = color.r;
+        r += rIncrement;
+        r = (r + 255) % upon;
+
+        let g = color.g;
+        g += gIncrement;
+        g = (g + 255) % upon;
+
+        let b = color.b;
+        b += bIncrement;
+        b = (b + 255) % upon;
+
+        return new Color(r, g, b, color.a);
+    }
+
+    static gradientRandomRGB2(color: Color, rIncrement: number, gIncrement: number, bIncrement: number, ) {
+        const upon = 255;
+
+        let r = color.r;
+        r += rIncrement;
+        if (r >= upon) {
+            r = -r;
+        }
+
+        let g = color.g;
+        g += gIncrement;
+        if (g >= upon) {
+            g = -g;
+        }
+
+        let b = color.b;
+        b += bIncrement;
+        if (b >= upon) {
+            b = -b;
+        }
+
+        return new Color(r, g, b, color.a);
+    }
+
+    static _gradientRandom(color: Color, increment = 1) {
         const upon = 255;
         const half = increment / 2;
 

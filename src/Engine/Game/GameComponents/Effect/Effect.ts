@@ -25,7 +25,7 @@ export class GhostEffect extends GeneralObject<GameEffectInterface> {
 
     update() {
         if (Math.random() > 0.5) {
-            this.fillColor = ColorHelper.gradientRandom(this.fillColor, this.gradientNumber);
+            this.fillColor = ColorHelper._gradientRandom(this.fillColor, this.gradientNumber);
         }
     }
 
