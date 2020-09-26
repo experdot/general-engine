@@ -30,7 +30,7 @@
     "babelify": "^10.0.0",
     "browser-sync": "^2.24.6",
     "browserify": "^16.2.2",
-    "del": "^5.0.0",
+    "del": "^6.0.0",
     "eslint-config-google": "^0.13.0",
     "eslint-config-standard": "^12.0.0-alpha.0",
     "eslint-plugin-import": "^2.8.0",
