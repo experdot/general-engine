@@ -1,5 +1,7 @@
+import { Array2 } from "../Collections/Array2";
 import { Matrix3x2 } from "../Numerics/Matrix3x2";
 import { Vector2 } from "../Numerics/Vector2";
+import { Color } from "../UI/Color";
 
 export class Graphics {
     static clear(context: CanvasRenderingContext2D) {
@@ -108,5 +110,27 @@ export class Graphics {
             }
         }
         ctx.closePath();
+    }
+
+    static getImageData(img: HTMLImageElement) {
+        const canvas = document.createElement('canvas')
+        canvas.width = img.width
+        canvas.height = img.height
+
+        const context = canvas.getContext('2d')
+        context.drawImage(img, 0, 0)
+
+        const pixels = context.getImageData(0, 0, img.width, img.height);
+
+        const colors = new Array2<Color>(canvas.width, canvas.height);
+        colors.forEach((v, x, y) => {
+            var p = y * colors.width + x;
+            var r = pixels.data[4 * p + 0];
+            var g = pixels.data[4 * p + 1];
+            var b = pixels.data[4 * p + 2];
+            colors.set(x, y, new Color(r, g, b, 1));
+        });
+
+        return colors;
     }
 }

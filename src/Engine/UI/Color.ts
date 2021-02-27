@@ -96,7 +96,7 @@ export class ColorHelper {
         return new Color(r, g, b, color.a);
     }
 
-    static gradientRandomRGB(color: Color, rIncrement: number, gIncrement: number, bIncrement: number, ) {
+    static gradientRandomRGB(color: Color, rIncrement: number, gIncrement: number, bIncrement: number,) {
         const upon = 255;
 
 
@@ -115,7 +115,7 @@ export class ColorHelper {
         return new Color(r, g, b, color.a);
     }
 
-    static gradientRandomRGB2(color: Color, rIncrement: number, gIncrement: number, bIncrement: number, ) {
+    static gradientRandomRGB2(color: Color, rIncrement: number, gIncrement: number, bIncrement: number,) {
         const upon = 255;
 
         let r = color.r;

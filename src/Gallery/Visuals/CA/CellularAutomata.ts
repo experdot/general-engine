@@ -44,7 +44,7 @@ export class CellularAutomata extends Array2<Cell> {
                 const absTg = Math.abs(target.color.g);
                 const absTb = Math.abs(target.color.b);
 
-                const distance = (Math.abs(xOffsets[i]) + Math.abs(yOffsets[i])) === 2 ? 1.41421356 : 1;
+                const distance = (Math.abs(xOffsets[i]) + Math.abs(yOffsets[i])) === 2 ? 1 : 1;
                 r += absTr / distance;
                 g += absTg / distance;
                 b += absTb / distance;
@@ -55,13 +55,13 @@ export class CellularAutomata extends Array2<Cell> {
             }
         }
 
-        const radio = 0.38;
+        const radio = 0.1;
         const dr = current.color.r + (r / count - absCr) * radio * Math.sign(current.color.r);
         const dg = current.color.g + (g / count - absCg) * radio * Math.sign(current.color.g);
         const db = current.color.b + (b / count - absCb) * radio * Math.sign(current.color.b);
         const aroundColor = new Color(dr, dg, db);
 
-        const aRadio = 130;
+        const aRadio = 20;
         const ar = rd / count / 255 * aRadio;
         const ag = gd / count / 255 * aRadio;
         const ab = bd / count / 255 * aRadio;

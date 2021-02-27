@@ -30,6 +30,8 @@ import {
 import {
     InputEvents
 } from "../../../../Engine/Inputs/Inputs";
+import { Array2 } from "../../../../Engine/Collections/Array2";
+import { GalleryImages } from "../../../Resources/GalleryImages";
 
 interface IGameOfLifeSettings {
     xOffsets: Array<number>;
@@ -52,6 +54,9 @@ export class GameOfLife extends GameVisual {
     settings: IGameOfLifeSettings;
     ghost: GhostEffect;
 
+    image: HTMLImageElement;
+    colors: Array2<Color>;
+
     private timers: { generate: DelayTimer; exchange: DelayTimer; grow: DelayTimer };
 
     constructor() {
@@ -72,6 +77,9 @@ export class GameOfLife extends GameVisual {
             size: 4
         };
 
+        this.image = new Image();
+        this.image.src = "../static/girl.png";
+
         // this.settings.xOffsets = [-1, 0, 1, 1, 1, 0, -1, -1, -2, -1, 0, 1, 2, 2, 2, 2, 2, 1, 0, -1, -2, -2, -2, -2];
         // this.settings.yOffsets = [-1, -1, -1, 0, 1, 1, 1, 0, -2, -2, -2, -2, -2, -1, 0, 1, 2, 2, 2, 2, 2, 1, 0, -1];
         // this.settings.xOffsets = [-1, 1, 0, 0];
@@ -85,11 +93,15 @@ export class GameOfLife extends GameVisual {
         const cw = 200 || w / 20;
         const ch = 200 || h / 20;
 
-        this.automata = new CellularAutomata(cw, ch);
-        this.automata.forEach((cell: Cell, x: number, y: number) => {
-            const color = Colors.Random || new Color(x * 2, y * 2, (x + y) * 2);
-            this.automata.data[x][y] = new Cell(color, 1);
-        });
+        setTimeout(() => {
+            this.colors = Graphics.getImageData(this.image);
+            this.automata = new CellularAutomata(cw, ch);
+            this.automata.forEach((cell: Cell, x: number, y: number) => {
+                //const color = Colors.Random || new Color(x * 2, y * 2, (x + y) * 2);
+                const color = this.colors.get(x, y).clone();
+                this.automata.data[x][y] = new Cell(color, 1);
+            });
+        }, 500);
     }
 
     private single: number = 0;
@@ -97,11 +109,16 @@ export class GameOfLife extends GameVisual {
         this.timers.generate.delay(20, () => {
             this._generate();
         });
-        //this.single = (this.single + 0.003) % (Math.PI * 2);
-        //this.settings.size = 25 + Math.sin(this.single) * 5;
+        //this.single = (this.single + 0.01) % (Math.PI * 2);
+        //this.settings.size = 5 + Math.sin(this.single + Math.PI * 3 / 2) * 10;
     }
 
     private _generate() {
+
+        if (!this.automata) {
+            return;
+        }
+
         const generation = this.automata.generate();
         // this.automata.forEach((cell, x, y) => {
         //     const current = this.automata.data[x][y];
@@ -110,7 +127,7 @@ export class GameOfLife extends GameVisual {
         this.automata.forEach((cell, x, y) => {
             const { aroundColor, aroundDeltas } = this.automata.aroundColor(x, y, this.settings.xOffsets, this.settings.yOffsets);
             generation.data[x][y] = this.automata.data[x][y];
-            generation.data[x][y].color = ColorHelper.gradientRandomRGB2(aroundColor, aroundDeltas.ar, aroundDeltas.ag, aroundDeltas.ab);
+            generation.data[x][y].color = ColorHelper.gradientRandomRGB(aroundColor, aroundDeltas.ar, aroundDeltas.ag, aroundDeltas.ab);
         });
         this.automata = generation;
     }
@@ -119,7 +136,7 @@ export class GameOfLife extends GameVisual {
 export class GameOfLifeView extends TypedGameView<GameOfLife> {
     private single: number = 0;
     private timers: { generate: DelayTimer; exchange: DelayTimer; grow: DelayTimer };
-    constructor(){
+    constructor() {
         super();
         this.timers = {
             generate: new DelayTimer(),
@@ -129,11 +146,15 @@ export class GameOfLifeView extends TypedGameView<GameOfLife> {
     }
 
     render(source: GameOfLife, context: CanvasRenderingContext2D) {
+        if (!source.automata) {
+            return;
+        }
+
         this.timers.generate.delay(50, () => {
             const offset = source.offset;
             const size = source.settings.size;
-            //Graphics.scaleOffset(context, 4, 4, 1);
-    
+            Graphics.scaleOffset(context, 4, 4, 1);
+
             //this.single = (this.single + 0.001) % (Math.PI * 2);
             Graphics.rotate(context, this.single, 1, (innerContext) => {
                 source.automata.forEach((cell: Cell, x: number, y: number) => {
