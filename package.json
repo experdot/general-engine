@@ -39,7 +39,7 @@
     "eslint-plugin-standard": "^4.0.0",
     "event-stream": "^3.3.4",
     "gulp": "^3.9.1",
-    "gulp-autoprefixer": "^6.0.0",
+    "gulp-autoprefixer": "^8.0.0",
     "gulp-babel": "^8.0.0",
     "gulp-cache": "^1.0.2",
     "gulp-clone": "^2.0.1",
