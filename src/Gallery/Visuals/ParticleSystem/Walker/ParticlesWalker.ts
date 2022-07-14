@@ -32,13 +32,14 @@ class ParticlesWalker extends ParticleSystem<WalkerParticle> {
     split: number;
     center: Vector2;
     maxDepth: number;
+    rotation: number;
     rotationDelta: number;
 
     constructor() {
         super();
 
         this.random = new Random();
-        this.joint(new GhostEffect(new Color(0, 128, 128, 0.006), 40));
+        this.joint(new GhostEffect(new Color(0, 128, 128, 0.003), 40));
 
         this.transform = new Transform();
     }
@@ -54,13 +55,15 @@ class ParticlesWalker extends ParticleSystem<WalkerParticle> {
         let particle = new WalkerParticle(center);
         particle.origin = particle.location.clone();
         particle.maxSize = 10;
-        particle.color = new Color(255, 255, 255, 0.1);
+        particle.color = new Color(255, 255, 255, 0.01);
         particle.direction = new Vector2(0, -this.world.width / 10);
         this.particles.push(particle);
 
         this.maxDepth = 6 + Math.floor(w / 600);
         this.createNodes(this.particles, particle, this.maxDepth, this.split, 1);
 
+        this.rotation = 0;
+        this.rotationDelta = 0.01;
         this.rotationDelta = Math.PI * 2 / Math.floor(Math.random() * 8 + 2);
     }
 
@@ -71,12 +74,14 @@ class ParticlesWalker extends ParticleSystem<WalkerParticle> {
         };
 
         this.transform.center = new Vector2(rect.width / 2, rect.height / 2);
-        this.transform.rotation = this.transform.rotation + this.rotationDelta;
+        this.rotation = this.rotation + this.rotationDelta;
 
-        if (this.transform.rotation > Math.PI * 10000) {
-            this.transform.rotation = 0;
-            this.rotationDelta = Math.PI * 2 / Math.floor(Math.random() * 8 + 2);
-        }
+        this.transform.rotation = this.rotation;
+
+        // if (this.transform.rotation > Math.PI * 10000) {
+        //     this.transform.rotation = 0;
+        //     this.rotationDelta = Math.PI * 2 / Math.floor(Math.random() * 8 + 2);
+        // }
 
         this.particles.forEach((element, index) => {
             element.update(rect, index === 0 ? this.center : element.parent.location);

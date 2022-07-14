@@ -1,6 +1,5 @@
 "use strict";
 var gulp = require("gulp"),
-    sass = require("gulp-sass"),
     autoprefixer = require("gulp-autoprefixer"),
     cssnano = require("gulp-cssnano"),
     sourcemaps = require("gulp-sourcemaps"),
@@ -58,9 +57,9 @@ const config = {
         }
     },
     styles: {
-        src: "scss/*.scss",
+        src: "scss/*.css",
         dest: "dist/styles",
-        watch: "scss/**/*.scss",
+        watch: "scss/**/*.css",
         sourcemap: options.env !== "production",
         concat: {
             enabled: false,
@@ -245,8 +244,6 @@ gulp.task(config.task.html, function () {
 gulp.task(config.task.styles, function () {
     return gulp.src(config.styles.src)
         .pipe(gulpif(config.styles.sourcemap, sourcemaps.init()))
-        .pipe(sass().on("error", sass.logError))
-        .on("error", sass.logError)
         .pipe(autoprefixer("last 2 version"))
         .pipe(gulpif(config.styles.concat.enabled, concat(config.styles.concat.fileName)))
         .pipe(gulpif(config.styles.minify.enabled, cssnano()))
