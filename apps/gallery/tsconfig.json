@@ -1,0 +1,13 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "types": ["vite/client"],
+    "paths": {
+      "@gallery/*": ["src/*"],
+      "@gallery-core/*": ["src/Gallery/*"],
+      "@legacy/*": ["../../packages/general-engine/src/*"]
+    }
+  },
+  "include": ["src/**/*.ts", "views/**/*.html"]
+}

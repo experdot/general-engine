@@ -1,69 +1,27 @@
 {
-  "name": "general-engine",
-  "version": "0.2.0",
-  "lockfileVersion": 1,
-  "main": "lib/index.js",
-  "author": "experdot",
-  "description": "Implementation of general system",
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/experdot/general-engine.git"
+  "name": "general-engine-workspace",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@10.12.1",
+  "engines": {
+    "node": ">=20"
   },
-  "homepage": "https://github.com/experdot/general-engine",
-  "keywords": [
-    "general system",
-    "typescript"
-  ],
-  "files": [
-    "lib/",
-    "src/Core",
-    "CHANGELOG.md"
-  ],
-  "dependencies": {},
+  "scripts": {
+    "dev": "pnpm --filter @general-engine/gallery dev",
+    "build": "pnpm -r build",
+    "build:gallery": "pnpm --filter @general-engine/gallery build",
+    "build:lib": "pnpm --filter general-engine build",
+    "lint": "pnpm -r lint",
+    "typecheck": "pnpm -r typecheck"
+  },
   "devDependencies": {
-    "@babel/core": "^7.1.0",
-    "@babel/preset-env": "^7.1.0",
-    "@types/jquery": "^3.3.5",
-    "babel-cli": "^6.26.0",
-    "babel-preset-env": "^1.7.0",
-    "babelify": "^10.0.0",
-    "browser-sync": "^2.24.6",
-    "browserify": "^16.2.2",
-    "del": "^5.0.0",
-    "eslint-config-google": "^0.13.0",
-    "eslint-config-standard": "^12.0.0-alpha.0",
-    "eslint-plugin-import": "^2.8.0",
-    "eslint-plugin-node": "^9.2.0",
-    "eslint-plugin-promise": "^4.0.0",
-    "eslint-plugin-standard": "^4.0.0",
-    "event-stream": "^3.3.4",
-    "gulp": "^3.9.1",
-    "gulp-autoprefixer": "^6.0.0",
-    "gulp-babel": "^8.0.0",
-    "gulp-cache": "^1.0.2",
-    "gulp-clone": "^2.0.1",
-    "gulp-concat": "^2.6.1",
-    "gulp-cssnano": "^2.1.1",
-    "gulp-github-release": "^1.2.1",
-    "gulp-header": "^2.0.5",
-    "gulp-htmlmin": "^5.0.1",
-    "gulp-if": "^3.0.0",
-    "gulp-md5-plus": "^1.0.3",
-    "gulp-refresh": "^1.1.0",
-    "gulp-rename": "^1.4.0",
-    "gulp-sequence": "^1.0.0",
-    "gulp-sourcemaps": "^2.6.4",
-    "gulp-uglify": "^3.0.1",
-    "gulp-watch": "^5.0.1",
-    "minimist": "^1.2.0",
-    "tsify": "^4.0.0",
-    "typescript": "^3.5.2",
-    "util": "^0.12.1",
-    "vinyl-buffer": "^1.0.1",
-    "vinyl-source-stream": "^2.0.0"
-  },
-  "overrides": {
-    "graceful-fs": "^4.2.9"
+    "@eslint/js": "^9.29.0",
+    "@rollup/plugin-alias": "^5.1.1",
+    "@types/node": "^24.0.3",
+    "eslint": "^9.29.0",
+    "globals": "^16.2.0",
+    "typescript": "^5.8.3",
+    "typescript-eslint": "^8.34.1",
+    "vite": "^7.0.0"
   }
 }

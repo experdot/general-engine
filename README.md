@@ -1,48 +1,53 @@
 # general-engine
-[![npm][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![codebeat badge][codebeat-image]][codebeat-url]
 
-> *General Engine* is a framework to build creative scenarios.
+General Engine is a small TypeScript framework for building connected, process-driven interactive scenes. This repository now ships as a modern `pnpm` workspace with:
 
-## Gallery
-To check out live examples created with general-engine, please visit [gallery][repo-gallery] website.
+- `packages/general-engine`: the reusable library package
+- `apps/gallery`: the demo/gallery site built with Vite
 
- 🌳 [Tree](https://general-engine.com/views/gallery.html?scene=tree)
+## Live Gallery
 
- 🕊 [Flyer](https://general-engine.com/views/gallery.html?scene=flyer)
- 
- 💥 [Walker](https://general-engine.com/views/gallery.html?scene=walker)
- 
- 🌀 [Endless Abyss](https://general-engine.com/views/gallery.html?scene=endlessabyss)
- 
- ⚔ [Game of life](https://general-engine.com/views/gallery.html?scene=gameoflife)
- 
- 🌿 [L-System Tree](https://general-engine.com/views/gallery.html?scene=lsystemtree)
- 
- 🎵 [Audio Visualizer](https://general-engine.com/views/gallery.html?scene=audiovisualizer)
+- Gallery home: <https://experdot.github.io/general-engine/views/gallery.html?scene=tree>
+- Flyer: <https://experdot.github.io/general-engine/views/gallery.html?scene=flyer>
+- Walker: <https://experdot.github.io/general-engine/views/gallery.html?scene=walker>
+- Tree: <https://experdot.github.io/general-engine/views/gallery.html?scene=tree>
+- L-System Tree: <https://experdot.github.io/general-engine/views/gallery.html?scene=lsystemtree>
+- Game of Life: <https://experdot.github.io/general-engine/views/gallery.html?scene=gameoflife>
+- Audio Visualizer: <https://experdot.github.io/general-engine/views/gallery.html?scene=audiovisualizer>
+- Endless Abyss: <https://experdot.github.io/general-engine/views/gallery.html?scene=endlessabyss>
+- AutoPaint: <https://experdot.github.io/general-engine/views/gallery.html?scene=autopaint>
+
+## What The Library Does
+
+The core abstraction is a `GeneralObject` that declares named processes and can be joined with other objects. Once joined, matching processes are chained together, which makes it easy to model scene systems, effects, views, and game loops as collaborating objects instead of a single large controller.
 
 ## Install
-Download a [stable release][repo-releases] and include the script in your web page:
-``` html
-<script src="general-engine.core.js" type="text/javascript"></script>
+
+For package consumers:
+
+```bash
+pnpm add general-engine
 ```
-You can also install using the package manager [NPM][npm-url].
-``` bash
-$ npm install general-engine
+
+For repository development:
+
+```bash
+pnpm install
 ```
-## Hello World
-The following is a simple hello-world example.
+
+## Basic Usage
 
 ```ts
-import { GeneralInterface, GeneralObject } from "../src/Core/GeneralObject";
+import { GeneralInterface, GeneralObject } from "general-engine";
 
-class IPrintInterface extends GeneralInterface {
+class PrintInterface extends GeneralInterface {
     print = [];
 }
 
-class PrintBase extends GeneralObject<IPrintInterface>{
+class PrintBase extends GeneralObject<PrintInterface> {
     constructor() {
         super();
-        this.implements(new IPrintInterface());
+        this.implements(new PrintInterface());
     }
 }
 
@@ -54,39 +59,24 @@ class PrintA extends PrintBase {
 
 class PrintB extends PrintBase {
     print() {
-        console.log("Hello General-Engine");
+        console.log("Hello General Engine");
     }
 }
 
-new PrintA().joint(new PrintB()).processes.print.process();
-
-// Output:
-// Hello World
-// Hello General-Engine
+new PrintA().joint(new PrintB()).processes.print?.process();
 ```
 
-## Building 
-To build you must first install [node.js](http://nodejs.org/) and [gulp](http://gulpjs.com/), then run
-``` bash
-$ npm install
+## Workspace Commands
+
+```bash
+pnpm dev
+pnpm lint
+pnpm typecheck
+pnpm build
 ```
-This will install the required build dependencies, then run
-``` bash
-$ gulp watch
-```
-to spawn a development server.
+
+`pnpm dev` starts the Vite-powered gallery app. `pnpm build` builds both the library package and the gallery site.
 
 ## License
-- [MIT](./LICENSE)
 
-[repo-releases]: https://github.com/experdot/general-engine/releases
-[repo-gallery]: https://experdot.github.io/general-engine/views/gallery.html?scene=endlessabyss
-
-[npm-url]: https://www.npmjs.com/package/general-engine
-[npm-image]: https://img.shields.io/npm/v/general-engine.svg
-
-[travis-url]: https://travis-ci.org/experdot/general-engine
-[travis-image]: https://travis-ci.org/experdot/general-engine.svg?branch=master
-
-[codebeat-url]: https://codebeat.co/projects/github-com-experdot-general-engine-master
-[codebeat-image]: https://codebeat.co/badges/7c21280a-03fb-4abc-90eb-a4f50c3e2760
+[MIT](./LICENSE)

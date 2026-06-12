@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Gallery</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+</head>
+
+<body>
+    <home>
+        <div class="game-container">
+            <div id="gallery-game-container" class="gallery-game-container">
+                <div id="gallery-game-layer-canvas" class="layer-canvas">
+                    <canvas id="gallery-game-canvas">Your browser doesn't support the canvas
+                        tag.</canvas>
+                </div>
+                <div id="gallery-game-layer-progress" class="layer-progress fade show">
+                    <div class="spinner"><i></i></div>
+                </div>
+            </div>
+        </div>
+        <div class="gallery-fixed">
+            <div class="navigation-bar">
+                <div class="gallery-panel" id="gallery-panel" hidden>
+                    <div class="gallery-navigator-external">
+                        <h4 class="panel-title" id="gallery-navigator-title-header">General Engine</h4>
+                        <span class="panel-description" id="gallery-navigator-title-description">Build creative scenarios by general system.</span>
+                        <div>
+                            <a href="https://github.com/experdot/general-engine/" class="badge-link">Github</a>
+                            <a href="https://www.npmjs.com/package/general-engine" class="badge-link">npm</a>
+                        </div>
+                    </div>
+                </div>
+
+                <nav class="gallery-navigator">
+                    <button class="nav-button" type="button" id="gallery-panel-toggle" aria-controls="gallery-panel"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                        <span>≡</span>
+                    </button>
+
+                    <div class="nav-actions" aria-label="Button group">
+                        <details class="dropdown">
+                            <summary class="nav-button">G</summary>
+                            <div id="gallery-navigator-dropdown" class="dropdown-menu"></div>
+                        </details>
+                        <button type="button" class="nav-button" title="Restart" id="gallery-navigator-restart">R</button>
+                        <button type="button" class="nav-button" title="Fullscreen" id="gallery-navigator-fullscreen">F</button>
+                    </div>
+
+                    <div id="gallery-navigator-frame" class="frame-indicator">00</div>
+                </nav>
+            </div>
+            <div id="gallery-alert-container"></div>
+        </div>
+    </home>
+
+    <script type="module" src="../src/main.ts"></script>
+</body>
+</html>
